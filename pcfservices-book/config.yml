@@ -1,6 +1,6 @@
 ---
-book_repo: docs-pcfservices-template/pcfservices-book
-layout_repo: docs-pcfservices-template/pcfservices-layout
+book_repo: pcfservices-book
+layout_repo: pcfservices-layout
 
 broken_link_exclusions: iefix|arrowhead
 repo_link_enabled: true
@@ -15,14 +15,14 @@ public_host: hello
 
 sections:
   - repository:
-      name: docs-pcfservices-template/pcfservices-content
+      name: pcfservices-content
     directory: myservice         #change me
     subnav_template: party_service_subnav.erb       # optional
     # product_id: myservice                      # optional
 
 # products:                                       # optional
 #   - id: myservice
-     subnav_root: myservice/index.html
+     #subnav_root: myservice/index.html
 
 template_variables:                             # optional
 
