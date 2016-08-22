@@ -121,6 +121,18 @@ Cell contents 1 | Cell contents 2
   </tr>
 </table>
 
+### Flowcharts, Sequence Diagrams, and Gantt Charts using Mermaid
+
+Bookbinder supports [mermaid](http://knsv.github.io/mermaid/), an easy way to make inline graphics, provided that they're flowcharts, sequence diagrams, or Gantt charts. Here's an example sequence diagram:
+
+<div class="mermaid">
+sequenceDiagram
+  User_div->>CloudFoundry:bind-service
+  CloudFoundry->>ODB:bind-service-instance
+  ODB->>ServiceAdapter:create-binding
+  ServiceAdapter->>ODB:binding info
+  ODB->>CloudFoundry:binding info
+</div>
 
 ### Markdown and Pivotal style resources
 
