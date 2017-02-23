@@ -145,6 +145,10 @@ $ cf bind-service <my-app-name> <my-cloud-cache-service-instance-name>
 
 This should provide connection information via the VCAP_SERVICES environment variable, which your app can use to configure components (e.g. a GemFire client cache) to use the service instance.
 
+### <a id="pulse"></a> Using the Pulse dashboard
+
+You can access the Pulse dashboard for a service instance by accessing the pulse-url obtained from a service key (as shown earlier) in a web browser. Use either of the operator or developer credentials to authenticate.
+
 ## <a id="delete"></a> Deleting a Service Instance
 
 You can delete service instances using the CF CLI. Before doing so, you will also need to remove any existing app bindings and service keys.
