@@ -5,9 +5,9 @@
 :subnav_templates:
   myservice: service_subnav
 :template_variables: 
-:local_repo_dir: "/Users/pspinrad/workspace/docs-pcfservices-template"
+:local_repo_dir: "/Users/pivotal/workspace/docs-cloud-cache"
 :workspace: !ruby/object:Pathname
-  path: "/Users/pspinrad/workspace/docs-pcfservices-template/book/output/master_middleman/source"
+  path: "/Users/pivotal/workspace/docs-cloud-cache/book/output/master_middleman/source"
 :feedback_enabled: 
 :repo_link_enabled: true
 :repo_links:

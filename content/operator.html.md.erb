@@ -1,0 +1,53 @@
+---
+title: Operator Guide
+owner: Cloud Cache Engineers
+---
+
+## <a id="install"></a> Installing Pivotal Cloud Cache
+
+Follow the steps below to install Pivotal Cloud Cache on your PCF.
+
+1. Download the tile from the Pivotal Network
+1. Upload the product to Ops Manager
+1. Click "Add" next to the uploaded product description
+1. Click on the Cloud Cache Tile and select configuration options
+1. Click "Apply Changes"
+
+## <a id="plan-config"></a> Configuring Service Plans
+
+Select the "Caching Plan" tab to configure the service plan that will be available to developers.
+
+![Configuring the Caching Plan](caching-plan-config.png)
+
+First you must check the "Enable Service Plan" checkbox if you would like the caching plan to be available in the CF marketplace. Note that the smoke test errand will fail if you do not check this or disable the errand.
+
+The "Plan Description" text field allows you to enter a plan description that will be displayed to developers.
+
+The "Service Instance Quota" configures the maximum number of Cloud Cache clusters that can exist simultaneously.
+
+When a developer creates (or updates) a service instance they will have the option to specify the number of servers in the cluster. The "Maximum servers per cluster" field allows the operator to set an upper bound on the number of servers a developer can request. If the developer does not explicitly specify the number of servers in a service instance the new cluster will have the number of servers specified in the "Default Number of Servers" field.
+
+The "Availability zones for service instances" setting controls which availability zones the members of a cluster are evenly distributed across.
+
+The remaining fields control the vm type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server vm type.
+
+When you are done configuring the plan be sure to click "Save" to save your configuration options.
+
+## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
+
+The process for upgrading is similar to that for installing
+
+1. Download the new version of the tile from the Pivotal Network
+1. Upload the product to Ops Manager
+1. Click "Add" next to the uploaded product
+1. Click on the Cloud Cache Tile and review your configuration options
+1. Click "Apply Changes"
+
+## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
+
+To uninstall the Cloud Cache take the following steps from the "Installation Dashboard"
+
+1. Click the trash can icon in the bottom right hand corner of the tile
+1. Click "Apply Changes"
+
+## <a id="troubleshooting"></a> Troubleshooting

@@ -1,0 +1,160 @@
+---
+title: Developer Guide
+owner: Cloud Cache Engineers
+---
+
+## <a id="create"></a> Creating a Pivotal Cloud Cache Service Instance
+
+You can create service instances using the CF CLI.
+
+```
+$ cf create-service p-cloud-cache caching <my-service-name>
+```
+
+Creation of service instances is asynchronous. You can run the `cf services` command to get the current status of the service creation and other service instances in the current org and space:
+
+```
+$ cf services
+Getting services in org <my-org> / space <my-space> as user...
+OK
+
+name                  service        plan      bound apps                                  last operation
+<my-service-name>     p-cloudcache   caching                                               create in progress
+```
+
+Eventually, the status should change from `create in progress` to `create succeeded`.
+
+## <a id="accessing"></a> Accessing a Service Instance
+
+Once your service instance is created, you can start accessing it. Usually, before using your service instance from a deployed CF app, you'll want to set up cache regions. This can be done via the `gfsh` command line tool. In order to connect, you'll first need to set up a service key.
+
+### <a id="create-service-key"></a> Creating Service Keys
+
+Service keys provide a way to access your service instance outside the scope of a deployed CF app. You can create these using the CF CLI.
+
+```
+$ cf create-service-key <my-service-name> <my-service-key-name>
+```
+
+Once you have done so, view the newly created service key:
+
+```
+$ cf service-key  <my-service-name> <my-service-key-name>
+```
+
+This should return output similar to the following:
+
+```
+{
+  "locators": [
+    "10.244.0.66[55221]",
+    "10.244.0.4[55221]",
+    "10.244.0.3[55221]"
+  ],
+  "urls": {
+    "gfsh": "<gfsh-url>",
+    "pulse": "<pulse-url>"
+  },
+  "users": [
+    {
+      "password": "<developer-password>",
+      "username": "developer"
+    },
+    {
+      "password": "<operator-password>",
+      "username": "operator"
+    }
+  ]
+}
+```
+
+This returned structure contains a few interesting pieces of information:
+
+* `operator` and `developer` credentials.
+* gfsh-url provides a URL which can be used to connect the gfsh client to the service instance
+* pulse-url provides a URL which can be used to view the Pulse dashboard in a web browser which allows the service instance status to be monitored. You can use the developer credentials to authenticate.
+
+The `operator` and `developer` roles provide access to different functions on the service instance.  The `operator` credentials can be used to administer the service instance (for example, to define or delete cache regions). It can also perform the same functions the `developer` credentials allow: performing CRUD data operations. As a best practice, you should use the role with the least amount of permissions necessary.
+
+### <a id="gfsh-connect"></a> Connecting with gfsh
+
+Start the `gfsh` command line tool:
+
+```
+$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  /
+ / /__/ / ____/  _____/ / /    / /
+/______/_/      /______/_/    /_/    9.0.1
+
+Monitor and Manage Pivotal GemFire
+gfsh>
+```
+
+From the `gfsh>` prompt, connect to your service instance as `operator`:
+
+```
+gfsh>connect --use-http --url=<gfsh-url> --user=operator --password=<operator-password>
+```
+
+## <a id="use"></a> Using Cloud Cache
+
+### <a id="create-regions"></a> Creating Regions with gfsh
+
+After connecting with `gfsh` as an operator you can define a new cache region.
+
+```
+gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU
+     Member      | Status
+---------------- | -------------------------------------------------------
+cacheserver-z2-1 | Region "/my-cache-region" created on "cacheserver-z2-1"
+cacheserver-z3-2 | Region "/my-cache-region" created on "cacheserver-z3-2"
+cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
+cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
+```
+
+You can test the newly created region by writing and reading values via gfsh:
+
+```
+gfsh>put --region=/my-cache-region --key=test --value=thevalue
+Result      : true
+Key Class   : java.lang.String
+Key         : test
+Value Class : java.lang.String
+Old Value   : <NULL>
+
+
+gfsh>get --region=/my-cache-region --key=test
+Result      : true
+Key Class   : java.lang.String
+Key         : test
+Value Class : java.lang.String
+Value       : thevalue
+```
+
+However, in practice, you'll most likely want to perform these operations from a deployed CF app. In order to do that, you must bind the service instance to these apps.
+
+### <a id="bind-service"></a> Binding an App to a Service Instance
+
+Binding your apps to a service instance allows them to connect to it and read/write data to the region. This can be done via the CF CLI:
+
+```
+$ cf bind-service <my-app-name> <my-cloud-cache-service-instance-name>
+```
+
+This should provide connection information via the VCAP_SERVICES environment variable, which your app can use to configure components (e.g. a GemFire client cache) to use the service instance.
+
+## <a id="delete"></a> Deleting a Service Instance
+
+You can delete service instances using the CF CLI. Before doing so, you will also need to remove any existing app bindings and service keys.
+
+```
+cf delete-service-key <my-service-name> <my-service-key-name>
+cf unbind-service <my-app-name> <my-service-name>
+cf delete-service <my-service-name>
+```
+Deletions are asynchronous. You can use the `cf services` command to get the current status of the service instance deletion.
+
+## <a id="recommended-usage"></a> Recommended Usage and Limitations
+
