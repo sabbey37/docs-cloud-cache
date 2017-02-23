@@ -3,7 +3,7 @@
   ".": 
 :production_host: hello
 :subnav_templates:
-  myservice: service_subnav
+  p-cloud-cache: service_subnav
 :template_variables: 
 :local_repo_dir: "/Users/pivotal/workspace/docs-cloud-cache"
 :workspace: !ruby/object:Pathname
@@ -11,10 +11,10 @@
 :feedback_enabled: 
 :repo_link_enabled: true
 :repo_links:
-  myservice:
+  p-cloud-cache:
     repo: content
     ref: master
     at_path: 
 :product_info:
-  myservice: {}
+  p-cloud-cache: {}
 :elastic_search: false

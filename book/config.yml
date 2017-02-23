@@ -16,7 +16,7 @@ public_host: hello
 sections:
   - repository:
       name: content
-    directory: myservice         #change me
+    directory: p-cloud-cache
     subnav_template: service_subnav.erb       # optional
     # product_id: myservice                      # optional
 
