@@ -51,3 +51,15 @@ To uninstall the Cloud Cache take the following steps from the "Installation Das
 1. Click "Apply Changes"
 
 ## <a id="troubleshooting"></a> Troubleshooting
+
+### Viewing statistics files
+
+The gemfire statistics files are located in the persistent store on each vm: `/var/vcap/store/gemfire-server/statistics.gfs`.
+
+To `scp` the statistics files to your workstation, you can run the following command:
+
+```
+bosh scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
+```
+
+Visit [this link](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) for instructions on loading the statistics files into Pivotal GemFire VSD.
