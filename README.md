@@ -4,6 +4,15 @@
 
 The staging docs are on PWS using the pcf-gemfire@pivotal.io account
 
+## Developing docs locally
+
+This will make the book available at localhost:4567 and automatically update when you write changes to disk
+
+```
+cd book
+bookbinder watch
+```
+
 ## Pushing docs to CF
 
 These docs are served as an app in CF
