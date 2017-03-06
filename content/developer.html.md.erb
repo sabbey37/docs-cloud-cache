@@ -3,12 +3,32 @@ title: Developer Guide
 owner: Cloud Cache Engineers
 ---
 
+## View all plans available for Pivotal Cloud Cache
+
+Using the CF CLI, the command below shows all plans available for Pivotal Cloud Cache.
+
+```
+$ cf marketplace -s p-cloudcache
+
+Getting service plan information for service p-cloudcache as admin...
+OK
+
+service plan   description      free or paid
+extra-small    Caching Plan 1   free
+small          Caching Plan 2   free
+medium         Caching Plan 3   free
+large          Caching Plan 4   free
+extra-large    Caching Plan 5   free
+```
+
+Please note that the plan names displayed above are plan names configured by the operator on tile installation.
+
 ## <a id="create"></a> Creating a Pivotal Cloud Cache Service Instance
 
 You can create service instances using the CF CLI.
 
 ```
-$ cf create-service p-cloud-cache caching <my-service-name>
+$ cf create-service p-cloud-cache small <my-service-name>
 ```
 
 Creation of service instances is asynchronous. You can run the `cf services` command to get the current status of the service creation and other service instances in the current org and space:
@@ -19,7 +39,7 @@ Getting services in org <my-org> / space <my-space> as user...
 OK
 
 name                  service        plan      bound apps                                  last operation
-<my-service-name>     p-cloudcache   caching                                               create in progress
+<my-service-name>     p-cloudcache   small                                                 create in progress
 ```
 
 Eventually, the status should change from `create in progress` to `create succeeded`.
