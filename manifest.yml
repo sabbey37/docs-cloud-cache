@@ -1,0 +1,7 @@
+---
+applications:
+- name: p-cloudcache-docs-staging
+  host: p-cloudcache-docs-staging
+  path: book/final_app
+  buildpack: "https://github.com/cloudfoundry/ruby-buildpack#v1.6.28"
+
