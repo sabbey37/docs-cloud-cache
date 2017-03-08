@@ -28,21 +28,42 @@ Please note that the plan names displayed above are plan names configured by the
 You can create service instances using the CF CLI.
 
 ```
-$ cf create-service p-cloud-cache small <my-service-name>
+$ cf create-service p-cloudcache <plan-name> <service-name>
 ```
 
 Creation of service instances is asynchronous. You can run the `cf services` command to get the current status of the service creation and other service instances in the current org and space:
 
 ```
 $ cf services
-Getting services in org <my-org> / space <my-space> as user...
+Getting services in org my-org / space my-space as user...
 OK
 
-name                  service        plan      bound apps                                  last operation
-<my-service-name>     p-cloudcache   small                                                 create in progress
+name                  service        plan      bound apps     last operation
+service-name          p-cloudcache   small                    create in progress
 ```
 
 Eventually, the status should change from `create in progress` to `create succeeded`.
+
+### <a id="params"></a> Optional Parameters
+You can create a customized service instance by passing optional parameters to `cf
+create-service`. For example:
+
+```
+$ cf create-service p-cloudcache small my-service-name -c '{"num_servers": 5}'
+```
+
+The Cloud Cache service broker supports the following parameters:
+
+* `num_servers` (int) - description: the number of server instances in the cluster. The minimum value is 4. The maximum and default values are configured by operator.
+* `new_size_percentage` (int) - The percentage of the heap to allocate to young
+generation. This value must be between 5 and 83. By default the new size is 2G
+or 10% of heap, whichever is smaller.
+
+These parameters can also be applied to an existing service instance using the `cf update-service` command.
+
+```
+$ cf update-service my-service-name -c '{"new_size_percentage": 20}'
+```
 
 ## <a id="accessing"></a> Accessing a Service Instance
 
