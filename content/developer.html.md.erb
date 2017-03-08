@@ -139,6 +139,27 @@ From the `gfsh>` prompt, connect to your service instance as `operator`:
 gfsh>connect --use-http --url=<gfsh-url> --user=operator --password=<operator-password>
 ```
 
+## <a id="upgrade"></a> Upgrading a Pivotal Cloud Cache Service Instance Plan
+
+You can upgrade service instances to a different service plan using the CF CLI.
+
+```
+$ cf update-service p-cloudcache -p <plan-name>
+```
+
+You can override the default number of servers while upgrading service plans by passing the `num_servers` parameter:
+
+```
+$ cf update-service p-cloudcache -p <plan-name> -c '{"num_servers": <integer>}'
+```
+
+### <a id="upgrade-caveats"></a> Upgrade Caveats
+
+Below are a few scenarios where you may encounter data loss when upgrading service plans:
+
+* Changing your service instance's service plan to one that has less memory than your current service instance
+* Decreasing the server instance count to be less than your current server instance count (regardless of vm type)
+
 ## <a id="use"></a> Using Cloud Cache
 
 ### <a id="create-regions"></a> Creating Regions with gfsh
