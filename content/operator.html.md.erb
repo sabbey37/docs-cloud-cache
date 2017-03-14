@@ -3,6 +3,7 @@ title: Operator Guide
 owner: Cloud Cache Engineers
 ---
 
+
 ## <a id="requirements"></a> Requirements for Pivotal Cloud Cache
 Before installing Pivotal Cloud Cache, please ensure that "Post Deploy Scripts" are enabled on your bosh director. You can enable this feature by checking the "Enable Post Deploy Scripts" checkbox on the "Director Config" page on the "Ops Manager Director" tile.
 
@@ -18,9 +19,22 @@ Follow the steps below to install Pivotal Cloud Cache on your PCF.
 1. Click on the Cloud Cache Tile and select configuration options
 1. Click "Apply Changes"
 
-## <a id="settings-config"></a> Configuring Tile Properties
 
-### Smoke tests
+
+
+### <a id="settings-config"></a> Configuring Tile Properties
+
+#### Assign AZs and Networks
+
+* Select an AZ that your singleton VMs will reside in (broker, errands).
+* Select the AZs that will be used to distribute the GemFire VMs. We recommend
+selecting all of them.
+* For "Network" select your ERT network.
+* For "Service Network" select the network to be used for GemFire VMs.
+
+
+
+#### Settings - Smoke tests
 
 The **"Plan to use for smoke test"** field allows you to configure the **`smoke-tests`** errand that will be run after tile installation to verify successful installation.
 
@@ -28,7 +42,8 @@ Select a plan from the list below that will be used when the **`smoke-tests`** e
 
 ![Configuring Tile Properties](smoke-test-config.png)
 
-### Forwarding logs to a Remote Syslog endpoint
+
+#### Settings - Forwarding Syslog
 
 You can configure syslog to foward logs from the broker VM to a remote syslog endpoint. Please note that only TCP endpoints are supported.
 
@@ -41,17 +56,16 @@ The **"CA certificate"** field is not required, however, if provided, it will be
 ![Configuring Syslog Properties](syslog-tls-enabled.png)
 
 
-## <a id="plan-config"></a> Configuring Service Plans
+
+#### Configuring Service Plans 1 - 5
 
 There are 5 individual plans you can configure to be available to developers.  Select the **"Plan 1"** through **"Plan 5"** tabs to configure each of them.
 
-![Configuring a Plan](config-plan-1.png)
+The **"Enable Plan"** toggle is checked by default. If you don't want to make this plan available, select "Disable Plan". Note that you must enable at least one plan.
 
-The **"Enable Service Plan"** checkbox is checked by default. If you don't want to make this plan available, uncheck it. Note that the smoke test errand will fail if you do not have at least one plan enabled.
+The **"Plan Name"** text field allows you to customize the name of the plan. This plan name will be displayed to developers when they view the service in the marketplace.
 
-The **"Plan Name"** text field allows you to customize plan name. This plan name will be displayed to developers when they view the service in the marketplace.
-
-The **"Plan Description"** text field allows you to enter a plan description that will be displayed to developers.
+The **"Plan Description"** text field allows you to enter a plan description that will be displayed to developers in the marketplace.
 
 The **"Service Instance Quota"** configures the maximum number of Cloud Cache clusters that can exist simultaneously.
 
@@ -59,9 +73,24 @@ When a developer creates (or updates) a service instance they will have the opti
 
 The **"Availability zones for service instances"** setting controls which availability zones the members of a cluster are evenly distributed across.
 
-The remaining fields control the vm type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server vm type.
+The remaining fields control the vm type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server vm type. We recommend the following configuration:
+
+* For the **"VM type for the Locator VMs"** field, select a VM that has at least 1GB of RAM and 4GB disk.
+* For the **"Persistent disk type for the Locator VMs"** field select 1GB or higher.
+* For the **"VM type for the Server VMs"** field select a VM that has at least 4GB of RAM and 8GB of disk.
+* For the **"Persistent disk type for the server VMs"** field select 1GB or higher.
 
 When you are done configuring the plan be sure to click **"Save"** to save your configuration options.
+
+![Configuring a Plan](config-plan-1.png)
+
+
+
+#### Stemcell
+Ensure you've imported the correct type of stemcell indicated on this tab.
+
+
+
 
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
@@ -73,6 +102,9 @@ The process for upgrading is similar to that for installing
 1. Click on the Cloud Cache Tile and review your configuration options
 1. Click "Apply Changes"
 
+
+
+
 ## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
 
 To uninstall the Cloud Cache take the following steps from the "Installation Dashboard"
@@ -80,16 +112,60 @@ To uninstall the Cloud Cache take the following steps from the "Installation Das
 1. Click the trash can icon in the bottom right hand corner of the tile
 1. Click "Apply Changes"
 
+
+
+
 ## <a id="troubleshooting"></a> Troubleshooting
 
 ### Viewing statistics files
 
-The gemfire statistics files are located in the persistent store on each vm: `/var/vcap/store/gemfire-server/statistics.gfs`.
-
-To `scp` the statistics files to your workstation, you can run the following command:
+You can visualize the performance of your cluster by downloading the statistics files from your servers. These files are located in the persistent store on each vm. To copy these files to your workstation, you can run the following command:
 
 ```
 bosh scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
 ```
 
 Visit [this link](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) for instructions on loading the statistics files into Pivotal GemFire VSD.
+
+### Smoke Test Failures
+
+#### Error: "Creating p-cloudcache <plan> <service name> failed"
+The smoke tests were unable to create an instance of GemFire. To troubleshoot
+why the deployment failed, create a new service instance using the same plan
+with the CF CLI and download the logs of the service deployment from BOSH.
+
+#### Error: "Deleting <service> failed"
+The smoke test was attempting to clean up a service instance it created. It
+failed to delete the service using `cf delete-service`. Use `bosh logs` to
+see the logs on the broker or the service instance to see why the deletion
+may have failed.
+
+#### Error: Cannot connect to the cluster <service name>
+The smoke test was unable to connect to the cluster.
+
+Check the logs of your load balancer.
+
+Check the logs of your CF Router to ensure the route to your CloudCache
+cluster is being properly registered.
+
+You can also create a service instance and try to connect to it using the
+Gfsh CLI. This will require creating a service key.
+
+#### Error: "Could not perform create/put on Cloud Cache cluster"
+The smoke test was unable to write data to the cluster. The user may not have
+permissions to create a region or write data.
+
+#### Error: "Could not retrieve value from Cloud Cache cluster"
+The smoke test was unable to read back the data it wrote. Data loss can happen
+if a cluster member improperly stops and starts again or if the member machine
+crashes and is ressurrected by Bosh. Use `bosh logs` to see the logs on the
+broker to see if there were any interruptions to the cluster by a service
+update.
+
+### General Connectivity
+#### Required ports
+
+GemFire servers will communicate with each other on port 40404, and with
+locators on port 55221. Both of these ports will need to be reachable for the
+cluster to work.
+
