@@ -59,11 +59,42 @@ The Cloud Cache service broker supports the following parameters:
 generation. This value must be between 5 and 83. By default the new size is 2G
 or 10% of heap, whichever is smaller.
 
-These parameters can also be applied to an existing service instance using the `cf update-service` command.
+
+## <a id="create"></a> Updating a Pivotal Cloud Cache Service Instance
+All optional parameters can be applied to an existing service instance using the `cf update-service` command.
 
 ```
 $ cf update-service my-service-name -c '{"new_size_percentage": 20}'
 ```
+
+Previously specified optional parameters will be persisted through subsequent updates. To return the service instance to default values the defaults must be explicitly specified as optional parameters.
+For example, if I create a service instance with 5 servers using a plan with a default value of 4 servers
+
+```
+$ cf create-service p-cloudcache small my-service-name -c '{"num_servers": 5}'
+```
+
+and then I update the new size percentage
+
+```
+$ cf update-service my-service-name -c '{"new_size_percentage": 50}'
+```
+
+the resulting service instance will have 5 servers and new size equal to 50% of heap.
+
+## <a id="updates"></a> Plan Updates
+The plan available on cf marketplace may be changed by the operator. If the operator changes the default value of one of the optional parameters this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters (e.g. decreasing the maximum value for `num_servers`) existing instances that exceed the new limits will not be affected but any subsequent service update that changes that optional parameter must adhere to the new limits.
+
+If you see the following error message when attempting to update a service instance,
+
+```
+cf update-service  my-service-name -c '{"num_servers": 5}'
+Updating service instance my-service-name as admin...
+FAILED
+Server error, status code: 502, error code: 10001, message: Service broker error: Service cannot be updated at this time, please try again later or contact your operator for more information
+```
+
+this indicates that the operator has made an update to the plan used by this service instance. You must wait for the operator to apply plan changes to all service instances before you will be able to make further service instance updates.
 
 ## <a id="accessing"></a> Accessing a Service Instance
 
@@ -138,27 +169,6 @@ From the `gfsh>` prompt, connect to your service instance as `operator`:
 ```
 gfsh>connect --use-http --url=<gfsh-url> --user=operator --password=<operator-password>
 ```
-
-## <a id="upgrade"></a> Upgrading a Pivotal Cloud Cache Service Instance Plan
-
-You can upgrade service instances to a different service plan using the CF CLI.
-
-```
-$ cf update-service p-cloudcache -p <plan-name>
-```
-
-You can override the default number of servers while upgrading service plans by passing the `num_servers` parameter:
-
-```
-$ cf update-service p-cloudcache -p <plan-name> -c '{"num_servers": <integer>}'
-```
-
-### <a id="upgrade-caveats"></a> Upgrade Caveats
-
-Below are a few scenarios where you may encounter data loss when upgrading service plans:
-
-* Changing your service instance's service plan to one that has less memory than your current service instance
-* Decreasing the server instance count to be less than your current server instance count (regardless of vm type)
 
 ## <a id="use"></a> Using Cloud Cache
 

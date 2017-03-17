@@ -98,7 +98,24 @@ The process for upgrading is similar to that for installing
 1. Click "Apply Changes"
 
 
+## <a id="update-plans"></a> Updating Pivotal Cloud Cache Plans
 
+Updating plans can be done on Ops Manager
+
+1. Click on the Cloud Cache tile
+1. Click on the plan you want to update under the "Information" section
+1. Edit the fields with the changes you want to make to the plan
+1. Click the "Save" button on the bottom of the page.
+1. Go to the "Installation Dashboard" by clicking on the "Pcf Ops Manager" logo.
+1. Click the "Apply Changes" button.
+
+Plan changes will not be applied to existing services instances until you run the `upgrade-all-service-instances` bosh-errand. You will need to use the Bosh CLI to run this errand.
+
+Until this errand is run, developers will not be able to update service instances.
+
+Changes to field that can be overridden by optional parameters (e.g. num_servers, new_size_percentage) will change the default value of these instance properties but will not affect existing service instances. If you change the allowed limits of an optional parameter (e.g. max servers per cluster) existing service instances in violation of the new limits will not be modified.
+
+When existing instances are upgraded, all plan changes will be applied to them.
 
 ## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
 
@@ -106,9 +123,6 @@ To uninstall the Cloud Cache take the following steps from the "Installation Das
 
 1. Click the trash can icon in the bottom right hand corner of the tile
 1. Click "Apply Changes"
-
-
-
 
 ## <a id="troubleshooting"></a> Troubleshooting
 
