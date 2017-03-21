@@ -16,7 +16,6 @@ Follow the steps below to install Pivotal Cloud Cache on your PCF.
 
 
 
-
 ### <a id="settings-config"></a> Configuring Tile Properties
 
 #### Assign AZs and Networks
@@ -35,21 +34,9 @@ The **"Plan to use for smoke test"** field allows you to configure the **`smoke-
 
 Select a plan from the list below that will be used when the **`smoke-tests`** errand is run. The **`smoke-tests`** errand will use the selected plan so please ensure that the selected plan is enabled on the plan configuration page as it will fail otherwise.
 
-![Configuring Tile Properties](smoke-test-config.png)
 
 
-#### Settings - Forwarding Syslog
-
-You can configure syslog to foward logs from the broker VM to a remote syslog endpoint. Please note that only TCP endpoints are supported.
-
-The form fields below allow you to configure your remote endpoint. TLS is not required, however, if enabled, you must configure the **"Permitted Peer"**. This permitted peer is used by the local syslog service to verify the remote host's certificate is issued for the expected domain.
-
-The **"CA certificate"** field is not required, however, if provided, it will be used to verify the authenticity of the remote host. If not provided, syslog will use the root CAs from the system. **NOTE:** If your remote syslog endpoint uses a self signed certificate, you should include it here.
-
-**Also, please note that your broker VM must be able to reach your remote syslog endpoint in order to forward logs.**
-
-![Configuring Syslog Properties](syslog-tls-enabled.png)
-
+![Configuring Tile Properties](settings-config.png)
 
 
 #### Configuring Service Plans 1 - 5
