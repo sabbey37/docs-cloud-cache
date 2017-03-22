@@ -4,14 +4,43 @@ owner: Cloud Cache Engineers
 ---
 
 This is documentation for the the Cloud Cache for PCF service tile. 
-## <a id='overview'></a>Overview
+# <a id='overview'></a>Overview
 
-Cloud Cache for PCF provides a service broker for easy on-demand creation of in memory data grids. Cloud Cache service instances should be used as a look aside caches for Cloud Foundry applications. Cloud Cache is powered by GemFire.
+Pivotal Cloud Cache(PCC) for PCF provides a service broker for easy on-demand creation of in memory data cluster. It creates dedicated (to the CF space) clusters which are tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
 
-## <a id='release-notes'></a>Release Notes
-## <a id='Architecture'></a>Architecture
-## <a id='sequence-diagram'></a>Sequence Diagram
-## <a id='recommeded-usage'></a>Recommended Usage and Limitations
-## <a id='security'></a>Security
+# <a id='release-notes'></a>Release Notes
+## <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
+### <a id='new-in-this-release'></a>Minimum Version Requirements
 
+- PCF 1.9.11 and above.
+
+### <a id='new-in-this-release'></a>New in This Release
+- Support for application look aside cache pattern
+- Multi AZ support
+- On Demand provisioning
+- MVP Role Based Access Control
+- Quotas - For both service instances and number of servers in a cluster
+- GemFire 9.0.2
+- Cluster is managed and configured with the cf CLI service commands and gfsh
+
+# <a id='architecture'></a>Architecture
+# <a id='sequence-diagram'></a>Sequence Diagram
+# <a id='recommeded-usage'></a>Recommended Usage and Limitations
+# <a id='security'></a>Security
+Pivotal recommends that Pivotal Cloud Cache for PCF is run in its own network.
+
+Encryption is done by using IPSec. For information about the IPsec Add-on for PCF, see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html).
+
+To allow this service to have network access you must create Application Security Groups. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
+
+### Authentication
+Clusters are created with 2 default users, **operator** and **developer**. Cluster can only be accessed using one of these 2 users. All client applications, gfsh, JMX clients needs to use one of these users to access the cluster.
+
+### Authorization
+Default users "operator" and "developer" both have different permissions. We have 2 default roles already created in Pivotal Cloud Cache.
+
+ - ***Operator*** role has "DATA:MANAGE, DATA:WRITE, DATA:READ" permissions
+ - ***Developer*** role has "DATA:WRITE, DATA:READ" permissions 
+
+More details on the permissions can be found [here](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html)
 
