@@ -133,8 +133,8 @@ This should return output similar to the following:
       "username": "developer"
     },
     {
-      "password": "<operator-password>",
-      "username": "operator"
+      "password": "<cluster_operator-password>",
+      "username": "cluster_operator"
     }
   ]
 }
@@ -142,11 +142,11 @@ This should return output similar to the following:
 
 This returned structure contains a few interesting pieces of information:
 
-* `operator` and `developer` credentials.
+* `cluster_operator` and `developer` credentials.
 * gfsh-url provides a URL which can be used to connect the gfsh client to the service instance
 * pulse-url provides a URL which can be used to view the Pulse dashboard in a web browser which allows the service instance status to be monitored. You can use the developer credentials to authenticate.
 
-The `operator` and `developer` roles provide access to different functions on the service instance.  The `operator` credentials can be used to administer the service instance (for example, to define or delete cache regions). It can also perform the same functions the `developer` credentials allow: performing CRUD data operations. As a best practice, you should use the role with the least amount of permissions necessary.
+The `cluster_operator` and `developer` roles provide access to different functions on the service instance.  The `cluster_operator` credentials can be used to administer the service instance (for example, to define or delete cache regions). It can also perform the same functions the `developer` credentials allow: performing CRUD data operations. As a best practice, you should use the role with the least amount of permissions necessary.
 
 ### <a id="gfsh-connect"></a> Connecting with gfsh
 
@@ -164,17 +164,17 @@ Monitor and Manage Pivotal GemFire
 gfsh>
 ```
 
-From the `gfsh>` prompt, connect to your service instance as `operator`:
+From the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
 
 ```
-gfsh>connect --use-http --url=<gfsh-url> --user=operator --password=<operator-password>
+gfsh>connect --use-http --url=<gfsh-url> --user=cluster_operator --password=<cluster_operator-password>
 ```
 
 ## <a id="use"></a> Using Cloud Cache
 
 ### <a id="create-regions"></a> Creating Regions with gfsh
 
-After connecting with `gfsh` as an operator you can define a new cache region.
+After connecting with `gfsh` as a cluster_operator you can define a new cache region.
 
 ```
 gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU
@@ -219,7 +219,7 @@ This should provide connection information via the VCAP_SERVICES environment var
 
 ### <a id="pulse"></a> Using the Pulse dashboard
 
-You can access the Pulse dashboard for a service instance by accessing the pulse-url obtained from a service key (as shown earlier) in a web browser. Use either of the operator or developer credentials to authenticate.
+You can access the Pulse dashboard for a service instance by accessing the pulse-url obtained from a service key (as shown earlier) in a web browser. Use either of the cluster_operator or developer credentials to authenticate.
 
 ## <a id="delete"></a> Deleting a Service Instance
 
