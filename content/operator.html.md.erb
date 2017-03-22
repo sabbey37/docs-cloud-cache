@@ -6,7 +6,7 @@ owner: Cloud Cache Engineers
 
 ## <a id="install"></a> Installing Pivotal Cloud Cache
 
-Follow the steps below to install Pivotal Cloud Cache on your PCF.
+Follow the steps below to install Pivotal Cloud Cache(PCC) on your PCF.
 
 1. Download the tile from the Pivotal Network
 1. Upload the product to Ops Manager
@@ -159,9 +159,12 @@ broker to see if there were any interruptions to the cluster by a service
 update.
 
 ### General Connectivity
-#### Required ports
+#### Client to Server comminication
 
-GemFire servers will communicate with each other on port 40404, and with
-locators on port 55221. Both of these ports will need to be reachable for the
-cluster to work.
+PCC Clients will communicate to PCC servers on port 40404 and with
+locators on port 55221. Both of these ports will need to be reachable from ERT network to service network.
 
+#### Membership port range
+PCC servers and locators communicate with each other using UDP and TCP. Current port range for this communication is `49152-65535`.
+
+If you have firewall between VMs please ensure this port range is open.
