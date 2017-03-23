@@ -17,7 +17,7 @@ sections:
   - repository:
       name: content
     directory: p-cloud-cache
-    subnav_template: service_subnav.erb       # optional
+    subnav_template: cloudcache_subnav.erb       # optional
     # product_id: myservice                      # optional
 
 # products:                                       # optional
