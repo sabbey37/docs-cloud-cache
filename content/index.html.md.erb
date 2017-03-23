@@ -24,7 +24,55 @@ Pivotal Cloud Cache(PCC) for PCF provides a service broker for easy on-demand cr
 - Cluster is managed and configured with the cf CLI service commands and gfsh
 
 # <a id='architecture'></a>Architecture
+
+<% mermaid_diagram do %>
+  graph LR;
+  subgraph locators
+  Locator1
+  Locator2
+  Locator3
+  end
+  subgraph servers
+  Server1
+  Server2
+  Server3
+  Server4
+  end
+  Client==>Locator1
+  Client-->Locator2
+  Client-->Locator3
+  Client-->Server1
+  Client-->Server2
+  Client-->Server3
+  Client-->Server4
+  Locator1-.->Server1
+  Locator1-.->Server2
+  Locator1-.->Server3
+  Locator1-.->Server4
+  Locator2-->Server1
+  Locator2-->Server2
+  Locator2-->Server3
+  Locator2-->Server4
+  Locator3-->Server1
+  Locator3-->Server2
+  Locator3-->Server3
+  Locator3-->Server4
+<% end %>
+
 # <a id='sequence-diagram'></a>Sequence Diagram
+
+<% mermaid_diagram do %>
+  sequenceDiagram
+    participant Client
+    participant Locator
+    participant Server1
+    participant Server2
+    Client->>+Locator: What servers can I talk to?
+    Locator->>-Client: Server1 and Server2
+    Client-->>Server1: Hello!
+    Client->>Server2: Hello!
+<% end %>
+
 # <a id='recommeded-usage'></a>Recommended Usage and Limitations
 # <a id='security'></a>Security
 Pivotal recommends that Pivotal Cloud Cache for PCF is run in its own network.
