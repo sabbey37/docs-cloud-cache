@@ -26,6 +26,17 @@ This is documentation for the the Cloud Cache for PCF service tile.
 # <a id='architecture'></a>Architecture
 # <a id='sequence-diagram'></a>Sequence Diagram
 # <a id='recommeded-usage'></a>Recommended Usage and Limitations
+Pivotal Cloud Cache (PCC) for PCF can be used as a cache. We currently support [look aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns). 
+ 
+- PCC can be used to store objects in key/value format, where value can be any object.
+- Any command in GFSH not explained in the documentation is **not supported**.
+- We support basic OQL queries, no support for joins.
+
+#### Limitations
+- Scale down of the cluster is not supported.
+- Plan migrations are not supported, i.e. `-p` flag with `cf update-service` command.
+
+
 # <a id='security'></a>Security
 Pivotal recommends that Pivotal Cloud Cache for PCF is run in its own network.
 
