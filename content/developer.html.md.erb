@@ -61,26 +61,27 @@ or 10% of heap, whichever is smaller.
 
 
 ## <a id="create"></a> Updating a Pivotal Cloud Cache Service Instance
-All optional parameters can be applied to an existing service instance using the `cf update-service` command.
-
-```
-$ cf update-service my-service-name -c '{"new_size_percentage": 20}'
-```
+All optional parameters can also be applied to an existing service instance using the `cf update-service` command. This is particularly useful for scaling up a cluster by increasing the number of servers.
 
 Previously specified optional parameters will be persisted through subsequent updates. To return the service instance to default values the defaults must be explicitly specified as optional parameters.
-For example, if I create a service instance with 5 servers using a plan with a default value of 4 servers
+For example, if a service instance is created with 5 servers using a plan with a default value of 4 servers
 
 ```
 $ cf create-service p-cloudcache small my-service-name -c '{"num_servers": 5}'
 ```
 
-and then I update the new size percentage
+and then the new size percentage is changed, like so:
 
 ```
 $ cf update-service my-service-name -c '{"new_size_percentage": 50}'
 ```
 
-the resulting service instance will have 5 servers and new size equal to 50% of heap.
+the resulting service instance will have still have 5 servers and new size equal to 50% of heap.
+
+### Cluster rebalancing
+When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, Pivotal Cloud Cache will automatically rebalance data in the cache so that data is distributed across the cluster.
+
+This automatic rebalancing does not occur when a server leaves the cluster and later rejoins (e.g. VM re-created, network connectivity restored). In this case, the cluster must be manually rebalanced using the [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) in `gfsh`, while authenticated as a cluster operator.
 
 ## <a id="updates"></a> Plan Updates
 The plan available on cf marketplace may be changed by the operator. If the operator changes the default value of one of the optional parameters this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters (e.g. decreasing the maximum value for `num_servers`) existing instances that exceed the new limits will not be affected but any subsequent service update that changes that optional parameter must adhere to the new limits.
@@ -176,8 +177,9 @@ gfsh>connect --use-http --url=<gfsh-url> --user=cluster_operator --password=<clu
 
 After connecting with `gfsh` as a cluster_operator you can define a new cache region.
 
+The following command creates a partitioned region with a single redundant copy.
 ```
-gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU
+gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU --redundant-copies=1
      Member      | Status
 ---------------- | -------------------------------------------------------
 cacheserver-z2-1 | Region "/my-cache-region" created on "cacheserver-z2-1"
@@ -185,6 +187,13 @@ cacheserver-z3-2 | Region "/my-cache-region" created on "cacheserver-z3-2"
 cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
 cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
 ```
+
+The following region types are recommended for Pivotal Cloud Cache:
+
+* `PARTITION_HEAP_LRU`
+* `REPLICATE_HEAP_LRU`
+
+Understanding the type of region that is relevant to your situation is paramount to achieve optimal performance. You can learn about this [here](http://gemfire.docs.pivotal.io/geode/developing/region_options/region_types.html#region_types)
 
 You can test the newly created region by writing and reading values via gfsh:
 
@@ -205,7 +214,7 @@ Value Class : java.lang.String
 Value       : thevalue
 ```
 
-However, in practice, you'll most likely want to perform these operations from a deployed CF app. In order to do that, you must bind the service instance to these apps.
+However, in practice, you'll most likely want to perform these get/put operations from a deployed CF app. In order to do that, you must bind the service instance to these apps.
 
 ### <a id="bind-service"></a> Binding an App to a Service Instance
 
@@ -231,6 +240,3 @@ cf unbind-service <my-app-name> <my-service-name>
 cf delete-service <my-service-name>
 ```
 Deletions are asynchronous. You can use the `cf services` command to get the current status of the service instance deletion.
-
-## <a id="recommended-usage"></a> Recommended Usage and Limitations
-
