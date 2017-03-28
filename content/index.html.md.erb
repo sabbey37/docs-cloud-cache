@@ -6,7 +6,7 @@ owner: Cloud Cache Engineers
 This is documentation for the the Cloud Cache for PCF service tile. 
 # <a id='overview'></a>Overview
 
-Pivotal Cloud Cache(PCC) for PCF provides a service broker for easy on-demand creation of in memory data cluster. It creates dedicated (to the CF space) clusters which are tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
+**Pivotal Cloud Cache (PCC)** for PCF provides a service broker for easy on-demand creation of in memory data cluster. It creates dedicated (to the CF space) clusters which are tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
 
 # <a id='release-notes'></a>Release Notes
 ## <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
@@ -147,12 +147,21 @@ The workflow for the PCF Admin, setting up a P-CloudCache service plan:
 
 
 # <a id='recommeded-usage'></a>Recommended Usage and Limitations
+Pivotal Cloud Cache (PCC) for PCF can be used as a cache. We currently support [look aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns). 
+ 
+- PCC can be used to store objects in key/value format, where value can be any object.
+- Any command in GFSH not explained in the documentation is **not supported**.
+- We support basic OQL queries, no support for joins.
+
+#### Limitations
+- Scale down of the cluster is not supported.
+- Plan migrations are not supported, i.e. `-p` flag with `cf update-service` command.
+
+
 # <a id='security'></a>Security
 Pivotal recommends that Pivotal Cloud Cache for PCF is run in its own network.
 
-Encryption is done by using IPSec. For information about the IPsec Add-on for PCF, see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html).
-
-To allow this service to have network access you must create Application Security Groups. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
+To allow this service to have network access you must create ASG. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
 
 ### Authentication
 Clusters are created with 2 default users, **operator** and **developer**. Cluster can only be accessed using one of these 2 users. All client applications, gfsh, JMX clients needs to use one of these users to access the cluster.
