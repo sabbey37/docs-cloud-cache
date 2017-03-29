@@ -1,9 +1,9 @@
 ---
-title: Cloud Cache for Pivotal Cloud Foundry 
+title: Cloud Cache for Pivotal Cloud Foundry
 owner: Cloud Cache Engineers
 ---
 
-This is documentation for the the Cloud Cache for PCF service tile. 
+This is documentation for the the Cloud Cache for PCF service tile.
 # <a id='overview'></a>Overview
 
 **Pivotal Cloud Cache (PCC)** for PCF provides a service broker for easy on-demand creation of in memory data cluster. It creates dedicated (to the CF space) clusters which are tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
@@ -36,7 +36,7 @@ Pivotal Cloud Cache deploys cache clusters that use Pivotal GemFire to provide h
 When you first spin up a cluster, you'll have three locators and at least 4 servers.
 
 <% mermaid_diagram do %>
-  graph TD; 
+  graph TD;
   Client
   subgraph P-CloudCache Cluster
   subgraph locators
@@ -61,7 +61,7 @@ When you first spin up a cluster, you'll have three locators and at least 4 serv
 If you scale the cluster up, you'll have more servers, increasing the capacity of the cache. There will always be three locators.
 
 <% mermaid_diagram do %>
-  graph TD; 
+  graph TD;
   Client
   subgraph P-CloudCache Cluster
   subgraph locators
@@ -131,7 +131,7 @@ If the server doesn't have the data locally, it will fetch it from another serve
 The workflow for the PCF Admin, setting up a P-CloudCache service plan:
 
 <% mermaid_diagram do %>
-  graph TD; 
+  graph TD;
   subgraph PCF Admin Actions
   s1
   s2
@@ -155,8 +155,8 @@ The workflow for the PCF Admin, setting up a P-CloudCache service plan:
 
 
 # <a id='recommeded-usage'></a>Recommended Usage and Limitations
-Pivotal Cloud Cache (PCC) for PCF can be used as a cache. We currently support [look aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns). 
- 
+Pivotal Cloud Cache (PCC) for PCF can be used as a cache. We currently support [look aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
+
 - PCC can be used to store objects in key/value format, where value can be any object.
 - Any command in GFSH not explained in the documentation is **not supported**.
 - We support basic OQL queries, no support for joins.
@@ -168,11 +168,9 @@ Pivotal Cloud Cache (PCC) for PCF can be used as a cache. We currently support [
 
 # <a id='security'></a>Security
 Pivotal recommends that Pivotal Cloud Cache for PCF is run in its own network.
+Pivotal recommends that a load balancer be used to block access to the go router directly from outside.
 
 To allow this service to have network access from apps, you must create Application Security Groups to allow access on the following ports: 1099, 8080, 40404 and 55221. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
-
-Pivotal Cloud Cache works with the IPsec Add-on for PCF. For information about the IPsec Add-on for PCF, see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html).
-
 
 ### Authentication
 Clusters are created with 2 default users, **cluster_operator** and **developer**. Cluster can only be accessed using one of these 2 users. All client applications, gfsh, JMX clients needs to use one of these users to access the cluster.
@@ -184,4 +182,3 @@ Default users "cluster_operator" and "developer" both have different permissions
  - ***Developer*** role has "DATA:WRITE, DATA:READ" permissions
 
 More details on the permissions can be found [here](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html)
-
