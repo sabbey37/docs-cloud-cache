@@ -1,39 +1,69 @@
 ---
-title: Cloud Cache for Pivotal Cloud Foundry
+title: Pivotal Cloud Cache for Pivotal Cloud Foundry
 owner: Cloud Cache Engineers
 ---
 
-This is documentation for the the Cloud Cache for PCF service tile.
-# <a id='overview'></a>Overview
+## <a id='overview'></a>Overview
 
-**Pivotal Cloud Cache (PCC)** for PCF provides a service broker for easy on-demand creation of in memory data cluster. It creates dedicated (to the CF space) clusters which are tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
+This is the documentation for Pivotal Cloud Cache (PCC) for Pivotal Cloud Foundry (PCF). This tile can be downloaded from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
 
-# <a id='release-notes'></a>Release Notes
-## <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
-### <a id='new-in-this-release'></a>Minimum Version Requirements
+This documentation:
+
+- Describes the features and architecture of Pivotal Cloud Cache for PCF
+- Instructs the PCF operator on how to install, configure, and maintain Pivotal Cloud Cache for PCF
+- Instructs the App developer on how to choose a service plan, create and delete PCC service instances, and bind an app
+
+## <a id='about'></a> About Pivotal Cloud Cache
+
+PCC for PCF provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
+
+You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
+
+### <a id='snapshot'></a> Product Snapshot
+
+Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
+
+- **Version:** v1.0.0
+- **Release Date:** 31 March 2017
+- **Software Component Version:** GemFire v9.0.2
+- **Compatible Ops Manager Version:** v1.9.11
+- **Compatible Elastic Runtime Version:** v1.9.11
+- **vSphere Support:** Yes
+- **Azure Support:** Yes
+- **GCP Support:** Yes
+- **OpenStack Support:** Yes
+- **AWS Support:** Yes
+- **IPSec Support:** No
+
+## <a id='release-notes'></a>Release Notes
+
+### <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
+
+#### <a id='minimum-version-requirements'></a>Minimum Version Requirements
 
 - PCF 1.9.11 and above.
 
-### <a id='new-in-this-release'></a>New in This Release
+#### <a id='new-in-this-release'></a>New in This Release
+
 - Support for application look aside cache pattern
 - Multi AZ support
-- On Demand provisioning
-- MVP Role Based Access Control
-- Quotas - For both service instances and number of servers in a cluster
+- On-demand provisioning
+- MVP role-based access control
+- Quotas, both for service instances and for number of servers in a cluster
 - GemFire 9.0.2
-- Cluster is managed and configured with the cf CLI service commands and gfsh
+- Managed and configure clusters using the PCF Command Line Interface (CLI) service commands and the GemFire gfsh CLI
 
+#### <a id='known-issues'></a>Known Issues
 
-### <a id='known-issues'></a>Known Issues
-- The `Upgrade all service instances` errand can only upgrade the first 50 instances created
-- On PCF for GCP deployments, Ops Manager service network VMs are not assigned the correct firewall rules. As a result, these VMs cannot communicate with the BOSH Director and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules
-- The Cloud Cache broker will accept requests to modify instances that have ongoing BOSH operations, resulting in an asynchronous failure
+- The `Upgrade all service instances` errand can only upgrade the first 50 instances created.
+- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. As a result, these VMs cannot communicate with the BOSH Director and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
+- The PCC broker will accept requests to modify instances that have ongoing BOSH operations, resulting in an asynchronous failure.
 
-# <a id='architecture'></a>Architecture
+## <a id='architecture'></a>Architecture
 
-Pivotal Cloud Cache deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees and eventual consistency.
+PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.
 
-When you first spin up a cluster, you'll have three locators and at least 4 servers.
+When you first spin up a cluster, you'll have three locators and at least four servers.
 
 <% mermaid_diagram do %>
   graph TD;
@@ -58,7 +88,8 @@ When you first spin up a cluster, you'll have three locators and at least 4 serv
   Client-->Server4
 <% end %>
 
-If you scale the cluster up, you'll have more servers, increasing the capacity of the cache. There will always be three locators.
+
+If you scale the cluster up, you'll have more servers, increasing the capacity of the cache. There always will be three locators.
 
 <% mermaid_diagram do %>
   graph TD;
@@ -89,9 +120,9 @@ If you scale the cluster up, you'll have more servers, increasing the capacity o
   Client-->Server7
 <% end %>
 
-When a client connects to the cluster, it first connects to a locator.
-The locator replies with the IP of a server for it to talk to.
-The client will then connect to that server.
+
+When a client connects to the cluster, it first connects to a locator. The locator replies with the IP of a server for it to talk to. The client then connects to that server.
+
 <% mermaid_diagram do %>
   sequenceDiagram
     participant Client
@@ -102,8 +133,7 @@ The client will then connect to that server.
     Client->>Server1: Hello!
 <% end %>
 
-
-When the client want to read or write data, it will send a request directly to the server.
+When the client wants to read or write data, it will send a request directly to the server.
 
 <% mermaid_diagram do %>
   sequenceDiagram
@@ -112,6 +142,7 @@ When the client want to read or write data, it will send a request directly to t
     Client->>+Server1: What's the value for KEY?
     Server1->>-Client: VALUE
 <% end %>
+
 
 If the server doesn't have the data locally, it will fetch it from another server.
 
@@ -126,9 +157,9 @@ If the server doesn't have the data locally, it will fetch it from another serve
     Server1->>-Client: VALUE
 <% end %>
 
-# <a id='sequence-diagram'></a>Workflow
+## <a id='workflow'></a>Workflow
 
-The workflow for the PCF Admin, setting up a P-CloudCache service plan:
+The workflow for the PCF admin setting up a PCC service plan:
 
 <% mermaid_diagram do %>
   graph TD;
@@ -152,33 +183,40 @@ The workflow for the PCF Admin, setting up a P-CloudCache service plan:
   s4-->s5
 <% end %>
 
+## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
-
-# <a id='recommeded-usage'></a>Recommended Usage and Limitations
-Pivotal Cloud Cache (PCC) for PCF can be used as a cache. We currently support [look aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
-
+- PCC for PCF can be used as a cache. It currently supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
-- Any command in GFSH not explained in the documentation is **not supported**.
-- We support basic OQL queries, no support for joins.
+- Any gfsh command not explained in the PCC documentation is **not supported**.
+- PCC supports basic OQL queries, with no support for joins.
 
-#### Limitations
+### Limitations
+
 - Scale down of the cluster is not supported.
-- Plan migrations are not supported, i.e. `-p` flag with `cf update-service` command.
+- Plan migrations--i.e., `-p` flag with the `cf update-service` command--are not supported.
 
+## <a id='security'></a>Security
 
-# <a id='security'></a>Security
-Pivotal recommends that Pivotal Cloud Cache for PCF is run in its own network.
-Pivotal recommends that a load balancer be used to block access to the go router directly from outside.
+Pivotal recommends that you:
 
-To allow this service to have network access from apps, you must create Application Security Groups to allow access on the following ports: 1099, 8080, 40404 and 55221. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
+- Run PCC for PCF in its own network
+- Use a load balancer to block access to the go router directly from outside.
+
+To allow this service to have network access from apps, you must create application security groups that allow access on the following ports: 1099, 8080, 40404, and 55221\. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
 
 ### Authentication
-Clusters are created with 2 default users, **cluster_operator** and **developer**. Cluster can only be accessed using one of these 2 users. All client applications, gfsh, JMX clients needs to use one of these users to access the cluster.
+
+Clusters are created with two default users: **cluster_operator** and **developer**. A cluster can only be accessed using one of these two users. All client applications, gfsh, and JMX clients need to use one of these users to access the cluster.
 
 ### Authorization
-Default users "cluster_operator" and "developer" both have different permissions. We have 2 default roles already created in Pivotal Cloud Cache.
 
- - ***Cluster Operator*** role has "DATA:MANAGE, DATA:WRITE, DATA:READ" permissions
- - ***Developer*** role has "DATA:WRITE, DATA:READ" permissions
+Default users cluster_operator and developer have different permissions:
 
-More details on the permissions can be found [here](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html)
+- **Cluster Operator** role has DATA:MANAGE, DATA:WRITE, and DATA:READ permissions.
+- **Developer** role has DATA:WRITE and DATA:READ permissions.
+
+More details on permissions can be found [here](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
+
+#### <a id='feedback'></a> Feedback
+
+Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback list](mailto:pivotal–cf–feedback@pivotal.io).
