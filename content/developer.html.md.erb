@@ -86,7 +86,7 @@ When updating a cluster to increase the number of servers, the available heap si
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins (e.g., VM re-created, network connectivity restored). In this case, you must manually rebalance the cluster using the [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) in gfsh, while authenticated as a cluster operator.
 
 ## <a id="updates"></a> Plan Updates
-The operator may change the plan available on the CF Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters (e.g., decreasing the maximum value for `num_servers`), existing instances that exceed the new limits will not be affected, but any subsequent service update that changes that optional parameter must adhere to the new limits.
+The operator may change the plan available on the Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters (e.g., decreasing the maximum value for `num_servers`), existing instances that exceed the new limits will not be affected, but any subsequent service update that changes that optional parameter must adhere to the new limits.
 
 If you see the following error message when attempting to update a service instance:
 
