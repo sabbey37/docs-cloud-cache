@@ -3,7 +3,8 @@ title: Operator Guide
 owner: Cloud Cache Engineers
 ---
 
-This document instructs the Pivotal Cloud Foundry (PCF) operator on how to install, configure, and maintain Pivotal Cloud Cache (PCC) for PCF
+
+This document describes how a Pivotal Cloud Foundry (PCF) operator can install, configure, and maintain Pivotal Cloud Cache (PCC) for PCF.
 
 ## <a id="install"></a> Installing Pivotal Cloud Cache
 
@@ -11,99 +12,96 @@ Follow the steps below to install PCC on PCF:
 
 1. Download the tile from the Pivotal Network.
 1. Upload the product to Ops Manager.
-1. Click "Add" next to the uploaded product description.
+1. Click **Add** next to the uploaded product description.
 1. Click on the Cloud Cache Tile and select configuration options.
-1. Click "Apply Changes."
-
+1. Click **Apply Changes**.
 
 ### <a id="settings-config"></a> Configuring Tile Properties
 
-#### Assign AZs and Networks
+#### Assign Availability Zones and Networks
 
-1. Select an AZ that your singleton VMs will reside in (broker, errands).
-1. Select the AZs that will be used to distribute the GemFire VMs. We recommend
+1. Select an  Availability Zone (AZ) where your singleton virtual machines (VMs) will reside. 
+1. Select the AZs used to distribute the GemFire VMs. We recommend
 selecting all of them.
-1. For "Network," select your ERT network.
-1. For "Service Network," select the network to be used for GemFire VMs.
-
+1. For **Network**, select your Elastic Runtime network.
+1. For **Service Network**, select the network to be used for GemFire VMs.
 
 #### Settings: Smoke Tests
 
-The **"Plan to use for smoke test"** field allows you to configure the `smoke-tests` errand that will be run after tile installation to verify successful installation.
+The **Plan to use for smoke test** field allows you to configure the `smoke-tests` errand that runs after tile installation to verify successful installation.
 
-Select a plan from the list below that will be used when the `smoke-tests` errand is run. The `smoke-tests` errand will use the selected plan, so ensure that the selected plan is enabled on the plan-configuration page. Otherwise, it will fail.
+Select a plan from the list below to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
 
 ![Configuring Tile Properties](settings-config.png)
 
-By default, the smoke tests will run on the `system` org and the `p-cloudcache-smoke-test` space.
-
+By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
 
 #### <a id="plan-config"></a> Configuring Service Plans 1 - 5
 
-There are 5 individual plans you can configure to be available to developers.  Select the **"Plan 1"** through **"Plan 5"** tabs to configure each of them.
+You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
 ![Configuring a Plan](configure-plan.png)
 
-The **"Enable Plan"** toggle is checked by default. If you don't want to make this plan available, select "Disable Plan." If you would like to make this plan available at a later time using the CF CLI, select "Manual Plan." Note that you must enable at least one plan.
+The **Enable Plan** toggle is checked by default. If you do not want to make this plan available, select **Disable Plan**. If you want to make this plan available at a later time using the cf CLI, select **Manual Plan**. You must enable at least one plan.
 
-The **"Plan Name"** text field allows you to customize the name of the plan. This plan name will be displayed to developers when they view the service in the Marketplace.
+The **Plan Name** text field allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace.
 
-The **"Plan Description"** text field allows you to enter a plan description that will be displayed to developers in the Marketplace.
+The **Plan Description** text field allows you to supply a plan description. The description is displayed to developers when they view the service in the Marketplace.
 
-The **"Service Instance Quota"** configures the maximum number of PCC clusters that can exist simultaneously.
+The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
 
-When developers create (or updates) a service instance, they will have the option to specify the number of servers in the cluster. The **"Maximum servers per cluster"** field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, the new cluster will have the number of servers specified in the **"Default Number of Servers"** field.
+When developers create or update a service instance, they can specify the number of servers in the cluster. The **Maximum servers per cluster** field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, a new cluster has the number of servers specified in the **Default Number of Servers** field.
 
-The **"Availability zones for service instances"** setting controls which availability zones the members of a cluster are evenly distributed across.
+The **Availability zones for service instances** setting controls which AZs the members of a cluster are evenly distributed across.
 
 The remaining fields control the VM type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server VM type. We recommend the following configuration:
 
-* For the **"VM type for the Locator VMs"** field, select a VM that has at least 1 GB of RAM and 4 GB of disk.
-* For the **"Persistent disk type for the Locator VMs"** field, select 10 GB or higher.
-* For the **"VM type for the Server VMs"** field, select a VM that has at least 4 GB of RAM and 8 GB of disk.
-* For the **"Persistent disk type for the server VMs"** field, select 10 GB or higher.
+* For the **VM type for the Locator VMs** field, select a VM that has at least 1&nbsp;GB of RAM and 4&nbsp;GB of disk space.
+* For the **Persistent disk type for the Locator VMs** field, select 10&nbsp;GB or higher.
+* For the **VM type for the Server VMs** field, select a VM that has at least 4&nbsp;GB of RAM and 8&nbsp;GB of disk space.
+* For the **Persistent disk type for the server VMs** field, select 10 GB or higher.
 
-When you are done configuring the plan, be sure to click **"Save"** to save your configuration options.
-
+When you finish configuring the plan, click **Save** to save your configuration options.
 
 #### Stemcell
-Ensure that you've imported the correct type of stemcell indicated on this tab.
 
+Ensure you import the correct type of stemcell indicated on this tab.
 
-## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
+## <a id="upgrade"></a> Upgrade Pivotal Cloud Cache
 
-The process for upgrading is similar to that for installing:
+Follow the steps below to upgrade PCC on PCF:
 
 1. Download the new version of the tile from the Pivotal Network.
 1. Upload the product to Ops Manager.
-1. Click "Add" next to the uploaded product.
+1. Click **Add** next to the uploaded product.
 1. Click on the Cloud Cache Tile and review your configuration options.
-1. Click "Apply Changes."
+1. Click **Apply Changes**.
 
+## <a id="update-plans"></a> Update Pivotal Cloud Cache Plans
 
-## <a id="update-plans"></a> Updating Pivotal Cloud Cache Plans
-
-Updating plans can be done on Ops Manager:
+Follow the steps below to update plans in Ops Manager.
 
 1. Click on the Cloud Cache tile.
-1. Click on the plan you want to update under the "Information" section.
+1. Click on the plan you want to update under the **Information** section.
 1. Edit the fields with the changes you want to make to the plan.
-1. Click the "Save" button on the bottom of the page.
-1. Go to the "Installation Dashboard" by clicking on the "PCF Ops Manager" logo.
-1. Click the "Apply Changes" button.
+1. Click **Save** button on the bottom of the page.
+1. Click on the **PCF Ops Manager** to navigate to the **Installation Dashboard**.
+1. Click **Apply Changes**.
 
-Plan changes will not be applied to existing services instances until you run the `upgrade-all-service-instances` bosh-errand. You will need to use the BOSH CLI to run this errand. Until this errand is run, developers will not be able to update service instances.
+Plan changes are not applied to existing services instances until you run the `upgrade-all-service-instances` BOSH errand. You must use the BOSH CLI to run this errand. Until you run this errand, developers cannot update service instances.
 
-Changes to fields that can be overridden by optional parameters (e.g., num_servers, new_size_percentage) will change the default value of these instance properties but will not affect existing service instances. If you change the allowed limits of an optional parameter (e.g., max servers per cluster), existing service instances in violation of the new limits will not be modified.
+Changes to fields that can be overridden by optional parameters, for example  `num_servers` or `new_size_percentage`, will change the default value of these instance properties, but will not affect existing service instances. 
+
+If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits will not be modified.
 
 When existing instances are upgraded, all plan changes will be applied to them.
 
-## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
+## <a id="uninstall"></a> Uninstall Pivotal Cloud Cache
 
-To uninstall the Cloud Cache take the following steps from the "Installation Dashboard":
+To uninstall Pivotal Cloud Cache, follow the steps from below from the **Installation Dashboard**:
 
 1. Click the trash can icon in the bottom-right-hand corner of the tile.
-1. Click "Apply Changes."
+1. Click **Apply Changes**.
 
 ## <a id="troubleshooting"></a> Troubleshooting
 
@@ -115,31 +113,26 @@ You can visualize the performance of your cluster by downloading the statistics 
 bosh scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
 ```
 
-[Click here](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) for instructions on loading the statistics files into Pivotal GemFire VSD.
+See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
 
 ### Smoke Test Failures
 
-#### Error: "Creating p-cloudcache <plan> <service name> failed"
-The smoke tests were unable to create an instance of GemFire. To troubleshoot
-why the deployment failed, create a new service instance using the same plan
-with the CF CLI and download the logs of the service deployment from BOSH.
+#### Error: "Creating p-cloudcache SERVICE-NAME failed"
+The smoke tests could not create an instance of GemFire. To troubleshoot
+why the deployment failed, use the cf CLI to create a new service instance using the same plan and download the logs of the service deployment from BOSH.
 
-#### Error: "Deleting <service> failed"
-The smoke test was attempting to clean up a service instance it created. It
-failed to delete the service using `cf delete-service`. Use `bosh logs` to
-view the logs on the broker or the service instance to see why the deletion
-may have failed.
+#### Error: "Deleting SERVICE-NAME failed"
+The smoke test attempted to clean up a service instance it created and failed to delete the service using the `cf delete-service` command. To trobleshoot this issue, run `bosh logs` to view the logs on the broker or the service instance to see why the deletion may have failed.
 
-#### Error: Cannot connect to the cluster <service name>
+#### Error: Cannot connect to the cluster SERVICE-NAME
 The smoke test was unable to connect to the cluster.
 
-Check the logs of your load balancer.
-
-Check the logs of your CF Router to ensure the route to your PCC
-cluster is being properly registered.
+To troubleshoot the issue, review the logs of your load balancer, and 
+review the logs of your CF Router to ensure the route to your PCC
+cluster is properly registered.
 
 You also can create a service instance and try to connect to it using the
-gfsh CLI. This will require creating a service key.
+gfsh CLI. This requires creating a service key.
 
 #### Error: "Could not perform create/put on Cloud Cache cluster"
 The smoke test was unable to write data to the cluster. The user may not have
@@ -148,17 +141,17 @@ permissions to create a region or write data.
 #### Error: "Could not retrieve value from Cloud Cache cluster"
 The smoke test was unable to read back the data it wrote. Data loss can happen
 if a cluster member improperly stops and starts again or if the member machine
-crashes and is ressurrected by BOSH. Use `bosh logs` to see the logs on the
+crashes and is resurrected by BOSH. Run `bosh logs` to view the logs on the
 broker to see if there were any interruptions to the cluster by a service
 update.
 
 ### General Connectivity
 #### Client-to-server Communication
 
-PCC Clients will communicate to PCC servers on port 40404 and with
-locators on port 55221. Both of these ports will need to be reachable from the ERT network to service the network.
+PCC Clients communicate to PCC servers on port 40404 and with
+locators on port 55221. Both of these ports must be reachable from the Elastic Runtime network to service the network.
 
 #### Membership Port Range
-PCC servers and locators communicate with each other using UDP and TCP. Current port range for this communication is `49152-65535`.
+PCC servers and locators communicate with each other using UDP and TCP. The current port range for this communication is `49152-65535`.
 
-If you have a firewall between VMs, please ensure that this port range is open.
+If you have a firewall between VMs, ensure this port range is open.

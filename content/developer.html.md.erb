@@ -3,13 +3,15 @@ title: Pivotal Cloud Cache Developer Guide
 owner: Cloud Cache Engineers
 ---
 
-This document instructs the Pivotal Cloud Foundry (PCF) app developer on how to choose a service plan, create and delete Pivotal Cloud Cache (PCC) service instances, and bind an app.
+This document describes how a Pivotal Cloud Foundry (PCF) app developer can choose a service plan, create and delete Pivotal Cloud Cache (PCC) service instances, and bind an app.
 
-## View all plans available for Pivotal Cloud Cache
+You must install the [Cloud Foundry Command Line Interface](http://docs.pivotal.io/pivotalcf/cf-cli/install-go-cli.html) (cf CLI) to run the commands in this topic.
 
-Using the PCF command line interface (CF CLI), the following command shows all plans available for PCC:
+## View All Plans Available for Pivotal Cloud Cache
 
-```
+Run `cf marketplace -s p-cloudcache` to view all plans available for Pivotal Cloud Cache. The plan names displayed are configured by the operator on tile installation.
+
+<pre class='terminal'>
 $ cf marketplace -s p-cloudcache
 
 Getting service plan information for service p-cloudcache as admin...
@@ -21,105 +23,106 @@ small          Caching Plan 2   free
 medium         Caching Plan 3   free
 large          Caching Plan 4   free
 extra-large    Caching Plan 5   free
-```
+</pre>
 
-Note that the plan names displayed above are configured by the operator on tile installation.
+## <a id="create"></a> Create a Pivotal Cloud Cache Service Instance
 
-## <a id="create"></a> Creating a Pivotal Cloud Cache Service Instance
+Run `cf create-service p-cloudcache PLAN-NAME SERVICE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-NAME` with a name of your choice. You use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
 
-You can create service instances using the CF CLI.
+<pre class='terminal'>
+$ cf create-service p-cloudcache extra-large my-cloudcache
+</pre>
 
-```
-$ cf create-service p-cloudcache <plan-name> <service-name>
-```
+Service instances are created asynchronously. Run the `cf services` command to view the current status of the service creation, and of other service instances in the current org and space:
 
-Creation of service instances is asynchronous. You can run the `cf services` command to get the current status of the service creation and other service instances in the current org and space:
-
-```
+<pre class='terminal'>
 $ cf services
 Getting services in org my-org / space my-space as user...
 OK
 
-name                  service        plan      bound apps     last operation
-service-name          p-cloudcache   small                    create in progress
-```
+name            service        plan    bound apps   last operation
+my-cloudcache   p-cloudcache   small                create in progress
+</pre>
 
-Eventually, the status should change from `create in progress` to `create succeeded`.
+When completed, the status changes from `create in progress` to `create succeeded`.
 
-### <a id="params"></a> Optional Parameters
-You can create a customized service instance by passing optional parameters to `cf
-create-service`. For example:
+### <a id="params"></a> Provide Optional Parameters
 
-```
-$ cf create-service p-cloudcache small my-service-name -c '{"num_servers": 5}'
-```
+You can create a customized service instance by passing optional parameters to `cf create-service` using the `-c` flag. The `-c` flag accepts a valid JSON object containing service-specific configuration parameters, provided either in-line or in a file. 
 
 The PCC service broker supports the following parameters:
 
-- `num_servers` (int): the number of server instances in the cluster. The minimum value is 4. The maximum and default values are configured by operator.
-- `new_size_percentage` (int): The percentage of the heap to allocate to young
-generation. This value must be between five and 83. By default, the new size is 2 G or 10% of heap, whichever is smaller.
+- `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by operator. 
+- `new_size_percentage`: An integer that specifies the percentage of the heap to allocate to young generation. This value must be between `5` and `83`. By default, the new size is 2&nbsp;GB or 10% of heap, whichever is smaller.
 
+The following example creates the service with five service instances in the cluster: 
 
-## <a id="create"></a> Updating a Pivotal Cloud Cache Service Instance
+<pre class='terminal'>
+$ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
+</pre>
 
-You also can apply all optional parameters to an existing service instance using the `cf update-service` command. This is particularly useful for scaling up a cluster by increasing the number of servers.
+## <a id="create"></a> Update a Pivotal Cloud Cache Service Instance
 
-Previously specified optional parameters will be persisted through subsequent updates. To return the service instance to default values, the defaults must be specified explicitly as optional parameters. For example, if a service instance is created with five servers using a plan with a default value of four servers:
+You  can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
 
-```
-$ cf create-service p-cloudcache small my-service-name -c '{"num_servers": 5}'
-```
+Previously specified optional parameters are persisted through subsequent updates. To return the service instance to default values, you must explicitly specify the defaults as optional parameters. 
 
-and the new size percentage is changed:
+For example, if you create a service instance with five servers using a plan that has a default value of four servers:
 
-```
-$ cf update-service my-service-name -c '{"new_size_percentage": 50}'
-```
+<pre class='terminal'>
+$ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
+</pre>
 
-then the resulting service instance still will have five servers and new size equal to 50% of heap.
+And you set the `new_size_percentage` to 50%:
 
-### Cluster rebalancing
+<pre class='terminal'>
+$ cf update-service my-cloudcache -c '{"new_size_percentage": 50}'
+</pre>
 
-When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC will automatically rebalance data in the cache so that data is distributed across the cluster.
+Then the resulting service instance has `5` servers and `new_size_percentage` of 50% of heap.
 
-This automatic rebalancing does not occur when a server leaves the cluster and later rejoins (e.g., VM re-created, network connectivity restored). In this case, you must manually rebalance the cluster using the [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) in gfsh, while authenticated as a cluster operator.
+### Cluster Rebalancing
+
+When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC automatically rebalances data in the cache to distribute data across the cluster.
+
+This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored. In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator.
 
 ## <a id="updates"></a> Plan Updates
-The operator may change the plan available on the Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters (e.g., decreasing the maximum value for `num_servers`), existing instances that exceed the new limits will not be affected, but any subsequent service update that changes that optional parameter must adhere to the new limits.
 
-If you see the following error message when attempting to update a service instance:
+Your PCF operator may change the plan available on the Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters, for example decreasing the maximum value for `num_servers`, existing instances that exceed the new limits are not affected, but any subsequent service update that changes the optional parameter must adhere to the new limits.
 
-```
-cf update-service  my-service-name -c '{"num_servers": 5}'
-Updating service instance my-service-name as admin...
+You may see the following error message when attempting to update a service instance:
+
+<pre class='terminal'>
+$ cf update-service  my-cloudcache -c '{"num_servers": 5}'
+Updating service instance my-cloudcache as admin...
 FAILED
 Server error, status code: 502, error code: 10001, message: Service broker error: Service cannot be updated at this time, please try again later or contact your operator for more information
-```
+</pre>
 
-this indicates that the operator has made an update to the plan used by this service instance. You must wait for the operator to apply plan changes to all service instances before you will be able to make further service instance updates.
+This error message indicates that the operator has made an update to the plan used by this service instance. You must wait for the operator to apply plan changes to all service instances before you can make further service instance updates.
 
-## <a id="accessing"></a> Accessing a Service Instance
+## <a id="accessing"></a> Access a Service Instance
 
-Once your service instance is created, you can start accessing it. Usually, before using your service instance from a deployed CF app, you'll want to set up cache regions. This can be done via the gfsh command-line tool. In order to connect, you'll first need to set up a service key.
+Once you have created a service instance, you can start accessing it. Usually you should set up cache regions before using your service instance from a deployed CF app. You can do this with the gfsh command line tool. To connect, you must set up a service key.
 
-### <a id="create-service-key"></a> Creating Service Keys
+### <a id="create-service-key"></a> Create Service Keys
 
-Service keys provide a way to access your service instance outside the scope of a deployed CF app. You can create these using the CF CLI.
+Service keys provide a way to access your service instance outside the scope of a deployed CF app. Run `cf create-service-key SERVICE-NAME KEY-NAME` to create  a service key. Replace `SERVICE-NAME` with the name you chose for your service instance. Replace `KEY-NAME` with a name of your choice. You use this name to refer to your service key with other commands. 
 
-```
-$ cf create-service-key <my-service-name> <my-service-key-name>
-```
+<pre class='terminal'>
+$ cf create-service-key my-cloudcache my-service-key
+</pre>
 
-Once you have done so, view the newly created service key:
+Run `cf create-service-key SERVICE-NAME KEY-NAME` to view the newly created service key.
 
-```
-$ cf service-key  <my-service-name> <my-service-key-name>
-```
+<pre class='terminal'>
+$ cf service-key my-cloudcache my-service-key
+</pre>
 
-This should return output similar to the following:
+The `cf service-key` returns output in the following format:
 
-```
+<pre class='terminal'>
 {
   "locators": [
     "10.244.0.66[55221]",
@@ -141,21 +144,25 @@ This should return output similar to the following:
     }
   ]
 }
-```
+</pre>
 
-This returned structure contains a few interesting pieces of information:
+This returned structure contains the following information:
 
 * `cluster_operator` and `developer` credentials
-* `gfsh-url`: Provides a URL that can be used to connect the gfsh client to the service instance
-* `pulse-url`: Provides a URL that can be used to view the Pulse dashboard in a web browser, which allows the service-instance status to be monitored. You can use the developer credentials to authenticate.
+* `gfsh-url`: A URL usable to connect the gfsh client to the service instance
+* `pulse-url`: A URL usable to view the Pulse dashboard in a web browser, which allows monitoring of the service-instance status. You can use the developer credentials to authenticate.
 
-The `cluster_operator` and `developer` roles provide access to different functions on the service instance. The `cluster_operator` credentials can be used to administer the service instance (e.g., to define or delete cache regions). It can also perform the same functions the `developer` credentials allow: performing CRUD data operations. As a best practice, you should use the role with the least amount of permissions necessary.
+The `cluster_operator` and `developer` roles provide access to different functions on the service instance. 
 
-### <a id="gfsh-connect"></a> Connecting with gfsh
+You can use the `cluster_operator` credentials to administer the service instance. For example, you can use the `cluster_operator` credentials to define or delete cache regions.
+
+You can use the `developer` credentials to perform create, retrieve, update, and delete (CRUD) data operations. You can also use the `cluster_operator` credentials to perform the same functions the `developer` credentials. As a best practice, you should use the role with the least amount of permissions necessary.
+
+### <a id="gfsh-connect"></a> Connect with gfsh
 
 Start the `gfsh` command-line tool:
 
-```
+<pre class='terminal'>
 $ gfsh
     _________________________     __
    / _____/ ______/ ______/ /____/ /
@@ -165,22 +172,23 @@ $ gfsh
 
 Monitor and Manage Pivotal GemFire
 gfsh>
-```
+</pre>
 
 From the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
 
-```
+<pre class='terminal'>
 gfsh>connect --use-http --url=<gfsh-url> --user=cluster_operator --password=<cluster_operator-password>
-```
+</pre>
 
 ## <a id="use"></a> Using Cloud Cache
 
-### <a id="create-regions"></a> Creating Regions with gfsh
+### <a id="create-regions"></a> Create Regions with gfsh
 
 After connecting with gfsh as a `cluster_operator`, you can define a new cache region.
 
 The following command creates a partitioned region with a single redundant copy:
-```
+
+<pre class='terminal'>
 gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU --redundant-copies=1
      Member      | Status
 ---------------- | -------------------------------------------------------
@@ -188,18 +196,18 @@ cacheserver-z2-1 | Region "/my-cache-region" created on "cacheserver-z2-1"
 cacheserver-z3-2 | Region "/my-cache-region" created on "cacheserver-z3-2"
 cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
 cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
-```
+</pre>
 
 The following region types are recommended for PCC:
 
 * `PARTITION_HEAP_LRU`
 * `REPLICATE_HEAP_LRU`
 
-Understanding the type of region that is relevant to your situation is paramount to achieving optimal performance. You can learn about this [here](http://gemfire.docs.pivotal.io/geode/developing/region_options/region_types.html#region_types).
+To achieve optimal performance, you should understand the type of region that is relevant to your situation. For more information, see the Pivotal GemFire [Region Types](http://gemfire.docs.pivotal.io/geode/developing/region_options/region_types.html#region_types) documentation.
 
-You can test the newly created region by writing and reading values via gfsh:
+You can test the newly created region by writing and reading values with gfsh:
 
-```
+<pre class='terminal'>
 gfsh>put --region=/my-cache-region --key=test --value=thevalue
 Result      : true
 Key Class   : java.lang.String
@@ -214,32 +222,38 @@ Key Class   : java.lang.String
 Key         : test
 Value Class : java.lang.String
 Value       : thevalue
-```
+</pre>
 
-However, in practice, you'll most likely want to perform these get/put operations from a deployed PCF app. In order to do that, you must bind the service instance to these apps.
+In practice, you should perform these get/put operations from a deployed PCF app. To do this, you must bind the service instance to these apps.
 
-### <a id="bind-service"></a> Binding an App to a Service Instance
+### <a id="bind-service"></a> Bind an App to a Service Instance
 
-Binding your apps to a service instance allows them to connect to it and read/write data to the region. This can be done via the CF CLI:
+Binding your apps to a service instance allows the apps to connect to the service instance, and read or write data to the region. Run `cf bind-service APP-NAME SERVICE-NAME` to bind an app to your service instance. Replace `APP-NAME` with the name of the app. Replace `SERVICE-NAME` with the name you chose for your service instance.
 
-```
-$ cf bind-service <my-app-name> <my-cloud-cache-service-instance-name>
-```
+<pre class='terminal'>
+$ cf bind-service my-app my-cloudcache
+</pre>
 
-This should provide connection information via the `VCAP_SERVICES` environment variable, which your app can use to configure components (e.g., a GemFire client cache) to use the service instance.
+Binding an app to the service instance provide connection information through  the `VCAP_SERVICES` environment variable, which your app can use to configure components like a GemFire client cache to use the service instance.
 
-### <a id="pulse"></a> Using the Pulse dashboard
+### <a id="pulse"></a> Use the Pulse Dashboard
 
-You can access the Pulse dashboard for a service instance by accessing the pulse-url obtained from a service key (as shown earlier) in a web browser. Use either the `cluster_operator` or `developer` credentials to authenticate.
+You can access the Pulse dashboard for a service instance by accessing the pulse-url you [obtained from a service key](#create-service-key) in a web browser. 
+
+Use either the `cluster_operator` or `developer` credentials to authenticate.
 
 ## <a id="delete"></a> Deleting a Service Instance
 
-You can delete service instances using the CF CLI. Before doing so, you will also need to remove any existing app bindings and service keys:
+You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
 
-```
-cf delete-service-key <my-service-name> <my-service-key-name>
-cf unbind-service <my-app-name> <my-service-name>
-cf delete-service <my-service-name>
-```
+1. Run `cf delete-service-key SERVICE-NAME KEY-NAME` to delete the service key.
+1. Run `cf unbind-service APP-NAME SERVICE-NAME` to unbind your app from the service instance.
+1. Run `cf delete-service SERVICE-NAME` to delete the service instance.
 
-Deletions are asynchronous. You can use the `cf services` command to get the current status of the service-instance deletion.
+<pre class='terminal'>
+$ cf delete-service-key my-cloudcache my-service-key
+$ cf unbind-service my-app my-cloudcache
+$ cf delete-service my-cloudcache
+</pre>
+
+Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
