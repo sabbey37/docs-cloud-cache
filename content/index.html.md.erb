@@ -5,21 +5,19 @@ owner: Cloud Cache Engineers
 
 ## <a id='overview'></a>Overview
 
-This is the documentation for Pivotal Cloud Cache (PCC) for Pivotal Cloud Foundry (PCF). This tile can be downloaded from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
-
-This documentation:
-
-- Describes the features and architecture of Pivotal Cloud Cache for PCF
-- Instructs the PCF operator on how to install, configure, and maintain Pivotal Cloud Cache for PCF
-- Instructs the App developer on how to choose a service plan, create and delete PCC service instances, and bind an app
-
-## <a id='about'></a> About Pivotal Cloud Cache
+This is the documentation for Pivotal Cloud Cache (PCC) for Pivotal Cloud Foundry (PCF). You can download the Pivotal Cloud Cache tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
 
 PCC for PCF provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. Pivotal Cloud Cache uses Pivotal GemFire.
 
 You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
 
-### <a id='snapshot'></a> Product Snapshot
+This documentation performs the following functions:
+
+- Describes the features and architecture of Pivotal Cloud Cache for PCF
+- Provides the PCF operator with instructions for installing, configuring, and maintaining Pivotal Cloud Cache for PCF
+- Provides app developers instructions for choosing a service plan, creating and deleting PCC service instances, and binding apps
+
+## <a id='snapshot'></a> Product Snapshot
 
 Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 
@@ -45,18 +43,18 @@ Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 
 #### <a id='new-in-this-release'></a>New in This Release
 
-- Support for application look aside cache pattern
+- Support for application look-aside cache pattern
 - Multi AZ support
 - On-demand provisioning
 - MVP role-based access control
 - Quotas, both for service instances and for number of servers in a cluster
 - GemFire 9.0.2
-- Managed and configure clusters using the PCF command-line interface (CLI) service commands and the GemFire gfsh CLI
+- Managed and configure clusters using the Cloud Foundry Command Line Interface (cf CLI) service commands and the GemFire gfsh CLI
 
 #### <a id='known-issues'></a>Known Issues
 
 - The `Upgrade all service instances` errand can only upgrade the first 50 instances created.
-- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. As a result, these VMs cannot communicate with the BOSH Director and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
+- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. As a result, these VMs cannot communicate with the BOSH Director, and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
 - The PCC broker will accept requests to modify instances that have ongoing BOSH operations, resulting in an asynchronous failure.
 
 ## <a id='architecture'></a>Architecture
@@ -121,7 +119,7 @@ If you scale the cluster up, you'll have more servers, increasing the capacity o
 <% end %>
 
 
-When a client connects to the cluster, it first connects to a locator. The locator replies with the IP of a server for it to talk to. The client then connects to that server.
+When a client connects to the cluster, it first connects to a locator. The locator replies with the IP address of a server for it to talk to. The client then connects to that server.
 
 <% mermaid_diagram do %>
   sequenceDiagram
@@ -133,7 +131,7 @@ When a client connects to the cluster, it first connects to a locator. The locat
     Client->>Server1: Hello!
 <% end %>
 
-When the client wants to read or write data, it will send a request directly to the server.
+When the client wants to read or write data, it sends a request directly to the server.
 
 <% mermaid_diagram do %>
   sequenceDiagram
@@ -144,7 +142,7 @@ When the client wants to read or write data, it will send a request directly to 
 <% end %>
 
 
-If the server doesn't have the data locally, it will fetch it from another server.
+If the server doesn't have the data locally, it fetches it from another server.
 
 <% mermaid_diagram do %>
   sequenceDiagram
@@ -185,7 +183,7 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
-- PCC for PCF can be used as a cache. It currently supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
+- PCC for PCF can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.
@@ -197,15 +195,21 @@ The workflow for the PCF admin setting up a PCC service plan:
 - WAN (Cross Data Center) replication is not supported.
 - Persistent regions are not supported.
 
-
 ## <a id='security'></a>Security
 
-Pivotal recommends that you:
+Pivotal recommends that you do the following:
 
 - Run PCC for PCF in its own network
-- Use a load balancer to block access to the go router directly from outside.
+- Use a load balancer to block direct, outside access to the Gorouter
 
-To allow this service to have network access from apps, you must create application security groups that allow access on the following ports: 1099, 8080, 40404, and 55221\. For more information, see [Networks, Security, and Assigning AZs](https://docs.pivotal.io/pivotalcf/1-9/adminguide/app-sec-groups.html#creating-groups).
+To allow PCC network access from apps, you must create application security groups that allow access on the following ports: 
+
+* 1099
+* 8080
+* 40404
+* 55221
+
+For more information, see the PCF [Application Security Groups](https://docs.pivotal.io/pivotalcf/adminguide/app-sec-groups.html#creating-groups) topic.
 
 ### Authentication
 
@@ -218,7 +222,7 @@ Default user roles `cluster_operator` and `developer` have different permissions
 - `cluster_operator` role has DATA:MANAGE, DATA:WRITE, and DATA:READ permissions.
 - `developer` role has DATA:WRITE and DATA:READ permissions.
 
-More details on permissions can be found [here](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
+You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
 
 #### <a id='feedback'></a> Feedback
 
