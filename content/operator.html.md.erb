@@ -32,9 +32,27 @@ The **Plan to use for smoke test** field allows you to configure the `smoke-test
 
 Select a plan from the list below to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
 
-![Configuring Tile Properties](settings-config.png)
+![Configuring Smoke Tests Plan](settings-config.png)
 
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
+
+#### Settings: External Syslog
+
+Pivotal Cloud Cache supports forwarding syslog to an external log management service (e.g. papertrail, splunk, or your custom enterprise log sink). To enable remote syslog for the service broker set the "Syslog Host" and "Syslog Port" properties on the "Settings" tab.
+
+![Configuring Log Management Service](syslog-config.png)
+
+The broker logs are useful for debugging problems creating, updating, and binding service instances.
+
+By default remote syslog will send unencrypted logs. You can enable TLS by selecting the "Enable TLS" radio button. You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority (i.e. in the case of an internal syslog server). If there are several peer servers that may respond to remote syslog connections you will need to provide a regex in the "permitted peer" field (e.g. *.example.com).
+
+![Configuring Log Management Service TLS](syslog-tls-config.png)
+
+By default, only the broker logs will be forwarded to your configured log management service. If you would like to forward server and locator logs from all service instances please check the "Send service instance logs to external syslog" checkbox.
+
+![Configuring Log Management Service for Service Instances](syslog-service-instances-config.png)
+
+You may want to enable remote syslog for service instances if you would like to monitor the health of the clusters. However, this will generate a large volume of logs, which is why it is disabled by default. The broker logs only include information about service instance creation, not on-going cluster health. Please note that service instance logs will be sent to the same host and port configured for the broker logs.
 
 #### <a id="plan-config"></a> Configuring Service Plans 1 - 5
 
@@ -127,7 +145,7 @@ The smoke test attempted to clean up a service instance it created and failed to
 #### Error: Cannot connect to the cluster SERVICE-NAME
 The smoke test was unable to connect to the cluster.
 
-To troubleshoot the issue, review the logs of your load balancer, and 
+To troubleshoot the issue, review the logs of your load balancer, and
 review the logs of your CF Router to ensure the route to your PCC
 cluster is properly registered.
 
