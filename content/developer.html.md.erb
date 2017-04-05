@@ -159,6 +159,13 @@ You can use the `cluster_operator` credentials to administer the service instanc
 You can use the `developer` credentials to perform create, retrieve, update, and delete (CRUD) data operations. You can also use the `cluster_operator` credentials to perform the same functions the `developer` credentials. As a best practice, you should use the role with the least amount of permissions necessary.
 
 ### <a id="gfsh-connect"></a> Connect with gfsh
+You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh` version 9.0.0 and above.
+
+To install gfsh:
+
+1. Download "Pivotal Gemfire" zip archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire)
+1. Unzip and locate the correct binary for your architecture (`gfsh` for unix or `gfsh.bats` for windows)
+1. Add the `gfsh` binary to your path
 
 Start the `gfsh` command-line tool:
 
