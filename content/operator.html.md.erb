@@ -1,12 +1,11 @@
 ---
-title: Operator Guide
+title: Pivotal Cloud Cache Operator Guide
 owner: Cloud Cache Engineers
 ---
 
-
 This document describes how a Pivotal Cloud Foundry (PCF) operator can install, configure, and maintain Pivotal Cloud Cache (PCC) for PCF.
 
-## <a id="install"></a> Installing Pivotal Cloud Cache
+## <a id="install"></a> Install Pivotal Cloud Cache
 
 Follow the steps below to install PCC on PCF:
 
@@ -16,13 +15,12 @@ Follow the steps below to install PCC on PCF:
 1. Click on the Cloud Cache Tile and select configuration options.
 1. Click **Apply Changes**.
 
-### <a id="settings-config"></a> Configuring Tile Properties
+### <a id="settings-config"></a> Configure Tile Properties
 
 #### Assign Availability Zones and Networks
 
 1. Select an  Availability Zone (AZ) where your singleton virtual machines (VMs) will reside. 
-1. Select the AZs used to distribute the GemFire VMs. We recommend
-selecting all of them.
+1. Select the AZs used to distribute the GemFire VMs. We recommend selecting all of them.
 1. For **Network**, select your Elastic Runtime network.
 1. For **Service Network**, select the network to be used for GemFire VMs.
 
@@ -38,21 +36,21 @@ By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcac
 
 #### Settings: External Syslog
 
-Pivotal Cloud Cache supports forwarding syslog to an external log management service (e.g. papertrail, splunk, or your custom enterprise log sink). To enable remote syslog for the service broker set the "Syslog Host" and "Syslog Port" properties on the "Settings" tab.
+Pivotal Cloud Cache supports forwarding syslog to an external log management service lik Papertrail, Splunk, or your custom enterprise log sink. To enable remote syslog for the service broker, set the **Syslog Host** and **Syslog Port** properties on the **Settings** tab.
 
 ![Configuring Log Management Service](syslog-config.png)
 
-The broker logs are useful for debugging problems creating, updating, and binding service instances.
+Use the broker logs to debug problems creating, updating, and binding service instances.
 
-By default remote syslog will send unencrypted logs. You can enable TLS by selecting the "Enable TLS" radio button. You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority (i.e. in the case of an internal syslog server). If there are several peer servers that may respond to remote syslog connections you will need to provide a regex in the "permitted peer" field (e.g. *.example.com).
+By default, remote syslog sends unencrypted logs. Enable TLS by selecting the **Enable TLS** radio button. You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority, for example in the case of an internal syslog server. If several peer servers exist that may respond to remote syslog connections, you must provide a regex in the "permitted peer" field, for example `*.example.com`.
 
 ![Configuring Log Management Service TLS](syslog-tls-config.png)
 
-By default, only the broker logs will be forwarded to your configured log management service. If you would like to forward server and locator logs from all service instances please check the "Send service instance logs to external syslog" checkbox.
+By default, only the broker logs are forwarded to your configured log management service. If you want to forward server and locator logs from all service instances, select the **Send service instance logs to external syslog** checkbox.
 
 ![Configuring Log Management Service for Service Instances](syslog-service-instances-config.png)
 
-You may want to enable remote syslog for service instances if you would like to monitor the health of the clusters. However, this will generate a large volume of logs, which is why it is disabled by default. The broker logs only include information about service instance creation, not on-going cluster health. Please note that service instance logs will be sent to the same host and port configured for the broker logs.
+You may want to enable remote syslog for service instances to monitor the health of the clusters. However, doing so generates a large volume of logs, which is why this setting is disabled by default. The broker logs only include information about service instance creation, not on-going cluster health. Service instance logs are sent to the same host and port configured for the broker logs.
 
 #### <a id="plan-config"></a> Configuring Service Plans 1 - 5
 
@@ -60,7 +58,7 @@ You can configure five individual plans for your developers. Select the **Plan 1
 
 ![Configuring a Plan](configure-plan.png)
 
-The **Enable Plan** toggle is checked by default. If you do not want to make this plan available, select **Disable Plan**. If you want to make this plan available at a later time using the cf CLI, select **Manual Plan**. You must enable at least one plan.
+The **Enable Plan** toggle is checked by default. If you do not want to make this plan available, select **Disable Plan**. If you want to make this plan available at a later time using the Cloud Foundry Command Line Interface (cf CLI), select **Manual Plan**. You must enable at least one plan.
 
 The **Plan Name** text field allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace.
 
@@ -112,7 +110,7 @@ Changes to fields that can be overridden by optional parameters, for example  `n
 
 If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits will not be modified.
 
-When existing instances are upgraded, all plan changes will be applied to them.
+When existing instances are upgraded, all plan changes are applied to them.
 
 ## <a id="uninstall"></a> Uninstall Pivotal Cloud Cache
 
@@ -140,7 +138,7 @@ The smoke tests could not create an instance of GemFire. To troubleshoot
 why the deployment failed, use the cf CLI to create a new service instance using the same plan and download the logs of the service deployment from BOSH.
 
 #### Error: "Deleting SERVICE-NAME failed"
-The smoke test attempted to clean up a service instance it created and failed to delete the service using the `cf delete-service` command. To trobleshoot this issue, run `bosh logs` to view the logs on the broker or the service instance to see why the deletion may have failed.
+The smoke test attempted to clean up a service instance it created and failed to delete the service using the `cf delete-service` command. To troubleshoot this issue, run `bosh logs` to view the logs on the broker or the service instance to see why the deletion may have failed.
 
 #### Error: Cannot connect to the cluster SERVICE-NAME
 The smoke test was unable to connect to the cluster.

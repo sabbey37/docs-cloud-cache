@@ -19,7 +19,7 @@ This documentation performs the following functions:
 
 ## <a id='snapshot'></a> Product Snapshot
 
-Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
+Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 
 - **Version:** v1.0.1
 - **Release Date:** 10 April 2017
@@ -35,7 +35,7 @@ Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 
 ## <a id='release-notes'></a>Release Notes
 
-### <a id='v1.0.1'></a>Pivotal Cloud Cache Version 1.0.1
+### <a id='v1.0.1'></a>Pivotal Cloud Cache Version v1.0.1
 
 #### <a id='new-in-this-release'></a>New in This Release
 
@@ -51,7 +51,7 @@ Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 - Added option to provide public IP addresses to VMs, which is necessary to allow egress on Google Cloud Platform
 - Added errand when deleting tile that deletes all PCC service instances
 
-### <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
+### <a id='v1.0'></a>Pivotal Cloud Cache Version v1.0
 
 #### <a id='minimum-version-requirements'></a>Minimum Version Requirements
 
@@ -64,7 +64,7 @@ Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 - On-demand provisioning
 - MVP role-based access control
 - Quotas, both for service instances and for number of servers in a cluster
-- GemFire 9.0.2
+- GemFire v9.0.2
 - Managed and configure clusters using the Cloud Foundry Command Line Interface (cf CLI) service commands and the GemFire gfsh CLI
 
 #### <a id='known-issues'></a>Known Issues
@@ -201,14 +201,14 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 - PCC for PCF can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
-- PCC works with gfsh versions 9.0.0 and above
+- PCC works with gfsh versions v9.0.0 and above
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.
 
 ### Limitations
 
 - Scale down of the cluster is not supported.
-- Plan migrations--i.e., `-p` flag with the `cf update-service` command--are not supported.
+- Plan migrations, for example, `-p` flag with the `cf update-service` command, are not supported.
 - WAN (Cross Data Center) replication is not supported.
 - Persistent regions are not supported.
 
@@ -230,7 +230,7 @@ For more information, see the PCF [Application Security Groups](https://docs.piv
 
 ### Authentication
 
-Clusters are created with two default users: `cluster_operator` and `developer`. A cluster can only be accessed using one of these two users. All client applications, gfsh, and JMX clients need to use one of these users to access the cluster.
+Clusters are created with two default users: `cluster_operator` and `developer`. A cluster can only be accessed using one of these two users. All client applications, gfsh, and JMX clients must authenticate as one of these users accounts to access the cluster.
 
 ### Authorization
 

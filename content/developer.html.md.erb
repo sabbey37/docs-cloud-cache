@@ -130,16 +130,16 @@ The `cf service-key` returns output in the following format:
     "10.244.0.3[55221]"
   ],
   "urls": {
-    "gfsh": "<gfsh-url>",
-    "pulse": "<pulse-url>"
+    "gfsh": "gfsh-url",
+    "pulse": "pulse-url"
   },
   "users": [
     {
-      "password": "<developer-password>",
+      "password": "developer-password",
       "username": "developer"
     },
     {
-      "password": "<cluster_operator-password>",
+      "password": "cluster_operator-password",
       "username": "cluster_operator"
     }
   ]
@@ -159,15 +159,14 @@ You can use the `cluster_operator` credentials to administer the service instanc
 You can use the `developer` credentials to perform create, retrieve, update, and delete (CRUD) data operations. You can also use the `cluster_operator` credentials to perform the same functions the `developer` credentials. As a best practice, you should use the role with the least amount of permissions necessary.
 
 ### <a id="gfsh-connect"></a> Connect with gfsh
-You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh` version 9.0.0 and above.
+You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh` v9.0.0 and above.
 
 To install gfsh:
 
 1. Download "Pivotal Gemfire" zip archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire)
-1. Unzip and locate the correct binary for your architecture (`gfsh` for unix or `gfsh.bats` for windows)
+1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bats` with Windows.
 1. Add the `gfsh` binary to your path
-
-Start the `gfsh` command-line tool:
+1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
 
 <pre class='terminal'>
 $ gfsh
@@ -178,13 +177,8 @@ $ gfsh
 /______/_/      /______/_/    /_/    9.0.1
 
 Monitor and Manage Pivotal GemFire
-gfsh>
-</pre>
 
-From the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
-
-<pre class='terminal'>
-gfsh>connect --use-http --url=<gfsh-url> --user=cluster_operator --password=<cluster_operator-password>
+gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluster_operator-password
 </pre>
 
 ## <a id="use"></a> Using Cloud Cache
@@ -220,7 +214,7 @@ Result      : true
 Key Class   : java.lang.String
 Key         : test
 Value Class : java.lang.String
-Old Value   : <NULL>
+Old Value   : NULL
 
 
 gfsh>get --region=/my-cache-region --key=test
@@ -251,9 +245,9 @@ The code is available at [https://github.com/cf-gemfire-org/cloudcache-sample-ap
 
 The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above.
 
-Apache Geode 1.0.0 is currently the only version that works to connect to our version of GemFire, whihch is listed in the `build.gradle`.
+Apache Geode 1.0.0 is currently the only version that works to connect to our version of GemFire, which is listed in the `build.gradle`.
 
-To deploy the app to cloudfoundry using the sample manifest below:
+Copy, update, and save the following sample manifest:
 
 ```
 ---
@@ -267,11 +261,9 @@ applications:
               # to docs above on how to create a cloud cache service instance.
 ```
 
-```
-$ cf push -f /path/to/manifest
-```
+Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` with the path to the sample manifest you created.
 
-Once the application is pushed and started there should be an entry in the `test` region where `key=1` and `value=one`
+Once you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
 
 ### <a id="pulse"></a> Use the Pulse dashboard
 
