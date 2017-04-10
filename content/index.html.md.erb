@@ -21,8 +21,8 @@ This documentation performs the following functions:
 
 Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 
-- **Version:** v1.0.0
-- **Release Date:** 31 March 2017
+- **Version:** v1.0.1
+- **Release Date:** 10 April 2017
 - **Software Component Version:** GemFire v9.0.2
 - **Compatible Ops Manager Version:** v1.9.11
 - **Compatible Elastic Runtime Version:** v1.9.11
@@ -34,6 +34,22 @@ Current Pivotal Cloud Cache for Pivotal Cloud Foundry details:
 - **IPSec Support:** No
 
 ## <a id='release-notes'></a>Release Notes
+
+### <a id='v1.0.1'></a>Pivotal Cloud Cache Version 1.0.1
+
+#### <a id='new-in-this-release'></a>New in This Release
+
+- Upgrades to v0.15.1 of On-Demand Service Broker
+- Smoke test now runs in the `system` organization
+- Improved reliability of Smoke Test errand
+- Adds support for gfsh `export logs` command
+- Optimized size of tile to make downloading and uploading faster
+- Ensured no data loss with when performing a stemcell upgrade for regions with redundancy
+- Add post deployment checks that all locators properly join the cluster
+- PCC broker can be configured to send logs to a syslog server
+- PCC service instances will now send logs to configured syslog endpoint if enabled
+- Added option to provide public IP addresses to VMs, which is necessary to allow egress on Google Cloud Platform
+- Added errand when deleting tile that deletes all PCC service instances
 
 ### <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
 
