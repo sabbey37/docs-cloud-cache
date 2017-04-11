@@ -81,6 +81,15 @@ The remaining fields control the VM type and persistent disk type for servers an
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
+#### Settings: Allow outbound internet access from service instances
+
+The **Allow outbound internet access from service instances** checkbox is unchecked by default.
+
+The **Allow outbound internet access from service instances** may need to be checked to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
+
+![Outbound Internet Access](outbound-internet-access.png)
+
+
 #### Stemcell
 
 Ensure you import the correct type of stemcell indicated on this tab.
