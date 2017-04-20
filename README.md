@@ -1,5 +1,11 @@
 # docs-cloud-cache
 
+## Branch using
+
+The pre-production documentation is on the **Master** branch.
+
+The current live documentation is on the **v1.0-branch**.
+
 ## Staging
 
 The staging docs are on PWS using the pcf-gemfire@pivotal.io account
