@@ -34,6 +34,17 @@ Select a plan from the list below to use when the `smoke-tests` errand runs. The
 
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
 
+#### Settings: Allow outbound internet access from service instances
+
+The **Allow outbound internet access from service instances** checkbox is unchecked by default.
+
+The **Allow outbound internet access from service instances** may need to be checked to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
+
+**Allow outbound internet access from service instances** is needed if bosh is configured to use external blob store, then the PCC tile should be configured to allow external internet access.
+
+![Outbound Internet Access](outbound-internet-access.png)
+
+
 #### Settings: External Syslog
 
 Pivotal Cloud Cache supports forwarding syslog to an external log management service lik Papertrail, Splunk, or your custom enterprise log sink. To enable remote syslog for the service broker, set the **Syslog Host** and **Syslog Port** properties on the **Settings** tab.
@@ -78,15 +89,6 @@ The remaining fields control the VM type and persistent disk type for servers an
 * For the **Persistent disk type for the server VMs** field, select 10 GB or higher.
 
 When you finish configuring the plan, click **Save** to save your configuration options.
-
-#### Settings: Allow outbound internet access from service instances
-
-The **Allow outbound internet access from service instances** checkbox is unchecked by default.
-
-The **Allow outbound internet access from service instances** may need to be checked to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
-
-![Outbound Internet Access](outbound-internet-access.png)
-
 
 #### Stemcell
 
