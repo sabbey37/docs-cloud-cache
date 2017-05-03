@@ -88,11 +88,9 @@ The **Service Instance Quota** sets the maximum number of PCC clusters that can 
 
 When developers create or update a service instance, they can specify the number of servers in the cluster. The **Maximum servers per cluster** field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, a new cluster has the number of servers specified in the **Default Number of Servers** field.
 
-The **Availability zones for service instances** setting controls which AZs the members of a cluster are evenly distributed across.
+The **Availability zones for service instances** setting determines which AZs are used for a particular cluster. The members of a cluster are distributed evenly across AZs.
 
-#### Warning
-
-Once you've selected availability zones for your service network, you cannot add additional zones afterwards as this will cause existing service instances, if any, to lose data on update.
+<p class="note warning"><strong> WARNING</strong> After you've selected AZs for your service network, you cannot add additional AZs; doing so causes existing service instances to lose data on update. </p>
 
 The remaining fields control the VM type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server VM type. We recommend the following configuration:
 
