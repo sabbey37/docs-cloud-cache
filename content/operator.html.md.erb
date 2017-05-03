@@ -89,6 +89,10 @@ When developers create or update a service instance, they can specify the number
 
 The **Availability zones for service instances** setting controls which AZs the members of a cluster are evenly distributed across.
 
+#### Warning
+
+Once you've selected availability zones for your service network, you cannot add additional zones afterwards as this will cause existing service instances, if any, to lose data on update.
+
 The remaining fields control the VM type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server VM type. We recommend the following configuration:
 
 * For the **VM type for the Locator VMs** field, select a VM that has at least 1&nbsp;GB of RAM and 4&nbsp;GB of disk space.
