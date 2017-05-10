@@ -2,9 +2,13 @@
 
 ## About Branches 
 
-**v1.0-branch** is your current branch for (already released) v1.0, and other branches such as `v1.0-no-az-changes` and `v1.0-service_access-#144322245` are being used to PR corrections/edits back into 1.0 docs.
+**v1.0-branch** is your current branch for (already released) v1.0.
 
-There will be a v1.1 branch that hasn't been created yet, and the **master branch** is not in use.
+Other branches such as **v1.0-no-az-changes** and **v1.0-service_access-#144322245** are being used to PR corrections/edits back into 1.0 docs.
+
+**master branch** is not in use.
+
+Coming soon is a **v1.1-branch** that hasn't been created yet.
 
 The above info about branches comes from Peter Tran and is correct as of May 10, 2017.
 
