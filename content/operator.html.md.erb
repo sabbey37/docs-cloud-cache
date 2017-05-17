@@ -194,3 +194,37 @@ locators on port 55221. Both of these ports must be reachable from the Elastic R
 PCC servers and locators communicate with each other using UDP and TCP. The current port range for this communication is `49152-65535`.
 
 If you have a firewall between VMs, ensure this port range is open.
+
+#### Bosh Director and VM's on Different Networks
+
+A deployment will fail if the VMs in the service network cannot reach the Bosh Director VM on another network. VM's on a different service network will need to be able to talk to the bosh director.
+
+If the VMs cannot communicate with the Bosh director, it will result in the following error:
+
+```
+Director task 1257
+Started preparing deployment > Preparing deployment. Done (00:00:00)
+
+Started preparing package compilation > Finding packages to compile. Done (00:00:00)
+
+Started creating missing vms
+Started creating missing vms > locator/d328ac30-fd48-424f-a28f-5087d94c07fd (0)
+Started creating missing vms > locator/c41e4988-257c-47a4-bb97-1828dae15df4 (2)
+Started creating missing vms > server/54f3690f-2366-405e-aca0-e0d630753e91 (0)
+Started creating missing vms > server/cbbb4739-aae0-472f-9f7f-713d6ac15d07 (3)
+Started creating missing vms > locator/36758e47-6f89-4003-968d-55620ca28e8a (1)
+Started creating missing vms > server/abc4f156-1403-4187-a1f7-35f1ff4d961c (1)
+Started creating missing vms > server/5a9c74e8-881e-4f49-99e3-0a708b2b583c (2). Failed: Timed out pinging to 37ebdd5e-4fe8-49cd-8a0f-cc72837a361c after 600 seconds (00:10:35)
+Failed creating missing vms > server/cbbb4739-aae0-472f-9f7f-713d6ac15d07 (3): Timed out pinging to db1d846b-a2cd-4c49-942e-3cf1b48edac1 after 600 seconds (00:10:37)
+Failed creating missing vms > locator/d328ac30-fd48-424f-a28f-5087d94c07fd (0): Timed out pinging to 578a74a3-5511-4263-adbd-5028c6b7d1ab after 600 seconds (00:10:38)
+Failed creating missing vms > server/54f3690f-2366-405e-aca0-e0d630753e91 (0): Timed out pinging to 73aec92f-b563-4f50-b22a-283072455b6e after 600 seconds (00:10:39)
+Failed creating missing vms > locator/36758e47-6f89-4003-968d-55620ca28e8a (1): Timed out pinging to 634738c2-2338-4d32-973a-63f91dcfd922 after 600 seconds (00:10:39)
+Failed creating missing vms > locator/c41e4988-257c-47a4-bb97-1828dae15df4 (2): Timed out pinging to 35b63dff-a7ff-44e2-984d-481dd9d1337b after 600 seconds (00:10:41)
+Failed creating missing vms > server/abc4f156-1403-4187-a1f7-35f1ff4d961c (1): Timed out pinging to e6a59079-974b-4c05-8ce3-d250b582a571 after 600 seconds (00:10:54)
+Failed creating missing vms (00:10:54)
+
+Error 450002: Timed out pinging to 37ebdd5e-4fe8-49cd-8a0f-cc72837a361c after 600 seconds
+
+Task 1257 error
+```
+
