@@ -48,7 +48,7 @@ The **Allow outbound internet access from service instances** checkbox is unchec
 
 The **Allow outbound internet access from service instances** may need to be checked to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
 
-**Allow outbound internet access from service instances** is needed if bosh is configured to use external blob store, then the PCC tile should be configured to allow external internet access.
+**Allow outbound internet access from service instances** is needed if BOSH is configured to use external blob store, then the PCC tile should be configured to allow external internet access.
 
 ![Outbound Internet Access](outbound-internet-access.png)
 
@@ -195,7 +195,7 @@ PCC servers and locators communicate with each other using UDP and TCP. The curr
 
 If you have a firewall between VMs, ensure this port range is open.
 
-#### Bosh Director and VMs on Different Networks
+#### BOSH Director and VMs on Different Networks
 
 A deployment will fail if the VMs in the service network cannot reach the BOSH Director VM on another network. VMs on a different service network need to be able to talk to the BOSH Director.
 
