@@ -5,7 +5,8 @@ owner: Cloud Cache Engineers
 
 ## <a id='overview'></a>Overview
 
-This is the documentation for Pivotal Cloud Cache (PCC). You can download the PCC tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
+This is the documentation for Pivotal Cloud Cache (PCC). 
+You can download the PCC tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
 
 PCC provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. PCC uses Pivotal GemFire.
 
@@ -21,11 +22,12 @@ This documentation performs the following functions:
 
 Current Pivotal Cloud Cache details:
 
-- **Version:** v1.0.2
-- **Release Date:** 3rd May 2017
-- **Software Component Version:** GemFire v9.0.2
-- **Compatible Ops Manager Version:** v1.9.11
-- **Compatible Elastic Runtime Version:** v1.9.11
+
+- **Version:** v1.0.3
+- **Release Date:** May 26, 2017
+- **Software Component Version:** GemFire v9.0.3
+- **Compatible Ops Manager Version:** v1.10.3
+- **Compatible Elastic Runtime Version:** v1.10.4
 - **vSphere Support:** Yes
 - **Azure Support:** Yes
 - **GCP Support:** Yes
@@ -35,9 +37,17 @@ Current Pivotal Cloud Cache details:
 
 ## <a id='release-notes'></a>Release Notes
 
-### <a id='v1.0.2'></a>Pivotal Cloud Cache Version 1.0.2
+### <a id='v1.0.3'></a>Pivotal Cloud Cache v1.0.3
 
-#### <a id='new-in-this-release'></a>New in This Release
+**<a id='new-in-this-release'></a>New in This Release**
+
+- Upgraded to Gemfire v9.0.3 
+- Fixed JVM parameters for garbage collection 
+- URL routes were updated to read "cloudcache" rather than "gemfire"
+
+### <a id='v1.0.2'></a>Pivotal Cloud Cache v1.0.2
+
+**<a id='new-in-this-release'></a>New in This Release**
 
 - Upgrades to v0.15.2 of On-Demand Service Broker
 - Increased smoke test canary timeout to 5 minutes
@@ -47,9 +57,9 @@ Current Pivotal Cloud Cache details:
 
 
 
-### <a id='v1.0.1'></a>Pivotal Cloud Cache Version 1.0.1
+### <a id='v1.0.1'></a>Pivotal Cloud Cache v1.0.1
 
-#### <a id='new-in-this-release'></a>New in This Release
+**<a id='new-in-this-release'></a>New in This Release**
 
 - Upgrades to v0.15.1 of On-Demand Service Broker
 - Smoke test now runs in the `system` organization
@@ -63,26 +73,27 @@ Current Pivotal Cloud Cache details:
 - Added option to provide public IP addresses to VMs, which is necessary to allow egress on Google Cloud Platform
 - Added errand when deleting tile that deletes all PCC service instances
 
-### <a id='v1.0'></a>Pivotal Cloud Cache Version 1.0
+### <a id='v1.0'></a>Pivotal Cloud Cache v1.0.0
 
-#### <a id='minimum-version-requirements'></a>Minimum Version Requirements
+**<a id='minimum-version-requirements'></a>Minimum Version Requirements**
 
 - PCC requires PCF with PCF Elastic Runtime v1.9.11 or above.
 
-#### <a id='new-in-this-release'></a>New in This Release
+**<a id='new-in-this-release'></a>New in This Release**
 
 - Support for application look-aside cache pattern
 - Multi AZ support
 - On-demand provisioning
 - MVP role-based access control
 - Quotas, both for service instances and for number of servers in a cluster
-- GemFire 9.0.2
+- GemFire v9.0.2
 - Managed and configure clusters using the Cloud Foundry Command Line Interface (cf CLI) service commands and the GemFire gfsh CLI
 
-#### <a id='known-issues'></a>Known Issues
+**<a id='known-issues'></a>Known Issues**
 
 - The `Upgrade all service instances` errand can only upgrade the first 50 instances created.
-- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. As a result, these VMs cannot communicate with the BOSH Director, and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
+- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. 
+As a result, these VMs cannot communicate with the BOSH Director, and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
 - The PCC broker will accept requests to modify instances that have ongoing BOSH operations, resulting in an asynchronous failure.
 
 ## <a id='architecture'></a>Architecture
@@ -213,7 +224,7 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 - PCC for PCF can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
-- PCC works with gfsh versions 9.0.0 and above
+- PCC works with gfsh v9.0.0 and later
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.
 
