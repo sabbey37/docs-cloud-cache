@@ -243,19 +243,22 @@ $ cf bind-service my-app my-cloudcache
 
 Binding an app to the service instance provide connection information through  the `VCAP_SERVICES` environment variable, which your app can use to configure components like a GemFire client cache to use the service instance.
 
-### <a id="sample-java-app-connect"></a> How to write a Java client app for PCC
+### <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
 
-A sample application written in pure Java has been put together to demonstrate how to connect an application to the service instance.
+A sample application in pure Java has been written to demonstrate how to connect an application to the service instance.
 
 The code is available at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git)
 
 The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above.
 
-Apache Geode 1.0.0 is currently the only version that works to connect to our version of GemFire, whihch is listed in the `build.gradle`.
+Apache Geode 1.0.0 is currently the only version that works to connect to our version of GemFire, which is listed in the `build.gradle`.
 
-To deploy the app to cloudfoundry using the sample manifest below:
+Follow these steps to deploy the sample app:
 
-```
+1. Modify the sample manifest, replacing `service0` with the name of your service. 
+
+
+    ```
 ---
 applications:
 - name: sample_app
@@ -263,17 +266,18 @@ applications:
   no-route: true
   health-check-type: none
   services:
-  - service0  # replace this with the name of your service. Please refer
-              # to docs above on how to create a cloud cache service instance.
-```
+  - service0  
+    ```
 
-```
-$ cf push -f /path/to/manifest
-```
+1. To deploy the app, run the `cf push` command:
 
-Once the application is pushed and started there should be an entry in the `test` region where `key=1` and `value=one`
+    ```
+  $ cf push -f /path/to/manifest
+    ```
 
-### <a id="pulse"></a> Use the Pulse dashboard
+After the app is pushed and started, there should be an entry in the `test` region where `key=1` and `value=one`.
+
+### <a id="pulse"></a> Use the Pulse Dashboard
 
 You can access the Pulse dashboard for a service instance by accessing the pulse-url you [obtained from a service key](#create-service-key) in a web browser.
 
