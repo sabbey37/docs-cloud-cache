@@ -243,6 +243,48 @@ $ cf bind-service my-app my-cloudcache
 
 Binding an app to the service instance provide connection information through  the `VCAP_SERVICES` environment variable, which your app can use to configure components like a GemFire client cache to use the service instance.
 
+Sample `VCAP_SERVICES`
+
+```
+system-provided:
+{
+"vcap_services": {
+ "p-cloudcache": [
+	{
+	 "credentials": {
+		"locators": [
+		 "10.244.0.4[55221]",
+		 "10.244.1.2[55221]",
+		 "10.244.0.130[55221]"
+		],
+		"urls": {
+		 "gfsh": "http://cloudcache-5574c540-1464-4f9e-b56b-74d8387cb50d.local.pcfdev.io/gemfire/v1",
+		 "pulse": "http://cloudcache-5574c540-1464-4f9e-b56b-74d8387cb50d.local.pcfdev.io/pulse"
+		},
+		"users": [
+		 {
+			"password": "some_developer_password",
+			"username": "developer"
+		 },
+		 {
+			"password": "some_password",
+			"username": "cluster_operator"
+		 }
+		]
+	 },
+	 "label": "p-cloudcache",
+	 "name": "test-service",
+	 "plan": "caching-small",
+	 "provider": null,
+	 "syslog_drain_url": null,
+	 "tags": [],
+	 "volume_mounts": []
+	}
+ ]
+}
+}
+```
+
 ### <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
 
 A sample application in pure Java has been written to demonstrate how to connect an application to the service instance.
