@@ -19,7 +19,6 @@ This documentation performs the following functions:
 
 ## <a id='snapshot'></a> Product Snapshot
 
-<<<<<<< HEAD
 The following table provides version and version-support information about Pivotal Cloud Cache:
 
 <table class="nice">
@@ -27,11 +26,11 @@ The following table provides version and version-support information about Pivot
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.0.1</td>
+        <td>v1.0.2</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>April 10, 2017</td>
+        <td>May 3, 2017</td>
     </tr>
     <tr>
         <td>Software component version</td>
@@ -57,25 +56,7 @@ The following table provides version and version-support information about Pivot
 
 ## <a id='release-notes'></a>Release Notes
 
-### <a id='v1.0.2'></a>Pivotal Cloud Cache Version v1.0.2
-
-Current Pivotal Cloud Cache details:
-
-- **Version:** v1.0.2
-- **Release Date:** 3rd May 2017
-- **Software Component Version:** GemFire v9.0.2
-- **Compatible Ops Manager Version:** v1.9.11
-- **Compatible Elastic Runtime Version:** v1.9.11
-- **vSphere Support:** Yes
-- **Azure Support:** Yes
-- **GCP Support:** Yes
-- **OpenStack Support:** Yes
-- **AWS Support:** Yes
-- **IPSec Support:** No
-
-## <a id='release-notes'></a>Release Notes
-
-### <a id='v1.0.2'></a>Pivotal Cloud Cache Version 1.0.2
+### <a id='v1.0.2'></a>Pivotal Cloud Cache v1.0.2
 
 #### <a id='new-in-this-release'></a>New in This Release
 
@@ -87,7 +68,7 @@ Current Pivotal Cloud Cache details:
 
 
 
-### <a id='v1.0.1'></a>Pivotal Cloud Cache Version 1.0.1
+### <a id='v1.0.1'></a>Pivotal Cloud Cache v1.0.1
 
 #### <a id='new-in-this-release'></a>New in This Release
 
@@ -103,7 +84,7 @@ Current Pivotal Cloud Cache details:
 - Added option to provide public IP addresses to VMs, which is necessary to allow egress on Google Cloud Platform
 - Added errand when deleting tile that deletes all PCC service instances
 
-### <a id='v1.0'></a>Pivotal Cloud Cache Version v1.0
+### <a id='v1.0'></a>Pivotal Cloud Cache v1.0
 
 #### <a id='minimum-version-requirements'></a>Minimum Version Requirements
 
@@ -282,7 +263,9 @@ For more information, see the PCF [Application Security Groups](https://docs.piv
 
 ### Authentication
 
-Clusters are created with two default users: `cluster_operator` and `developer`. A cluster can only be accessed using one of these two users. All client applications, gfsh, and JMX clients must authenticate as one of these users accounts to access the cluster.
+Clusters are created with two default users: `cluster_operator` and `developer`.
+A cluster can only be accessed using one of these two users.
+All client applications, gfsh, and JMX clients must authenticate as one of these users accounts to access the cluster.
 
 ### Authorization
 
@@ -293,6 +276,6 @@ Default user roles `cluster_operator` and `developer` have different permissions
 
 You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
 
-#### <a id='feedback'></a> Feedback
+## <a id='feedback'></a> Feedback
 
 Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback list](mailto:pivotal–cf–feedback@pivotal.io).
