@@ -25,7 +25,7 @@ large          Caching Plan 4   free
 extra-large    Caching Plan 5   free
 </pre>
 
-## <a id="create"></a> Create a Pivotal Cloud Cache Service Instance
+## <a id="create"></a> Creating a Pivotal Cloud Cache Service Instance
 
 Run `cf create-service p-cloudcache PLAN-NAME SERVICE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-NAME` with a name of your choice. You use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
 
@@ -61,7 +61,7 @@ The following example creates the service with five service instances in the clu
 $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 </pre>
 
-## <a id="create"></a> Update a Pivotal Cloud Cache Service Instance
+## <a id="create"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You  can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
 
@@ -87,7 +87,7 @@ When updating a cluster to increase the number of servers, the available heap si
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored. In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator.
 
-## <a id="updates"></a> Plan Updates
+## <a id="updates"></a> About Plan Updates
 
 Your PCF operator may change the plan available on the Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters, for example decreasing the maximum value for `num_servers`, existing instances that exceed the new limits are not affected, but any subsequent service update that changes the optional parameter must adhere to the new limits.
 
@@ -102,7 +102,7 @@ Server error, status code: 502, error code: 10001, message: Service broker error
 
 This error message indicates that the operator has made an update to the plan used by this service instance. You must wait for the operator to apply plan changes to all service instances before you can make further service instance updates.
 
-## <a id="accessing"></a> Access a Service Instance
+## <a id="accessing"></a> Accessing a Service Instance
 
 Once you have created a service instance, you can start accessing it. Usually you should set up cache regions before using your service instance from a deployed CF app. You can do this with the gfsh command line tool. To connect, you must set up a service key.
 
@@ -235,15 +235,19 @@ In practice, you should perform these get/put operations from a deployed PCF app
 
 ### <a id="bind-service"></a> Bind an App to a Service Instance
 
-Binding your apps to a service instance allows the apps to connect to the service instance, and read or write data to the region. Run `cf bind-service APP-NAME SERVICE-NAME` to bind an app to your service instance. Replace `APP-NAME` with the name of the app. Replace `SERVICE-NAME` with the name you chose for your service instance.
+Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region. 
+Run `cf bind-service APP-NAME SERVICE-NAME` to bind an app to your service instance. 
+Replace `APP-NAME` with the name of the app. 
+Replace `SERVICE-NAME` with the name you chose for your service instance.
 
 <pre class='terminal'>
 $ cf bind-service my-app my-cloudcache
 </pre>
 
-Binding an app to the service instance provide connection information through  the `VCAP_SERVICES` environment variable, which your app can use to configure components like a GemFire client cache to use the service instance.
+Binding an app to the service instance provides connection information through the `VCAP_SERVICES` environment variable.
+Your app can use this information to configure components, such as the GemFire client cache, to use the service instance. 
 
-Sample `VCAP_SERVICES`
+The following is a sample `VCAP_SERVICES` environment variable:
 
 ```
 system-provided:
