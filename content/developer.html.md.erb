@@ -328,3 +328,18 @@ $ cf delete-service my-cloudcache
 </pre>
 
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
+
+
+## <a id="ssc"></a> Enabling Session State Caching With the Java Buildpack
+
+When using sessions state caching your service instance must have the tag `session-replication`. You can add the tag on service creation or updating the service.
+
+```
+cf create-service <SERVICE> <SERVICE-INSTANCE-NAME> -t session-replication
+```
+
+```
+cf update-service <SERVICE-INSTANCE-NAME> -t session-replication
+```
+
+Once the service instance has the tag `session-replication` the java buildpack will download all the required resources for session state caching.
