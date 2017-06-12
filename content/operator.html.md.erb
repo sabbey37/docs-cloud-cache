@@ -38,7 +38,9 @@ The **Plan to use for smoke test** field allows you to configure the `smoke-test
 
 Select a plan from the list below to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
 
-It is recommended that you make one of your plans "extra small" (4 servers, the minimum) and use that for the smoke tests. This helps reduce the installation time, as the smoke tests will create (and later destroy) an instance of this plan.
+Pivotal recommends that you make an extra small plan, four server plan, to use for smoke test.
+The smallest plan is four servers.
+Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
 
 ![Configuring Smoke Tests Plan](settings-config.png)
 
