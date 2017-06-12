@@ -37,6 +37,8 @@ The **Plan to use for smoke test** field allows you to configure the `smoke-test
 
 Select a plan from the list below to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
 
+It is recommended that you make one of your plans "extra small" (4 servers, the minimum) and use that for the smoke tests. This helps reduce the installation time, as the smoke tests will create (and later destroy) an instance of this plan.
+
 ![Configuring Smoke Tests Plan](settings-config.png)
 
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
