@@ -336,7 +336,9 @@ Deletions are asynchronous. Run `cf services` to view the current status of the 
 
 ## <a id="ssc"></a> Enabling Session State Caching With the Java Buildpack
 
-When using sessions state caching your service instance must have the tag `session-replication`. You can add the tag on service creation or updating the service.
+When using session state caching your service instance must have the tag `session-replication`. You can add the tag on service creation or updating the service.
+
+Another way to enable session state caching is to have the service instance name end with the text `-session-replication`, for example `my-app-session-replication`
 
 ```
 cf create-service <SERVICE> <SERVICE-INSTANCE-NAME> -t session-replication
