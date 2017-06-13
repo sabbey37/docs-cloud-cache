@@ -109,7 +109,7 @@ When you finish configuring the plan, click **Save** to save your configuration 
 
 Ensure you import the correct type of stemcell indicated on this tab.
 
-## <a id="upgrade"></a> Upgrade Pivotal Cloud Cache
+## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
 Follow the steps below to upgrade PCC on PCF:
 
@@ -119,7 +119,7 @@ Follow the steps below to upgrade PCC on PCF:
 1. Click on the Cloud Cache Tile and review your configuration options.
 1. Click **Apply Changes**.
 
-## <a id="update-plans"></a> Update Pivotal Cloud Cache Plans
+## <a id="update-plans"></a> Updating Pivotal Cloud Cache Plans
 
 Follow the steps below to update plans in Ops Manager.
 
@@ -138,7 +138,7 @@ If you change the allowed limits of an optional parameter, for example the maxim
 
 When existing instances are upgraded, all plan changes will be applied to them.
 
-## <a id="uninstall"></a> Uninstall Pivotal Cloud Cache
+## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
 
 To uninstall Pivotal Cloud Cache, follow the steps from below from the **Installation Dashboard**:
 
@@ -147,7 +147,7 @@ To uninstall Pivotal Cloud Cache, follow the steps from below from the **Install
 
 ## <a id="troubleshooting"></a> Troubleshooting
 
-### Viewing Statistics Files
+### <a id="view-statistics"></a>View Statistics Files
 
 You can visualize the performance of your cluster by downloading the statistics files from your servers. These files are located in the persistent store on each VM. To copy these files to your workstation, run the following command:
 
@@ -157,7 +157,7 @@ bosh scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
 
 See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
 
-### Smoke Test Failures
+### <a id="smoke-test-failures"></a>Smoke Test Failures
 
 #### Error: "Creating p-cloudcache SERVICE-NAME failed"
 The smoke tests could not create an instance of GemFire. To troubleshoot
@@ -187,7 +187,7 @@ crashes and is resurrected by BOSH. Run `bosh logs` to view the logs on the
 broker to see if there were any interruptions to the cluster by a service
 update.
 
-### General Connectivity
+### <a id="general-connectivity"></a>General Connectivity
 #### Client-to-server Communication
 
 PCC Clients communicate to PCC servers on port 40404 and with

@@ -61,7 +61,7 @@ The following example creates the service with five service instances in the clu
 $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 </pre>
 
-## <a id="create"></a> Updating a Pivotal Cloud Cache Service Instance
+## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You  can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
 
@@ -81,13 +81,13 @@ $ cf update-service my-cloudcache -c '{"new_size_percentage": 50}'
 
 Then the resulting service instance has `5` servers and `new_size_percentage` of 50% of heap.
 
-### Cluster Rebalancing
+### <a id="cluster-rebalancing"></a>Cluster Rebalancing
 
 When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC automatically rebalances data in the cache to distribute data across the cluster.
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored. In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator.
 
-## <a id="updates"></a> About Plan Updates
+## <a id="plan-updates"></a> About Plan Updates
 
 Your PCF operator may change the plan available on the Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters, for example decreasing the maximum value for `num_servers`, existing instances that exceed the new limits are not affected, but any subsequent service update that changes the optional parameter must adhere to the new limits.
 
