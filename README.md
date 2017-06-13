@@ -6,7 +6,7 @@
 
 Other branches such as **v1.0-no-az-changes** and **v1.0-service_access-#144322245** are being used to PR corrections/edits back into 1.0 docs.
 
-The **master branch** is not in use.
+The **master branch** is in use for v1.1 development.
 
 Coming soon is a **v1.1-branch** that hasn't been created yet.
 
