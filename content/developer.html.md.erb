@@ -331,18 +331,22 @@ $ cf delete-service my-cloudcache
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
 
-## <a id="ssc"></a> Enabling Session State Caching With the Java Buildpack
+## <a id="ssc"></a> Enabling Session State Caching with the Java Buildpack
 
-When using session state caching your service instance must have the tag `session-replication`. You can add the tag on service creation or updating the service.
+When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching.
 
-Another way to enable session state caching is to have the service instance name end with the text `-session-replication`, for example `my-app-session-replication`
+To enable session state caching, do one of the following: 
 
-```
-cf create-service <SERVICE> <SERVICE-INSTANCE-NAME> -t session-replication
-```
++ When creating your service instance name, append it with the `session-replication` tag. For example, for the `p-cloudcache` service:
 
-```
-cf update-service <SERVICE-INSTANCE-NAME> -t session-replication
-```
+    <pre class='terminal'>
+     $ cf create-service p-cloudcache my-service-instance -t session-replication</pre> 
 
-Once the service instance has the tag `session-replication` the java buildpack will download all the required resources for session state caching.
+* When updating your service instance name (for example, if the updated name is `new-service-instance`), append it with the `session-replication` tag:
+
+    <pre class='terminal'>
+    $ cf update-service new-service-instance -t session-replication</pre>
+
+* End the service instance name with the text `-session-replication`:
+ `my-service-instance-session-replication`.
+
