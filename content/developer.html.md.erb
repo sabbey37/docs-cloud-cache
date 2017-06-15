@@ -27,7 +27,7 @@ extra-large    Caching Plan 5   free
 
 ## <a id="create"></a> Creating a Pivotal Cloud Cache Service Instance
 
-Run `cf create-service p-cloudcache PLAN-NAME SERVICE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-NAME` with a name of your choice. You use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
+Run `cf create-service p-cloudcache PLAN-NAME SERVICE-INSTANCE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-INSTANCE-NAME` with a name of your choice. You use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
 
 <pre class='terminal'>
 $ cf create-service p-cloudcache extra-large my-cloudcache
@@ -61,7 +61,26 @@ The following example creates the service with five service instances in the clu
 $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 </pre>
 
-## <a id="create"></a> Updating a Pivotal Cloud Cache Service Instance
+### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
+
+When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching.
+
+To enable session state caching, do one of the following: 
+
++ When creating your service instance name, append it with the `session-replication` tag. For example, for the `p-cloudcache` service:
+
+    <pre class='terminal'>
+     $ cf create-service p-cloudcache my-service-instance -t session-replication</pre> 
+
+* When updating your service instance name (for example, if the updated name is `new-service-instance`), append it with the `session-replication` tag:
+
+    <pre class='terminal'>
+    $ cf update-service new-service-instance -t session-replication</pre>
+
+* End the service instance name with the text `-session-replication`:
+ `my-service-instance-session-replication`.
+
+## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You  can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
 
@@ -81,13 +100,13 @@ $ cf update-service my-cloudcache -c '{"new_size_percentage": 50}'
 
 Then the resulting service instance has `5` servers and `new_size_percentage` of 50% of heap.
 
-### Cluster Rebalancing
+### <a id="cluster-rebalancing"></a>Cluster Rebalancing
 
 When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC automatically rebalances data in the cache to distribute data across the cluster.
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored. In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator.
 
-## <a id="updates"></a> About Plan Updates
+### <a id="plan-updates"></a> About Plan Updates
 
 Your PCF operator may change the plan available on the Marketplace. If the operator changes the default value of one of the optional parameters, this change will not affect existing service instances. If the operator changes the allowed values of one of the optional parameters, for example decreasing the maximum value for `num_servers`, existing instances that exceed the new limits are not affected, but any subsequent service update that changes the optional parameter must adhere to the new limits.
 
@@ -108,13 +127,13 @@ Once you have created a service instance, you can start accessing it. Usually yo
 
 ### <a id="create-service-key"></a> Create Service Keys
 
-Service keys provide a way to access your service instance outside the scope of a deployed CF app. Run `cf create-service-key SERVICE-NAME KEY-NAME` to create  a service key. Replace `SERVICE-NAME` with the name you chose for your service instance. Replace `KEY-NAME` with a name of your choice. You use this name to refer to your service key with other commands. 
+Service keys provide a way to access your service instance outside the scope of a deployed CF app. Run `cf create-service-key SERVICE-INSTANCE-NAME KEY-NAME` to create  a service key. Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance. Replace `KEY-NAME` with a name of your choice. You use this name to refer to your service key with other commands. 
 
 <pre class='terminal'>
 $ cf create-service-key my-cloudcache my-service-key
 </pre>
 
-Run `cf create-service-key SERVICE-NAME KEY-NAME` to view the newly created service key.
+Run `cf create-service-key SERVICE-INSTANCE-NAME KEY-NAME` to view the newly created service key.
 
 <pre class='terminal'>
 $ cf service-key my-cloudcache my-service-key
@@ -230,9 +249,9 @@ In practice, you should perform these get/put operations from a deployed PCF app
 ### <a id="bind-service"></a> Bind an App to a Service Instance
 
 Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region. 
-Run `cf bind-service APP-NAME SERVICE-NAME` to bind an app to your service instance. 
+Run `cf bind-service APP-NAME SERVICE-INSTANCE-NAME` to bind an app to your service instance. 
 Replace `APP-NAME` with the name of the app. 
-Replace `SERVICE-NAME` with the name you chose for your service instance.
+Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance.
 
 <pre class='terminal'>
 $ cf bind-service my-app my-cloudcache
@@ -280,7 +299,7 @@ The following is a sample `VCAP_SERVICES` environment variable:
 }
 ```
 
-### <a id="sample-java-app-connect"></a> How to write a Java client app for PCC
+### <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
 
 A sample application written in pure Java has been put together to demonstrate how to connect an application to the service instance.
 
@@ -308,7 +327,7 @@ Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` 
 
 Once you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
 
-### <a id="pulse"></a> Use the Pulse dashboard
+### <a id="pulse"></a> Use the Pulse Dashboard
 
 You can access the Pulse dashboard for a service instance by accessing the pulse-url you [obtained from a service key](#create-service-key) in a web browser.
 
@@ -318,9 +337,9 @@ Use either the `cluster_operator` or `developer` credentials to authenticate.
 
 You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
 
-1. Run `cf delete-service-key SERVICE-NAME KEY-NAME` to delete the service key.
-1. Run `cf unbind-service APP-NAME SERVICE-NAME` to unbind your app from the service instance.
-1. Run `cf delete-service SERVICE-NAME` to delete the service instance.
+1. Run `cf delete-service-key SERVICE-INSTANCE-NAME KEY-NAME` to delete the service key.
+1. Run `cf unbind-service APP-NAME SERVICE-INSTANCE-NAME` to unbind your app from the service instance.
+1. Run `cf delete-service SERVICE-INSTANCE-NAME` to delete the service instance.
 
 <pre class='terminal'>
 $ cf delete-service-key my-cloudcache my-service-key
@@ -331,22 +350,5 @@ $ cf delete-service my-cloudcache
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
 
-## <a id="ssc"></a> Enabling Session State Caching with the Java Buildpack
 
-When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching.
-
-To enable session state caching, do one of the following: 
-
-+ When creating your service instance name, append it with the `session-replication` tag. For example, for the `p-cloudcache` service:
-
-    <pre class='terminal'>
-     $ cf create-service p-cloudcache my-service-instance -t session-replication</pre> 
-
-* When updating your service instance name (for example, if the updated name is `new-service-instance`), append it with the `session-replication` tag:
-
-    <pre class='terminal'>
-    $ cf update-service new-service-instance -t session-replication</pre>
-
-* End the service instance name with the text `-session-replication`:
- `my-service-instance-session-replication`.
 
