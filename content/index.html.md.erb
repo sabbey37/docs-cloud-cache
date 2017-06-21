@@ -1,7 +1,13 @@
 ---
-title: Pivotal Cloud Cache
+title: Pivotal Cloud Cache (Beta)
 owner: Cloud Cache Engineers
 ---
+
+<p class="note warning">
+<strong>WARNING! </strong>
+Pivotal Cloud Cache is currently in beta and is intended for evaluation and test purposes only. 
+Do not use this product in a PCF production environment.
+</p>
 
 ## <a id='overview'></a>Overview
 
@@ -26,11 +32,11 @@ The following table provides version and version-support information about Pivot
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.0.2</td>
+        <td>v1.1.0</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>May 3, 2017</td>
+        <td>June 30, 2017</td>
     </tr>
     <tr>
         <td>Software component version</td>
@@ -56,55 +62,22 @@ The following table provides version and version-support information about Pivot
 
 ## <a id='release-notes'></a>Release Notes
 
-### <a id='v1.0.2'></a>Pivotal Cloud Cache v1.0.2
+### <a id='v1.1.0'></a>Pivotal Cloud Cache v1.1.0
 
 #### <a id='new-in-this-release'></a>New in This Release
 
-- Upgrades to v0.15.2 of On-Demand Service Broker
-- Increased smoke test canary timeout to 5 minutes
-- Sets global service instance quota to 50 instances
-- Provides option to disable a plan and service access separately
-- Validates that plan description doesnt contain any spaces
-
-
-
-### <a id='v1.0.1'></a>Pivotal Cloud Cache v1.0.1
-
-#### <a id='new-in-this-release'></a>New in This Release
-
-- Upgrades to v0.15.1 of On-Demand Service Broker
-- Smoke test now runs in the `system` organization
-- Improved reliability of Smoke Test errand
-- Adds support for gfsh `export logs` command
-- Optimized size of tile to make downloading and uploading faster
-- Ensured no data loss with when performing a stemcell upgrade for regions with redundancy
-- Add post deployment checks that all locators properly join the cluster
-- PCC broker can be configured to send logs to a syslog server
-- PCC service instances will now send logs to configured syslog endpoint if enabled
-- Added option to provide public IP addresses to VMs, which is necessary to allow egress on Google Cloud Platform
-- Added errand when deleting tile that deletes all PCC service instances
-
-### <a id='v1.0'></a>Pivotal Cloud Cache v1.0
-
-#### <a id='minimum-version-requirements'></a>Minimum Version Requirements
-
-- PCC requires PCF with PCF Elastic Runtime v1.9.11 or above.
-
-#### <a id='new-in-this-release'></a>New in This Release
-
-- Support for application look-aside cache pattern
-- Multi AZ support
-- On-demand provisioning
-- MVP role-based access control
-- Quotas, both for service instances and for number of servers in a cluster
-- GemFire v9.0.2
-- Managed and configure clusters using the Cloud Foundry Command Line Interface (cf CLI) service commands and the GemFire gfsh CLI
+- Something
+- Something else 
 
 #### <a id='known-issues'></a>Known Issues
 
-- The `Upgrade all service instances` errand can only upgrade the first 50 instances created.
-- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. As a result, these VMs cannot communicate with the BOSH Director, and the Cloud Cache Broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
-- The PCC broker will accept requests to modify instances that have ongoing BOSH operations, resulting in an asynchronous failure.
++ Something
++ Something else
+
+### <a id="16x"></a>Release Notes for Earlier Versions
+
+For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
+
 
 ## <a id='architecture'></a>Architecture
 
@@ -234,7 +207,7 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 - PCC for PCF can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
-- PCC works with gfsh versions v9.0.0 and above
+- PCC works with gfsh versions v9.0.0 and later
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.
 
