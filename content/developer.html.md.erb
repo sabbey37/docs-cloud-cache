@@ -84,6 +84,24 @@ To enable session state caching, do one of the following:
 * End the service instance name with the text `-session-replication`:
  `my-service-instance-session-replication`.
 
+### <a id="ssc-spring-session"></a> Enable Session State Caching using Spring Session
+
+There is experimental support for session state caching for apps using [Spring Session.](http://projects.spring.io/spring-session/) It uses pre-release versions of Spring Session libraries.
+
+The application developer needs to make some changes to their application to use spring-session with Cloudcache:
+
+* Replace existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is seconds.
+* Add the `spring-session-data-geode` and `spring-data-geode` dependencies to the build.
+* Add beans to the Spring application config.
+
+Please refer to the sample available at [https://github.com/jxblum/spring-session-data-gemfire-example](https://github.com/jxblum/spring-session-data-gemfire-example) on how you can do the above.
+
+A region named `ClusteredSpringSessions` will also need to be created. This can be created in gfsh using the `cluster_operator` credentials. For example:
+
+```
+create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
+```
+
 ## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You  can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
