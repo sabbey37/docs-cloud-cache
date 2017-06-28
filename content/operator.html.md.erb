@@ -14,32 +14,34 @@ PCC requires PCF with PCF Elastic Runtime v1.9.11 or later.
 
 ## <a id="install"></a> Beginning Your Installation of Pivotal Cloud Cache
 
-Follow the steps below to install PCC on PCF:
+Follow the steps below to start installing PCC on PCF:
 
 1. Download the tile from the [Pivotal Network](https://network.pivotal.io/).
-1. Click *Import a Product* to import the tile into Ops Manager.
+1. Click **Import a Product** to import the tile into Ops Manager.
 1. Click the **+** symbol next to the uploaded product description.
-1. Click on the Cloud Cache Tile. From here, you can start your configuration.
+1. Click on the Cloud Cache Tile. From here, you can click through the **Settings**, **Status**, **Credentials**, and **Logs** tabs to start configuring PCC.
 
 ### <a id="settings-config"></a> Configure Tile Properties
 
 #### Assign Availability Zones and Networks
 
-1. Select an  Availability Zone (AZ) where your singleton virtual machines (VMs) will reside. 
-1. Select the AZs used to distribute the GemFire VMs. We recommend
-selecting all of them.
+1. Under **Place singleton jobs in**, select the Availability Zone (AZ) where your singleton virtual machines (VMs) will reside. 
+1. Under **Balance other jobs in**, select the AZ(s) you want to use for distributing other GemFire VMs. We recommend selecting all of them.
 1. For **Network**, select your Elastic Runtime network.
 1. For **Service Network**, select the network to be used for GemFire VMs.
+1. Click **Save**.
 
 #### Settings: Smoke Tests
 
-The **Plan to use for smoke test** field allows you to configure the `smoke-tests` errand that runs after tile installation to verify successful installation.
+Click the **Settings** heading on the the left side of the page to move on to the next set of configurable properites. Here, you can choose a plan to use for smoke tests.
 
-Select a plan from the list below to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
+This section allows you to configure the `smoke-tests` errand that runs after tile installation. The errand verifies that your installation was successful. 
+
+Select a plan from the list shown to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
 
 Pivotal recommends that you use the smallest four-server plan for smoke tests. Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
 
-![Configuring Smoke Tests Plan](settings-config.png)
+![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
 
