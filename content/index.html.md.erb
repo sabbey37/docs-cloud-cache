@@ -11,11 +11,18 @@ Do not use this product in a PCF production environment.
 
 ## <a id='overview'></a>Overview
 
-This is the documentation for Pivotal Cloud Cache (PCC). You can download the PCC tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
+Pivotal Cloud Cache (PCC) is a high-performance, highly available caching layer for Pivotal Cloud Foundry (PCF).
+PCC offers an in-memory key-value store.
+The product delivers low-latency responses to a large number of concurrent data access requests.
 
-PCC provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan. Service operators can create multiple plans to support different use cases. PCC uses Pivotal GemFire.
+PCC provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan.
+Service operators can create multiple plans to support different use cases.
+PCC uses Pivotal GemFire.
 
 You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
+
+This is the documentation for PCC.
+You can download the PCC tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
 
 This documentation performs the following functions:
 
@@ -75,6 +82,7 @@ The following table provides version and version-support information about Pivot
 
 + In the event of a failure BOSH doesnt show the correct state of the VM: Currently monit is not monitoring ports which PCC processes are using which in some cases makes it think the process is running even though it might not be listening on the port.
 + Defaults in Ops Manager 1.10+ have been set such that all post-deploy errands default to 'when changed'. When changed does not run when the Operator would expect it to run (only runs for templated properties not all manifest changes). These need to manually changed to 'on'.
+* As of Ops Manager v10.0.0, [errands set to the When Changed rule do not always run when the tile has relevant changes](http://docs.pivotal.io/tiledev/tile-errands.html). One-time rules should be set when using Ops Manager 1.10.7 or earlier to ensure that the Update All Service Instances is run.
 
 ### <a id="16x"></a>Release Notes for Earlier Versions
 
