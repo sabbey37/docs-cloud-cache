@@ -12,17 +12,16 @@ This document describes how a Pivotal Cloud Foundry (PCF) operator can install, 
 
 PCC requires PCF with PCF Elastic Runtime v1.9.11 or later.
 
-## <a id="install"></a> Installing Pivotal Cloud Cache
+## <a id="install"></a> Beginning Your Installation of Pivotal Cloud Cache
 
 Follow the steps below to install PCC on PCF:
 
-1. Download the tile from the Pivotal Network.
-1. Upload the product to Ops Manager.
-1. Click **Add** next to the uploaded product description.
-1. Click on the Cloud Cache Tile and select configuration options.
-1. Click **Apply Changes**.
+1. Download the tile from the [Pivotal Network](https://network.pivotal.io/).
+1. Click *Import a Product* to import the tile into Ops Manager.
+1. Click the **+** symbol next to the uploaded product description.
+1. Click on the Cloud Cache Tile. From here, you can start your configuration.
 
-### <a id="settings-config"></a> Configuring Tile Properties
+### <a id="settings-config"></a> Configure Tile Properties
 
 #### Assign Availability Zones and Networks
 
@@ -73,7 +72,7 @@ By default, only the broker logs will be forwarded to your configured log manage
 
 You may want to enable remote syslog for service instances if you would like to monitor the health of the clusters. However, this will generate a large volume of logs, which is why it is disabled by default. The broker logs only include information about service instance creation, not on-going cluster health. Please note that service instance logs will be sent to the same host and port configured for the broker logs.
 
-### <a id="plan-config"></a> Configuring Service Plans
+### <a id="plan-config"></a> Configure Service Plans
 
 You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
