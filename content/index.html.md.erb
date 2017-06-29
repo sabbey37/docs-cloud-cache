@@ -1,13 +1,7 @@
 ---
-title: Pivotal Cloud Cache (Beta)
+title: Pivotal Cloud Cache
 owner: Cloud Cache Engineers
 ---
-
-<p class="note warning">
-<strong>WARNING! </strong>
-Pivotal Cloud Cache is currently in beta and is intended for evaluation and test purposes only. 
-Do not use this product in a PCF production environment.
-</p>
 
 ## <a id='overview'></a>Overview
 
@@ -77,18 +71,13 @@ The following table provides version and version-support information about Pivot
 
 #### <a id='known-issues'></a>Known Issues
 
-+ A locator VM might fail to listen on its port and the status not be reported by BOSH. 
-  You only know that the locator VM has gone down when you run the `list members` command in gfsh.<br>
++ At this time, BOSH is not monitoring ports in order to detect a VM failure. Therefore, if a VM fails, it will go unreported by BOSH. You can only determine that a VM has gone down when you run the `list members` command in gfsh.<br>
+
   _Workaround_: SSH into the missing locator VM and run the monit restart command.
-+ If PCC is used with Ops Manager v1.10.0 to v1.10.7, 
-  errands set to When Changed sometimes fail to run when the PCC tile changes.
-  _Workaround_: If you are using Ops Manager v1.10.0 to v1.10.7, always set the Post-Deploy Errands to **On**.<br>
-  For information on setting errands, see Configure Errands in the Operator Guide.
 
 ### <a id="16x"></a>Release Notes for Earlier Versions
 
 For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
-
 
 ## <a id='architecture'></a>Architecture
 
