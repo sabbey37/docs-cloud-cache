@@ -77,8 +77,9 @@ The following table provides version and version-support information about Pivot
 
 #### <a id='known-issues'></a>Known Issues
 
-+ In the event of a failure, BOSH does not show the correct state of the VM:
-  Currently monit is not monitoring ports which PCC processes are using which in some cases makes it think the process is running even though it might not be listening on the port.
++ A locator VM might fail to listen on its port and the status not be reported by BOSH. 
+  You only know that the locator VM has gone down when you run the `list members` command in gfsh.
+  If this happens, SSH into the missing locator VM and run the monit restart command.
 + Defaults in Ops Manager 1.10+ have been set such that all post-deploy errands default to 'when changed'. When changed does not run when the Operator would expect it to run (only runs for templated properties not all manifest changes). These need to manually changed to 'on'.
 * As of Ops Manager v10.0.0, [errands set to the When Changed rule do not always run when the tile has relevant changes](http://docs.pivotal.io/tiledev/tile-errands.html). One-time rules should be set when using Ops Manager 1.10.7 or earlier to ensure that the Update All Service Instances is run.
 
