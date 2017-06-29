@@ -80,8 +80,10 @@ The following table provides version and version-support information about Pivot
 + A locator VM might fail to listen on its port and the status not be reported by BOSH. 
   You only know that the locator VM has gone down when you run the `list members` command in gfsh.
   If this happens, SSH into the missing locator VM and run the monit restart command.
-+ Defaults in Ops Manager 1.10+ have been set such that all post-deploy errands default to 'when changed'. When changed does not run when the Operator would expect it to run (only runs for templated properties not all manifest changes). These need to manually changed to 'on'.
-* As of Ops Manager v10.0.0, [errands set to the When Changed rule do not always run when the tile has relevant changes](http://docs.pivotal.io/tiledev/tile-errands.html). One-time rules should be set when using Ops Manager 1.10.7 or earlier to ensure that the Update All Service Instances is run.
++ If PCC is used with Ops Manager v1.10.0 to v1.10.7, 
+  errands set to When Changed sometimes fail to run when the PCC tile changes.
+  _Workaround_: If you are using Ops Manager v1.10.0 to v1.10.7, always set the Post-Deploy Errands to **On**.
+  For information on setting errands, see Configure Errands in the Operator Guide.
 
 ### <a id="16x"></a>Release Notes for Earlier Versions
 
