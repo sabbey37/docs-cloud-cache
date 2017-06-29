@@ -78,8 +78,8 @@ The following table provides version and version-support information about Pivot
 #### <a id='known-issues'></a>Known Issues
 
 + A locator VM might fail to listen on its port and the status not be reported by BOSH. 
-  You only know that the locator VM has gone down when you run the `list members` command in gfsh.
-  If this happens, SSH into the missing locator VM and run the monit restart command.
+  You only know that the locator VM has gone down when you run the `list members` command in gfsh.<br>
+  _Workaround_: SSH into the missing locator VM and run the monit restart command.
 + If PCC is used with Ops Manager v1.10.0 to v1.10.7, 
   errands set to When Changed sometimes fail to run when the PCC tile changes.
   _Workaround_: If you are using Ops Manager v1.10.0 to v1.10.7, always set the Post-Deploy Errands to **On**.<br>
