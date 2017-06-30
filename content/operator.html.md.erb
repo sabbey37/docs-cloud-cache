@@ -3,8 +3,7 @@ title: Pivotal Cloud Cache Operator Guide
 owner: Cloud Cache Engineers
 ---
 
-This document describes how a Pivotal Cloud Foundry (PCF) operator can install, configure, and maintain Pivotal Cloud Cache (PCC) for PCF.
-
+This document describes how a Pivotal Cloud Foundry (PCF) operator can install, configure, and maintain Pivotal Cloud Cache (PCC).
 
 ## <a id="requirements"></a> Requirements for Pivotal Cloud Cache
 
@@ -16,9 +15,9 @@ You must have access to a Service Network in order to install PCC.
 
 PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 with PCF Elastic Runtime v1.11.0 or later.
 
-## <a id="install"></a> Beginning Your Installation of Pivotal Cloud Cache
+## <a id="install"></a> Installing Pivotal Cloud Cache
 
-Follow the steps below to start installing PCC on PCF:
+Follow the steps below to install PCC on PCF:
 
 1. Download the tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
 1. Click **Import a Product** to import the tile into Ops Manager.
@@ -52,7 +51,8 @@ To select AZs and networks for VMs used by PCC, do the following:
     <tr><td><strong>Place singleton jobs in</strong></td>
         <td>Select the region that you want for singleton VMs.</td></tr>
     <tr><td><strong>Balance other jobs in</strong></td>
-        <td>Select the AZ(s) you want to use for distributing other GemFire VMs. Pivotal recommends selecting all of them.</td></tr>
+        <td>Select the AZ(s) you want to use for distributing other GemFire VMs.
+            Pivotal recommends selecting all of them.</td></tr>
     <tr><td><strong>Network</strong></td>
         <td>Select your Elastic Runtime network.</td>
     <tr><td><strong>Service Network</strong></td>
@@ -63,28 +63,44 @@ To select AZs and networks for VMs used by PCC, do the following:
 
 ####<a name='settings'></a> Settings: Smoke Tests
 
-Click the **Settings** heading on the the left side of the page to go to the next set of configurable properites.
-Here, you can choose a plan to use for smoke tests.
-
-This section allows you to configure the `smoke-tests` errand that runs after tile installation. The errand verifies that your installation was successful. 
-
-From the list shown, select a plan to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
-
-Pivotal recommends that you use the smallest four-server plan for smoke tests. Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
-
-![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
-
+The smoke-tests errand that runs after tile installation.
+The errand verifies that your installation was successful.
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
+
+To select which plan you want to use for smoke tests, do the following:
+
+1. Click **Settings**.
+
+2. Select a plan to use when the `smoke-tests` errand runs.
+
+     Ensure the selected plan is enabled and configured.
+     For information about configuring plans, see [Configure Service Plans](#plan-config) below.
+     If the selected plan is not enabled, the `smoke-tests` errand fails.
+
+     Pivotal recommends that you use the smallest four-server plan for smoke tests.
+     Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
+     ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
+
+3. Click **Save**.
 
 #### Settings: Allow Outbound Internet Access
 
-The **Allow outbound internet access from service instances** checkbox is unchecked by default. 
+By default, outbound internet access is not allowed from service instances. 
 
-Check this box if you want to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
+If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances.
+Log forwarding and backups, which require external endpoints, might also require internet access.
 
-Check **Allow outbound internet access from service instances** if BOSH is configured to use an external blob store; this enables the PCC tile to allow external internet access. 
+To allow outbound internet access from service instance, do the following:
 
-![Outbound Internet Access](allow-outbound-access.png)
+1. Click **Settings**.
+
+2. Click **Allow outbound internet access from service instances (IaaS-dependent)**.
+
+3. Click **Save**.
+
+    ![Outbound Internet Access](allow-outbound-access.png)
+
+3. Click **Save**.
 
 ####<a name='syslog'></a> Syslog
 
@@ -144,7 +160,7 @@ When developers create or update a service instance, they can specify the number
 
 The **Availability zones for service instances** setting determines which AZs are used for a particular cluster. The members of a cluster are distributed evenly across AZs.
 
-<p class="note warning"><strong> WARNING</strong> After you've selected AZs for your service network, you cannot add additional AZs; doing so causes existing service instances to lose data on update. </p>
+<p class="note warning"><strong> WARNING!</strong> After you've selected AZs for your service network, you cannot add additional AZs; doing so causes existing service instances to lose data on update. </p>
 
 The remaining fields control the VM type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server VM type. We recommend the following configuration:
 
@@ -159,8 +175,9 @@ When you finish configuring the plan, click **Save** to save your configuration 
 
 By default, Post-Deploy and Pre-Delete errands always run. 
 Pivotal recommends keeping these defaults.
-However, if necessary, you can changes these defaults, as follows.
+However, if necessary, you can change these defaults, as follows.
 
+For general information about errands in PCF, see [Managing Errands in Ops Manager](https://docs.pivotal.io/pivotalcf/customizing/managing_errands.html)
 1. Click **Errands**.
 
 2. Change the setting for the errands.
