@@ -21,23 +21,50 @@ PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 wi
 Follow the steps below to start installing PCC on PCF:
 
 1. Download the tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
-1. Click *Import a Product* to import the tile into Ops Manager.
+1. Click **Import a Product** to import the tile into Ops Manager.
 1. Click the **+** symbol next to the uploaded product description.
-1. Click on the Cloud Cache Tile. From here, you can click through the **Settings**, **Status**, **Credentials**, and **Logs** tabs to start configuring PCC.
+1. Click on the Cloud Cache tile.
+1. Follow the steps in the [Configure Tile Properties](#settings-config) section below to configure the tile.
+1. After completing the configuration steps, return to the Ops Manager Installation Dashboard
+   and click **Apply Changes** to complete the installation of the PCC tile.
 
 ### <a id="settings-config"></a> Configure Tile Properties
 
-#### Assign Availability Zones and Networks
+You need to configure the following panes. Each pane name needs to show a green checkmark before you can complete the installation.
 
-1. Under **Place singleton jobs in**, select the Availability Zone (AZ) where your singleton virtual machines (VMs) will reside. 
-1. Under **Balance other jobs in**, select the AZ(s) you want to use for distributing other GemFire VMs. We recommend selecting all of them.
-1. For **Network**, select your Elastic Runtime network.
-1. For **Service Network**, select the network to be used for GemFire VMs.
+* [Assign AZs and Networks](#azs)
+* [Settings](#settings)
+* [Syslog](#syslog)
+* [Plan](#plan-config)
+* [Errands](#errands)
+* [Resource Config](#resource-config)
+* [Stemcell](#stemcell)
+
+####<a name='azs'></a> Assign Availability Zones and Networks
+
+To select AZs and networks for VMs used by PCC, do the following:
+
+1. Click **Assign AZs and Networks**.
+
+1. Configure the fields on the **Assign AZs and Networks** pane as follows:
+   <table>
+    <tr><th>Field</th><th>Instructions</th></tr>
+    <tr><td><strong>Place singleton jobs in</strong></td>
+        <td>Select the region that you want for singleton VMs.</td></tr>
+    <tr><td><strong>Balance other jobs in</strong></td>
+        <td>Select the AZ(s) you want to use for distributing other GemFire VMs. Pivotal recommends selecting all of them.</td></tr>
+    <tr><td><strong>Network</strong></td>
+        <td>Select your Elastic Runtime network.</td>
+    <tr><td><strong>Service Network</strong></td>
+        <td>Select the network to be used for GemFire VMs.</td> 
+  </table>
+
 1. Click **Save**.
 
-#### Settings: Smoke Tests
+####<a name='settings'></a> Settings: Smoke Tests
 
-Click the **Settings** heading on the the left side of the page to go to the next set of configurable properites. Here, you can choose a plan to use for smoke tests.
+Click the **Settings** heading on the the left side of the page to go to the next set of configurable properites.
+Here, you can choose a plan to use for smoke tests.
 
 This section allows you to configure the `smoke-tests` errand that runs after tile installation. The errand verifies that your installation was successful. 
 
@@ -59,25 +86,45 @@ Check **Allow outbound internet access from service instances** if BOSH is confi
 
 ![Outbound Internet Access](allow-outbound-access.png)
 
-#### Settings: External Syslog
+####<a name='syslog'></a> Syslog
 
-Pivotal Cloud Cache supports forwarding syslog to an external log management service (e.g. papertrail, splunk, or your custom enterprise log sink). To enable remote syslog for the service broker, provide a host and port in the **External Syslog Host** and **External Syslog Port** fields.
-
-![Configuring Log Management Service](syslog-config.png)
-
+By default, syslog forwarding is not enabled in PCC.
+However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
 The broker logs are useful for debugging problems creating, updating, and binding service instances.
 
-Remote syslog sends unencrypted logs by default. To secure log transmission, you can enable TLS by selecting the **Enable TLS** option button. If there are several peer servers that may respond to remote syslog connections, you need to provide a regex in the **Permitted Peer for TLS Communication** field (shown here as *.example.com). You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority (for exampe, an internal syslog server). 
+To enable remote syslog for the service broker, do the following:
 
-![Configuring Log Management Service TLS](syslog-tls-config.png)
+1. Click **Syslog**.
+   ![Configuring Log Management Service](syslog-config.png)
+2. Configure the fields on the **Syslog** pane as follows:
+   <table>
+    <tr><th>Field</th><th>Instructions</th></tr>
+    <tr><td><strong>Enable Remote Syslog</strong></td>
+        <td>Click to select this button.</td></tr>
+    <tr><td><strong></strong>External Syslog Address</td>
+        <td>Enter the address or host of the syslog server for sending logs, for example, `logs.example.com`.</td></tr>
+    <tr><td><strong></strong>External Syslog Port</td>
+        <td>Enter the port of the syslog server for sending logs, for example,` 29279`.</td></tr>
+    <tr><td><strong>Enable TLS for Syslog</strong></td>
+        <td>Click to enable secure log transmission through TLS.
+            Otherwise, remote syslog sends unencrypted logs.</td></tr>
+    <tr><td><strong>Permitted Peer for TLS Communication. This is required if TLS is enabled.</strong></td>
+        <td>If there are several peer servers that can respond to remote syslog connections, then
+            provide a regex, such as `*.example.com`.</td></tr> 
+    <tr><td><strong>CA Certificate for TLS Communication</td>
+        <td>If the server certificate is not signed by a known authority, for example, an internal syslog server,
+            provide the CA certificate of the log management service endpoint.</td></tr>
+    <tr><td><strong>Send service instance logs to external</td>
+        <td>By default, only the broker logs are forwarded to your configured log management service.
+            If you want to forward server and locator logs from all service instances, select this.
+            This lets you monitor the health of the clusters, although it generates a large volume of logs.<br><br>
+            If you don't enable this, you get only the broker logs which include information about service instance creation, 
+            but not about on-going cluster health.</td></tr>
+  </table>
 
-By default, only the broker logs are forwarded to your configured log management service. If you want to forward server and locator logs from all service instances, select the **Send service instance logs to external syslog** checkbox.
+3. Click **Save**.
 
-![Configuring Log Management Service for Service Instances](syslog-service-instances-config.png)
-
-You may want to enable remote syslog for service instances to monitor the health of the clusters. However, doing so generates a large volume of logs, which is why this setting is disabled by default. The broker logs only include information about service instance creation, not on-going cluster health. Service instance logs are sent to the same host and port configured for the broker logs.
-
-### <a id="plan-config"></a> Configure Service Plans
+#### <a name="plan-config"></a> Configure Service Plans
 
 You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
@@ -108,7 +155,23 @@ The remaining fields control the VM type and persistent disk type for servers an
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
-#### Stemcell
+####<a name='errands'></a> Errands
+
+By default, Post-Deploy and Pre-Delete errands always run. 
+Pivotal recommends keeping these defaults.
+However, if necessary, you can changes these defaults, as follows.
+
+1. Click **Errands**.
+
+2. Change the setting for the errands.
+   
+     <p class="note"><strong>Note</strong>: If you are using Ops Manager v1.10.0 to v1.10.7, do not set errands to <strong>When Changed</strong>.
+     This is because errands set to When Changed sometimes fail to run when the PCC tile changes.</p?
+     errands set to When Changed sometimes fail to run when the PCC tile changes. </p>
+
+3. Click **Save**.
+
+####<a name='stemcell'></a> Stemcell
 
 Ensure you import the correct type of stemcell indicated on this tab.
 
@@ -143,7 +206,7 @@ If you change the allowed limits of an optional parameter, for example the maxim
 
 When existing instances are upgraded, all plan changes are applied to them.
 
-## <a id="uninstall"></a> Uninstall Pivotal Cloud Cache
+## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
 
 To uninstall Pivotal Cloud Cache, follow the steps from below from the **Installation Dashboard**:
 
@@ -152,7 +215,7 @@ To uninstall Pivotal Cloud Cache, follow the steps from below from the **Install
 
 ## <a id="troubleshooting"></a> Troubleshooting
 
-### Viewing Statistics Files
+###<a id='view-statistics'></a> View Statistics Files
 
 You can visualize the performance of your cluster by downloading the statistics files from your servers. These files are located in the persistent store on each VM. To copy these files to your workstation, run the following command:
 
@@ -162,7 +225,7 @@ bosh scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
 
 See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
 
-### Smoke Test Failures
+###<a id='smoke-test-failures'></a> Smoke Test Failures
 
 #### Error: "Creating p-cloudcache SERVICE-NAME failed"
 The smoke tests could not create an instance of GemFire. To troubleshoot
@@ -192,8 +255,8 @@ crashes and is resurrected by BOSH. Run `bosh logs` to view the logs on the
 broker to see if there were any interruptions to the cluster by a service
 update.
 
-### General Connectivity
-#### Client-to-server Communication
+###<a id='general-connectivity'></a> General Connectivity
+#### Client-to-Server Communication
 
 PCC Clients communicate to PCC servers on port 40404 and with
 locators on port 55221. Both of these ports must be reachable from the Elastic Runtime network to service the network.
