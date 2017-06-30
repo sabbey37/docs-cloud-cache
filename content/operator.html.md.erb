@@ -14,55 +14,56 @@ PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 wi
 
 ## <a id="install"></a> Beginning Your Installation of Pivotal Cloud Cache
 
-Follow the steps below to install PCC on PCF:
+Follow the steps below to start installing PCC on PCF:
 
 1. Download the tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
-1. Upload the product to Ops Manager.
-1. Click **Add** next to the uploaded product description.
-1. Click on the Cloud Cache Tile and select configuration options.
-1. Click **Apply Changes**.
+1. Click *Import a Product* to import the tile into Ops Manager.
+1. Click the **+** symbol next to the uploaded product description.
+1. Click on the Cloud Cache Tile. From here, you can click through the **Settings**, **Status**, **Credentials**, and **Logs** tabs to start configuring PCC.
 
 ### <a id="settings-config"></a> Configure Tile Properties
 
 #### Assign Availability Zones and Networks
 
-1. Select an  Availability Zone (AZ) where your singleton virtual machines (VMs) will reside.
-1. Select the AZs used to distribute the GemFire VMs. We recommend selecting all of them.
+1. Under **Place singleton jobs in**, select the Availability Zone (AZ) where your singleton virtual machines (VMs) will reside. 
+1. Under **Balance other jobs in**, select the AZ(s) you want to use for distributing other GemFire VMs. We recommend selecting all of them.
 1. For **Network**, select your Elastic Runtime network.
 1. For **Service Network**, select the network to be used for GemFire VMs.
+1. Click **Save**.
 
 #### Settings: Smoke Tests
 
-The **Plan to use for smoke test** field allows you to configure the `smoke-tests` errand that runs after tile installation to verify successful installation.
+Click the **Settings** heading on the the left side of the page to go to the next set of configurable properites. Here, you can choose a plan to use for smoke tests.
 
-Select a plan from the list below to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
+This section allows you to configure the `smoke-tests` errand that runs after tile installation. The errand verifies that your installation was successful. 
+
+From the list shown, select a plan to use when the `smoke-tests` errand runs. The `smoke-tests` errand uses the selected plan. Ensure the selected plan is enabled on the plan-configuration page. If the selected plan is not enabled, the `smoke-tests` errand will fail.
 
 Pivotal recommends that you use the smallest four-server plan for smoke tests. Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
 
-![Configuring Smoke Tests Plan](settings-config.png)
+![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
 
-#### Settings: Allow outbound internet access from service instances
+#### Settings: Allow Outbound Internet Access
 
-The **Allow outbound internet access from service instances** checkbox is unchecked by default.
+The **Allow outbound internet access from service instances** checkbox is unchecked by default. 
 
-The **Allow outbound internet access from service instances** may need to be checked to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
+Check this box if you want to allow outbound internet traffic (this is IaaS dependent; see Ops Manager documentation for details). For configuring an external syslog endpoint, this box may need to be checked.
 
-**Allow outbound internet access from service instances** is needed if BOSH is configured to use external blob store, then the PCC tile should be configured to allow external internet access.
+Check **Allow outbound internet access from service instances** if BOSH is configured to use an external blob store; this enables the PCC tile to allow external internet access. 
 
-![Outbound Internet Access](outbound-internet-access.png)
-
+![Outbound Internet Access](allow-outbound-access.png)
 
 #### Settings: External Syslog
 
-Pivotal Cloud Cache supports forwarding syslog to an external log management service lik Papertrail, Splunk, or your custom enterprise log sink. To enable remote syslog for the service broker, set the **Syslog Host** and **Syslog Port** properties on the **Settings** tab.
+Pivotal Cloud Cache supports forwarding syslog to an external log management service (e.g. papertrail, splunk, or your custom enterprise log sink). To enable remote syslog for the service broker, provide a host and port in the **External Syslog Host** and **External Syslog Port** fields.
 
 ![Configuring Log Management Service](syslog-config.png)
 
-Use the broker logs to debug problems creating, updating, and binding service instances.
+The broker logs are useful for debugging problems creating, updating, and binding service instances.
 
-By default, remote syslog sends unencrypted logs. Enable TLS by selecting the **Enable TLS** radio button. You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority, for example in the case of an internal syslog server. If several peer servers exist that may respond to remote syslog connections, you must provide a regex in the "permitted peer" field, for example `*.example.com`.
+Remote syslog sends unencrypted logs by default. To secure log transmission, you can enable TLS by selecting the **Enable TLS** option button. If there are several peer servers that may respond to remote syslog connections, you need to provide a regex in the **Permitted Peer for TLS Communication** field (shown here as *.example.com). You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority (for exampe, an internal syslog server). 
 
 ![Configuring Log Management Service TLS](syslog-tls-config.png)
 
@@ -72,7 +73,7 @@ By default, only the broker logs are forwarded to your configured log management
 
 You may want to enable remote syslog for service instances to monitor the health of the clusters. However, doing so generates a large volume of logs, which is why this setting is disabled by default. The broker logs only include information about service instance creation, not on-going cluster health. Service instance logs are sent to the same host and port configured for the broker logs.
 
-### <a id="plan-config"></a> Configuring Service Plans
+### <a id="plan-config"></a> Configure Service Plans
 
 You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
@@ -106,6 +107,8 @@ When you finish configuring the plan, click **Save** to save your configuration 
 #### Stemcell
 
 Ensure you import the correct type of stemcell indicated on this tab.
+
+You can download the latest available stemcells from [Pivnet](https://network.pivotal.io/products/stemcells/).
 
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
