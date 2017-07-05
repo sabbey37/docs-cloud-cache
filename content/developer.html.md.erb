@@ -374,7 +374,7 @@ Deletions are asynchronous. Run `cf services` to view the current status of the 
 
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot Application to PCC with SSC
 
-As of this release to get a Spring boot application running with session state caching on PCC you must create a `war` using the `spring-boot-starter-tomcat` plugin instead of using the `spring-boot-maven` plugin to create a `jar`. If you want your app to use SSC, you cannot use `spring-boot-maven` to build a jar and push your app to cf. This is because the java_buildpack will not pull in the necessary jars for SSC when it detects a spring jar.
+As of this release, to get a Spring boot application running with session state caching (SSC) on PCC, you must create a `war` using the `spring-boot-starter-tomcat` plugin instead of using the `spring-boot-maven` plugin to create a `jar`. For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a jar and push your app to CF, because the java_buildpack will not pull in the necessary jars for SSC when it detects a spring jar.
 
 To build your `war`, add this depedency to your `pom.xml`:
 
