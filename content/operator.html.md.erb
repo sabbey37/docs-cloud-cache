@@ -15,18 +15,20 @@ You must have access to a Service Network in order to install PCC.
 
 PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 with PCF Elastic Runtime v1.11.0 or later.
 
-## <a id="install"></a> Beginning Your Installation of Pivotal Cloud Cache
+## <a id="install"></a> Installing Pivotal Cloud Cache
 
-Follow the steps below to start installing PCC on PCF:
+Follow the steps below to install PCC on PCF:
 
 1. Download the tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
 1. Click *Import a Product* to import the tile into Ops Manager.
 1. Click the **+** symbol next to the uploaded product description.
-1. Click on the Cloud Cache Tile. From here, you can click through the **Settings**, **Status**, **Credentials**, and **Logs** tabs to start configuring PCC.
+1. Click on the Cloud Cache tile.
+1. Complete all the configuration steps in the [Configure Tile Properties](#settings-config) section below.
+1. Return to the Ops Manager Installation Dashboard and click **Apply Changes** to complete the installation of the PCC tile.  
 
 ### <a id="settings-config"></a> Configure Tile Properties
 
-You need to configure the following panes. Each pane name needs to show a green checkmark before you can complete the installation.
+Configure the following panes. Each pane name must show a green checkmark before you can complete the installation.
 
 * [Assign AZs and Networks](#azs)
 * [Settings](#settings)
