@@ -146,7 +146,7 @@ This error message indicates that the operator has made an update to the plan us
 
 ## <a id="accessing"></a> Accessing a Service Instance
 
-Once you have created a service instance, you can start accessing it. Usually you should set up cache regions before using your service instance from a deployed CF app. You can do this with the gfsh command line tool. To connect, you must set up a service key.
+After you have created a service instance, you can start accessing it. Usually you should set up cache regions before using your service instance from a deployed CF app. You can do this with the gfsh command line tool. To connect, you must set up a service key.
 
 ### <a id="create-service-key"></a> Create Service Keys
 
@@ -348,7 +348,7 @@ Update the `gradle.properties` with your username and password used for [https:/
 
 Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` with the path to the sample manifest you created.
 
-Once you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
+After you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
 
 ### <a id="pulse"></a> Use the Pulse Dashboard
 
@@ -372,11 +372,14 @@ $ cf delete-service my-cloudcache
 
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
-## <a id="spring-boot-ssc"></a> Connecting a Spring Boot Application to PCC with SSC
+## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to PCC with SSC
 
-As of this release, to get a Spring boot application running with session state caching (SSC) on PCC, you must create a `war` using the `spring-boot-starter-tomcat` plugin instead of using the `spring-boot-maven` plugin to create a `jar`. For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a jar and push your app to CF, because the java_buildpack will not pull in the necessary jars for SSC when it detects a spring jar.
+In PCC v1.1 and later, to get a Spring Boot app running with session state caching (SSC) on PCC,
+you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead of the `spring-boot-maven` plugin to create a JAR file.
+For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
+because the Java buildpack does not pull in the necessary JAR files for SSC when it detects a Spring JAR file.
 
-To build your `war`, add this depedency to your `pom.xml`:
+To build your WAR file, add this depedency to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -386,7 +389,7 @@ To build your `war`, add this depedency to your `pom.xml`:
 </dependency>
 ```
 
-For a full example of running a spring boot application that connects with SSC, [run this app](https://github.com/cf-gemfire-org/http-session-caching) and use this following for your `pom.xml`:
+For a full example of running a Spring Boot app that connects with SSC, [run this app](https://github.com/cf-gemfire-org/http-session-caching) and use this following for your `pom.xml`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
