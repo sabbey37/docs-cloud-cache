@@ -372,6 +372,67 @@ $ cf delete-service my-cloudcache
 
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
+## <a id="spring-boot-ssc"></a> Connecting a Spring Boot Application to PCC with SSC
 
+As of this release to get a Spring boot application running with session state caching on PCC you must create a `war` using the `spring-boot-starter-tomcat` plugin instead of using the `spring-boot-maven` plugin to create a `jar`. If you want your app to use SSC, you cannot use `spring-boot-maven` to build a jar and push your app to cf. This is because the java_buildpack will not pull in the necessary jars for SSC when it detects a spring jar.
 
+To build your `war`, add this depedency to your `pom.xml`:
 
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-tomcat</artifactId>
+  <scope>provided</scope>
+</dependency>
+```
+
+For a full example of running a spring boot application that connects with SSC, [run this app](https://github.com/cf-gemfire-org/http-session-caching) and use this following for your `pom.xml`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.pivotal.gemfire.demo</groupId>
+  <artifactId>HttpSessionCaching-Webapp</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>HttpSessionCaching-Webapp</name>
+  <description>Demo project for GemFire Http Session State caching</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.3.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+l      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
+```
