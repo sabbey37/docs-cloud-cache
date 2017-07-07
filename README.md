@@ -2,7 +2,7 @@
 
 ## About Branches 
 
-On 7/7/17, **v1.0-branch** is your branch for (already released) v1.0. **v1.1 branch** is your branch for v1.1, to be released today. Your branch for changes on future releases (but not on v1.1) is **master branch**.
+On 7/7/17, **v1.0-branch** is your branch for (already released) v1.0. For today's release, v1.1, documentation lives on **v1.1 branch**. Your branch for changes on future releases (but not on v1.1) is **master branch**.
 
 Other branches such as **v1.0-no-az-changes** and **v1.0-service_access-#144322245** are being used to PR corrections/edits back into 1.0 docs.
 
