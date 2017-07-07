@@ -2,13 +2,11 @@
 
 ## About Branches 
 
-On 7/7/17, **v1.0-branch** is your branch for (already released) v1.0. For today's release, v1.1, documentation lives on **v1.1 branch**. Your branch for changes on future releases (but not on v1.1) is **master branch**.
+Currently, **v1.0-branch** is your branch for (already released) v1.0 documentation. For the July 2017 release, v1.1, documentation lives on **v1.1 branch**. Your branch for changes on future releases (but not on v1.1) is **master branch**.
 
-Other branches such as **v1.0-no-az-changes** and **v1.0-service_access-#144322245** are being used to PR corrections/edits back into 1.0 docs.
+Other branches are sometimes created to PR corrections/edits back into live docs.
 
 The **master branch** is in use for v1.2 development.
-
-A **v1.1-branch** was created (using **master branch** as a snapshot) on 7/6/17.
 
 The above info about branches comes from Megan Moore and is correct as of July 7, 2017.
 
