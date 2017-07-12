@@ -15,7 +15,7 @@ You must have access to a Service Network in order to install PCC.
 
 PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 with PCF Elastic Runtime v1.11.0 or later.
 
-## <a id="install"></a> Installing Pivotal Cloud Cache
+## <a id="install"></a> Installing and Configuring Pivotal Cloud Cache
 
 Follow the steps below to install PCC on PCF:
 
@@ -36,7 +36,7 @@ After you complete a section, a green circle containing a check mark appears nex
 Each section name must show this checked green circle before you can complete your installation.
 
 * [Assign AZs and Networks](#azs)
-* [Settings](#settings)
+* [Settings: Smoke Tests and Outbound Internet Access](#settings)
 * [Syslog](#syslog)
 * [Plan](#plan-config)
 * [Errands](#errands)
@@ -65,7 +65,7 @@ To select AZs and networks for VMs used by PCC, do the following:
 
 1. Click **Save**.
 
-####<a name='settings'></a> Settings: Smoke Tests
+####<a name='settings'></a> Settings: Configure Smoke Test Errands
 
 The smoke-tests errand that runs after tile installation.
 The errand verifies that your installation was successful.
@@ -87,7 +87,7 @@ To select which plan you want to use for smoke tests, do the following:
 
 3. Click **Save**.
 
-#### Settings: Allow Outbound Internet Access
+#### Settings: Configure Outbound Internet Access
 
 By default, outbound internet access is not allowed from service instances. 
 
@@ -100,13 +100,11 @@ To allow outbound internet access from service instance, do the following:
 
 2. Click **Allow outbound internet access from service instances (IaaS-dependent)**.
 
-3. Click **Save**.
-
     ![Outbound Internet Access](allow-outbound-access.png)
 
 3. Click **Save**.
 
-####<a name='syslog'></a> Syslog
+####<a name='syslog'></a> Syslog Forwarding
 
 By default, syslog forwarding is not enabled in PCC.
 However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
