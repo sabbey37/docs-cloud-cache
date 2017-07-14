@@ -40,11 +40,9 @@ Current Pivotal Cloud Cache details:
 
 ## <a id='known-issues'></a>Known Issues
 
-### Upgrade All Service Instances errand fails
+### Service Instance Upgrade Fails When Pulse Has Open Connections
 
-** Affected Versions: ** 1.0.0 - 1.0.5
-
-#### Issue
+**Affected Versions**: 1.0.0 - 1.0.5
 
 The `upgrade-all-service-instances` errand fails. On the Cloud Cache service instance deployment, this may appear with an error similar to the following:
 
@@ -58,7 +56,7 @@ The `upgrade-all-service-instances` errand fails. On the Cloud Cache service ins
 
 This is due to a bug in GemFire where the locators cannot stop successfully when there is an open connection to the Pulse dashboard. This issue can be tracked in the Apache Geode Jira [here](https://issues.apache.org/jira/browse/GEODE-3191).
 
-#### Solution
+#### Mitigations
 
 ##### Option 1
 
@@ -72,7 +70,7 @@ If you have not yet run the `upgrade-all-service-instances` errand, please follo
 1. Identify each Cloud Cache deployment using the BOSH CLI
 1. For each Cloud Cache deploymnent, use `bosh ssh` to ssh onto a locator VM
 1. On the locator VM, change to be the root user by running `sudo su`
-1. On the locator VM, use monit to stop the route_registrar job by running `monit stop route_registrar`
+1. On the locator VM, use `monit` to stop the `route_registrar` job by running `monit stop route_registrar`
 1. Repeat steps 4-5 for all the locators for each Cloud Cache deployment
 1. Navigate back to the Operations Manager dashboard and click **Apply Changes**
 1. The `upgrade-all-service-instances` errand should complete successfully
