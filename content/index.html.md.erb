@@ -82,7 +82,7 @@ If you have already run the `upgrade-all-service-instances` errand and now have 
 1. SSH onto the Operations Manager VM.
 1. Identify the locator which is in a stopped state using the BOSH CLI. This can be done by running `bosh vms`.
 1. On the locator VM, change yourself to the root user by running `sudo su`.
-1. On the locator VM, `monit summary` will show the `gemfire-locator` process as `not monitored`.
+1. Optionally, on the locator VM, you can run `monit summary` to confirm that the `gemfire-locator` process is not monitored.
 1. Kill the process by running `kill -9 "$(ps -ef | grep LocatorLauncher | head -n 1 | awk '{print $2}')"`.
 
 After killing the LocatorLauncher process on the stopped Locator VM, proceed with option 2 above.
@@ -100,7 +100,7 @@ After killing the LocatorLauncher process on the stopped Locator VM, proceed wit
 
 **<a id='new-in-this-release'></a>New in This Release**
 
-- Rewrote smoke test using Go to fix timeout issues on some environments.
+- Rewrote smoke test using Go to fix timeout issues on some environments
 
 ### <a id='v1.0.3'></a>Pivotal Cloud Cache v1.0.3
 
