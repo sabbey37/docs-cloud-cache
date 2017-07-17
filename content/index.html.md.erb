@@ -56,7 +56,7 @@ The `upgrade-all-service-instances` errand fails. On the Cloud Cache service ins
 
 This is due to a bug in GemFire where the locators cannot stop successfully when there is an open connection to the Pulse dashboard. This issue can be tracked in the Apache Geode Jira [here](https://issues.apache.org/jira/browse/GEODE-3191).
 
-#### Mitigations
+#### Mitigation Options
 
 ##### Option 1
 
@@ -64,28 +64,29 @@ If possible, close all connections to the Pulse dashboards before upgrading the 
 
 ##### Option 2
 
-If you have not yet run the `upgrade-all-service-instances` errand, please follow the steps below:
+If you have not yet run the `upgrade-all-service-instances` errand, follow the steps below:
 
-1. SSH onto the Operations Manager VM
-1. Identify each Cloud Cache deployment using the BOSH CLI
-1. For each Cloud Cache deploymnent, use `bosh ssh` to ssh onto a locator VM
-1. On the locator VM, change to be the root user by running `sudo su`
-1. On the locator VM, use `monit` to stop the `route_registrar` job by running `monit stop route_registrar`
-1. Repeat steps 4-5 for all the locators for each Cloud Cache deployment
-1. Navigate back to the Operations Manager dashboard and click **Apply Changes**
-1. The `upgrade-all-service-instances` errand should complete successfully
+1. SSH onto the Operations Manager VM.
+1. Identify each Cloud Cache deployment using the BOSH CLI.
+1. For each Cloud Cache deploymnent, use `bosh ssh` to ssh onto a locator VM.
+1. On the locator VM, change yourself to the root user by running `sudo su`.
+1. On the locator VM, use `monit` to stop the `route_registrar` job by running `monit stop route_registrar`.
+1. Repeat steps 4-5 for all the locators for each Cloud Cache deployment.
+1. Navigate back to the Operations Manager dashboard and click **Apply Changes**.
+1. The `upgrade-all-service-instances` errand should complete successfully.
 
 ##### Option 3
 
-If you have already run the `upgrade-all-service-instances` errand and now have a stopped locator in one of your Cloud Cache deployments, please follow the steps below:
+If you have already run the `upgrade-all-service-instances` errand and now have a stopped locator in one of your Cloud Cache deployments, follow the steps below:
 
-1. SSH onto the Operations Manager VM
-1. Identify the locator which is in a stopped state using the BOSH CLI. This can be done by running `bosh vms`
+1. SSH onto the Operations Manager VM.
+1. Identify the locator which is in a stopped state using the BOSH CLI. This can be done by running `bosh vms`.
 
-** On the stopped locator VM**
-1. On the locator VM, change to be the root user by running `sudo su`
-1. On the locator VM, `monit summary` will show the `gemfire-locator` process as `not monitored`
-1. Kill the process by running `kill -9 "$(ps -ef | grep LocatorLauncher | head -n 1 | awk '{print $2}')"`
+**On the stopped locator VM**:
+
+1. On the locator VM, change yourself to the root user by running `sudo su`
+1. On the locator VM, `monit summary` will show the `gemfire-locator` process as `not monitored`.
+1. Kill the process by running `kill -9 "$(ps -ef | grep LocatorLauncher | head -n 1 | awk '{print $2}')"`.
 
 After killing the LocatorLauncher process on the stopped Locator VM, proceed with option 2 above.
 
