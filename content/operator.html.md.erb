@@ -65,17 +65,16 @@ To select AZs and networks for VMs used by PCC, do the following:
 
 1. Click **Save**.
 
-####<a name='settings'></a> Settings: Configure Smoke Test Errands
+####<a name='settings'></a> Settings: Specify Smoke Test Errands and Outbound Internet Acces
 
-The smoke-tests errand that runs after tile installation.
-The errand verifies that your installation was successful.
-By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
+1. Click **Settings**. This section provides settings for smoke-test errands and VM options.
 
-To select which plan you want to use for smoke tests, do the following:
 
-1. Click **Settings**.
+2. Under **Plan to use for smoke test**, select a plan to use when the `smoke-tests` errand runs.
+<br>
+	*The smoke-tests errand runs after tile installation and verifies that your installation was successful.
 
-2. Select a plan to use when the `smoke-tests` errand runs.
+	*By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
 
      Ensure the selected plan is enabled and configured.
      For information about configuring plans, see [Configure Service Plans](#plan-config) below.
@@ -85,26 +84,19 @@ To select which plan you want to use for smoke tests, do the following:
      Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
      ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
-3. Click **Save**.
+3. Under **VM options**, allow or disable internet access.
+<br>
+ 	*If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances. Log forwarding and backups, which require external endpoints, might also require internet access.
 
-#### Settings: Configure Outbound Internet Access
+	*By default, outbound internet access is NOT allowed from service instances. 
 
-By default, outbound internet access is not allowed from service instances. 
-
-If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances.
-Log forwarding and backups, which require external endpoints, might also require internet access.
-
-To allow outbound internet access from service instance, do the following:
-
-1. Click **Settings**.
-
-2. Click **Allow outbound internet access from service instances (IaaS-dependent)**.
+ 	To allow outbound internet access from service instance, click **Allow outbound internet access from service instances (IaaS-dependent)**.
 
     ![Outbound Internet Access](allow-outbound-access.png)
 
-3. Click **Save**.
+3. After you have configured smoke test errands and internet access options, click **Save**.
 
-####<a name='syslog'></a> Syslog Forwarding
+####<a name='syslog'></a> Set Up Syslog Forwarding
 
 By default, syslog forwarding is not enabled in PCC.
 However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
@@ -148,18 +140,18 @@ You can configure five individual plans for your developers. Select the **Plan 1
 
 ![Configuring a Plan](configure-plan.png)
 
-1. Configure settings for your service plan as described in the table below.
+Configure settings for your service plan as described in the table below.
 
 <table>
     <tr><th>Setting</th><th>Instructions</th></tr>
     <tr><td><strong>Service Plan Access</strong></td>
-        <td>**Enable Plan** is checked by default. If you do not want to add this plan to the CF service catalog, select **Disable Plan**. You must enable at least one plan.</td></tr>
+        <td><strong>Enable Plan</strong> is checked by default. If you do not want to add this plan to the CF service catalog, select <strong>Disable Plan</strong>. You must enable at least one plan.</td></tr>
     <tr><td><strong>Plan Name</strong></td>
         <td>Allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace..</td></tr>
     <tr><td><strong>Plan Description</strong></td>
         <td>Allows you to supply a plan description. The description is displayed to developers when they view the service in the Marketplace.</td>
     <tr><td><strong>CF Service Access</strong></td>
-        <td>Enabled by default. This setting determines whether the plan is dispalyed on the marketplace. **Enable Service Access** will display the service plan to all developers in the CF marketplace. **Disable Service Access** will not display the service plan to developers in the CF marketplace and cannot be enabled at a later time. **Leave Service Access Unchanged** will not display the service plan in the CF marketplace by default but can be enabled at a later time.</td> 
+        <td>Enabled by default. This setting determines whether the plan is dispalyed on the marketplace. <strong>Enable Service Access</strong> will display the service plan to all developers in the CF marketplace. <strong>Disable Service Access</strong> will not display the service plan to developers in the CF marketplace and cannot be enabled at a later time. <strong>Leave Service Access Unchanged</strong> will not display the service plan in the CF marketplace by default but can be enabled at a later time.</td> 
     <tr><td><strong>Maximum service instances</strong></td>
         <td>Sets the maximum allowed PCC service instances.</td></tr>
     <tr><td><strong>Maximum servers per cluster</strong></td>
@@ -180,7 +172,7 @@ You can configure five individual plans for your developers. Select the **Plan 1
 
 <p class="note"><strong>Note</strong>: The total size of the cache is directly related to the number of servers and the amount of memory of the selected server VM type.</p>
 
-2. When you finish configuring the plan, click **Save** to save your configuration options.
+When you finish configuring the plan, click **Save** to save your configuration options.
 
 ####<a name='errands'></a> Errands
 
