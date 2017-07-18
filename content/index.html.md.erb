@@ -25,7 +25,6 @@ This documentation performs the following functions:
 
 Current Pivotal Cloud Cache details:
 
-
 - **Version:** v1.0.5
 - **Release Date:** June 29, 2017
 - **Software Component Version:** GemFire v9.0.3
@@ -55,14 +54,10 @@ The `upgrade-all-service-instances` errand fails. On the Cloud Cache service ins
 ```
 
 This is due to a bug in GemFire where the locators cannot stop successfully when there is an open connection to the Pulse dashboard. This issue can be tracked in the Apache Geode Jira [here](https://issues.apache.org/jira/browse/GEODE-3191).
-
-#### Mitigation Options
-
-##### Option 1
+##### Mitigation Option 1
 
 If possible, close all connections to the Pulse dashboards before upgrading the Pivotal Cloud Cache tile.
-
-##### Option 2
+##### Mitigation Option 2
 
 If you have not yet run the `upgrade-all-service-instances` errand, follow the steps below:
 
@@ -75,17 +70,21 @@ If you have not yet run the `upgrade-all-service-instances` errand, follow the s
 1. Navigate back to the Operations Manager dashboard and click **Apply Changes**.
 1. The `upgrade-all-service-instances` errand should complete successfully.
 
-##### Option 3
+##### Mitigation Option 3
 
 If you have already run the `upgrade-all-service-instances` errand and now have a stopped locator in one of your Cloud Cache deployments, follow the steps below:
 
 1. SSH onto the Operations Manager VM.
 1. Identify the locator which is in a stopped state using the BOSH CLI. This can be done by running `bosh vms`.
 1. On the locator VM, change yourself to the root user by running `sudo su`.
-1. Optionally, on the locator VM, you can run `monit summary` to confirm that the `gemfire-locator` process is not monitored.
+1. (Optional) On the locator VM, run `monit summary` to confirm that the `gemfire-locator` process is not monitored.
 1. Kill the process by running `kill -9 "$(ps -ef | grep LocatorLauncher | head -n 1 | awk '{print $2}')"`.
 
 After killing the LocatorLauncher process on the stopped Locator VM, proceed with option 2 above.
+
+### Pulse Monitoring Tool Issue
+The topology diagram in the Pulse monitoring tool might not be accurate, and might display more members in a cluster than the cluster actually contains. 
+However the numerical value for members, shown in the top bar of the tool, is accurate.
 
 ## <a id='release-notes'></a>Release Notes
 
@@ -120,8 +119,6 @@ After killing the LocatorLauncher process on the stopped Locator VM, proceed wit
 - Sets global service instance quota to 50 instances
 - Provides option to disable a plan and service access separately
 - Validates that the plan description doesnt contain any spaces
-
-
 
 ### <a id='v1.0.1'></a>Pivotal Cloud Cache v1.0.1
 
@@ -329,12 +326,6 @@ Default user roles `cluster_operator` and `developer` have different permissions
 - `developer` role has DATA:WRITE and DATA:READ permissions.
 
 You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
-
-## <a id='bugs'></a>Known Issues
-
-### Pulse Issues
-The topology diagram might not be accurate and might show more members than are actually in the cluster. 
-However, the numerical value displayed on the top bar is accurate.
 
 #### <a id='feedback'></a> Feedback
 
