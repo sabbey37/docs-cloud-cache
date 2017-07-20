@@ -48,14 +48,14 @@ When completed, the status changes from `create in progress` to `create succeede
 
 ### <a id="params"></a> Provide Optional Parameters
 
-You can create a customized service instance by passing optional parameters to `cf create-service` using the `-c` flag. The `-c` flag accepts a valid JSON object containing service-specific configuration parameters, provided either in-line or in a file. 
+You can create a customized service instance by passing optional parameters to `cf create-service` using the `-c` flag. The `-c` flag accepts a valid JSON object containing service-specific configuration parameters, provided either in-line or in a file.
 
 The PCC service broker supports the following parameters:
 
-- `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by operator. 
+- `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by operator.
 - `new_size_percentage`: An integer that specifies the percentage of the heap to allocate to young generation. This value must be between `5` and `83`. By default, the new size is 2&nbsp;GB or 10% of heap, whichever is smaller.
 
-The following example creates the service with five service instances in the cluster: 
+The following example creates the service with five service instances in the cluster:
 
 <pre class='terminal'>
 $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
@@ -63,14 +63,14 @@ $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
 
-When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching.
+When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching. This is avaible in java buildpack v4 starting from v4.3 and v3 starting from v3.19.
 
-To enable session state caching, do one of the following: 
+To enable session state caching, do one of the following:
 
 + When creating your service instance name, append it with the `session-replication` tag. For example, for the `p-cloudcache` service:
 
     <pre class='terminal'>
-     $ cf create-service p-cloudcache my-service-instance -t session-replication</pre> 
+     $ cf create-service p-cloudcache my-service-instance -t session-replication</pre>
 
 * When updating your service instance name (for example, if the updated name is `new-service-instance`), append it with the `session-replication` tag:
 
@@ -85,7 +85,7 @@ To enable session state caching, do one of the following:
 Session state caching for apps using [Spring Session](http://projects.spring.io/spring-session/) is a beta feature.
 It uses pre-release versions of Spring Session libraries.
 
-To use `spring-session` with Cloud Cache, follow the steps below: 
+To use `spring-session` with Cloud Cache, follow the steps below:
 
 1. Make the following changes to the app:
   * Replace existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is seconds.
@@ -103,7 +103,7 @@ To use `spring-session` with Cloud Cache, follow the steps below:
 
 You can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
 
-Previously specified optional parameters are persisted through subsequent updates. To return the service instance to default values, you must explicitly specify the defaults as optional parameters. 
+Previously specified optional parameters are persisted through subsequent updates. To return the service instance to default values, you must explicitly specify the defaults as optional parameters.
 
 For example, if you create a service instance with five servers using a plan that has a default value of four servers:
 
@@ -127,7 +127,7 @@ This automatic rebalancing does not occur when a server leaves the cluster and l
 
 ## <a id="plan-updates"></a> About Changes to the Service Plan
 
-Your PCF operator can change details of the service plan available on the Marketplace. If your operator changes the default value of one of the optional parameters, this does not affect existing service instances. 
+Your PCF operator can change details of the service plan available on the Marketplace. If your operator changes the default value of one of the optional parameters, this does not affect existing service instances.
 
 However, if your operator changes the allowed values of one of the optional parameters, existing instances that exceed the new limits are not affected, but any subsequent service updates that change the optional parameter must adhere to the new limits.
 
@@ -150,7 +150,7 @@ After you have created a service instance, you can start accessing it. Usually y
 
 ### <a id="create-service-key"></a> Create Service Keys
 
-Service keys provide a way to access your service instance outside the scope of a deployed CF app. Run `cf create-service-key SERVICE-INSTANCE-NAME KEY-NAME` to create  a service key. Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance. Replace `KEY-NAME` with a name of your choice. You use this name to refer to your service key with other commands. 
+Service keys provide a way to access your service instance outside the scope of a deployed CF app. Run `cf create-service-key SERVICE-INSTANCE-NAME KEY-NAME` to create  a service key. Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance. Replace `KEY-NAME` with a name of your choice. You use this name to refer to your service key with other commands.
 
 <pre class='terminal'>
 $ cf create-service-key my-cloudcache my-service-key
@@ -194,7 +194,7 @@ This returned structure contains the following information:
 * `gfsh-url`: A URL usable to connect the gfsh client to the service instance
 * `pulse-url`: A URL usable to view the Pulse dashboard in a web browser, which allows monitoring of the service-instance status. You can use the developer credentials to authenticate.
 
-The `cluster_operator` and `developer` roles provide access to different functions on the service instance. 
+The `cluster_operator` and `developer` roles provide access to different functions on the service instance.
 
 You can use the `cluster_operator` credentials to administer the service instance. For example, you can use the `cluster_operator` credentials to define or delete cache regions.
 
@@ -271,9 +271,9 @@ In practice, you should perform these get/put operations from a deployed PCF app
 
 ### <a id="bind-service"></a> Bind an App to a Service Instance
 
-Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region. 
-Run `cf bind-service APP-NAME SERVICE-INSTANCE-NAME` to bind an app to your service instance. 
-Replace `APP-NAME` with the name of the app. 
+Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region.
+Run `cf bind-service APP-NAME SERVICE-INSTANCE-NAME` to bind an app to your service instance.
+Replace `APP-NAME` with the name of the app.
 Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance.
 
 <pre class='terminal'>
@@ -281,7 +281,7 @@ $ cf bind-service my-app my-cloudcache
 </pre>
 
 Binding an app to the service instance provides connection information through the `VCAP_SERVICES` environment variable.
-Your app can use this information to configure components, such as the GemFire client cache, to use the service instance. 
+Your app can use this information to configure components, such as the GemFire client cache, to use the service instance.
 
 The following is a sample `VCAP_SERVICES` environment variable:
 
