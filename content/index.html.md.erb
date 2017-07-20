@@ -135,6 +135,10 @@ A locator VM might fail to listen on its port and the status not be reported by 
 
 SSH into the missing locator VM and run the monit restart command.
 
+### Pulse Monitoring Tool Issue
+
+The topology diagram might not be accurate and might show more members than are actually in the cluster. 
+However, the numerical value displayed on the top bar is accurate.
 
 ## <a id='release-notes'></a>Release Notes
 
@@ -322,11 +326,6 @@ Default user roles `cluster_operator` and `developer` have different permissions
 - `developer` role has DATA:WRITE and DATA:READ permissions.
 
 You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
-
-## <a id='bugs'></a>Known Issues
-### Pulse Issue
-The topology diagram might not be accurate and might show more members than are actually in the cluster. 
-However, the numerical value displayed on the top bar is accurate.
 
 ## <a id='feedback'></a> Feedback
 Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback list](mailto:pivotal–cf–feedback@pivotal.io).
