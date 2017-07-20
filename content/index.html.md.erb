@@ -54,9 +54,11 @@ The `upgrade-all-service-instances` errand fails. On the Cloud Cache service ins
 ```
 
 This is due to a bug in GemFire where the locators cannot stop successfully when there is an open connection to the Pulse dashboard. This issue can be tracked in the Apache Geode Jira [here](https://issues.apache.org/jira/browse/GEODE-3191).
+
 ##### Mitigation Option 1
 
 If possible, close all connections to the Pulse dashboards before upgrading the Pivotal Cloud Cache tile.
+
 ##### Mitigation Option 2
 
 If you have not yet run the `upgrade-all-service-instances` errand, follow the steps below:
