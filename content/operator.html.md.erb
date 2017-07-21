@@ -7,11 +7,11 @@ This document describes how a Pivotal Cloud Foundry (PCF) operator can install, 
 
 ## <a id="requirements"></a> Requirements for Pivotal Cloud Cache
 
-#### Service Network
+### Service Network
 
 You must have access to a Service Network in order to install PCC. 
 
-#### Minimum Version Requirements
+### Minimum Version Requirements
 
 PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 with PCF Elastic Runtime v1.11.0 or later.
 
@@ -63,38 +63,35 @@ To select AZs and networks for VMs used by PCC, do the following:
         <td>Select the network to be used for GemFire VMs.</td> 
   </table>
 
-1. Click **Save**.
+3. Click **Save**.
 
 ####<a name='settings'></a> Settings: Specify Smoke Test Errands and Outbound Internet Acces
 
 1. Click **Settings**. This section provides settings for smoke-test errands and VM options.
 
+2. Under **Plan to use for smoke test**, select a plan to use when the `smoke-tests` errand runs. The smoke-tests errand runs after tile installation and verifies that your installation was successful. By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space. 
 
-2. Under **Plan to use for smoke test**, select a plan to use when the `smoke-tests` errand runs.
-<br>
-	* The smoke-tests errand runs after tile installation and verifies that your installation was successful.
+3. Ensure that the selected plan is enabled and configured. For information about configuring plans, see [Configure Service Plans](#plan-config) below.
+If the selected plan is not enabled, the `smoke-tests` errand fails.
 
-	* By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
+    <p class="note"><strong>Note</strong>: Pivotal recommends that you use the smallest four-server plan for smoke tests.
+    Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.</p>
 
-     Ensure the selected plan is enabled and configured.
-     For information about configuring plans, see [Configure Service Plans](#plan-config) below.
-     If the selected plan is not enabled, the `smoke-tests` errand fails.
+    ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
-     Pivotal recommends that you use the smallest four-server plan for smoke tests.
-     Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
-     ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
+4. Under **VM options**, allow or disable internet access. 
 
-3. Under **VM options**, allow or disable internet access.
-<br>
- 	* If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances. Log forwarding and backups, which require external endpoints, might also require internet access.
 
-	* By default, outbound internet access is NOT allowed from service instances. 
+     If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances. Log forwarding and backups, which require external endpoints, might also require internet access. 
 
- 	To allow outbound internet access from service instance, click **Allow outbound internet access from service instances (IaaS-dependent)**.
+
+     By default, outbound internet access is NOT allowed from service instances. 
+
+5. To allow outbound internet access from service instance, click **Allow outbound internet access from service instances (IaaS-dependent)**.
 
     ![Outbound Internet Access](allow-outbound-access.png)
 
-3. After you have configured smoke test errands and internet access options, click **Save**.
+6. After you have configured smoke test errands and internet access options, click **Save**.
 
 ####<a name='syslog'></a> Set Up Syslog Forwarding
 
