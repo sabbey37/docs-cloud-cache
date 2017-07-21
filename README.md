@@ -2,13 +2,13 @@
 
 ## About Branches 
 
-Currently, **v1.0-branch** is your branch for (already released) v1.0 documentation. For the July 2017 release, v1.1, documentation lives on **v1.1 branch**. Your branch for changes on future releases (but not on v1.1) is **master branch**.
+Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. Your branch for changes on future releases (but not on v1.1) is **master branch**.
 
 Other branches are sometimes created to PR corrections/edits back into live docs.
 
 The **master branch** is in use for v1.2 development.
 
-The above info about branches comes from Megan Moore and is correct as of July 7, 2017.
+The above info about branches comes from Megan Moore and is correct as of July 21, 2017.
 
 ## Staging
 
@@ -19,20 +19,10 @@ The staging docs are on PWS using https://docs-pcf-staging.cfapps.io/.
 This will make the book available at localhost:4567 and automatically update when you write changes to disk
 
 ```
-cd book
-bookbinder watch
-```
-
-## Pushing docs to CF
-
-These docs are served as an app in CF
-
-```
-cd book
+cd docs-book-cloud-cache
 bundle install
-bookbinder bind local
-cd final_app
-cf push p-cloudcache-docs-staging -b https://github.com/cloudfoundry/ruby-buildpack#v1.6.28
+bundle exec ookbinder watch
+
 ```
 
 ## Building Docs as part of docs-book-pcfservices
@@ -60,6 +50,6 @@ cf push p-cloudcache-docs-staging -b https://github.com/cloudfoundry/ruby-buildp
     </li>
     ```
 5. Copy the `docs-cloud-cache/master-middleman/source/subnavs/cloudcache_subnav.erb` to `docs-book-pcfservices/master-middleman/source/subnavs/`
-6. In `docs-book-pcfservices`, run `bookbinder watch` (after getting ruby/rbenv/bundle/etc installed)
+6. In `docs-book-pcfservices`, run `bookbinder watch` (after getting ruby/rbenv/bundle/etc installed).
 
 
