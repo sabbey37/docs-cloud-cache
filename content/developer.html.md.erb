@@ -63,7 +63,7 @@ $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
 
-When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching. This is avaible in java buildpack v4 starting from v4.3 and v3 starting from v3.19.
+When the service instance name is followed by the `session-replication` tag, the java buildpack will download all the required resources for session state caching. This is available in java buildpack v4 starting from v4.3, and in v3 starting from v3.19.
 
 To enable session state caching, do one of the following:
 
@@ -379,7 +379,7 @@ you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead
 For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
 because the Java buildpack does not pull in the necessary JAR files for SSC when it detects a Spring JAR file.
 
-To build your WAR file, add this depedency to your `pom.xml`:
+To build your WAR file, add this dependency to your `pom.xml`:
 
 ```xml
 <dependency>
