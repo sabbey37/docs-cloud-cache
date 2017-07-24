@@ -6,22 +6,21 @@ owner: Cloud Cache Engineers
 ## <a id='overview'></a>Overview
 
 Pivotal Cloud Cache (PCC) is a high-performance, highly available caching layer for Pivotal Cloud Foundry (PCF).
-PCC offers an in-memory key-value store.
-The product delivers low-latency responses to a large number of concurrent data access requests.
 
-PCC provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan.
-Service operators can create multiple plans to support different use cases.
-PCC uses Pivotal GemFire.
+PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data access requests.
 
-You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
+PCC provides a service broker to create in-memory data clusters on demand. These clusters are dedicated to the PCF space and tuned for specific use cases defined by the plan. Service operators can create multiple plans to support different use cases.
+
+PCC uses Pivotal GemFire. You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
 
 This documentation performs the following functions:
 
-- Describes the features and architecture of PCC
-- Provides the PCF operator with instructions for installing, configuring, and maintaining PCC
-- Provides app developers instructions for choosing a service plan, creating and deleting PCC service instances, and binding apps
+* Describes the features and architecture of PCC
+* Provides the PCF operator with instructions for installing, configuring, and maintaining PCC
+* Provides app developers instructions for choosing a service plan, creating, and deleting PCC service instances
+* Provides app developers instructions for binding apps
 
-## <a id='snapshot'></a> Product Snapshot
+## <a id='snapshot'></a>Product Snapshot
 
 The following table provides version and version-support information about Pivotal Cloud Cache:
 
@@ -58,23 +57,22 @@ The following table provides version and version-support information about Pivot
     </tr>
 </table>
 
-## <a id='release-notes'></a>Release Notes
+## <a id='release-notes'></a>Release notes
 
 ### <a id='v1.1.0'></a>Pivotal Cloud Cache v1.1.0
 
-#### <a id='new-in-this-release'></a>New in This Release
+#### <a id='new-in-this-release'></a>New in this release
 
 Version 1.1 of PCC includes the following new features:
 
-- HTTP session caching is supported in PCC.
-- PCC is compatible with PCF v1.11.
-- PCC signs BOSH deployments with SHA-2 to prevent certificate collisions.
-- Syslog setup supports standard RFC format.
+* HTTP session caching is supported in PCC
+* PCC is compatible with PCF v1.11
+* PCC signs BOSH deployments with SHA-2 to increase security and prevent certificate collisions
+* Syslog setup supports standard RFC format
 
 #### <a id='known-issues'></a>Known Issue
 
-A locator VM might fail to listen on its port and the status not be reported by BOSH. 
-  You only know that the locator VM has gone down when you run the `list members` command in gfsh.
+A locator VM might fail to listen on its port and the status not be reported by BOSH. To identify this problem, confirm that the locator VM has gone down when you run the `list members` command in gfsh.
 
 _Workaround_: SSH into the missing locator VM and run the monit restart command.
 
