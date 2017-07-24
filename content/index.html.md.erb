@@ -86,7 +86,7 @@ If you have not yet run the `upgrade-all-service-instances` errand, follow the s
 
 1. SSH onto the Operations Manager VM.
 1. Identify each Cloud Cache deployment using the BOSH CLI.
-1. For each Cloud Cache deploymnent, use `bosh ssh` to ssh onto a locator VM.
+1. For each Cloud Cache deployment, use `bosh ssh` to ssh onto a locator VM.
 1. On the locator VM, change to be the root user by running `sudo su`.
 1. On the locator VM, use `monit` to stop the `route_registrar` job by running `monit stop route_registrar`.
 1. Repeat steps 4-5 for all the locators for each Cloud Cache deployment.
@@ -141,7 +141,7 @@ For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-c
 
 PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.
 
-When you first spin up a cluster, you'll have three locators and at least four servers.
+When you first spin up a cluster, you will have three locators and at least four servers.
 
 <% mermaid_diagram do %>
   graph TD;
@@ -167,7 +167,7 @@ When you first spin up a cluster, you'll have three locators and at least four s
 <% end %>
 
 
-If you scale the cluster up, you'll have more servers, increasing the capacity of the cache. There always will be three locators.
+If you scale the cluster up, you will have more servers, increasing the capacity of the cache. There always will be three locators.
 
 <% mermaid_diagram do %>
   graph TD;
