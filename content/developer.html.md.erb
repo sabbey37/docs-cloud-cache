@@ -374,6 +374,8 @@ Deletions are asynchronous. Run `cf services` to view the current status of the 
 
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to PCC with SSC
 
+### Tomcat App
+
 In PCC v1.1 and later, to get a Spring Boot app running with session state caching (SSC) on PCC,
 you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead of the `spring-boot-maven` plugin to create a JAR file.
 For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
@@ -438,4 +440,66 @@ For a full example of running a Spring Boot app that connects with SSC, [run thi
   </dependencies>
 
 </project>
+```
+
+### Spring Session Data Gemfire App
+
+You can easily connect your spring app to PCC to cache session state, but you
+need to use the right verion of the spring-session-data-gemfire library to do so.
+PCC 1.1.x only supports spring-session-data-gemfire version 2.0.0.M0.
+
+| PCC Version | SSDG Verion |
+|-------------|-------------|
+| 1.1.x       | 2.0.0.M0    |
+
+Example `build.gradle` file that works with PCC 1.1.x:
+
+```
+version = '0.0.1-SNAPSHOT'
+
+buildscript {
+	ext {
+		springBootVersion = '2.0.0.M2'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
+
+idea{
+	module{
+		downloadSources = true
+		downloadJavadoc = true
+	}
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/libs-milestone" }
+	maven { url "https://repo.spring.io/milestone" }
+	maven { url "http://repo.springsource.org/simple/ext-release-local" }
+    maven { url "http://repo.spring.io/libs-release/" }
+	maven { url "https://repository.apache.org/content/repositories/snapshots" }
+}
+
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
+	compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M0")
+	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
+	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+}
 ```
