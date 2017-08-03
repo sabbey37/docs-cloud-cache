@@ -211,8 +211,91 @@ From the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
 gfsh>connect --use-http --url=<gfsh-url> --user=cluster_operator --password=<cluster_operator-password>
 </pre>
 
-## <a id="use"></a> Using Cloud Cache
+### Workaround Connect with gfsh over HTTPS
 
+Connecting over HTTPS is a bit more work than HTTP, but it is required for some network setups.
+The additional steps are:
+
+1. Creating a truststore. 
+2. Setting an environment variable before you start gfsh.
+
+Before you start this process, you'll need to have your ERT environment certificate handy.
+
+#### Create a truststore that contains the ERT certificate
+
+We suggest using the `keytool` command line utility to create a truststore file.
+You'll pass in your ERT certificate file with the `-file` flag, and the path for the output truststore file with the `-keystore` flag.
+
+When you run this command, you will be prompted to enter a keystore password. Create a password and remember it!
+You will then be prompted with the certificate details. Type **yes** to trust the certificate.
+
+Here is an example of how to run `keytool` and what the output looks like:
+
+<pre class='terminal'>
+$ keytool -import -alias &lt;env&gt;-ssl -file &lt;path-to-ERT-cert&gt; -keystore &lt;env&gt;.truststore
+Enter keystore password:
+Re-enter new password:
+Owner: CN=*.url.example.com, OU=Cloud Foundry, O=Pivotal, L=New York, ST=New York, C=US
+Issuer: CN=*.url.example.com, OU=Cloud Foundry, O=Pivotal, L=New York, ST=New York, C=US
+Serial number: bd84912917b5b665
+Valid from: Sat Jul 29 09:18:43 EDT 2017 until: Mon Apr 07 09:18:43 EDT 2031
+Certificate fingerprints:
+	 MD5:  A9:17:B1:C9:6C:0A:F7:A3:56:51:6D:67:F8:3E:94:35
+	 SHA1: BA:DA:23:09:17:C0:DF:37:D9:6F:47:05:05:00:44:6B:24:A1:3D:77
+	 SHA256: A6:F3:4E:B8:FF:8F:72:92:0A:6D:55:6E:59:54:83:30:76:49:80:92:52:3D:91:4D:61:1C:A1:29:D3:BD:56:57
+	 Signature algorithm name: SHA256withRSA
+	 Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.10 Criticality=true
+BasicConstraints:[
+  CA:true
+  PathLen:0
+]
+
+#2: ObjectId: 2.5.29.11 Criticality=false
+SubjectAlternativeName [
+  DNSName: *.sys.url.example.com
+  DNSName: *.apps.url.example.com
+  DNSName: *.uaa.sys.url.example.com
+  DNSName: *.login.sys.url.example.com
+  DNSName: *.url.example.com
+  DNSName: *.ws.url.example.com
+]
+
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+</pre>
+
+#### Setting the Environment Variable
+
+Now that you've created a truststore file, you'll need to tell gfsh to use it.
+The way to do that is to set the `JAVA_ARGS` environment variable, before starting gfsh.
+
+<pre class='terminal'>
+$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;path to generated truststore&gt;"
+</pre>
+
+#### Connect over HTTPS
+This part is nearly the same as over HTTP; just make sure to use a url starting with `https`. 
+
+Open the gfsh console and connect via https:
+
+<pre class='terminal'>
+$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  /
+ / /__/ / ____/  _____/ / /    / /
+/______/_/      /______/_/    /_/    9.0.1
+
+Monitor and Manage Pivotal GemFire
+
+gfsh>connect --use-http --url=https-gfsh-url --user=cluster_operator --password=cluster_operator-password
+</pre>
+
+## <a id="use"></a> Using Cloud Cache
 ### <a id="create-regions"></a> Create Regions with gfsh
 
 After connecting with gfsh as a `cluster_operator`, you can define a new cache region.
