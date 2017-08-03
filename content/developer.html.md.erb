@@ -213,8 +213,12 @@ gfsh>connect --use-http --url=<gfsh-url> --user=cluster_operator --password=<clu
 
 ### Workaround Connect with gfsh over HTTPS
 
-Connecting over HTTPS is a bit more work than HTTP, but it required for some network setups.
-The additional steps are creating a truststore and setting an environment variable before you start gfsh.
+Connecting over HTTPS is a bit more work than HTTP, but it is required for some network setups.
+The additional steps are:
+
+1. Creating a truststore. 
+2. Setting an environment variable before you start gfsh.
+
 Before you start this process, you'll need to have your ERT environment certificate handy.
 
 #### Create a truststore that contains the ERT certificate
