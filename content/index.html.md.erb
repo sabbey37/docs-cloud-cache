@@ -85,8 +85,18 @@ If you have already run the `upgrade-all-service-instances` errand and now have 
 After killing the LocatorLauncher process on the stopped Locator VM, proceed with option 2 above.
 
 ### Pulse Monitoring Tool Issue
-The topology diagram might not be accurate and might display more members in a cluster than the cluster actually contains. 
+The topology diagram might not be accurate and might display more members in a cluster than the cluster actually contains.
 However, the numerical value displayed on the top bar is accurate.
+
+### Updating a PCC service instance fails if syslog TLS is disabled
+
+**Affected Versions**: 1.0.0 - 1.0.6
+
+If you have syslog enabled but want to disable syslog TLS, you will not be able to upgrade PCC. You will encounter the following error:
+
+```
+Service broker error: previous manifest locator job must contain syslog.tls properties if syslog properties exist
+```
 
 ## <a id='release-notes'></a>Release Notes
 
@@ -94,7 +104,7 @@ However, the numerical value displayed on the top bar is accurate.
 
 **<a id='new-in-this-release'></a>New in This Release**
 
-- Fixed service instance upgrade failure when pulse has open connections 
+- Fixed service instance upgrade failure when pulse has open connections
 
 ### <a id='v1.0.5'></a>Pivotal Cloud Cache v1.0.5
 
