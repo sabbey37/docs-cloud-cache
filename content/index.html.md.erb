@@ -66,7 +66,7 @@ The following table provides version and version-support information about Pivot
 
 The `upgrade-all-service-instances` errand fails. On the Cloud Cache service instance deployment, this may appear with an error similar to the following:
 
- ```
+```
  19:38:27 | Updating instance locator: locator/d6d98feb-f005-49ca-b1c1-3e2803811cc8 (0) (canary) (00:10:20)
             L Error: Action Failed get_task: Task f425d048-954e-424c-642f-3ba2f2b3bec4 result: Unmounting persistent disk: Running command: 'umount /dev/sdc1', stdout: '', stderr: 'umount: /var/vcap/store: device is busy.
         (In some cases useful info about processes that use
@@ -121,6 +121,15 @@ The topology diagram in the Pulse monitoring tool might not be accurate, and mig
 However the numerical value for members, shown in the top bar of the tool, is accurate.
 
 ## <a id='release-notes'></a>Release Notes
+### <a id='v1.1.1'></a>Pivotal Cloud Cache v1.1.1
+
+#### <a id='new-in-this-release'></a>New in This Release
+Version 1.1.1 of PCC includes the following bug fixes:
+
+ - Improved password requirement of the testing utility 
+ - Increased `monit` for smoke tests to be successful
+ - Improved kill command to force kill in the event of `gfsh stop` failure
+ - Fixed upgrading a cloud cache service failure when `syslog tls` is disabled and `Send service instance logs to external syslog` is enabled
 
 ### <a id='v1.1.0'></a>Pivotal Cloud Cache v1.1.0
 
