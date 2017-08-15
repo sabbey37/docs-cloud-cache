@@ -232,7 +232,10 @@ Connecting over HTTPS involves a few more steps than connecting over HTTP, but i
 1. Add the `gfsh` binary to your path.
 1. Locate the certificate you use to configure TLS termination. 
 1. Using your certificate, create a truststore file as described in the [create a truststore](#truststore) section, below.
-1. Set the `JAVA_ARGS` environment variable as described in the [set the environment variable](#environment-variable) section, below.
+1. After you have created a truststore file, set the `JAVA_ARGS` environment variable.
+<pre class='terminal'>
+$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;path to generated truststore&gt;"
+</pre>
 1. Using a url starting with `https`, open the gfsh console and connect:
 
 <pre class='terminal'>
@@ -293,14 +296,6 @@ SubjectAlternativeName [
 
 Trust this certificate? [no]:  yes
 Certificate was added to keystore
-</pre>
-
-#### <a id="environment-variable"></a> Set the Environment Variable
-
-After you have created a truststore file, set the `JAVA_ARGS` environment variable.
-
-<pre class='terminal'>
-$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;path to generated truststore&gt;"
 </pre>
 
 ## <a id="use"></a> Using Cloud Cache
