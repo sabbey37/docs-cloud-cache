@@ -205,9 +205,9 @@ You can manage your cluster and data with the `gfsh` command-line interface. PCC
 
 To install gfsh:
 
-1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire)
+1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
 1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
-1. Add the `gfsh` binary to your path
+1. Add the `gfsh` binary to your path.
 1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
 
 <pre class='terminal'>
@@ -223,16 +223,35 @@ Monitor and Manage Pivotal GemFire
 gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluster_operator-password
 </pre>
 
-### Workaround Connect with gfsh over HTTPS
+### <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-Connecting over HTTPS is a bit more work than HTTP, but it required for some network setups.
-The additional steps are creating a truststore and setting an environment variable before you start gfsh.
-Before you start this process, you'll need to have your ERT environment certificate handy.
+Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into ERT. Before you can connect, you must create a truststore and set an environment variable. 
 
-#### Create a truststore that contains the ERT certificate
+1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
+1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
+1. Add the `gfsh` binary to your path.
+1. Locate the certificate you use to configure TLS termination. 
+1. Using your certificate, create a truststore file as described in the [create a truststore](#truststore) section, below.
+1. Set the `JAVA_ARGS` environment variable as described in the [set the environment variable](environment-variable) section, below.
+1. Using a url starting with `https`, open the gfsh console and connect:
 
-We suggest using the `keytool` command line utility to create a truststore file.
-You'll pass in your ERT certificate file with the `-file` flag, and the path for the output truststore file with the `-keystore` flag.
+<pre class='terminal'>
+$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  /
+ / /__/ / ____/  _____/ / /    / /
+/______/_/      /______/_/    /_/    9.0.1
+
+Monitor and Manage Pivotal GemFire
+
+gfsh>connect --use-http --url=https-gfsh-url --user=cluster_operator --password=cluster_operator-password
+</pre>
+
+#### <a id="truststore"></a> Create a truststore 
+
+To create a truststore, use the same certificate you used to configure TLS termination. We suggest using the `keytool` command line utility to create a truststore file. 
+You'll pass in your certificate file with the `-file` flag, and the path for the output truststore file with the `-keystore` flag.
 
 When you run this command, you will be prompted to enter a keystore password. Create a password and remember it!
 You will then be prompted with the certificate details. Type **yes** to trust the certificate.
@@ -276,31 +295,12 @@ Trust this certificate? [no]:  yes
 Certificate was added to keystore
 </pre>
 
-#### Setting the Environment Variable
+#### <a id="environment-variable"></a> Set the Environment Variable
 
-Now that you've created a truststore file, you'll need to tell gfsh to use it.
-The way to do that is to set the `JAVA_ARGS` environment variable, before starting gfsh.
+After you have created a truststore file, set the `JAVA_ARGS` environment variable.
 
 <pre class='terminal'>
 $ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;path to generated truststore&gt;"
-</pre>
-
-#### Connect over HTTPS
-This part is nearly the same as over HTTP; just make sure to use a url starting with `https`. 
-
-Open the gfsh console and connect via https:
-
-<pre class='terminal'>
-$ gfsh
-    _________________________     __
-   / _____/ ______/ ______/ /____/ /
-  / /  __/ /___  /_____  / _____  /
- / /__/ / ____/  _____/ / /    / /
-/______/_/      /______/_/    /_/    9.0.1
-
-Monitor and Manage Pivotal GemFire
-
-gfsh>connect --use-http --url=https-gfsh-url --user=cluster_operator --password=cluster_operator-password
 </pre>
 
 ## <a id="use"></a> Using Cloud Cache
