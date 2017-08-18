@@ -389,9 +389,9 @@ Each server and locator in the cluster will output metrics.
 
 You can get logs and `.gfs` stats files from your PCC service instances using the `export logs` command in gfsh.
 
-1. Use the [Connect with gfsh](#gfsh-connect) procedure to connect to the service instance you want logs from.
+1. Use the [Connect with gfsh](#gfsh-connect) procedure to connect to the service instance for which you want to see logs.
 1. Run `export logs`.
-1. There will be a `.zip` file in the same directory where you started gfsh. This file this will contain a folder for each member of the cluster. The member's folder will contain the associated log files and stats files for that member.
+1. There will be a `.zip` file in the same directory where you started gfsh. This file contains a folder for each member of the cluster; the member's folder contains the associated log files and stats files for that member.
 
 For more information on the gfsh export command, please refer to the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/export.html).
 
