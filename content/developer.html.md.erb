@@ -228,15 +228,17 @@ gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluste
 Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into ERT. Before you can connect, you must create a truststore and set an environment variable. 
 
 1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
-1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
+1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix or `gfsh.bat` with Windows.
 1. Add the `gfsh` binary to your path.
 1. Locate the certificate you use to configure TLS termination. 
-1. Using your certificate, create a truststore file as described in the [create a truststore](#truststore) section, below.
-1. After you have created a truststore file, set the `JAVA_ARGS` environment variable.
+1. Using your certificate, create a truststore file. For more information, see [Create a Truststore](#truststore), below.
+1. After you have created a truststore file, set the `JAVA_ARGS` environment variable with the following command:
+`export JAVA_ARGS="-Djavax.net.ssl.trustStore=<PATH-TO-TRUSTSTORE-FILE>"`
+For example,
 <pre class='terminal'>
-$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;path to generated truststore&gt;"
+$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;../myTrustStore&gt;"
 </pre>
-1. Using a url starting with `https`, open the gfsh console and connect:
+1. Using a URL starting with `https`, open the gfsh console and connect:
 
 <pre class='terminal'>
 $ gfsh
@@ -246,10 +248,9 @@ $ gfsh
  / /__/ / ____/  _____/ / /    / /
 /______/_/      /______/_/    /_/    9.0.1
 
-
 Monitor and Manage Pivotal GemFire
 
-gfsh>connect --use-http --url=https-gfsh-url --user=cluster_operator --password=cluster_operator-password
+gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluster_operator-password
 </pre>
 
 #### <a id="truststore"></a> Create a truststore 
