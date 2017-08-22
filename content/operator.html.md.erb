@@ -198,9 +198,25 @@ Ensure you import the correct type of stemcell indicated on this tab.
 
 You can download the latest available stemcells from [Pivnet](https://network.pivotal.io/products/stemcells/).
 
-## <a id="bosh"></a> BOSH System Health Metrics
 
-<%= partial '../../p-cloud-cache/odb/bosh_health_metrics' %>
+## <a id="monitoring"></a> Monitoring Cloud Cache Service Instances
+
+Below is a table of the metrics emmitted through the CF Nozzle with their Key Performance Indicator guidelines.
+
+**Metric Name**|**Description**|**Metric Type**|**Emit Frequency**|**Suggested Measurement**|**Measurement Type**|**Warning Threshold**|**Critical Threshold**|**Suggested Actions**|**Why a KPI?**
+:-----|:-----|:-----|:-----|:-----|:-----|:-----|:-----|:---------|:-----
+system.mem.percent|RAM being consumed|percent|every 60 seconds|Average over last 10 minutes|avg|>40|>50| | 
+serviceinstance.MemberCount|Returns the number of members in the distributed system.|number|every second|Every second|count|< manifest member count| |This depends on the expected member count, which is available in the bosh manifest. If the number expected is different from the number emitted, this is a critical situation that may lead to data loss, and the reasons for node failure should be investigated by examining the service logs.|Member loss due to any reason can cause potential data loss
+serviceinstance.TotalHeapSize|Returns the total available heap (in megabytes) across all distributed members.|number|every second|Every second|pulse| | | |If the total heap size and used heap size are too close system might see thrashing due to GC activity. This increases the latency
+serviceinstance.UsedHeapSize|Returns the total heap used on all members.|number|every second|Every second|pulse| | | |If the total heap size and used heap size are too close system might see thrashing due to GC activity. This increases the latency 
+member.GarbageCollectionCount|Returns the number of times garbage collection has occurred.|number|every second|Sum over 10 minutes|sum|1000|1200|Check the number of queries run against the system which increases the deserialization of objects and increases garbage|If the frequency of GC is high, we might see high CPU usage which causes delays in the cluster.
+member.HostCpuUsage (process cpu usage)|Amount of CPU utilization|percent|every second|Average over 10 minutes|avg|90%|100%|If this is not happening with high GC activity then the system is reaching its limits and horizontally scaling might help.|High cpu usage causes delayed responses and can also make the member non responsive which will eventualy be kicked out of the cluster, potentially leading to data loss.
+member.GetsAvgLatency|Returns the cache get average latency.|number|every second|Average over 10 minutes|avg|1s|2s|If this is not happening with high GC activity then the system is reaching its limits and horizontally scaling might help.|Its a good indicator of the overall responsiveness of the system. If this number is high, the service administrator will want to diagnose the root cause.
+member.PutsAvgLatency|Returns the cache put average latency.|number|every second|Average over 10 minutes|avg|1s|2s|If this is not happening with high GC activity then the system is reaching its limits and horizontally scaling might help.|Its a good indicator of the overall responsiveness of the system. If this number is high, the service administrator will want to diagnose the root cause.
+member.JVMPauses|Returns the number JVM pauses|number|every second|Sum over 2 seconds.|sum|2|5|Check the cached object size if its greater than >1mb we might be hitting the limitation on JVM to garbage collect this obeject. Otherwise we might be hitting utilization limit on the cluster and we need to scale up to add more memory to the cluster|Due to a JVM pause the memeber stops responding to "are-you-alive" messages which might cause this member to be kicked out of the cluster.
+member.FileDescriptorLimit|Returns the maximum number of open file descriptors allowed for the member's host operating system.|number|every second|Every second|pulse| | | |If total FD open is higher than total FD available it will cause the member to stop responding and crash.
+member.TotalFileDescriptorOpen|Returns the current number of open file descriptors.|number|every second|Every second|pulse| | | |If total FD open is higher than total FD available it will cause the member to stop responding and crash.
+
 
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
