@@ -158,6 +158,8 @@ The **Plan Name** text field allows you to customize the name of the plan. This 
 
 The **Plan Description** text field allows you to supply a plan description. The description is displayed to developers when they view the service in the Marketplace.
 
+The **Enable metrics for service instances** Checkbox will enable metrics for service instances created using the plan. Once enabled the metrics will be sent to the Loggregator Firehose.
+
 The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
 
 When developers create or update a service instance, they can specify the number of servers in the cluster. The **Maximum servers per cluster** field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, a new cluster has the number of servers specified in the **Default Number of Servers** field.
