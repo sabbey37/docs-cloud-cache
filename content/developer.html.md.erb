@@ -225,7 +225,7 @@ gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluste
 
 ### <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into ERT. Before you can connect, you must create a truststore and set an environment variable. 
+Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into ERT; that is, the certificate you use where your TLS termination occurs. Before you can connect, you must create a truststore and set an environment variable. 
 
 1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
 1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix or `gfsh.bat` with Windows.
@@ -236,7 +236,7 @@ Connecting over HTTPS involves a few more steps than connecting over HTTP, but i
 `export JAVA_ARGS="-Djavax.net.ssl.trustStore=<PATH-TO-TRUSTSTORE-FILE>"`
 For example,
 <pre class='terminal'>
-$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=&lt;../myTrustStore&gt;"
+$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=myTrustStore"
 </pre>
 1. Using a URL starting with `https`, open the gfsh console and connect:
 
@@ -264,7 +264,7 @@ You will then be prompted with the certificate details. Type **yes** to trust th
 Here is an example of how to run `keytool` and what the output looks like:
 
 <pre class='terminal'>
-$ keytool -import -alias &lt;env&gt;-ssl -file &lt;path-to-ERT-cert&gt; -keystore &lt;env&gt;.truststore
+$ keytool -import -alias prod-ssl -file /tmp/ert-lb-certificate.cer myTrustStore 
 Enter keystore password:
 Re-enter new password:
 Owner: CN=*.url.example.com, OU=Cloud Foundry, O=Pivotal, L=New York, ST=New York, C=US
