@@ -233,7 +233,7 @@ Connecting over HTTPS involves a few more steps than connecting over HTTP, but i
 1. Locate the certificate you use to configure TLS termination. 
 1. Using your certificate, create a truststore file. For more information, see [Create a Truststore](#truststore), below.
 1. After you have created a truststore file, set the `JAVA_ARGS` environment variable with the following command:
-`export JAVA_ARGS="-Djavax.net.ssl.trustStore=<PATH-TO-TRUSTSTORE-FILE>"`
+`export JAVA_ARGS="-Djavax.net.ssl.trustStore=PATH-TO-TRUSTSTORE-FILE"`
 For example,
 <pre class='terminal'>
 $ export JAVA_ARGS="-Djavax.net.ssl.trustStore=myTrustStore"
@@ -261,7 +261,7 @@ You'll pass in your certificate file with the `-file` flag, and the path for the
 When you run this command, you will be prompted to enter a keystore password. Create a password and remember it!
 You will then be prompted with the certificate details. Type **yes** to trust the certificate.
 
-Here is an example of how to run `keytool` and what the output looks like:
+The following example shows how to run `keytool` and what the output looks like:
 
 <pre class='terminal'>
 $ keytool -import -alias prod-ssl -file /tmp/ert-lb-certificate.cer myTrustStore 
