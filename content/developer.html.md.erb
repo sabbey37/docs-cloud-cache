@@ -133,7 +133,7 @@ However, if your operator changes the allowed values of one of the optional para
 
 For example, if the PCF operator changes the plan by decreasing the maximum value for `num_servers`, any future service updates must adhere to the new `num_servers` value limit.
 
-You may see the following error message when attempting to update a service instance:
+You might see the following error message when attempting to update a service instance:
 
 <pre class='terminal'>
 $ cf update-service  my-cloudcache -c '{"num_servers": 5}'
@@ -146,7 +146,10 @@ This error message indicates that the operator has made an update to the plan us
 
 ## <a id="accessing"></a> Accessing a Service Instance
 
-After you have created a service instance, you can start accessing it. Usually you should set up cache regions before using your service instance from a deployed CF app. You can do this with the gfsh command line tool. To connect, you must set up a service key.
+After you have created a service instance, you can start accessing it.
+Usually, you set up cache regions before using your service instance from a deployed CF app.
+You can do this with the gfsh command line tool.
+To connect, you must set up a service key, see [Create Service Keys](#create-service-key) below.
 
 ### <a id="create-service-key"></a> Create Service Keys
 
@@ -156,7 +159,7 @@ Service keys provide a way to access your service instance outside the scope of 
 $ cf create-service-key my-cloudcache my-service-key
 </pre>
 
-Run `cf create-service-key SERVICE-INSTANCE-NAME KEY-NAME` to view the newly created service key.
+Run `cf service-key SERVICE-INSTANCE-NAME KEY-NAME` to view the newly created service key.
 
 <pre class='terminal'>
 $ cf service-key my-cloudcache my-service-key
@@ -227,26 +230,24 @@ gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluste
 
 Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into ERT; that is, the certificate you use where your TLS termination occurs. Before you can connect, you must create a truststore. 
 
-#### <a id="truststore"></a> Create a truststore 
+#### <a id="truststore"></a> Create a Truststore 
 
 To create a truststore, use the same certificate you used to configure TLS termination. We suggest using the `keytool` command line utility to create a truststore file. 
 
 1. Locate the certificate you use to configure TLS termination. 
 1. Using your certificate, run the `keytool` command.
-In this command, identify your certificate file with the `-file` flag and the path for the truststore file with the `-keystore` flag. For example:
 
-`$ keytool -import -alias ENV -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH"`
+    For example:
 
-Where:<br>
+    `$ keytool -import -alias ENV -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH"`
 
-+ `ENV` is your system environment.
+    Where:<br>
+    + `ENV` is your system environment.
+    + `CERTIFICATE.CER` is your certificate file.
+    + `TRUSTSTORE-FILE-PATH` is the path to the location where you want to create the truststore file, including the name you want to give the file.
 
-+ `CERTIFICATE.CER` is your certificate file.
-
-+ `TRUSTSTORE-FILE-PATH` is the path to the location where you want to create the truststore file, including the name you want to give the file.
-
-3. When you run this command, you will be prompted to enter a keystore password. Create a password and remember it!
-4. You will then be prompted with the certificate details. Type **yes** to trust the certificate.
+3. When you run this command, you are prompted to enter a keystore password. Create a password and remember it!
+4. When prompted for the certificate details, enter **yes** to trust the certificate.
 
 The following example shows how to run `keytool` and what the output looks like:
 
@@ -287,7 +288,7 @@ Trust this certificate? [no]:  yes
 Certificate was added to keystore
 </pre>
 
-#### <a id="establish-https"></a> Establish the connection with HTTPS 
+#### <a id="establish-https"></a> Establish the Connection with HTTPS 
 
 After you have created the truststore, you can connect using HTTPS.
 
@@ -296,17 +297,16 @@ After you have created the truststore, you can connect using HTTPS.
 1. Add the `gfsh` binary to your path.
 1. Set the `JAVA_ARGS` environment variable with the following command:
 
-`export JAVA_ARGS="-Djavax.net.ssl.trustStore=TRUSTSTORE-FILE-PATH"`
+    `export JAVA_ARGS="-Djavax.net.ssl.trustStore=TRUSTSTORE-FILE-PATH"`
 
-Where: 
-<br>
-  `TRUSTSTORE-FILE-PATH` is the path to the TrustStore file you created in [Create a truststore](#truststore).
+    Where: 
+    `TRUSTSTORE-FILE-PATH` is the path to the TrustStore file you created in [Create a Truststore](#truststore).
 
-For example,
-<pre class='terminal'>
-$ export JAVA_ARGS="-Djavax.net.ssl.trustStore=/tmp/truststore/prod.myTrustStore"
-</pre>
-  5. Using a URL starting with `https`, open the gfsh console and connect:
+    For example,
+    <pre class='terminal'>
+    $ export JAVA_ARGS="-Djavax.net.ssl.trustStore=/tmp/truststore/prod.myTrustStore"
+    </pre>
+5. Using a URL starting with `https`, open the gfsh console and connect:
 
 <pre class='terminal'>
 $ gfsh
