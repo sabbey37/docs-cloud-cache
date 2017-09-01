@@ -204,7 +204,7 @@ You can use the `cluster_operator` credentials to administer the service instanc
 You can use the `developer` credentials to perform create, retrieve, update, and delete (CRUD) data operations. You can also use the `cluster_operator` credentials to perform the same functions the `developer` credentials. As a best practice, you should use the role with the least amount of permissions necessary.
 
 ### <a id="gfsh-connect"></a> Connect with gfsh
-You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh` v9.0.0 and above.
+You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh` v9.0.0 and later.
 
 To install gfsh:
 
@@ -472,10 +472,11 @@ Deletions are asynchronous. Run `cf services` to view the current status of the 
 
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to PCC with SSC
 
-### Tomcat App
+###<a id="tomcat"></a> Use the Tomcat App
 
 In PCC v1.1 and later, to get a Spring Boot app running with session state caching (SSC) on PCC,
 you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead of the `spring-boot-maven` plugin to create a JAR file.
+
 For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
 because the Java buildpack does not pull in the necessary JAR files for SSC when it detects a Spring JAR file.
 
@@ -540,17 +541,17 @@ For a full example of running a Spring Boot app that connects with SSC, [run thi
 </project>
 ```
 
-### Spring Session Data Gemfire App
+###<a id="spring-session"></a> Spring Session Data Gemfire App
 
-You can easily connect your Spring app to PCC to do session state caching, but you
+You can connect your Spring app to PCC to do session state caching, but you
 must use the correct verion of the spring-session-data-gemfire library to do so.
-PCC 1.1.x only supports spring-session-data-gemfire version 2.0.0.M0.
+PCC v1.1.x only supports spring-session-data-gemfire version v2.0.0.M0.
 
 | PCC Version | SSDG Verion |
 |-------------|-------------|
-| 1.1.x       | 2.0.0.M0    |
+| v1.1.x       | v2.0.0.M0    |
 
-Example `build.gradle` file that works with PCC 1.1.x:
+Example `build.gradle` file that works with PCC v1.1.x:
 
 ```
 version = '0.0.1-SNAPSHOT'
