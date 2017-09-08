@@ -454,6 +454,16 @@ You can access the Pulse dashboard for a service instance by accessing the pulse
 
 Use either the `cluster_operator` or `developer` credentials to authenticate.
 
+### <a id="exporting_logs"></a> Exporting gfsh Logs
+
+You can get logs and `.gfs` stats files from your PCC service instances using the `export logs` command in gfsh.
+
+1. Use the [Connect with gfsh](#gfsh-connect) procedure to connect to the service instance for which you want to see logs.
+1. Run `export logs`.
+1. There will be a `.zip` file in the same directory where you started gfsh. This file contains a folder for each member of the cluster; the member's folder contains the associated log files and stats files for that member.
+
+For more information on the gfsh export command, please refer to the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/export.html).
+
 ## <a id="delete"></a> Deleting a Service Instance
 
 You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
