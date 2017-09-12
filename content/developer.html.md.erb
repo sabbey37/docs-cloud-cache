@@ -457,6 +457,8 @@ Use either the `cluster_operator` or `developer` credentials to authenticate.
 
 ### <a id="nozzle"></a> Access Service Metrics
 
+To access service metrics the operator will need to enable `service metrics` on the plan.
+
 PCC service instances output metrics to the Loggregator Firehose. You can use the
 [Firehose plugin](https://docs.cloudfoundry.org/loggregator/cli-plugin.html) to
 view metrics output on the CF CLI directly or connect the output to any other
