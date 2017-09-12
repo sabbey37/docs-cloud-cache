@@ -152,13 +152,17 @@ You can configure five individual plans for your developers. Select the **Plan 1
 
 The **Enable Plan** button is checked by default. If you do not want to add this plan to the CF service catalog, select **Disable Plan**. You must enable at least one plan.
 
-The **CF Service Access** drop-down menu allows you to configure the plan's visibility in the CF Marketplace. **Enable Service Access** will display the service plan to all developers in the CF marketplace. **Disable Service Access** will not display the service plan to developers in the CF marketplace and cannot be enabled at a later time. **Leave Service Access Unchanged** will not display the service plan in the CF marketplace by default but can be enabled at a later time.
+The **CF Service Access** drop-down menu allows you to configure the plan's visibility in the CF Marketplace.
+**Enable Service Access** displays the service plan to all developers in the CF marketplace.
+**Disable Service Access** does not display the service plan to developers in the CF marketplace and cannot be enabled at a later time. 
+**Leave Service Access Unchanged** does not display the service plan in the CF marketplace by default but can be enabled at a later time.
 
 The **Plan Name** text field allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace.
 
 The **Plan Description** text field allows you to supply a plan description. The description is displayed to developers when they view the service in the Marketplace.
 
-The **Enable metrics for service instances** Checkbox will enable metrics for service instances created using the plan. Once enabled the metrics will be sent to the Loggregator Firehose.
+The **Enable metrics for service instances** checkbox enables metrics for service instances created using the plan.
+Once enabled, the metrics are sent to the Loggregator Firehose.
 
 The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
 
@@ -212,14 +216,14 @@ serviceinstance.MemberCount|Returns the number of members in the distributed sys
 serviceinstance.TotalHeapSize|Returns the total available heap (in megabytes) across all distributed members.|number|Every second|pulse| | | |If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.
 serviceinstance.UsedHeapSize|Returns the total heap used on all members.|number|Every second|pulse| | | |If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.
 member.GarbageCollectionCount|Returns the number of times garbage collection has occurred.|number|Sum over 10 minutes|sum|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.|If the frequency of GC is high, the system might see high CPU usage, which causes delays in the cluster.
-member.HostCpuUsage (process cpu usage)|Amount of CPU utilization|percent|Average over 10 minutes|avg|85%|95%|If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.|High CPU usage causes delayed responses and can also make the member non-responsive. This will eventually cause it to be kicked out of the cluster, potentially leading to data loss.
+member.HostCpuUsage (process cpu usage)|Amount of CPU utilization|percent|Average over 10 minutes|avg|85%|95%|If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.|High CPU usage causes delayed responses and can also make the member non-responsive. This eventually causes it to be kicked out of the cluster, potentially leading to data loss.
 member.GetsAvgLatency|Returns the cache get average latency.|number|Average over 10 minutes|avg|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.|A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.
 member.PutsAvgLatency|Returns the cache put average latency.|number|Average over 10 minutes|avg|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.|A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.
 member.JVMPauses|Returns the number JVM pauses|number|Sum over 2 seconds|sum|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|Check the cached object size; if it is greater than >1mb, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.|Due to a JVM pause, the member stops responding to "are-you-alive" messages, which may cause this member to be kicked out of the cluster.
-member.FileDescriptorLimit|Returns the maximum number of open file descriptors allowed for the member's host operating system.|number|Every second|pulse| | | |If total FD open is higher than total FD available it will cause the member to stop responding and crash.
-member.TotalFileDescriptorOpen|Returns the current number of open file descriptors.|number|Every second|pulse| | | |If total FD open is higher than total FD available it will cause the member to stop responding and crash.
-serviceinstance.UnusedHeapSizePercentage|Returns the proportion of available heap size as a percentage|percent|Every second|compound metric|40%|10%|If this is a spike due to eviction catching up with insert frequency then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested|If the total heap size and used heap size are too close system might see thrashing due to GC activity. This increases the latency
-member.FileDescriptorRemaining|Returns the number of available File Descriptors|number|Every second|compound metric|1000|100|You need to scale horizontally to increase capacity|If total FD open is higher than total FD available it will cause the member to stop responding and crash.
+member.FileDescriptorLimit|Returns the maximum number of open file descriptors allowed for the member's host operating system.|number|Every second|pulse| | | |If total FD open is higher than total FD available, it causes the member to stop responding and crash.
+member.TotalFileDescriptorOpen|Returns the current number of open file descriptors.|number|Every second|pulse| | | |If total FD open is higher than total FD available, it causes the member to stop responding and crash.
+serviceinstance.UnusedHeapSizePercentage|Returns the proportion of available heap size as a percentage|percent|Every second|compound metric|40%|10%|If this is a spike due to eviction catching up with insert frequency, then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested|If the total heap size and used heap size are too close, system might see thrashing due to GC activity. This increases the latency
+member.FileDescriptorRemaining|Returns the number of available File Descriptors|number|Every second|compound metric|1000|100|You need to scale horizontally to increase capacity|If total FD open is higher than total FD available, it causes the member to stop responding and crash.
 
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
@@ -244,9 +248,9 @@ Follow the steps below to update plans in Ops Manager.
 
 Plan changes are not applied to existing services instances until you run the `upgrade-all-service-instances` BOSH errand. You must use the BOSH CLI to run this errand. Until you run this errand, developers cannot update service instances.
 
-Changes to fields that can be overridden by optional parameters, for example  `num_servers` or `new_size_percentage`, will change the default value of these instance properties, but will not affect existing service instances. 
+Changes to fields that can be overridden by optional parameters, for example  `num_servers` or `new_size_percentage`, change the default value of these instance properties, but do not affect existing service instances. 
 
-If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits will not be modified.
+If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits are not modified.
 
 When existing instances are upgraded, all plan changes are applied to them.
 
