@@ -63,7 +63,7 @@ $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
 
-When the service instance name is followed by the `session-replication` tag, the Java buildpack will download all the required resources for session state caching. This feature is available iin Java buildpack version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
+When the service instance name is followed by the `session-replication` tag, the Java buildpack downloads all the required resources for session state caching. This feature is available iin Java buildpack version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
 
 To enable session state caching, do one of the following:
 
@@ -456,7 +456,7 @@ Use either the `cluster_operator` or `developer` credentials to authenticate.
 
 ### <a id="nozzle"></a> Accessing Service Metrics
 
-To access service metrics the operator will need to enable `service metrics` on the plan.
+To access service metrics the operator needs to enable `service metrics` on the plan.
 
 PCC service instances output metrics to the Loggregator Firehose. You can use the
 [Firehose plugin](https://docs.cloudfoundry.org/loggregator/cli-plugin.html) to
@@ -465,7 +465,7 @@ view metrics output on the CF CLI directly or connect the output to any other
 for example, the nozzle for [Datadog](https://github.com/cloudfoundry-attic/datadog-firehose-nozzle).
 
 PCC 1.2.x supports metrics for the whole cluster and metrics for each member.
-Each server and locator in the cluster will output metrics.
+Each server and locator in the cluster outputs metrics.
 
 #### Service Instance (Cluster-wide) Metrics
 * serviceinstance.MemberCount: the number of VMs in the cluster
@@ -478,7 +478,7 @@ Each server and locator in the cluster will output metrics.
 * member.GetsAvgLatency: the avg latency of GET requests to this Gemfire member
 * member.PutsAvgLatency: the avg latency of PUT requests to this Gemfire member
 * member.JVMPauses: the number of JVM pauses that have occured on this member since startup
-* member.FileDescriptorLimit: the number of files this member will allow to be open at once
+* member.FileDescriptorLimit: the number of files this member allows to be open at once
 * member.TotalFileDescriptorOpen: the number of files this member has open now
 * member.FileDescriptorRemaining: the number of files that this member could open before hitting its limit
 * member.TotalHeapSize: the number of megabytes allocated for the heap
@@ -491,9 +491,12 @@ You can get logs and `.gfs` stats files from your PCC service instances using th
 
 1. Use the [Connect with gfsh](#gfsh-connect) procedure to connect to the service instance for which you want to see logs.
 1. Run `export logs`.
-1. There will be a `.zip` file in the same directory where you started gfsh. This file contains a folder for each member of the cluster; the member's folder contains the associated log files and stats files for that member.
+1. Find the ZIP file in the directory where you started gfsh. 
+   This file contains a folder for each member of the cluster.
+   The member folder contains the associated log files and stats files for that member.
 
-For more information on the gfsh export command, please refer to the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/export.html).
+For more information about the gfsh export command,
+see the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/export.html).
 
 ## <a id="delete"></a> Deleting a Service Instance
 
@@ -512,6 +515,11 @@ $ cf delete-service my-cloudcache
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to PCC with SSC
+
+This section describes the two ways in which you can connect a Spring Boot app to PCC: 
+
++ Using a Tomcat app with a WAR file. This is the default method for Tomcat apps.
++ Using the spring-session-data-gemfire library. This method requires that you use the correct version of these libraries.
 
 ###<a id="tomcat"></a> Use the Tomcat App
 
@@ -582,7 +590,7 @@ l      <artifactId>spring-boot-starter-tomcat</artifactId>
 </project>
 ```
 
-###<a id="spring-session"></a> Spring Session Data Gemfire App
+###<a id="spring-session"></a> Use the Spring Session Data Gemfire App
 
 You can connect your Spring app to PCC to do session state caching, but you
 must use the correct verion of the spring-session-data-gemfire library to do so.
