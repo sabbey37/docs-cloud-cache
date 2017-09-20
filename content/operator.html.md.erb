@@ -234,7 +234,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 </thead>
 <tbody>
 <tr>
-<td>member.UsedMemoryPercentage</td>
+<td>`member.UsedMemoryPercentage`</td>
 <td>RAM being consumed</td>
 <td>percent</td>
 <td>Average over last 10 minutes</td>
@@ -245,7 +245,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td></td>
 </tr>
 <tr>
-<td>serviceinstance.MemberCount</td>
+<td>`serviceinstance.MemberCount`</td>
 <td>Returns the number of members in the distributed system.</td>
 <td>number</td>
 <td>Every second</td>
@@ -256,7 +256,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>Member loss due to any reason can cause potential data loss.</td>
 </tr>
 <tr>
-<td>serviceinstance.TotalHeapSize</td>
+<td>`serviceinstance.TotalHeapSize`</td>
 <td>Returns the total available heap (in megabytes) across all distributed members.</td>
 <td>number</td>
 <td>Every second</td>
@@ -267,7 +267,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
 </tr>
 <tr>
-<td>serviceinstance.UsedHeapSize</td>
+<td>`serviceinstance.UsedHeapSize`</td>
 <td>Returns the total heap used on all members.</td>
 <td>number</td>
 <td>Every second</td>
@@ -278,7 +278,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
 </tr>
 <tr>
-<td>member.GarbageCollectionCount</td>
+<td>`member.GarbageCollectionCount`</td>
 <td>Returns the number of times garbage collection has occurred.</td>
 <td>number</td>
 <td>Sum over 10 minutes</td>
@@ -289,7 +289,8 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>If the frequency of GC is high, the system might see high CPU usage, which causes delays in the cluster.</td>
 </tr>
 <tr>
-<td>member.HostCpuUsage (process cpu usage)</td>
+<td>`member.HostCpuUsage`
+(process cpu usage)</td>
 <td>Amount of CPU utilization</td>
 <td>percent</td>
 <td>Average over 10 minutes</td>
@@ -300,7 +301,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>High CPU usage causes delayed responses and can also make the member non-responsive. This eventually causes it to be kicked out of the cluster, potentially leading to data loss.</td>
 </tr>
 <tr>
-<td>member.GetsAvgLatency</td>
+<td>`member.GetsAvgLatency`</td>
 <td>Returns the cache get average latency.</td>
 <td>number</td>
 <td>Average over 10 minutes</td>
@@ -311,7 +312,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
 </tr>
 <tr>
-<td>member.PutsAvgLatency</td>
+<td>`member.PutsAvgLatency`</td>
 <td>Returns the cache put average latency.</td>
 <td>number</td>
 <td>Average over 10 minutes</td>
@@ -322,7 +323,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
 </tr>
 <tr>
-<td>member.JVMPauses</td>
+<td>`member.JVMPauses`</td>
 <td>Returns the number JVM pauses</td>
 <td>number</td>
 <td>Sum over 2 seconds</td>
@@ -333,7 +334,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>Due to a JVM pause, the member stops responding to “are-you-alive” messages, which may cause this member to be kicked out of the cluster.</td>
 </tr>
 <tr>
-<td>member.FileDescriptorLimit</td>
+<td>`member.FileDescriptorLimit`</td>
 <td>Returns the maximum number of open file descriptors allowed for the member’s host operating system.</td>
 <td>number</td>
 <td>Every second</td>
@@ -344,7 +345,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
 </tr>
 <tr>
-<td>member.TotalFileDescriptorOpen</td>
+<td>`member.TotalFileDescriptorOpen`</td>
 <td>Returns the current number of open file descriptors.</td>
 <td>number</td>
 <td>Every second</td>
@@ -355,7 +356,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
 </tr>
 <tr>
-<td>serviceinstance.UnusedHeapSizePercentage</td>
+<td>`serviceinstance.UnusedHeapSizePercentage`</td>
 <td>Returns the proportion of available heap size as a percentage</td>
 <td>percent</td>
 <td>Every second</td>
@@ -366,7 +367,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>If the total heap size and used heap size are too close, system might see thrashing due to GC activity. This increases the latency</td>
 </tr>
 <tr>
-<td>member.FileDescriptorRemaining</td>
+<td>`member.FileDescriptorRemaining`</td>
 <td>Returns the number of available File Descriptors</td>
 <td>number</td>
 <td>Every second</td>
