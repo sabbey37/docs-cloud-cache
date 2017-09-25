@@ -380,6 +380,18 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 </tbody>
 </table>
 
+### <a id="monitoring-prometheus"></a> Monitoring Cloud Cache Service Instances with Prometheus
+
+Prometheus is a monitoring and alerting toolkit that allows for metric scraping. You can use the Firehose exporter to export all the metrics from the CF Firehose which can then be graphed in Grafana for monitoring your Cloud Cache cluster.
+
+Follow the instructions [here](https://github.com/pivotal-cf/prometheus-on-PCF) for how to deploy prometheus alongside your PCF cluster.
+
+Prometheus can be deployed on any IaaS. You will need to ensure the Firehose exporter job can talk to your UAA VM. This may involve opening up the correct firewall rules or enabling your VM to allow outgoing traffic.
+
+![Grafana Example](grafana.png)
+
+You can run queries and build a custom dashboard on specific metrics that are important to you.
+
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
 Follow the steps below to upgrade PCC on PCF:
