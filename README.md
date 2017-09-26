@@ -2,13 +2,15 @@
 
 ## About Branches 
 
-Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. A branch for 1.2 (unreleased) documentation exists; you can make changes or PRs relevant to 1.2 on that branch. Your branch for changes on future releases (later than v1.2) is **master branch**.
+Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. A branch for 1.2 (unreleased) documentation exists; you can make changes or PRs relevant to 1.2 on that branch. Version 1.2 is scheduled for GA on 9/30/17.
+
+Your branch for changes on future releases (later than v1.2) is **master branch**.
 
 Other branches are sometimes created to PR corrections/edits back into live docs.
 
 The **master branch** is in use for versions after 1.2.
 
-The above info about branches comes from Megan Moore and is correct as of August 28, 2017.
+The above info about branches comes from Megan Moore and is correct as of September 26, 2017.
 
 ## Staging
 
