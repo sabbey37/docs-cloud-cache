@@ -29,15 +29,15 @@ The following table provides version and version-support information about Pivot
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.1.0</td>
+        <td>v1.2.0</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>June 30, 2017</td>
+        <td>September 29, 2017</td>
     </tr>
     <tr>
         <td>Software component version</td>
-        <td>GemFire v9.0.4</td>
+        <td>GemFire vx.x.x</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
@@ -45,7 +45,7 @@ The following table provides version and version-support information about Pivot
     </tr>
     <tr>
         <td>Compatible Elastic Runtime version(s)</td>
-        <td>v1.10.3 and later, v1.11.x</td>
+        <td>vx.x.x and later, vx.x.x</td>
     </tr>
     <tr>
         <td>IaaS support</td>
@@ -59,20 +59,20 @@ The following table provides version and version-support information about Pivot
 
 ## <a id='release-notes'></a>Release notes
 
-### <a id='v1.1.0'></a>Pivotal Cloud Cache v1.1.0
+### <a id='v1.2.0'></a>Pivotal Cloud Cache v1.2.0
 
 #### <a id='new-in-this-release'></a>New in this release
 
-Version 1.1 of PCC includes the following new features:
+Version 1.2 of PCC includes the following new features:
 
-* HTTP session caching is supported in PCC
-* PCC is compatible with PCF v1.11
-* PCC signs BOSH deployments with SHA-2 to increase security and prevent certificate collisions
-* Syslog setup supports standard RFC format
+* feature
+* feature
+* feature
+* feature
 
 #### <a id='known-issues'></a>Known Issue
 
-A locator VM might fail to listen on its port and the status not be reported by BOSH. To identify this problem, confirm that the locator VM has gone down when you run the `list members` command in gfsh.
+Issue
 
 _Workaround_: SSH into the missing locator VM and run the monit restart command.
 
