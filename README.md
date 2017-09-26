@@ -2,7 +2,7 @@
 
 ## About Branches 
 
-Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. A branch for 1.2 (unreleased) documentation exists; you can make changes or PRs relevant to 1.2 on that branch. Version 1.2 is scheduled for GA on 9/30/17.
+Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. A branch for 1.2 (unreleased) documentation exists; you can make changes or PRs relevant to 1.2 on that branch. Version 1.2 is scheduled for GA on 9/29/17.
 
 Your branch for changes on future releases (later than v1.2) is **master branch**.
 
