@@ -120,32 +120,6 @@ SSH into the missing locator VM and run the `monit restart` command.
 The topology diagram in the Pulse monitoring tool might not be accurate, and might display more members in a cluster than the cluster actually contains. 
 However the numerical value for members, shown in the top bar of the tool, is accurate.
 
-## <a id='release-notes'></a>Release Notes
-### <a id='v1.1.1'></a>Pivotal Cloud Cache v1.1.1
-
-#### <a id='new-in-this-release'></a>New in This Release
-Version 1.1.1 of PCC includes the following bug fixes:
-
- - Improved password requirement of the testing utility 
- - Increased `monit` for smoke tests to be successful
- - Improved kill command to force kill in the event of `gfsh stop` failure
- - Fixed upgrading a cloud cache service failure when `syslog tls` is disabled and `Send service instance logs to external syslog` is enabled
-
-### <a id='v1.1.0'></a>Pivotal Cloud Cache v1.1.0
-
-#### <a id='new-in-this-release'></a>New in This Release
-
-Version 1.1 of PCC includes the following new features:
-
-- HTTP session caching is supported in PCC.
-- PCC is compatible with PCF v1.10 and v1.11.
-- PCC signs BOSH deployments with SHA-2 to prevent certificate collisions.
-- Syslog setup supports standard RFC format.
-
-### <a id="16x"></a>Release Notes for Earlier Versions
-
-For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
-
 ## <a id='architecture'></a>Architecture
 
 PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.

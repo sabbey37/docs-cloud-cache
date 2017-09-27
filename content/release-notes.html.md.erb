@@ -1,0 +1,28 @@
+---
+title: Pivotal Cloud Cache for PCF Release Notes
+owner: Cloud Cache Engineers
+---
+
+## <a id='v1.1.1'></a>v1.1.1
+
+**Release Date: August 10, 2017**
+
+Bug fixes:
+
+ - Improved password requirement of the testing utility 
+ - Increased `monit` for smoke tests to be successful
+ - Improved kill command to force kill in the event of `gfsh stop` failure
+ - Fixed upgrading a cloud cache service failure when `syslog tls` is disabled and `Send service instance logs to external syslog` is enabled
+
+## <a id='v1.1.0'></a>v1.1.0
+
+Features:
+
+- HTTP session caching is supported in PCC.
+- PCC is compatible with PCF v1.10 and v1.11.
+- PCC signs BOSH deployments with SHA-2 to prevent certificate collisions.
+- Syslog setup supports standard RFC format.
+
+## <a id="16x"></a>Release Notes for Earlier Versions
+
+For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
