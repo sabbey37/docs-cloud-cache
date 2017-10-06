@@ -3,6 +3,7 @@ title: Pivotal Cloud Cache Operator Guide
 owner: Cloud Cache Engineers
 ---
 
+
 This document describes how a Pivotal Cloud Foundry (PCF) operator can install, configure, and maintain Pivotal Cloud Cache (PCC).
 
 ## <a id="requirements"></a> Requirements for Pivotal Cloud Cache
@@ -209,22 +210,169 @@ You can download the latest available stemcells from [Pivnet](https://network.pi
 ## <a id="monitoring"></a> Monitoring Cloud Cache Service Instances
 
 The table below shows the metrics emitted through the CF Nozzle and their corresponding Key Performance Indicator (KPI) guidelines.
-
-**Metric Name**|**Description**|**Metric Type**|**Suggested Measurement**|**Measurement Type**|**Warning Threshold**|**Critical Threshold**|**Suggested Actions**|**Why a KPI?**
------|-----|-----|-----|-----|-----|-----|-----|-----
-member.UsedMemoryPercentage|RAM being consumed|percent|Average over last 10 minutes|avg|75%|85%| |
-serviceinstance.MemberCount|Returns the number of members in the distributed system.|number|Every second|count|< manifest member count| |This depends on the expected member count, which is available in the BOSH manifest. If the number expected is different from the number emitted, this is a critical situation that may lead to data loss, and the reasons for node failure should be investigated by examining the service logs.|Member loss due to any reason can cause potential data loss.
-serviceinstance.TotalHeapSize|Returns the total available heap (in megabytes) across all distributed members.|number|Every second|pulse| | | |If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.
-serviceinstance.UsedHeapSize|Returns the total heap used on all members.|number|Every second|pulse| | | |If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.
-member.GarbageCollectionCount|Returns the number of times garbage collection has occurred.|number|Sum over 10 minutes|sum|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.|If the frequency of GC is high, the system might see high CPU usage, which causes delays in the cluster.
-member.HostCpuUsage (process cpu usage)|Amount of CPU utilization|percent|Average over 10 minutes|avg|85%|95%|If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.|High CPU usage causes delayed responses and can also make the member non-responsive. This eventually causes it to be kicked out of the cluster, potentially leading to data loss.
-member.GetsAvgLatency|Returns the cache get average latency.|number|Average over 10 minutes|avg|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.|A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.
-member.PutsAvgLatency|Returns the cache put average latency.|number|Average over 10 minutes|avg|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.|A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.
-member.JVMPauses|Returns the number JVM pauses|number|Sum over 2 seconds|sum|Dependent on IaaS and application use case.|Dependent on IaaS and application use case.|Check the cached object size; if it is greater than >1mb, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.|Due to a JVM pause, the member stops responding to "are-you-alive" messages, which may cause this member to be kicked out of the cluster.
-member.FileDescriptorLimit|Returns the maximum number of open file descriptors allowed for the member's host operating system.|number|Every second|pulse| | | |If total FD open is higher than total FD available, it causes the member to stop responding and crash.
-member.TotalFileDescriptorOpen|Returns the current number of open file descriptors.|number|Every second|pulse| | | |If total FD open is higher than total FD available, it causes the member to stop responding and crash.
-serviceinstance.UnusedHeapSizePercentage|Returns the proportion of available heap size as a percentage|percent|Every second|compound metric|40%|10%|If this is a spike due to eviction catching up with insert frequency, then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested|If the total heap size and used heap size are too close, system might see thrashing due to GC activity. This increases the latency
-member.FileDescriptorRemaining|Returns the number of available File Descriptors|number|Every second|compound metric|1000|100|You need to scale horizontally to increase capacity|If total FD open is higher than total FD available, it causes the member to stop responding and crash.
+<div class="overflow-auto">
+    <table class="spreadsheet">
+        <thead>
+            <tr>
+                <th class="metric-name">Metric Name</th>
+                <th class="description">Description</th>
+                <th class="metric-type">Metric Type</th>
+                <th class="suggested-measurement">Suggested Measurement</th>
+                <th class="measurement-type">Measurement Type</th>
+                <th class="warning-threshold">Warning Threshold</th>
+                <th class="critical-threshold">Critial Threshold</th>
+                <th class="suggested-actions">Suggested Actions</th>
+                <th class="why-kpi">Why a KPI?</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="metric-name"><code>member.UsedMemoryPercentage</code></td>
+            <td class="description">RAM being consumed</td>
+            <td class="metric-type">percent</td>
+            <td class="suggested-measurement">Average over last 10 minutes</td>
+            <td class="measurement-type">avg</td>
+            <td class="warning-threshold">75%</td>
+            <td class="critical-threshold">85%</td>
+            <td class="suggested-actions"></td>
+            <td class="why-kpi"></td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>serviceinstance.MemberCount</code></td>
+            <td class="description">Returns the number of members in the distributed system.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">count</td>
+            <td class="warning-threshold">&lt; manifest member count</td>
+            <td class="critical-threshold"></td>
+            <td class="suggested-actions"><p>This depends on the expected member count, which is available in the BOSH manifest. If the number expected is different from the number emitted, this is a critical situation that may lead to data loss, and the reasons for node failure should be investigated by examining the service logs.</p>
+            </td>
+            <td class="why-kpi"><p>Member loss due to any reason can cause potential data loss.</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>serviceinstance.TotalHeapSize</code></td>
+            <td class="description">Returns the total available heap (in megabytes) across all distributed members.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">pulse</td>
+            <td class="warning-threshold"></td>
+            <td class="critical-threshold"></td>
+            <td class="suggested-actions"></td>
+            <td class="why-kpi">If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>serviceinstance.UsedHeapSize</code></td>
+            <td class="description">Returns the total heap used on all members.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">pulse</td>
+            <td class="warning-threshold"></td>
+            <td class="critical-threshold"></td>
+            <td class="suggested-actions"></td>
+            <td class="why-kpi">If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.GarbageCollectionCount</code></td>
+            <td class="description">Returns the number of times garbage collection has occurred.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Sum over 10 minutes</td>
+            <td class="measurement-type">sum</td>
+            <td class="warning-threshold">Dependent on IaaS and application use case.</td>
+            <td class="critical-threshold">Dependent on IaaS and application use case.</td>
+            <td class="suggested-actions">Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.</td>
+            <td class="why-kpi">If the frequency of GC is high, the system might see high CPU usage, which causes delays in the cluster.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.HostCpuUsage</code> (pr class="description"ocess cpu usage)</td>
+            <td class="description">Amount of CPU utilization</td>
+            <td class="metric-type">percent</td>
+            <td class="suggested-measurement">Average over 10 minutes</td>
+            <td class="measurement-type">avg</td>
+            <td class="warning-threshold">85%</td>
+            <td class="critical-threshold">95%</td>
+            <td class="suggested-actions">If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.</td>
+            <td class="why-kpi">High CPU usage causes delayed responses and can also make the member non-responsive. This eventually causes it to be kicked out of the cluster, potentially leading to data loss.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.GetsAvgLatency</code></td>
+            <td class="description">Returns the cache get average latency.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Average over 10 minutes</td>
+            <td class="measurement-type">avg</td>
+            <td class="warning-threshold">Dependent on IaaS and application use case.</td>
+            <td class="critical-threshold">Dependent on IaaS and application use case.</td>
+            <td class="suggested-actions">If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
+            <td class="why-kpi">A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.PutsAvgLatency</code></td>
+            <td class="description">Returns the cache put average latency.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Average over 10 minutes</td>
+            <td class="measurement-type">avg</td>
+            <td class="warning-threshold">Dependent on IaaS and application use case.</td>
+            <td class="critical-threshold">Dependent on IaaS and application use case.</td>
+            <td class="suggested-actions">If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
+            <td class="why-kpi">A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.JVMPauses</code></td>
+            <td class="description">Returns the number JVM pauses</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Sum over 2 seconds</td>
+            <td class="measurement-type">sum</td>
+            <td class="warning-threshold">Dependent on IaaS and application use case.</td>
+            <td class="critical-threshold">Dependent on IaaS and application use case.</td>
+            <td class="suggested-actions">Check the cached object size; if it is greater than &gt;1&nbsp;MB, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.</td>
+            <td class="why-kpi">Due to a JVM pause, the member stops responding to “are-you-alive” messages, which may cause this member to be kicked out of the cluster.</td>
+        </tr>
+            <td class="metric-name"><code>member.FileDescriptorLimit</code></td>
+            <td class="description">Returns the maximum number of open file descriptors allowed for the member’s host operating system.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">pulse</td>
+            <td class="warning-threshold"></td>
+            <td class="critical-threshold"></td>
+            <td class="suggested-actions"></td>
+            <td class="why-kpi">If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.TotalFileDescriptorOpen</code></td>
+            <td class="description">Returns the current number of open file descriptors.</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">pulse</td>
+            <td class="warning-threshold"></td>
+            <td class="critical-threshold"></td>
+            <td class="suggested-actions"></td>
+            <td class="why-kpi">If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>serviceinstance.UnusedHeapSizePercentage</code></td>
+            <td class="description">Returns the proportion of available heap size as a percentage</td>
+            <td class="metric-type">percent</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">compound metric</td>
+            <td class="warning-threshold">40%</td>
+            <td class="critical-threshold">10%</td>
+            <td class="suggested-actions">If this is a spike due to eviction catching up with insert frequency, then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested</td>
+            <td class="why-kpi">If the total heap size and used heap size are too close, system might see thrashing due to GC activity. This increases the latency</td>
+        </tr>
+        <tr>
+            <td class="metric-name"><code>member.FileDescriptorRemaining</code></td>
+            <td class="description">Returns the number of available File Descriptors</td>
+            <td class="metric-type">number</td>
+            <td class="suggested-measurement">Every second</td>
+            <td class="measurement-type">compound metric</td>
+            <td class="warning-threshold">1000</td>
+            <td class="critical-threshold">100</td>
+            <td class="suggested-actions">You need to scale horizontally to increase capacity</td>
+            <td class="why-kpi">If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
