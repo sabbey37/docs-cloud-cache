@@ -207,6 +207,9 @@ You can download the latest available stemcells from [Pivnet](https://network.pi
 
 ## <a id="monitoring"></a> Monitoring Cloud Cache Service Instances
 
+Pivotal Cloud Cache clusters and brokers emit multiple service metrics. 
+You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.
+
 The table below shows the metrics emitted through the CF Nozzle and their corresponding Key Performance Indicatior (KPI) guidelines.
 
 <table width=100%>
@@ -382,7 +385,7 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 
 ### <a id="monitoring-prometheus"></a> Monitoring Cloud Cache Service Instances with Prometheus
 
-Prometheus is a monitoring and alerting toolkit that allows for metric scraping.
+Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
 You can use the [Firehose exporter](https://github.com/cloudfoundry-community/firehose_exporter) to export all the metrics from the Firehose,
 which you can then graph with [Grafana](https://github.com/grafana/grafana) to monitor your Cloud Cache cluster.
 
