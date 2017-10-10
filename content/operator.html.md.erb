@@ -72,7 +72,7 @@ The smoke-tests errand that runs after tile installation.
 The errand verifies that your installation was successful.
 By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcache-smoke-test` space.
 
-**Note:** Smoke tests will fail unless you enable global default application security groups (ASGs). You can enable global default ASGs by binding the ASG to the `system` org without specifying a space. To enable global default ASGs, use `cf bind-running-security-group`.
+<p class="note"><strong>Note</strong>: Smoke tests will fail unless you enable global default application security groups (ASGs). You can enable global default ASGs by binding the ASG to the <code>system</code> org without specifying a space. To enable global default ASGs, use <code>cf bind-running-security-group</code>.</p>
 
 To select which plan you want to use for smoke tests, do the following:
 
