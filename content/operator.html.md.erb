@@ -412,6 +412,19 @@ To uninstall Pivotal Cloud Cache, follow the steps from below from the **Install
 1. Click the trash can icon in the bottom-right-hand corner of the tile.
 1. Click **Apply Changes**.
 
+<<<<<<< HEAD
+=======
+##<a id='dev-plan'></a> Dev Plan
+
+The Dev Plan is a minimal plan for development and testing only. The plan's locator and server are colocated on a single VM. 
+
+<p class="note"><strong>Note</strong>: All of the Dev Plan data is stored on a single VM. When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled. Therefore, there will be data loss when you perform an update or upgrade.</p>
+
+![Dev Plan Configuration Sections](dev-plan.png)
+
+When a service instance using a Dev Plan is created, PCC creates a sample `PARTITION_REDUNDANT_HEAP_LRU` type region, called `example_partition_region`, by default.
+
+>>>>>>> 24890b6... rewording info about dev plan data being lost on update or upgrade [#151722387]
 ## <a id="troubleshooting"></a> Troubleshooting
 
 ###<a id='view-statistics'></a> View Statistics Files
