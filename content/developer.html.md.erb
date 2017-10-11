@@ -99,6 +99,10 @@ To use `spring-session` with Cloud Cache, follow the steps below:
   create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
   ```
 
+### <a id="service-instance-dev-plan"></a> Dev Plan
+
+Once a service instance, using a dev plan is created PCC creates a sample region called `example_partition_region` of type `PARTITION_REDUNDANT_HEAP_LRU` by default.
+
 ## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
@@ -454,7 +458,7 @@ You can access the Pulse dashboard for a service instance by accessing the pulse
 
 Use either the `cluster_operator` or `developer` credentials to authenticate.
 
-### <a id="nozzle"></a> Accessing Service Metrics
+### <a id="nozzle"></a> Access Service Instance Metrics
 
 To access service metrics, you must have **Enable Plan** selected under **Service Plan Access** on the page where you configure your tile properties. (For details, see the [Configure Service Plans](http://docs-pcf-staging.cfapps.io/p-cloud-cache/1-2/operator.html#plan-config) page.)
 
@@ -484,6 +488,10 @@ Each server and locator in the cluster outputs metrics.
 * member.TotalHeapSize: the number of megabytes allocated for the heap
 * member.UsedHeapSize: the number of megabytes currently in use for the heap
 * member.UnusedHeapSizePercentage: the percentage of the total heap size that is not currently being used
+
+### <a id="nozzle-service-metrics"></a> Access Service Broker Metrics
+
+Service broker metrics are on by default and can be accessed through the [Firehose nozzle plugin](https://docs.cloudfoundry.org/loggregator/cli-plugin.html). For more information on broker metrics, see [On Demand Broker Metrics](https://docs.pivotal.io/svc-sdk/odb/0-16/operating.html#metrics).
 
 ### <a id="exporting_logs"></a> Export gfsh Logs
 
