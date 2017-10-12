@@ -1,5 +1,12 @@
 # docs-cloud-cache
 
+## About Product Name
+
+The name of the product is Pivotal Cloud Cache. 
+The name can be abbreviated after first use in body text on the page.
+For example: first use in body text is "Pivotal Cloud Cache (PCC)". 
+In titles and headings and in subsequent use on the page, use "PCC".
+
 ## About Branches 
 
 Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. A branch for 1.2 (unreleased) documentation exists; you can make changes or PRs relevant to 1.2 on that branch. Version 1.2 is scheduled for GA on 9/29/17.
