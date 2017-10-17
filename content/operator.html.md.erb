@@ -444,6 +444,18 @@ The Dev Plan is a minimal plan for development and testing only. The plan's loca
 
 <p class="note"><strong>Note</strong>: All of the Dev Plan data is stored on a single VM. When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled. Therefore, there will be data loss when you perform an update or upgrade.</p>
 
+<<<<<<< HEAD
+=======
+![Dev Plan Configuration Sections](dev-plan.png)
+
+When using the Dev Plan, to create an example region called `example_partition_region`:
+1. Go to the  check the `Ops Manager Director` section.
+1. Select the `Director Config` tab. 
+1. Check the `Enable Post Deploy Scripts` box. 
+
+![Enable Post Deploy Scripts](enable-post-deploy-scripts.png)
+
+>>>>>>> 1ec2f3e... Update operator.html.md.erb
 When a service instance using a Dev Plan is created, PCC creates a sample `PARTITION_REDUNDANT_HEAP_LRU` type region, called `example_partition_region`, by default.
 
 ![Dev Plan Configuration Sections](dev-plan.png)
