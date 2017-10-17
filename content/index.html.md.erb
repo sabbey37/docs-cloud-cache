@@ -185,7 +185,7 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
-- PCC for PCF can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
+- PCC can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
 - PCC works with gfsh versions v9.0.0 and later
 - Any gfsh command not explained in the PCC documentation is **not supported**.
@@ -202,7 +202,7 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 Pivotal recommends that you do the following:
 
-- Run PCC for PCF in its own network
+- Run PCC in its own network
 - Use a load balancer to block direct, outside access to the Gorouter
 
 To allow PCC network access from apps, you must create application security groups that allow access on the following ports: 
