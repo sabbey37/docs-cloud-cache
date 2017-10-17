@@ -443,6 +443,10 @@ The Dev Plan is a minimal plan for development and testing only. The plan's loca
 
 ![Dev Plan Configuration Sections](dev-plan.png)
 
+You must enable `Enable Post Deploy Scripts` under `Director config` in the `Ops Manager Director tile` for an example region, `example_partition_region` to be created when using the Dev Plan.
+
+![Enable Post Deploy Scripts](enable-post-deploy-scripts.png)
+
 When a service instance using a Dev Plan is created, PCC creates a sample `PARTITION_REDUNDANT_HEAP_LRU` type region, called `example_partition_region`, by default.
 
 ## <a id="troubleshooting"></a> Troubleshooting
