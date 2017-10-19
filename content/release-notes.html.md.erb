@@ -1,5 +1,5 @@
 ---
-title: Pivotal Cloud Cache for PCF Release Notes
+title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
@@ -9,10 +9,18 @@ owner: Cloud Cache Engineers
 
 Bug fixes:
 
+<<<<<<< HEAD
  - Improved password requirement of the testing utility 
  - Increased `monit` for smoke tests to be successful
  - Improved kill command to force kill in the event of `gfsh stop` failure
  - Fixed upgrading a cloud cache service failure when `syslog tls` is disabled and `Send service instance logs to external syslog` is enabled
+=======
+- Improved password requirement of the testing utility
+- Increased monit for smoke tests to be successful
+- Improved kill command to force kill in the event of gfsh stop failure
+- Fixed upgrading a Pivotal Cloud Cache (PCC) service failure when syslog tls is disabled 
+- Send service instance logs to external syslog is enabled
+>>>>>>> 52513eb... spelled out PCC in H2 headings[#151934612]
 
 ## <a id='v1.1.0'></a>v1.1.0
 
@@ -25,4 +33,85 @@ Features:
 
 ## <a id="16x"></a>Release Notes for Earlier Versions
 
+<<<<<<< HEAD
 For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
+=======
+**Release Date:** June 29, 2017
+
+Features: 
+
+- This version is based on the On-Demand Services SDK (ODB) v0.16.
+  It fixes the issue with the *upgrade-all-service-instances* errand returning success when it has actually failed.
+
+## <a id='v1.0.4'></a>v1.0.4
+
+**Release Date:** June 9, 2017
+
+Features: 
+
+- Rewrote smoke test using Go to fix timeout issues on some environments
+
+## <a id='v1.0.3'></a>v1.0.3
+
+Features: 
+
+**Release Date:** May 22, 2017
+
+- Upgraded to GemFire v9.0.3
+- Upgraded to v0.15.3 of On-Demand Service Broker
+- Fixed JVM parameters for garbage collection
+- URL routes were updated to read "cloudcache" rather than "gemfire"
+
+## <a id='v1.0.2'></a>v1.0.2
+
+**Release Date:** May 3, 2017
+
+Features: 
+
+- Upgrades to v0.15.2 of On-Demand Service Broker
+- Increased smoke test canary timeout to five minutes
+- Sets global service instance quota to 50 instances
+- Provides option to disable a plan and service access separately
+- Validates that the plan description doesnt contain any spaces
+
+## <a id='v1.0.1'></a>v1.0.1
+
+**Release Date:** April 13, 2017
+
+Features: 
+
+- Upgrades to v0.15.1 of On-Demand Service Broker
+- Smoke test now runs in the `system` organization
+- Improved reliability of Smoke Test errand
+- Adds support for gfsh `export logs` command
+- Optimized size of tile to make downloading and uploading faster
+- Ensured no data loss with when performing a stemcell upgrade for regions with redundancy
+- Add post deployment checks that all locators properly join the cluster
+- PCC broker can be configured to send logs to a syslog server
+- PCC service instances will now send logs to configured syslog endpoint if enabled
+- Added option to provide public IP addresses to VMs, which is necessary to allow egress on Google Cloud Platform
+- Added errand when deleting tile that deletes all PCC service instances
+
+## <a id='v1.0'></a>v1.0.0
+
+**Release Date:** March 31, 2017
+
+Requirement: PCC v1.0.0 requires PCF with Elastic Runtime v1.9.11 or above.
+
+Features: 
+
+- Support for application look-aside cache pattern
+- Multi AZ support
+- On-demand provisioning
+- MVP role-based access control
+- Quotas, both for service instances and for number of servers in a cluster
+- GemFire v9.0.2
+- Manage and configure clusters using the Cloud Foundry Command Line Interface (cf CLI) service commands and the GemFire gfsh CLI
+
+Known issues:
+
+- The `Upgrade all service instances` errand can only upgrade the first 50 instances created.
+- On PCF for Google Cloud Platform deployments, Ops Manager service network VMs are not assigned the correct firewall rules. 
+As a result, these VMs cannot communicate with the BOSH Director, and the PCC broker will fail to create service instances. As a workaround, modify your firewall to use subnet CIDR-based rules.
+- The PCC broker will accept requests to modify instances that have ongoing BOSH operations, resulting in an asynchronous failure.
+>>>>>>> 52513eb... spelled out PCC in H2 headings[#151934612]
