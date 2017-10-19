@@ -43,7 +43,7 @@ Current PCC details:
 
 **Affected Versions**: 1.0.0 - 1.0.5
 
-The `upgrade-all-service-instances` errand fails. On the Cloud Cache service instance deployment, this may appear with an error similar to the following:
+The `upgrade-all-service-instances` errand fails. On the PCC service instance deployment, this may appear with an error similar to the following:
 
 ```
  19:38:27 | Updating instance locator: locator/d6d98feb-f005-49ca-b1c1-3e2803811cc8 (0) (canary) (00:10:20)
@@ -64,17 +64,17 @@ If possible, close all connections to the Pulse dashboards before upgrading the 
 If you have not yet run the `upgrade-all-service-instances` errand, follow the steps below:
 
 1. SSH onto the Operations Manager VM.
-1. Identify each Cloud Cache deployment using the BOSH CLI.
-1. For each Cloud Cache deploymnent, use `bosh ssh` to ssh onto a locator VM.
+1. Identify each PCC deployment using the BOSH CLI.
+1. For each PCC deployment, use `bosh ssh` to SSH onto a locator VM.
 1. On the locator VM, change yourself to the root user by running `sudo su`.
 1. On the locator VM, use `monit` to stop the `route_registrar` job by running `monit stop route_registrar`.
-1. Repeat steps 4-5 for all the locators for each Cloud Cache deployment.
+1. Repeat steps 4-5 for all the locators for each PCC deployment.
 1. Navigate back to the Operations Manager dashboard and click **Apply Changes**.
 1. The `upgrade-all-service-instances` errand should complete successfully.
 
 ##### Mitigation Option 3
 
-If you have already run the `upgrade-all-service-instances` errand and now have a stopped locator in one of your Cloud Cache deployments, follow the steps below:
+If you have already run the `upgrade-all-service-instances` errand and now have a stopped locator in one of your PCC deployments, follow the steps below:
 
 1. SSH onto the Operations Manager VM.
 1. Identify the locator which is in a stopped state using the BOSH CLI. This can be done by running `bosh vms`.
