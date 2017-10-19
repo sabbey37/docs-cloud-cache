@@ -7,7 +7,7 @@ This document describes how a Pivotal Cloud Foundry (PCF) app developer can choo
 
 You must install the [Cloud Foundry Command Line Interface](http://docs.pivotal.io/pivotalcf/cf-cli/install-go-cli.html) (cf CLI) to run the commands in this topic.
 
-## <a id="viewing"></a>Viewing All Plans Available for PCC
+## <a id="viewing"></a>Viewing All Plans Available for Pivotal Cloud Cache
 
 Run `cf marketplace -s p-cloudcache` to view all plans available for PCC. The plan names displayed are configured by the operator on tile installation.
 
@@ -25,7 +25,7 @@ large          Caching Plan 4   free
 extra-large    Caching Plan 5   free
 </pre>
 
-## <a id="create"></a> Creating a PCC Service Instance
+## <a id="create"></a> Creating a Pivotal Cloud Cache Service Instance
 
 Run `cf create-service p-cloudcache PLAN-NAME SERVICE-INSTANCE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-INSTANCE-NAME` with a name of your choice. Use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
 
@@ -104,7 +104,7 @@ To use `spring-session` with PCC, follow the steps below:
 After a service instance, using a dev plan, is created,
 PCC creates a sample region called `example_partition_region` of type `PARTITION_REDUNDANT_HEAP_LRU` by default.
 
-## <a id="update-service-instance"></a> Updating a PCC Service Instance
+## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
 
@@ -326,7 +326,7 @@ Monitor and Manage Pivotal GemFire
 gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluster_operator-password
 </pre>
 
-## <a id="use"></a> Using PCC
+## <a id="use"></a> Using Pivotal Cloud Cache
 
 ### <a id="create-regions"></a> Create Regions with gfsh
 
@@ -523,7 +523,7 @@ $ cf delete-service my-cloudcache
 
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
-## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to PCC with SSC
+## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to Pivotal Cloud Cache with Session State Caching
 
 This section describes the two ways in which you can connect a Spring Boot app to PCC: 
 
