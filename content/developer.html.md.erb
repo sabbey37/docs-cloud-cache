@@ -85,7 +85,7 @@ To enable session state caching, do one of the following:
 Session state caching for apps using [Spring Session](http://projects.spring.io/spring-session/) is a beta feature.
 It uses pre-release versions of Spring Session libraries.
 
-To use `spring-session` with Cloud Cache, follow the steps below:
+To use `spring-session` with Pivotal Cloud Cache, follow the steps below:
 
 1. Make the following changes to the app:
   * Replace existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is seconds.
@@ -322,7 +322,7 @@ gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluste
 </pre>
 
 
-## <a id="use"></a> Using Cloud Cache
+## <a id="use"></a> Using Pivotal Cloud Cache
 ### <a id="create-regions"></a> Create Regions with gfsh
 
 After connecting with gfsh as a `cluster_operator`, you can define a new cache region.
