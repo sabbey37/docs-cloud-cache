@@ -184,6 +184,25 @@ The remaining fields control the VM type and persistent disk type for servers an
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
+##<a id='dev-plan'></a> Configure Dev Plans
+
+A Dev Plan is a type of service plan. You can use a Dev Plan for minimal development and testing. The plan's locator and server are colocated on a single VM. 
+
+<p class="note warning"><strong> WARNING!</strong>: All of the Dev Plan data is stored on a single VM. When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled. Therefore, there will be data loss when you perform an update or upgrade.</p>
+
+![Dev Plan Configuration Sections](dev-plan.png)
+
+ When you configure the Dev Plan, you can adjust the settings so that an `example partition region` is created by default. This is recommended, as the `example partition region` provides a space for developers to perform their data testing. If this region is generated automatically, developers can begin testing without having to take extra steps. For more information on data regions, see [Data Regions](https://gemfire.docs.pivotal.io/geode/basic_config/data_regions/chapter_overview.html) in the Pivotal GemFire documentation.
+
+ To ensure that the region will be created by default:
+
+1. Go to the `Ops Manager Director` section.
+2. Select the `Director Config` tab. 
+3. Check the `Enable Post Deploy Scripts` box. 
+4. Click **Save** at the bottom of the page to save your changes.
+
+![Enable Post Deploy Scripts](enable-post-deploy-scripts.png)
+
 ####<a name='errands'></a> Errands
 
 By default, Post-Deploy and Pre-Delete errands always run. 
@@ -438,6 +457,7 @@ To uninstall PCC, follow the steps from below from the **Installation Dashboard*
 1. Click the trash can icon in the bottom-right-hand corner of the tile.
 1. Click **Apply Changes**.
 
+<<<<<<< HEAD
 ##<a id='dev-plan'></a> Dev Plan
 
 The Dev Plan is a minimal plan for development and testing only. The plan's locator and server are colocated on a single VM. 
@@ -457,6 +477,8 @@ When a service instance using a Dev Plan is created, PCC creates a sample `PARTI
 
 ![Dev Plan Configuration Sections](dev-plan.png)
 
+=======
+>>>>>>> 9fd5890... adding detail and steps on creating data region for the dev plan [#152038057]
 ## <a id="troubleshooting"></a> Troubleshooting
 
 ###<a id='view-statistics'></a> View Statistics Files
