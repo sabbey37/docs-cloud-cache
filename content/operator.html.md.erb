@@ -37,8 +37,9 @@ Each section name must show this green check mark before you can complete your i
 
 * [Assign AZs and Networks](#azs)
 * [Settings](#settings)
+* [Service Plans](#plan-config)
+* [Dev Plans](#dev-plan)
 * [Syslog](#syslog)
-* [Plan](#plan-config)
 * [Errands](#errands)
 * [Resource Config](#resource-config)
 * [Stemcell](#stemcell)
@@ -144,7 +145,7 @@ To enable remote syslog for the service broker, do the following:
 
 3. Click **Save**.
 
-#### <a name="plan-config"></a> Configure Service Plans
+####<a name="plan-config"></a> Configure Service Plans
 
 You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
@@ -181,15 +182,17 @@ The remaining fields control the VM type and persistent disk type for servers an
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
-###<a id='dev-plan'></a> Configure Dev Plans
+####<a id='dev-plan'></a> Configure Dev Plans
 
-A Dev Plan is a type of service plan. You can use a Dev Plan for minimal development and testing. The plan's locator and server are colocated on a single VM. 
+A dev plan is a type of service plan. You can use a dev plan for minimal development and testing. The plan's locator and server are colocated on a single VM. 
 
-<p class="note warning"><strong> WARNING!</strong>: All of the Dev Plan data is stored on a single VM. When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled. Therefore, there will be data loss when you perform an update or upgrade.</p>
+<p class="note warning"><strong> WARNING!</strong>: All of the dev plan data is stored on a single VM. When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled. Therefore, there will be data loss when you perform an update or upgrade.</p>
+
+The page for configuring a dev plan is similar to the page for configuring a [service plan](https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-2/operator.html#plan-config). To configure the dev plan, input information in the fields and make selections from the options on the **Plan for test development** page. 
 
 ![Dev Plan Configuration Sections](dev-plan.png)
 
- When you configure the Dev Plan, you can adjust the settings so that an `example partition region` is created by default. This is recommended, as the `example partition region` provides a space for developers to perform their data testing. If this region is generated automatically, developers can begin testing without having to take extra steps. For more information on data regions, see [Data Regions](https://gemfire.docs.pivotal.io/geode/basic_config/data_regions/chapter_overview.html) in the Pivotal GemFire documentation.
+ When you configure the dev plan, you can adjust the settings so that an `example partition region` is created by default. This is recommended, as the `example partition region` provides a space for developers to perform their data testing. If this region is generated automatically, developers can begin testing without having to take extra steps. For more information on data regions, see [Data Regions](https://gemfire.docs.pivotal.io/geode/basic_config/data_regions/chapter_overview.html) in the Pivotal GemFire documentation.
 
  To ensure that the region will be created by default:
 
