@@ -101,8 +101,17 @@ To use `spring-session` with PCC, follow the steps below:
 
 ### <a id="service-instance-dev-plan"></a> Dev Plan
 
-After a service instance, using a dev plan, is created,
-PCC creates a sample region called `example_partition_region` of type `PARTITION_REDUNDANT_HEAP_LRU` by default.
+A dev plan is a type of service plan. You can use a dev plan for minimal development and testing. The plan's locator and server are colocated on a single VM. 
+
+<p class="note warning"><strong> WARNING</strong>: All of the dev plan data is stored on a single VM.
+   When your service instance is updated or upgraded, the data is wiped from the VM and the VM itself is recycled.
+   Therefore, there is data loss when you perform an update or upgrade.</p>
+
+If your dev plan has been configured to create a dev region by default, 
+PCC creates a sample region called `example_partition_region` of type `PARTITION_REDUNDANT_HEAP_LRU`. You can use this region for development and testing. 
+
+<p class="note"><strong>Note</strong>: If the `example_partition_region` has been created, you can change the Dev Plan settings to create it. To do so, navigate to the **Director Config** pane of Ops Manger Director and
+select the **Enable Post Deploy Scripts** option.  </p>
 
 ## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
