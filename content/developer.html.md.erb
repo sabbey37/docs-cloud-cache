@@ -125,7 +125,7 @@ When updating a cluster to increase the number of servers, the available heap si
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored.
  In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator. 
-<p class="note"><strong>Note</strong>: You must first [connect with gfsh](https://docs.pivotal.io/p-cloud-cache/1-1/developer.html#gfsh-connect) before you can use the `rebalance` command.</p>
+<p class="note"><strong>Note</strong>: You must first [connect with gfsh](#gfsh-connect) before you can use the `rebalance` command.</p>
 
 ## <a id="plan-updates"></a> About Changes to the Service Plan
 
