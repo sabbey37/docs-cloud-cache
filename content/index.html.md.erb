@@ -61,7 +61,40 @@ The following table provides version and version-support information about PCC:
 
 <%= partial '../../p-cloud-cache/odb/on-demand-service-table' %>
 
-## <a id='architecture'></a>Architecture
+## <a id='architecture'></a>PCC Architecture
+
+### <a id='GFBasics'></a>GemFire Basics
+
+Pivotal GemFire is the data store within PCC.
+A small amount of administrative GemFire setup is required
+for a PCC service instance,
+and a limited portion of the GemFire API will be used
+by any application.
+
+The PCC architectural model is a client-server model.
+Applications (or microservices) are the clients,
+and PCC maintains a set of GemFire servers.
+The GemFire servers provide a low latency, consistent,
+fault tolerant data store within PCC.
+
+![Client Server Model](client-server.png)
+
+GemFire holds data in key/value pairs.
+Each pair is called an entry.
+Entries are logically grouped into sets called regions.
+A region is a map (or dictionary) data structure.
+
+The application (client) uses PCC as a cache.
+A cache lookup (read) is a get operation on a GemFire region.
+The cache operation of a cache write is a put operation
+on a GemFire region.
+The GemFire command-line interface, called `gfsh`,
+facilitates region administration.
+Use gfsh to create and destroy regions within
+the PCC service instance.
+
+
+### <a id='PCC-Cluster-Architecture'></a>The PCC Cluster
 
 PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.
 
@@ -122,6 +155,7 @@ If you scale the cluster up, you'll have more servers, increasing the capacity o
   Client-->Server7
 <% end %>
 
+### <a id='MemberCommunication'></a>Member Communication
 
 When a client connects to the cluster, it first connects to a locator. The locator replies with the IP address of a server for it to talk to. The client then connects to that server.
 
@@ -159,7 +193,7 @@ If the server doesn't have the data locally, it fetches it from another server.
     Server1->>-Client: VALUE
 <% end %>
 
-## <a id='workflow'></a>Workflow
+## <a id='workflow'></a>Workflow to Set Up a PCC Service
 
 The workflow for the PCF admin setting up a PCC service plan:
 

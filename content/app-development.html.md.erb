@@ -1,0 +1,188 @@
+---
+title: Application Development
+---
+
+Some intro prose
+
+## <a id="region-design"></a> Region Design
+
+There are two basic types of regions: partitioned and replicated.
+The distinction between the two types is based on how 
+entries (key/value pairs) are distributed among servers
+that host the region.
+
+### <a id="partitioned-regions"></a> Partitioned Regions
+
+A partitioned region distributes region entries across servers
+by using hashing.
+The hash of a key maps an entry to a bucket.
+A fixed number of buckets are distributed across the servers
+that host the region.
+
+Here is a diagram that shows a single partitioned region (highlighted)
+with very few entries to illustrate partitioning.
+
+![Partitioned Region](partitioned-region.png)
+
+A partitioned region is the proper type of region to use
+
+- when the region will be holding vast quantities of data.
+So much data in fact, that more servers may need to be added
+to scale the system up so that it can hold even more data.
+PCC can be scaled up without downtime,
+as described at link here to directions to scale up.
+
+- when operations on the region are write-heavy,
+meaning that there are a lot of entry updates.
+
+Redundancy adds fault tolerance to a partitioned region.
+Here is that same region,
+but with the addition of a single redundant copy of each each entry.
+The buckets drawn with dashed lines are redundant copies.
+Within the diagram, the partitioned region is highlighted.
+
+![Partitioned Region with Redundancy](partitioned-redundant-region.png)
+
+With one redundant copy,
+the GemFire cluster can tolerate a single server failure
+without losing any region data.
+With one fewer server,
+GemFire revises which server holds the primary copy of an entry.
+The region may be configured such that the cluster restores
+the region's redundancy if the failed server does not
+rejoin the cluster.
+
+A partitioned region without redundancy will permanently
+lose data if a server goes down.
+All entries hosted in the buckets on the failed server will be lost.
+
+#### <a id="partitioned-types"></a> Partitioned Region Types for creating regions on the server
+
+Region types associate a name with a particular region configuration.
+The type is used when creating a region.
+
+- `PARTITION`
+Region entries are placed into the buckets that are
+distributed across all servers hosting the region.
+There is no redundancy for this region type.
+- `PARTITION_HEAP_LRU` 
+In addition to placing region entries into buckets that are
+distributed across all servers hosting the region,
+the region destroys entries when the server (its JVM)
+hits the threshold of being low on memory.
+The oldest entry in the bucket where a new entry will live
+is the one chosen for destruction.
+There is no redundancy for this region type.
+- `PARTITION_REDUNDANT` 
+GemFire keeps and maintains a declared number of redundant copies
+of all entries.
+The default number of redundant copies is 1.
+- `PARTITION_REDUNDANT_HEAP_LRU` 
+GemFire keeps and maintains a declared number of redundant copies
+in addition to destroying entries when the server (its JVM)
+hits the threshold of being low on memory.
+The oldest entry in the bucket where a new entry will live
+is the one chosen for destruction.
+The default number of redundant copies is 1.
+*NOTE: This is the current recommendation, but there is no way for the gfsh admin to set the eviction percentage. Given that, should this document tell the app writer what the values are?*
+
+### <a id="replicated-regions"></a> Replicated Regions
+
+Here is a replicated region with very few entries (four)
+to illustrate the distribution of entries across servers.
+For a replicated region,
+all servers that host the region have a copy of every entry.
+
+![Replicated Region](replicated-region.png)
+
+GemFire maintains copies of all region entries on all servers.
+GemFire takes care of distribution and keeps the entries
+consistent across the servers.
+A replicated region is the proper type of region to use
+
+- when region entries do not change often.
+Each write of an entry must be propagated to all servers
+that host the region.
+As a consequence,
+performance suffers when many concurrent write accesses
+cause subsequent writes to all other servers hosting the region.
+- when the overall quantity of entries is not so large as to push
+the limits of memory space for a single server.
+- when the entries of a region will be frequently accessed
+together with entries from other regions.
+The entries in the replicated region will always be available
+on the server that receives the access request,
+leading to better performance.
+
+#### <a id="replicated-types"></a> Replicated Region Types for creating regions on the server
+
+Region types associate a name a particular region configuration.
+The type is used when creating a region.
+
+- `REPLICATE` 
+All servers hosting the region have a copy of all entries.
+- `REPLICATE_HEAP_LRU` 
+All servers hosting the region have a copy of all entries.
+All servers destroy entries when a server (its JVM)
+hits the threshold of being low on memory.
+
+
+### <a id="region-design-example"></a> An Example to Demonstrate Region Design
+
+Assume that a region holds entries representing customer data.
+Each entry represents a single customer.
+With an ever-increasing number of customers,
+this region data is a good candidate for a partitioned region.
+
+Perhaps another region holds customer orders.
+This data also naturally maps to a partitioned region.
+The same could apply to a region that holds order shipment data
+or customer payments.
+In each case, the number of region entries continues to grow over time,
+and updates are often made to those entries,
+making the data somewhat write heavy.
+
+A good candidate for a replicated region would be the data
+associated with the company’s products.
+Each region entry represents a single product.
+There are a limited number of products,
+and those products do not often change.
+
+Consider that as a client application goes beyond the most simplistic
+of cases for data representation,
+the PCC instance will be hosting all of these regions.
+And the application will likely be interacting with more than one
+of the regions.
+Interactions with customer orders, shipments,
+and payments will all require product information.
+The product region will benefit from access to all entries on all servers,
+again pointing to a region type choice of a replicated region.
+
+## <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
+
+A sample app written in pure Java has been put together to demonstrate how to connect an app to the service instance.
+
+The code is available at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git)
+
+The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above.
+
+Copy, update, and save the following sample manifest:
+
+```
+---
+applications:
+- name: sample_app
+  path: build/libs/cloudcache-sample-app-1.0-SNAPSHOT-all.jar
+  no-route: true
+  health-check-type: none
+  services:
+  - service0  # replace this with the name of your service. Please refer
+              # to docs above on how to create a cloud cache service instance.
+```
+
+Update the `gradle.properties` with your username and password used for [https://commercial-repo.pivotal.io/](https://commercial-repo.pivotal.io/)
+
+Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` with the path to the sample manifest you created.
+
+After you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
+

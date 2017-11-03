@@ -438,34 +438,6 @@ The following is a sample `VCAP_SERVICES` environment variable:
 }
 ```
 
-### <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
-
-A sample app written in pure Java has been put together to demonstrate how to connect an app to the service instance.
-
-The code is available at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git)
-
-The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above.
-
-Copy, update, and save the following sample manifest:
-
-```
----
-applications:
-- name: sample_app
-  path: build/libs/cloudcache-sample-app-1.0-SNAPSHOT-all.jar
-  no-route: true
-  health-check-type: none
-  services:
-  - service0  # replace this with the name of your service. Please refer
-              # to docs above on how to create a cloud cache service instance.
-```
-
-Update the `gradle.properties` with your username and password used for [https://commercial-repo.pivotal.io/](https://commercial-repo.pivotal.io/)
-
-Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` with the path to the sample manifest you created.
-
-After you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
-
 ### <a id="pulse"></a> Use the Pulse Dashboard
 
 You can access the Pulse dashboard for a service instance by accessing the pulse-url you [obtained from a service key](#create-service-key) in a web browser.
