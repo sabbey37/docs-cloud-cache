@@ -2,14 +2,26 @@
 title: Application Development
 ---
 
-Some intro prose
+Cached data are held in GemFire regions.
+Each entry within a region is a key/value pair.
+The choice of key and region type affect
+the performance of the design.
+There are two basic types of regions: partitioned and replicated.
+The distinction between the two types is based on how 
+entries are distributed among servers
+that host the region.
 
 ## <a id="region-design"></a> Region Design
 
-There are two basic types of regions: partitioned and replicated.
-The distinction between the two types is based on how 
-entries (key/value pairs) are distributed among servers
-that host the region.
+### <a id="keys"></a> Keys
+
+_Section not completed._
+Best practices for keys:
+
+- unique key for each entry
+- using a primitive type such as `Integer` or `String`.
+Try not to use an object.  Why?
+If partitioned region key is a POJO, it needs a quality hash function defined.
 
 ### <a id="partitioned-regions"></a> Partitioned Regions
 
@@ -127,9 +139,38 @@ All servers destroy entries when a server (its JVM)
 hits the threshold of being low on memory.
 
 
+### <a id="app-regions"></a> Regions as Used by the Application
+
+The client accesses regions hosted on the servers by creating a cache
+and the regions.
+The type of the client region determines if
+data is only on the servers or if it is also cached locally by the client.
+Locally cached data can introduce consistency issues,
+because region entries updated on a server are
+not automatically propagated to the client's local cache.
+
+Client region types associate a name with a particular
+client region configuration.
+
+- `PROXY` forwards all region operations to the servers.
+No entries are locally cached.
+Use this type unless there is a compelling reason to use 
+one of the other types.
+Use this type for all Twelve-Factor applications
+in order to assure the implementation of stateless processes.
+It prevents the application from accidentally caching state
+by not caching any entries locally.
+- `CACHING_PROXY` forwards all region operations to the servers,
+and entries are locally cached.
+- `CACHING_PROXY_HEAP_LRU` forwards all region operations to the servers,
+and entries are locally cached.
+Locally cached entries will be destroyed when the application’s
+usage of cache space causes its JVM to hit
+the threshold of being low on memory.
+
 ### <a id="region-design-example"></a> An Example to Demonstrate Region Design
 
-Assume that a region holds entries representing customer data.
+Assume that on servers, a region holds entries representing customer data.
 Each entry represents a single customer.
 With an ever-increasing number of customers,
 this region data is a good candidate for a partitioned region.
