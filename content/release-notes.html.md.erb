@@ -5,7 +5,7 @@ owner: Cloud Cache Engineers
 
 ## <a id='v120'></a>v1.2.0
 
-**Release Date:** October 2, 2017
+**Release Date:**  December, 2017
 
 Features:
 
@@ -17,9 +17,77 @@ Features:
   * cloudcache-metrics
 - PCC enables time-based statistics by default
 - `cf create service` creates VMs in parallel when possible
+- Spring Jars have been removed from the server
 
 ## <a id="16x"></a>Release Notes for Earlier Versions
 
 For v1.1.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-1/index.html#release-notes) in the v1.1 version of this documentation.
 
 For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
+
+## Known Issues
+
+### Upgrading Spring Session Data Gemfire applications
+
+If you were previously using Spring Session Data Gemfire 2.0.0 M1 in your applications your app will break on PCC 1.2.0. The following steps can be followed to mitigate this.
+
+1. Stop the application
+1. Upgrade your Spring Session Data Gemfire 2.0.0 M1 to Spring Session Data Gemfire 2.0.0 M2
+1. Spring Session Data Gemfire depends on Spring Data Gemfire. Spring Data Gemfire depends on GemFire 9.1.1. You will need to exclude GemFire 9.1.1 and instead include GemFire 9.0.4.
+1. Clear `ClusteredSpringSessions` region
+1. Upgrade to PCC 1.2.0
+1. Start application
+
+The following gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4
+
+```
+version = '0.0.1-SNAPSHOT'
+
+buildscript {
+	ext {
+		springBootVersion = '2.0.0.M3'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
+
+idea{
+	module{
+		downloadSources = true
+		downloadJavadoc = true
+	}
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/libs-milestone" }
+	maven { url "https://repo.spring.io/milestone" }
+	maven { url "http://repo.springsource.org/simple/ext-release-local" }
+	maven { url "http://repo.spring.io/libs-release/" }
+	maven { url "https://repository.apache.org/content/repositories/snapshots" }
+}
+
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
+	compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") {
+		exclude group: "io.pivotal.gemfire"
+	}
+	compile("io.pivotal.gemfire:geode-core:9.0.4")
+	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
+	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
+}
+```
