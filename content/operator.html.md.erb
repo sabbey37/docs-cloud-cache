@@ -37,8 +37,9 @@ Each section name must show this green check mark before you can complete your i
 
 * [Assign AZs and Networks](#azs)
 * [Settings](#settings)
+* [Service Plans](#plan-config)
+* [Dev Plans](#dev-plan)
 * [Syslog](#syslog)
-* [Plan](#plan-config)
 * [Errands](#errands)
 * [Resource Config](#resource-config)
 * [Stemcell](#stemcell)
@@ -144,18 +145,13 @@ To enable remote syslog for the service broker, do the following:
 
 3. Click **Save**.
 
-#### <a name="plan-config"></a> Configure Service Plans
+####<a name="plan-config"></a> Configure Service Plans
 
 You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
 ![Configuring a Plan](configure-plan.png)
 
-The **Enable Plan** button is checked by default. If you do not want to add this plan to the CF service catalog, select **Disable Plan**. You must enable at least one plan.
-
-The **CF Service Access** drop-down menu allows you to configure the plan's visibility in the CF Marketplace.
-**Enable Service Access** displays the service plan to all developers in the CF marketplace.
-**Disable Service Access** does not display the service plan to developers in the CF marketplace and cannot be enabled at a later time. 
-**Leave Service Access Unchanged** does not display the service plan in the CF marketplace by default but can be enabled at a later time.
+The **Plan Enabled** option is selected by default. If you do not want to add this plan to the CF service catalog, select **Plan Disabled**. You must enable at least one plan.
 
 The **Plan Name** text field allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace.
 
@@ -163,6 +159,11 @@ The **Plan Description** text field allows you to supply a plan description. The
 
 The **Enable metrics for service instances** checkbox enables metrics for service instances created using the plan.
 Once enabled, the metrics are sent to the Loggregator Firehose.
+
+The **CF Service Access** drop-down menu gives you the option to display or not display the service plan in the Marketplace.
+**Enable Service Access** displays the service plan the Marketplace.
+**Disable Service Access** makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time. 
+**Leave Service Access Unchanged** makes the plan unavailable in the Marketplace by default, but allows you to make it available at a later time.
 
 The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
 
@@ -180,6 +181,32 @@ The remaining fields control the VM type and persistent disk type for servers an
 * For the **Persistent disk type for the server VMs** field, select 10 GB or higher.
 
 When you finish configuring the plan, click **Save** to save your configuration options.
+
+####<a id='dev-plan'></a> Configure Dev Plans
+
+A dev plan is a type of service plan. You can use a dev plan for minimal development and testing. The plan's locator and server are colocated on a single VM. 
+
+<p class="note warning"><strong> WARNING</strong>: All of the dev plan data is stored on a single VM.
+   When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled.
+   Therefore, there is data loss when you perform an update or upgrade.</p>
+
+The page for configuring a dev plan is similar to the page for configuring a [service plan](https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-2/operator.html#plan-config). To configure the dev plan, input information in the fields and make selections from the options on the **Plan for test development** page. 
+
+![Dev Plan Configuration Sections](dev-plan.png)
+
+<a name='default-data-region'></a> **Default Data Region for the Dev Plan**
+
+If you have enabled post deploy scripts in your Ops Manager Director,
+a data region called `example partition region` is created automatically with the dev plan.
+
+Generating this region automatically lets developers begin testing without having to take extra steps
+to create a space for testing.
+For more information on data regions, see [Data Regions](https://gemfire.docs.pivotal.io/geode/basic_config/data_regions/chapter_overview.html) in the Pivotal GemFire documentation.
+
+To confirm that post deploy scripts are enabled, navigate to the **Director Config** pane of Ops Manger Director and
+verify that **Enable Post Deploy Scripts** is selected.
+
+![Enable post deploy scripts](ops-man-post-deploy.png)
 
 ####<a name='errands'></a> Errands
 
@@ -202,12 +229,12 @@ For general information about errands in PCF, see [Managing Errands in Ops Manag
 
 Ensure you import the correct type of stemcell indicated on this tab.
 
-You can download the latest available stemcells from [Pivnet](https://network.pivotal.io/products/stemcells/).
+You can download the latest available stemcells from the [Pivotal Network](https://network.pivotal.io/products/stemcells/).
 
 
-## <a id="monitoring"></a> Monitoring Cloud Cache Service Instances
+## <a id="monitoring"></a> Monitoring Pivotal Cloud Cache Service Instances
 
-Pivotal Cloud Cache clusters and brokers emit service metrics. 
+PCC clusters and brokers emit service metrics. 
 You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.
 
 The table below shows the metrics emitted through the CF Nozzle and their corresponding Key Performance Indicatior (KPI) guidelines.
@@ -383,11 +410,11 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 </tbody>
 </table>
 
-### <a id="monitoring-prometheus"></a> Monitoring Cloud Cache Service Instances with Prometheus
+### <a id="monitoring-prometheus"></a> Monitoring PCC Service Instances with Prometheus
 
 Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
 You can use the [Firehose exporter](https://github.com/cloudfoundry-community/firehose_exporter) to export all the metrics from the Firehose,
-which you can then graph with [Grafana](https://github.com/grafana/grafana) to monitor your Cloud Cache cluster.
+which you can then graph with [Grafana](https://github.com/grafana/grafana) to monitor your PCC cluster.
 
 Follow the instructions [here](https://github.com/pivotal-cf/prometheus-on-PCF) to deploy Prometheus alongside your PCF cluster.
 
@@ -401,12 +428,12 @@ You can run queries on, and build a custom dashboard of, specific metrics that a
 
 ## <a id="upgrade"></a> Upgrading Pivotal Cloud Cache
 
-Follow the steps below to upgrade PCC on PCF:
+Follow the steps below to upgrade PCC:
 
 1. Download the new version of the tile from the Pivotal Network.
 1. Upload the product to Ops Manager.
 1. Click **Add** next to the uploaded product.
-1. Click on the Cloud Cache Tile and review your configuration options.
+1. Click on the Cloud Cache tile and review your configuration options.
 1. Click **Apply Changes**.
 
 ## <a id="update-plans"></a> Updating Pivotal Cloud Cache Plans
@@ -430,20 +457,10 @@ When existing instances are upgraded, all plan changes are applied to them.
 
 ## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
 
-To uninstall Pivotal Cloud Cache, follow the steps from below from the **Installation Dashboard**:
+To uninstall PCC, follow the steps from below from the **Installation Dashboard**:
 
 1. Click the trash can icon in the bottom-right-hand corner of the tile.
 1. Click **Apply Changes**.
-
-##<a id='dev-plan'></a> Dev Plan
-
-The Dev Plan is a minimal plan for development and testing only. The plan's locator and server are colocated on a single VM. 
-
-<p class="note"><strong>Note</strong>: All of the Dev Plan data is stored on a single VM. When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled. Therefore, there will be data loss when you perform an update or upgrade.</p>
-
-![Dev Plan Configuration Sections](dev-plan.png)
-
-When a service instance using a Dev Plan is created, PCC creates a sample `PARTITION_REDUNDANT_HEAP_LRU` type region, called `example_partition_region`, by default.
 
 ## <a id="troubleshooting"></a> Troubleshooting
 
