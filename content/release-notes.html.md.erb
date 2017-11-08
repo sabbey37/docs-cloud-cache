@@ -3,13 +3,28 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
+## <a id='v1.1.2'></a>v1.1.2
+
+**Release Date:** November 2, 2017
+
+Features:
+
+- Spring Session Data Gemfire 2.0.0.M1 compatible
+- When the AZs in the tile configuration are updated and the upgrade-all-service-instances errand is run, existing instances will not change AZs. However new instances that are created will use the newly configured AZs.
+
+Bug fixes:
+
+ - Pulse bug: Upgrades failed when a connection to pulse was still open during upgrade.
+ - Service Instances failed to come up when gfsh start server was slow.
+ - When smoke-tests failed the would print the service-key exposing credentials.
+
 ## <a id='v1.1.1'></a>v1.1.1
 
 **Release Date:** August 10, 2017
 
 Bug fixes:
 
- - Improved password requirement of the testing utility 
+ - Improved password requirement of the testing utility
  - Increased `monit` for smoke tests to be successful
  - Improved kill command to force kill in the event of `gfsh stop` failure
  - Fixed upgrading a cloud cache service failure when `syslog tls` is disabled and `Send service instance logs to external syslog` is enabled
