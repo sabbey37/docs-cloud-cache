@@ -27,18 +27,25 @@ For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-c
 
 ## Known Issues
 
-### Upgrading Spring Session Data Gemfire applications
+### Upgrade Spring Session Data GemFire Apps
 
-If you were previously using Spring Session Data Gemfire 2.0.0 M1 in your applications, your app will break on PCC 1.2.0. Follow these steps as a workaround:
+If you were previously using Spring Session Data Gemfire 2.0.0 M1 in your apps,
+they break on PCC v1.2.0.
+Follow these steps as a workaround:
 
-1. Stop the application.
-1. [Upgrade](https://gemfire.docs.pivotal.io/gemfire/getting_started/upgrade/upgrade_from_overview.html) your Spring Session Data Gemfire 2.0.0 M1 to Spring Session Data Gemfire 2.0.0 M2.
-1. Spring Session Data Gemfire depends on Spring Data Gemfire. Spring Data Gemfire depends on GemFire 9.1.1. You will need to exclude GemFire 9.1.1 and instead include GemFire 9.0.4. See instructions for this process below step 6 in this section.
+1. Stop the app.
+1. Upgrade your Spring Session Data GemFire 2.0.0 M1 to Spring Session Data Gemfire 2.0.0 M2.
+For upgrade instructions, see [Upgrading Pivotal GemFire](https://gemfire.docs.pivotal.io/gemfire/getting_started/upgrade/upgrade_from_overview.html).
+1. Spring Session Data GemFire depends on Spring Data GemFire.
+   Spring Data GemFire depends on GemFire 9.1.1. 
+   You need to exclude GemFire 9.1.1 and instead include GemFire 9.0.4.
+   An example gradle file is provided [below](#gradle).
 1. Clear the `ClusteredSpringSessions` region.
-1. [Upgrade](http://docs.pivotal.io/p-cloud-cache/1-2/operator.html#upgrade) to PCC 1.2.0.
-1. Start the application.
+1. Upgrade to PCC v1.2.0.
+   For upgrade instructions, see [Upgrading Pivotal Cloud Cache](./operator.html#upgrade)
+1. Start the app.
 
-The following gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4
+<a name="gradle"></a>The following gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4
 
 ```
 version = '0.0.1-SNAPSHOT'
