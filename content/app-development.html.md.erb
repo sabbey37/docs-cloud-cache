@@ -15,13 +15,17 @@ that host the region.
 
 ### <a id="keys"></a> Keys
 
-_Section not completed._
-Best practices for keys:
+Each region entry must have a unique key.
+Experienced designers recommend that keys be a wrapped primitive type,
+with a slight preference of `String` over `Integer` or `Long`. 
+Using a `String` key enhances the development and debugging
+environment by permitting the use of a REST API (Swagger UI),
+as it only works with `String` types.
 
-- unique key for each entry
-- using a primitive type such as `Integer` or `String`.
-Try not to use an object.  Why?
-If partitioned region key is a POJO, it needs a quality hash function defined.
+Objects (compound types) may be used for keys.
+However, doing so sets the bar higher for the developer.
+At a minimum, keys for partitioned regions need
+both a quality hash function and an equals function defined.
 
 ### <a id="partitioned-regions"></a> Partitioned Regions
 
@@ -42,7 +46,8 @@ A partitioned region is the proper type of region to use
 So much data in fact, that more servers may need to be added
 to scale the system up so that it can hold even more data.
 PCC can be scaled up without downtime,
-as described at link here to directions to scale up.
+with directions to do so in
+[Updating a Pivotal Cloud Cache Service Instance](./developer.html#update-service-instance).
 
 - when operations on the region are write-heavy,
 meaning that there are a lot of entry updates.
@@ -96,7 +101,6 @@ hits the threshold of being low on memory.
 The oldest entry in the bucket where a new entry will live
 is the one chosen for destruction.
 The default number of redundant copies is 1.
-*NOTE: This is the current recommendation, but there is no way for the gfsh admin to set the eviction percentage. Given that, should this document tell the app writer what the values are?*
 
 ### <a id="replicated-regions"></a> Replicated Regions
 
@@ -144,7 +148,9 @@ hits the threshold of being low on memory.
 The client accesses regions hosted on the servers by creating a cache
 and the regions.
 The type of the client region determines if
-data is only on the servers or if it is also cached locally by the client.
+data is only on the servers or 
+if it is also cached locally by the client in addition to being on
+the servers.
 Locally cached data can introduce consistency issues,
 because region entries updated on a server are
 not automatically propagated to the client's local cache.
@@ -154,12 +160,12 @@ client region configuration.
 
 - `PROXY` forwards all region operations to the servers.
 No entries are locally cached.
-Use this type unless there is a compelling reason to use 
+Use this client region type unless there is a compelling reason to use 
 one of the other types.
 Use this type for all Twelve-Factor applications
 in order to assure the implementation of stateless processes.
-It prevents the application from accidentally caching state
-by not caching any entries locally.
+Not caching any entries locally
+prevents the application from accidentally caching state.
 - `CACHING_PROXY` forwards all region operations to the servers,
 and entries are locally cached.
 - `CACHING_PROXY_HEAP_LRU` forwards all region operations to the servers,
@@ -192,7 +198,7 @@ and those products do not often change.
 Consider that as a client application goes beyond the most simplistic
 of cases for data representation,
 the PCC instance will be hosting all of these regions.
-And the application will likely be interacting with more than one
+And, that application will likely be interacting with more than one
 of the regions.
 Interactions with customer orders, shipments,
 and payments will all require product information.
