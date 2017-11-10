@@ -7,7 +7,7 @@ owner: Cloud Cache Engineers
 
 **Release Date:**  December XX, 2017
 
-Features:
+Features included in this release:
 
 - Pivotal Cloud Cache (PCC) supports sending broker and service instance metrics to loggregator
 - PCC is compatible with PCF v1.11 and v1.12
@@ -19,33 +19,40 @@ Features:
 - `cf create service` creates VMs in parallel when possible
 - Spring Jars have been removed from the server
 
+Known issues in this release:
+
+- PCC v1.2 does not support Spring Session Data GemFire 2.0.0 M1.<br>
+  For instructions on upgrading to Spring Session Data GemFire 2.0.0 M2, 
+  see [Workaround: Upgrade Spring Session Data GemFire Apps](#workaround) below.
+
 ## <a id="16x"></a>Release Notes for Earlier Versions
 
 For v1.1.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-1/index.html#release-notes) in the v1.1 version of this documentation.
 
 For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
 
-## <a id="known_issues"></a>Known Issues
 
-### Upgrade Spring Session Data GemFire Apps
+##<a id=workaround></a> Workaround: Upgrade Spring Session Data GemFire Apps
 
-If you were previously using Spring Session Data Gemfire 2.0.0 M1 in your apps,
-they break on PCC v1.2.0.
-Follow these steps as a workaround:
+Apps using Spring Session Data GemFire 2.0.0 M1 do not run on PCC v1.2.0.
+You need to upgrade to Spring Session Data GemFire 2.0.0 M2.
+
+Follow these steps to upgrade:
 
 1. Stop the app.
-1. Upgrade your Spring Session Data GemFire 2.0.0 M1 to Spring Session Data Gemfire 2.0.0 M2.
-For upgrade instructions, see [Upgrading Pivotal GemFire](https://gemfire.docs.pivotal.io/gemfire/getting_started/upgrade/upgrade_from_overview.html).
-1. Spring Session Data GemFire depends on Spring Data GemFire.
+1. Upgrade your Spring Session Data GemFire 2.0.0 M1 to Spring Session Data GemFire 2.0.0 M2.
+   For upgrade instructions, see [Upgrading Pivotal GemFire](https://gemfire.docs.pivotal.io/gemfire/getting_started/upgrade/upgrade_from_overview.html).
+1. Exclude GemFire 9.1.1 and include GemFire 9.0.4.<br>
+   You need to do this because
+   Spring Session Data GemFire depends on Spring Data GemFire and
    Spring Data GemFire depends on GemFire 9.1.1. 
-   You need to exclude GemFire 9.1.1 and instead include GemFire 9.0.4.
-   An example gradle file is provided [below](#gradle).
+   An example gradle build file is provided [below](#gradle).
 1. Clear the `ClusteredSpringSessions` region.
 1. Upgrade to PCC v1.2.0.
    For upgrade instructions, see [Upgrading Pivotal Cloud Cache](./operator.html#upgrade)
 1. Start the app.
 
-<a name="gradle"></a>The following gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4
+<a name="gradle"></a>This gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4
 
 ```
 version = '0.0.1-SNAPSHOT'
