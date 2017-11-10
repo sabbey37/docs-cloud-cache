@@ -675,3 +675,50 @@ dependencies {
 	testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 ```
+
+## <a id="spring-data-gemfire"></a> Spring Data GemFire
+
+### <a id="spring-data-gemfire-cq"></a> Continuous Queries
+
+Creating continuous queries with the Spring Data Gemfire library is a simple process with a few annotations.
+
+Requirements:
+
+ * Spring Data GemFire 2.0.1.Release
+ * Spring Boot 2.0.0+
+
+To enable continous queries we must set `subscriptionEnabled` and `readyForEvents` to be true on the client cache object. The recommended way to set `subscriptionEnabled` and `readyForEvents` is to do it through the annotation, `ClientCacheApplication`.
+
+```java
+
+@ClientCacheApplication(name = "GemFireSpringApplication", readyForEvents = true, subscriptionEnabled = true)
+
+```
+
+If you want to enable durable queries then you need to set `durableClientId` and `keepAlive`, which can also be set through the annotation.
+
+```java
+
+@ClientCacheApplication(name = "GemFireSpringApplication", durableClientId = "durable-client-id", keepAlive = true, readyForEvents = true, subscriptionEnabled = true)
+
+```
+
+Now that the configuration is done on the client cache we can create our ContinuousQuery. Using the annotation `ContinuousQuery` we can specify our query and bind it to a function to handle the query when it is triggered as shown below.
+
+``` java
+
+@Component
+public class ContinuousQuery {
+
+    @ContinuousQuery(name = "PestoQuery", query = "SELECT * FROM /Region", durable = true)
+    public void handlehanges(CqEvent event) {
+      //PERFORM SOME ACTION
+    }
+}
+
+
+```
+
+If you want to specify the continuous query in its own class you must annotate `@Component` on the class so the spring component scan will dect the `@ContinuousQuery` annotation. The `durable` attribute must be set to `true` if you want the continous query to be durable.
+
+More information can be found in the [Spring Data Gemfire Documentaiton](https://docs.spring.io/spring-data/gemfire/docs/2.0.1.RELEASE/reference/html/)
