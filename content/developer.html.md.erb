@@ -543,7 +543,7 @@ Deletions are asynchronous. Run `cf services` to view the current status of the 
 This section describes the two ways in which you can connect a Spring Boot app to PCC: 
 
 + Using a Tomcat app with a WAR file. This is the default method for Tomcat apps.
-+ Using the spring-session-data-gemfire library. This method requires that you use the correct version of these libraries.
++ Using the `spring-session-data-gemfire` library. This method requires that you use the correct version of these libraries.
 
 ###<a id="tomcat"></a> Use the Tomcat App
 
@@ -614,7 +614,7 @@ l      <artifactId>spring-boot-starter-tomcat</artifactId>
 </project>
 ```
 
-###<a id="spring-session"></a> Use the Spring Session Data GemFire App
+###<a id="spring-session"></a> Use a Spring Session Data GemFire App
 
 You can connect your Spring app to PCC to do session state caching, but you
 must use the correct verion of the `spring-session-data-gemfire` library to do so.
@@ -624,11 +624,12 @@ PCC v1.2.x only supports Spring Session Data GemFire version v2.0.0.M2.
 |-------------|-------------|
 | v1.2.x       | v2.0.0.M2    |
 
-If you have upgraded to PCC version 1.2, you may encounter two different cases:
+When using Spring Session Data GemFire with PCC v1.2, you may encounter two different types of clusters:
 
 + clusters that existed when PCC was upgraded
-+ clusters that were created after the PCC upgrade
++ clusters that were created after PCC was upgraded
 
+** Pre-Uprgrade Clusters**
 For clusters that existed before PCC was upgraded, this is an example build.gradle:
 
 ```
@@ -682,6 +683,7 @@ dependencies {
     compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
 }
 ```
+** Post-Upgrade Clusters** 
 
 For clusters that were created after PCC was upgraded, you would change the following section of your build.gradle:
 
@@ -699,10 +701,10 @@ compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2")
 ```
 
 
-### <a id=spring_session_data_gemfire></a> Upgrade Spring Session Data GemFire Apps
+## <a id=spring_session_data_gemfire></a> Upgrade the Spring Session Data GemFire App
 
 PCC v1.2.0 only works with Spring Session Data GemFire 2.0.0 M2. 
-If you have an older version of Spring Session Data GemFire, you must upgrade it in order for it to work with PCC v1.20.
+If you have an older version of Spring Session Data GemFire, you must upgrade it in order for it to work with PCC v1.2.0.
 
 Follow these steps to upgrade:
 
@@ -713,13 +715,8 @@ Follow these steps to upgrade:
    You need to do this because
    Spring Session Data GemFire depends on Spring Data GemFire, and
    Spring Data GemFire depends on GemFire 9.1.1. 
-   An example gradle build file is provided [below](#gradle).
-1. Clear the `ClusteredSpringSessions` region.
-1. Upgrade to PCC v1.2.0.
-   For upgrade instructions, see [Upgrading Pivotal Cloud Cache](./operator.html#upgrade)
-1. Start the app.
-
-<a name="gradle"></a>This gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4.
+   
+<a name="gradle"></a>This `build.gradle` file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4.
 
 ```
 version = '0.0.1-SNAPSHOT'
@@ -772,6 +769,10 @@ dependencies {
   compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
 }
 ```
+1. Clear the `ClusteredSpringSessions` region.
+1. Upgrade to PCC v1.2.0.
+   For upgrade instructions, see [Upgrading Pivotal Cloud Cache](./operator.html#upgrade).
+1. Start the app.
 
 ## <a id="spring-data-gemfire"></a> Creating Continuous Queries Using Spring Data GemFire
 
