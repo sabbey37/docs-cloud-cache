@@ -629,8 +629,9 @@ When using Spring Session Data GemFire with PCC v1.2, you may encounter two diff
 + clusters that existed when PCC was upgraded
 + clusters that were created after PCC was upgraded
 
-** Pre-Uprgrade Clusters**
-For clusters that existed before PCC was upgraded, this is an example build.gradle:
+**Pre-Uprgrade Clusters**
+
+For clusters that existed before PCC was upgraded, this is an example `build.gradle`:
 
 ```
 version = '0.0.1-SNAPSHOT'
@@ -683,18 +684,18 @@ dependencies {
     compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
 }
 ```
-** Post-Upgrade Clusters** 
+**Post-Upgrade Clusters** 
 
-For clusters that were created after PCC was upgraded, you would change the following section of your build.gradle:
+For clusters that were created after PCC was upgraded, change the following section of your `build.gradle`.
 
 ```
 compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") {
         exclude group: "io.pivotal.gemfire"
     }
-    compile("io.pivotal.gemfire:geode-core:9.0.4")
+compile("io.pivotal.gemfire:geode-core:9.0.4")
 ```
 
-To be:
+Becomes:
 
 ```
 compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") 
