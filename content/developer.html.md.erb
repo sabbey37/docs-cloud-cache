@@ -617,30 +617,35 @@ l      <artifactId>spring-boot-starter-tomcat</artifactId>
 ###<a id="spring-session"></a> Use the Spring Session Data GemFire App
 
 You can connect your Spring app to PCC to do session state caching, but you
-must use the correct verion of the spring-session-data-gemfire library to do so.
-PCC v1.1.x only supports spring-session-data-gemfire version v2.0.0.M0.
+must use the correct verion of the `spring-session-data-gemfire` library to do so.
+PCC v1.2.x only supports Spring Session Data GemFire version v2.0.0.M2.
 
 | PCC Version | SSDG Verion |
 |-------------|-------------|
-| v1.1.x       | v2.0.0.M0    |
+| v1.2.x       | v2.0.0.M2    |
 
-Example `build.gradle` file that works with PCC v1.1.x:
+If you have upgraded to PCC version 1.2, you may encounter two different cases:
+
++ clusters that existed when PCC was upgraded
++ clusters that were created after the PCC upgrade
+
+For clusters that existed before PCC was upgraded, this is an example build.gradle:
 
 ```
 version = '0.0.1-SNAPSHOT'
 
 buildscript {
-	ext {
-		springBootVersion = '2.0.0.M2'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.0.0.M3'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -648,31 +653,123 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'idea'
 
 idea{
-	module{
-		downloadSources = true
-		downloadJavadoc = true
-	}
+    module{
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/libs-milestone" }
-	maven { url "https://repo.spring.io/milestone" }
-	maven { url "http://repo.springsource.org/simple/ext-release-local" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-milestone" }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "http://repo.springsource.org/simple/ext-release-local" }
     maven { url "http://repo.spring.io/libs-release/" }
-	maven { url "https://repository.apache.org/content/repositories/snapshots" }
+    maven { url "https://repository.apache.org/content/repositories/snapshots" }
 }
 
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
-	compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M0")
-	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
-	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
-	testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
+    compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") {
+        exclude group: "io.pivotal.gemfire"
+    }
+    compile("io.pivotal.gemfire:geode-core:9.0.4")
+    compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
+    compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
+}
+```
+
+For clusters that were created after PCC was upgraded, you would change the following section of your build.gradle:
+
+```
+compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") {
+        exclude group: "io.pivotal.gemfire"
+    }
+    compile("io.pivotal.gemfire:geode-core:9.0.4")
+```
+
+To be:
+
+```
+compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") 
+```
+
+
+### <a id=spring_session_data_gemfire></a> Upgrade Spring Session Data GemFire Apps
+
+PCC v1.2.0 only works with Spring Session Data GemFire 2.0.0 M2. 
+If you have an older version of Spring Session Data GemFire, you must upgrade it in order for it to work with PCC v1.20.
+
+Follow these steps to upgrade:
+
+1. Stop the app.
+1. Upgrade your Spring Session Data GemFire 2.0.0 M0 to Spring Session Data GemFire 2.0.0 M2.
+   For upgrade instructions, see [Upgrading Pivotal GemFire](https://gemfire.docs.pivotal.io/gemfire/getting_started/upgrade/upgrade_from_overview.html).
+1. Exclude GemFire 9.1.1 and include GemFire 9.0.4.<br>
+   You need to do this because
+   Spring Session Data GemFire depends on Spring Data GemFire, and
+   Spring Data GemFire depends on GemFire 9.1.1. 
+   An example gradle build file is provided [below](#gradle).
+1. Clear the `ClusteredSpringSessions` region.
+1. Upgrade to PCC v1.2.0.
+   For upgrade instructions, see [Upgrading Pivotal Cloud Cache](./operator.html#upgrade)
+1. Start the app.
+
+<a name="gradle"></a>This gradle build file illustrates how to exclude GemFire 9.1.1 and include GemFire 9.0.4.
+
+```
+version = '0.0.1-SNAPSHOT'
+
+buildscript {
+  ext {
+    springBootVersion = '2.0.0.M3'
+  }
+  repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
+
+idea{
+  module{
+    downloadSources = true
+    downloadJavadoc = true
+  }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+  maven { url "https://repo.spring.io/libs-milestone" }
+  maven { url "https://repo.spring.io/milestone" }
+  maven { url "http://repo.springsource.org/simple/ext-release-local" }
+  maven { url "http://repo.spring.io/libs-release/" }
+  maven { url "https://repository.apache.org/content/repositories/snapshots" }
+}
+
+
+dependencies {
+  compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
+  compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2") {
+    exclude group: "io.pivotal.gemfire"
+  }
+  compile("io.pivotal.gemfire:geode-core:9.0.4")
+  compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
+  compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
 }
 ```
 
