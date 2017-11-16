@@ -622,12 +622,13 @@ Build the app for PCC v1.2 with a dependency on Spring Session Data GemFire vers
 
 ####<a id=spring_session_data_gemfire></a> Upgrade Spring Session Data GemFire
 
-PCC v1.2.0 only works with Spring Session Data GemFire 2.0.0 M2. If you have an older version of Spring Session Data GemFire, you must upgrade it in order for it to work with PCC v1.2.0.
+PCC v1.2.0 only works with Spring Session Data GemFire 2.0.0 M2. 
 
-Follow these steps to upgrade to Spring Session Data GemFire 2.0.0 M2:
+Before your operator upgades to PCC v1.20, stop your app. If you don't stop the app before the upgrade to PCC v1.2.0, the upgrade process will break the app. Therefore, pivotal recommends manually stopping your app before your operator upgrades PCC.
 
-1. Stop the app.
-2. Rebuild your app using a `build.gradle` file that depends on GemFire 9.1.1. For example:
+After your operator has upgraded to PCC v1.2.0, when you're ready to restart your app, follow these steps to upgrade to Spring Session Data GemFire 2.0.0 M2:
+
+1. Rebuild your app using a `build.gradle` file that depends on GemFire 9.1.1. For example:
 
     ```
     version = '0.0.1-SNAPSHOT'
@@ -678,8 +679,8 @@ Follow these steps to upgrade to Spring Session Data GemFire 2.0.0 M2:
     }
     ```
 
-3. Clear the session state region.
-4. Start the rebuilt app.
+2. Clear the session state region.
+3. Start the rebuilt app.
 
 ## <a id="spring-data-gemfire"></a> Creating Continuous Queries Using Spring Data GemFire
 
