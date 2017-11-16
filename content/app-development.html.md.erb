@@ -16,16 +16,14 @@ that host the region.
 ### <a id="keys"></a> Keys
 
 Each region entry must have a unique key.
-Experienced designers recommend that keys be a wrapped primitive type,
-with a slight preference of `String` over `Integer` or `Long`. 
+Use a wrapped primitive type of `String`, `Integer`, or `Long`.
+Experienced designers have
+a slight preference of `String` over `Integer` or `Long`. 
 Using a `String` key enhances the development and debugging
 environment by permitting the use of a REST API (Swagger UI),
 as it only works with `String` types.
 
-Objects (compound types) may be used for keys.
-However, doing so sets the bar higher for the developer.
-At a minimum, keys for partitioned regions need
-both a quality hash function and an equals function defined.
+Objects (compound types) may **not** be used for keys.
 
 ### <a id="partitioned-regions"></a> Partitioned Regions
 
@@ -62,6 +60,7 @@ Within the diagram, the partitioned region is highlighted.
 
 With one redundant copy,
 the GemFire cluster can tolerate a single server failure
+or a service upgrade 
 without losing any region data.
 With one fewer server,
 GemFire revises which server holds the primary copy of an entry.
@@ -70,31 +69,26 @@ the region's redundancy if the failed server does not
 rejoin the cluster.
 
 A partitioned region without redundancy will permanently
-lose data if a server goes down.
+lose data during a service upgrade or if a server goes down.
 All entries hosted in the buckets on the failed server will be lost.
 
 #### <a id="partitioned-types"></a> Partitioned Region Types for creating regions on the server
 
 Region types associate a name with a particular region configuration.
 The type is used when creating a region.
+Although more region types than these exist,
+use one of these types to ensure that no region data is lost
+during service upgrades or if a server fails.
 
-- `PARTITION`
+- `PARTITION_REDUNDANT` 
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region.
-There is no redundancy for this region type.
-- `PARTITION_HEAP_LRU` 
-In addition to placing region entries into buckets that are
-distributed across all servers hosting the region,
-the region destroys entries when the server (its JVM)
-hits the threshold of being low on memory.
-The oldest entry in the bucket where a new entry will live
-is the one chosen for destruction.
-There is no redundancy for this region type.
-- `PARTITION_REDUNDANT` 
-GemFire keeps and maintains a declared number of redundant copies
-of all entries.
+In addition, GemFire keeps and maintains a declared number of
+redundant copies of all entries.
 The default number of redundant copies is 1.
 - `PARTITION_REDUNDANT_HEAP_LRU` 
+Region entries are placed into the buckets that are
+distributed across all servers hosting the region.
 GemFire keeps and maintains a declared number of redundant copies
 in addition to destroying entries when the server (its JVM)
 hits the threshold of being low on memory.
@@ -124,6 +118,7 @@ performance suffers when many concurrent write accesses
 cause subsequent writes to all other servers hosting the region.
 - when the overall quantity of entries is not so large as to push
 the limits of memory space for a single server.
+The PCF service plan sets the server memory size.
 - when the entries of a region will be frequently accessed
 together with entries from other regions.
 The entries in the replicated region will always be available
@@ -195,14 +190,14 @@ Each region entry represents a single product.
 There are a limited number of products,
 and those products do not often change.
 
-Consider that as a client application goes beyond the most simplistic
+Consider that as the client application goes beyond the most simplistic
 of cases for data representation,
-the PCC instance will be hosting all of these regions.
-And, that application will likely be interacting with more than one
-of the regions.
-Interactions with customer orders, shipments,
+the PCC instance will be hosting all of these regions
+such that the application can access all of these regions.
+Operations on customer orders, shipments,
 and payments will all require product information.
-The product region will benefit from access to all entries on all servers,
+The product region will benefit from access to all its entries 
+available on all the cluster's servers,
 again pointing to a region type choice of a replicated region.
 
 ## <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC

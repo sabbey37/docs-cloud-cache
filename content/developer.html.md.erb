@@ -348,7 +348,7 @@ After connecting with gfsh as a `cluster_operator`, you can define a new cache r
 The following command creates a partitioned region with a single redundant copy:
 
 <pre class='terminal'>
-gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU --redundant-copies=1
+gfsh>create region --name=my-cache-region --type=PARTITION_REDUNDANT_HEAP_LRU
      Member      | Status
 ---------------- | -------------------------------------------------------
 cacheserver-z2-1 | Region "/my-cache-region" created on "cacheserver-z2-1"
@@ -357,12 +357,8 @@ cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
 cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
 </pre>
 
-The following region types are recommended for PCC:
-
-* `PARTITION_HEAP_LRU`
-* `REPLICATE_HEAP_LRU`
-
-To achieve optimal performance, you should understand the type of region that is relevant to your situation. For more information, see the Pivotal GemFire [Region Types](http://gemfire90.docs.pivotal.io/geode/developing/region_options/region_types.html) documentation.
+See [Region Design](../app-development.html#region-design)
+for guidelines on choosing a region type.
 
 You can test the newly created region by writing and reading values with gfsh:
 
