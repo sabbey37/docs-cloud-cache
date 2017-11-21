@@ -189,6 +189,7 @@ The `cf service-key` returns output in the following format:
 
 <pre class='terminal'>
 {
+  "distributed_system_id": "0",
   "locators": [
     "10.244.0.66[55221]",
     "10.244.0.4[55221]",
@@ -201,11 +202,17 @@ The `cf service-key` returns output in the following format:
   "users": [
     {
       "password": "developer-password",
-      "username": "developer"
+      "username": "developer-username",
+      "roles": [
+       "developer"
+      ]
     },
     {
       "password": "cluster_operator-password",
-      "username": "cluster_operator"
+      "username": "cluster_operator-username",
+      "roles": [
+       "cluster_operator"
+      ]
     }
   ]
 }
