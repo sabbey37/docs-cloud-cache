@@ -9,21 +9,19 @@ In titles and headings and in subsequent use on the page, use "PCC".
 
 ## About Branches 
 
-Currently, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.1 and v1.0 documentation. A branch for 1.2 (unreleased) documentation exists; you can make changes or PRs relevant to 1.2 on that branch. Version 1.2 is scheduled for GA on 9/29/17.
+Currently, **v1.2-branch**, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.2, v1.1, and v1.0 documentation.
 
-Your branch for changes on future releases (later than v1.2) is **master branch**.
+Use the **master** branch for unreleased, v1.3, documentation; you can make changes or PRs relevant to v1.2 on that branch.
 
 Other branches are sometimes created to PR corrections/edits back into live docs.
 
-The **master branch** is in use for versions after 1.2.
-
-The above info about branches comes from Megan Moore and is correct as of September 26, 2017.
+The above info about branches comes from Megan Moore and Jane Day and is correct as of November 22, 2017.
 
 ## Staging
 
 The staging docs are on PWS using https://docs-pcf-staging.cfapps.io/.
 
-Staging docs for the upcoming v1.2 release are on https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-2/index.html.
+Staging docs for the v1.3 release are coming soon on https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-3/index.html.
 
 ## Developing docs locally
 
