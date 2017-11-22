@@ -64,9 +64,6 @@ or a service upgrade
 without losing any region data.
 With one fewer server,
 GemFire revises which server holds the primary copy of an entry.
-The region may be configured such that the cluster restores
-the region's redundancy if the failed server does not
-rejoin the cluster.
 
 A partitioned region without redundancy will permanently
 lose data during a service upgrade or if a server goes down.
