@@ -5,15 +5,13 @@ owner: Cloud Cache Engineers
 
 ## <a id='overview'></a>Overview
 
-Pivotal Cloud Cache (PCC) is a high-performance, highly available caching layer for Pivotal Cloud Foundry (PCF). 
-PCC offers an in-memory key-value store.
-The product delivers low-latency responses to a large number of concurrent data access requests.
+Pivotal Cloud Cache (PCC) is a high-performance caching layer for Pivotal Cloud Foundry (PCF). 
+PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data access requests.
 
-PCC provides a service broker for on-demand creation of in-memory data clusters that are dedicated to the PCF space and tuned for the intended use cases defined by the plan.
+PCC provides a service broker to create in-memory data clusters on demand. These clusters are dedicated to the PCF space and tuned for specific use cases defined by the plan. 
 Service operators can create multiple plans to support different use cases.
-PCC uses Pivotal GemFire.
 
-You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
+PCC uses Pivotal GemFire. You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
 
 This documentation performs the following functions:
 
@@ -25,8 +23,8 @@ This documentation performs the following functions:
 
 Current PCC details:
 
-- **Version:** v1.0.7
-- **Release Date:** Aug 14, 2017
+- **Version:** v1.0.8
+- **Release Date:** November 15, 2017
 - **Software Component Version:** GemFire v9.1.1
 - **Compatible Ops Manager Version:** v1.9.x and v1.10.x
 - **Compatible Elastic Runtime Version:** v1.9.21+ and v1.10.x
@@ -225,8 +223,8 @@ The workflow for the PCF admin setting up a PCC service plan:
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
 - PCC can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
-- PCC can be used to store objects in key/value format, where value can be any object.
-- PCC works with gfsh (gfsh version should be same as the gemfire version mentioned in snapshot)
+- PCC can be used to store objects in key/value format, where the value can be any object.
+- PCC works with gfsh. You can only use the gfsh version that matches the version of GemFire in this release. 
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.
 
