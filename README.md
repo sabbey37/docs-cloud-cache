@@ -31,7 +31,7 @@ This will make the book available at localhost:4567 and automatically update whe
 ```
 cd docs-book-cloud-cache
 bundle install
-bundle exec ookbinder watch
+bundle exec bookbinder watch
 
 ```
 
