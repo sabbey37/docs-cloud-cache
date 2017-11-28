@@ -38,7 +38,7 @@ The following table provides version and version-support information about PCC:
     </tr>
     <tr>
         <td>Software component version</td>
-        <td>GemFire v9.0.4</td>
+        <td>GemFire v9.1.1</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
@@ -190,6 +190,7 @@ The workflow for the PCF admin setting up a PCC service plan:
 
 - PCC can be used as a cache. It supports the [look-aside cache pattern](https://content.pivotal.io/blog/an-introduction-to-look-aside-vs-inline-caching-patterns).
 - PCC can be used to store objects in key/value format, where value can be any object.
+- PCC works with gfsh. You can only use the gfsh version that matches this release's version of GemFire. See the [Product Snapshot](#snapshot)section for the version of GemFire supported in this release. 
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.
 
