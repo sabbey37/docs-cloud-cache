@@ -624,64 +624,110 @@ l      <artifactId>spring-boot-starter-tomcat</artifactId>
 </project>
 ```
 
-###<a id="spring-session"></a> Use the Spring Session Data Gemfire App
+###<a id="spring-session"></a> Use a Spring Session Data GemFire App
 
 You can connect your Spring app to PCC to do session state caching, but you
-must use the correct verion of the spring-session-data-gemfire library to do so.
-PCC v1.1.x only supports spring-session-data-gemfire version v2.0.0.M0.
+must use the correct version of the `spring-session-data-gemfire` library to do so.
+Build the app for PCC v1.2 with a dependency on Spring Session Data GemFire v2.0.0.M2.
 
-| PCC Version | SSDG Verion |
-|-------------|-------------|
-| v1.1.x       | v2.0.0.M0    |
+####<a id=spring_session_data_gemfire></a> Upgrade Spring Session Data GemFire
 
-Example `build.gradle` file that works with PCC v1.1.x:
+PCC v1.2.0 only works with Spring Session Data GemFire 2.0.0.M2. 
 
-```
-version = '0.0.1-SNAPSHOT'
+Before your operator upgades to PCC v1.20, stop your app. If you don't, the upgrade process will break the app. Therefore, Pivotal recommends manually stopping your app before your operator upgrades PCC.
 
-buildscript {
-	ext {
-		springBootVersion = '2.0.0.M2'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
-}
+<p class="note"><strong>Note</strong>: Stopping your app while the operator upgrades to PCC v1.20 will cause downtime.</p>
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'idea'
+After your operator has upgraded to PCC v1.2.0, when you're ready to restart your app, follow these steps to upgrade to Spring Session Data GemFire 2.0.0.M2:
 
-idea{
-	module{
-		downloadSources = true
-		downloadJavadoc = true
-	}
-}
+1. Rebuild your app using a `build.gradle` file that depends on GemFire 9.1.1. For example:
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+    ```
+    version = '0.0.1-SNAPSHOT'
 
-repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/libs-milestone" }
-	maven { url "https://repo.spring.io/milestone" }
-	maven { url "http://repo.springsource.org/simple/ext-release-local" }
-    maven { url "http://repo.spring.io/libs-release/" }
-	maven { url "https://repository.apache.org/content/repositories/snapshots" }
-}
+    buildscript {
+      ext {
+        springBootVersion = '2.0.0.M3'
+      }
+      repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+      }
+      dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+      }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'idea'
+
+    idea{
+      module{
+        downloadSources = true
+        downloadJavadoc = true
+      }
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+      mavenCentral()
+      maven { url "https://repo.spring.io/libs-milestone" }
+      maven { url "https://repo.spring.io/milestone" }
+      maven { url "http://repo.springsource.org/simple/ext-release-local" }
+      maven { url "http://repo.spring.io/libs-release/" }
+      maven { url "https://repository.apache.org/content/repositories/snapshots" }
+    }
 
 
-dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
-	compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M0")
-	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
-	compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
-	testCompile("org.springframework.boot:spring-boot-starter-test")
-}
-```
+    dependencies {
+      compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
+      compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2")
+      compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
+      compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
+    }
+    ```
+
+2. Clear the session state region.
+3. Start the rebuilt app.
+
+## <a id="spring-data-gemfire"></a> Creating Continuous Queries Using Spring Data GemFire
+
+To create continuous queries with the Spring Data GemFire library, you must have the following:
+
+* Spring Data GemFire v2.0.1 release
+* Spring Boot v2.0.0+
+
+To create continuous queries, perform the following steps:
+
+1. Set `subscriptionEnabled` and `readyForEvents` to `true` on the client cache object through the annotation `ClientCacheApplication`:
+
+    ```java
+    @ClientCacheApplication(name = "GemFireSpringApplication", readyForEvents = true, subscriptionEnabled = true)
+    ```
+1. To enable durable queries, set `durableClientId` and `keepAlive` through the annotation:
+
+    ```java
+    @ClientCacheApplication(name = "GemFireSpringApplication", durableClientId = "durable-client-id", keepAlive = true, readyForEvents = true, subscriptionEnabled = true)
+    ```
+1. Use the annotation `ContinuousQuery` to specify the continuous query and bind it to a function to handle the query when it is triggered:
+
+    ``` java
+    @Component
+    public class ContinuousQuery {
+
+        @ContinuousQuery(name = "PestoQuery", query = "SELECT * FROM /Region", durable = true)
+        public void handlehanges(CqEvent event) {
+          //PERFORM SOME ACTION
+        }
+    }
+    ```
+    If you want to specify the continuous query in its own class,
+    you must annotate `@Component` on the class so the Spring component scan detects the `@ContinuousQuery` annotation. 
+    <br><br>
+    If you want the continuous query to be durable, you must set the `durable` attribute to `true`.
+
+For more information, see the [Spring Data GemFire documentation](https://docs.spring.io/spring-data/gemfire/docs/2.0.1.RELEASE/reference/html/).
