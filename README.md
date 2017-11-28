@@ -21,7 +21,8 @@ The above info about branches comes from Megan Moore and Jane Day and is correct
 
 The staging docs are on PWS using https://docs-pcf-staging.cfapps.io/.
 
-Staging docs for the v1.3 release are coming soon on https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-3/index.html.
+Staging docs for the v1.3 release are on https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-3/index.html . 
+Ask in the pcf-docs Slack channel if you need access.
 
 ## Developing docs locally
 
