@@ -159,12 +159,7 @@ You can configure five individual plans for your developers. Select the **Plan 1
 
 ![Configuring a Plan](configure-plan.png)
 
-The **Enable Plan** button is checked by default. If you do not want to add this plan to the CF service catalog, select **Disable Plan**. You must enable at least one plan.
-
-The **CF Service Access** drop-down menu allows you to configure the plan's visibility in the CF Marketplace.
-**Enable Service Access** displays the service plan to all developers in the CF marketplace.
-**Disable Service Access** does not display the service plan to developers in the CF marketplace and cannot be enabled at a later time. 
-**Leave Service Access Unchanged** does not display the service plan in the CF marketplace by default but can be enabled at a later time.
+The **Plan Enabled** option is selected by default. If you do not want to add this plan to the CF service catalog, select **Plan Disabled**. You must enable at least one plan.
 
 The **Plan Name** text field allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace.
 
@@ -172,6 +167,11 @@ The **Plan Description** text field allows you to supply a plan description. The
 
 The **Enable metrics for service instances** checkbox enables metrics for service instances created using the plan.
 Once enabled, the metrics are sent to the Loggregator Firehose.
+
+The **CF Service Access** drop-down menu gives you the option to display or not display the service plan in the Marketplace.
+**Enable Service Access** displays the service plan the Marketplace.
+**Disable Service Access** makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time. 
+**Leave Service Access Unchanged** makes the plan unavailable in the Marketplace by default, but allows you to make it available at a later time.
 
 The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
 
