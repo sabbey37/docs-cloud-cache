@@ -353,7 +353,7 @@ After connecting with gfsh as a `cluster_operator`, you can define a new cache r
 The following command creates a partitioned region with a single redundant copy:
 
 <pre class='terminal'>
-gfsh>create region --name=my-cache-region --type=PARTITION_HEAP_LRU --redundant-copies=1
+gfsh>create region --name=my-cache-region --type=PARTITION_REDUNDANT_HEAP_LRU
      Member      | Status
 ---------------- | -------------------------------------------------------
 cacheserver-z2-1 | Region "/my-cache-region" created on "cacheserver-z2-1"
@@ -362,12 +362,8 @@ cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
 cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
 </pre>
 
-The following region types are recommended for PCC:
-
-* `PARTITION_HEAP_LRU`
-* `REPLICATE_HEAP_LRU`
-
-To achieve optimal performance, you should understand the type of region that is relevant to your situation. For more information, see the Pivotal GemFire [Region Types](http://gemfire90.docs.pivotal.io/geode/developing/region_options/region_types.html) documentation.
+See [Region Design](../app-development.html#region-design)
+for guidelines on choosing a region type.
 
 You can test the newly created region by writing and reading values with gfsh:
 
@@ -442,34 +438,6 @@ The following is a sample `VCAP_SERVICES` environment variable:
   ]
 }
 ```
-
-### <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
-
-A sample app written in pure Java has been put together to demonstrate how to connect an app to the service instance.
-
-The code is available at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git)
-
-The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above.
-
-Copy, update, and save the following sample manifest:
-
-```
----
-applications:
-- name: sample_app
-  path: build/libs/cloudcache-sample-app-1.0-SNAPSHOT-all.jar
-  no-route: true
-  health-check-type: none
-  services:
-  - service0  # replace this with the name of your service. Please refer
-              # to docs above on how to create a cloud cache service instance.
-```
-
-Update the `gradle.properties` with your username and password used for [https://commercial-repo.pivotal.io/](https://commercial-repo.pivotal.io/)
-
-Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` with the path to the sample manifest you created.
-
-After you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
 
 ### <a id="pulse"></a> Use the Pulse Dashboard
 
