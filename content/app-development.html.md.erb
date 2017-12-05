@@ -23,7 +23,7 @@ Using a `String` key enhances the development and debugging
 environment by permitting the use of a REST API (Swagger UI),
 as it only works with `String` types.
 
-Objects (compound types) may **not** be used for keys.
+<p class='note'><strong>Note:</strong> You may not use objects (compound types) for keys.</p>
 
 ### <a id="partitioned-regions"></a> Partitioned Regions
 
@@ -38,17 +38,13 @@ with very few entries to illustrate partitioning.
 
 ![Partitioned Region](partitioned-region.png)
 
-A partitioned region is the proper type of region to use
+A partitioned region is the proper type of region to use in two cases:
 
-- when the region will be holding vast quantities of data.
-So much data in fact, that more servers may need to be added
-to scale the system up so that it can hold even more data.
-PCC can be scaled up without downtime,
-with directions to do so in
-[Updating a Pivotal Cloud Cache Service Instance](./developer.html#update-service-instance).
+- In one case, the region holds vast quantities of data.
+There may be so much data that you need to add more servers to scale the system up.
+PCC can be scaled up without downtime; to learn more, see [Updating a Pivotal Cloud Cache Service Instance](./developer.html#update-service-instance).
 
-- when operations on the region are write-heavy,
-meaning that there are a lot of entry updates.
+- In the second case, operations on the region are write-heavy, meaning that there are a lot of entry updates.
 
 Redundancy adds fault tolerance to a partitioned region.
 Here is that same region,
@@ -62,12 +58,11 @@ With one redundant copy,
 the GemFire cluster can tolerate a single server failure
 or a service upgrade 
 without losing any region data.
-With one fewer server,
+With one less server,
 GemFire revises which server holds the primary copy of an entry.
 
-A partitioned region without redundancy will permanently
-lose data during a service upgrade or if a server goes down.
-All entries hosted in the buckets on the failed server will be lost.
+A partitioned region without redundancy permanently loses data during a service upgrade or if a server goes down.
+All entries hosted in the buckets on the failed server are lost.
 
 #### <a id="partitioned-types"></a> Partitioned Region Types for creating regions on the server
 
@@ -89,7 +84,7 @@ distributed across all servers hosting the region.
 GemFire keeps and maintains a declared number of redundant copies
 in addition to destroying entries when the server (its JVM)
 hits the threshold of being low on memory.
-The oldest entry in the bucket where a new entry will live
+The oldest entry in the bucket where a new entry lives
 is the one chosen for destruction.
 The default number of redundant copies is 1.
 
@@ -105,20 +100,19 @@ all servers that host the region have a copy of every entry.
 GemFire maintains copies of all region entries on all servers.
 GemFire takes care of distribution and keeps the entries
 consistent across the servers.
-A replicated region is the proper type of region to use
+A replicated region is the proper type of region to use in three cases:
 
-- when region entries do not change often.
+- In the first case, use a replicated region when region entries do not change often.
 Each write of an entry must be propagated to all servers
 that host the region.
 As a consequence,
 performance suffers when many concurrent write accesses
 cause subsequent writes to all other servers hosting the region.
-- when the overall quantity of entries is not so large as to push
-the limits of memory space for a single server.
+- In the second case, use a replicated region when the overall quantity of entries is not so large as to push the limits of memory space for a single server.
 The PCF service plan sets the server memory size.
-- when the entries of a region will be frequently accessed
+- In the third case, use a replicated recion when the entries of a region are frequently accessed
 together with entries from other regions.
-The entries in the replicated region will always be available
+The entries in the replicated region are always available
 on the server that receives the access request,
 leading to better performance.
 
@@ -155,7 +149,7 @@ No entries are locally cached.
 Use this client region type unless there is a compelling reason to use 
 one of the other types.
 Use this type for all Twelve-Factor applications
-in order to assure the implementation of stateless processes.
+in order to assure stateless processes are implemented.
 Not caching any entries locally
 prevents the application from accidentally caching state.
 - `CACHING_PROXY` forwards all region operations to the servers,
@@ -189,25 +183,23 @@ and those products do not often change.
 
 Consider that as the client application goes beyond the most simplistic
 of cases for data representation,
-the PCC instance will be hosting all of these regions
+the PCC instance hosts all of these regions
 such that the application can access all of these regions.
 Operations on customer orders, shipments,
-and payments will all require product information.
-The product region will benefit from access to all its entries 
+and payments all require product information.
+The product region benefits from access to all its entries 
 available on all the cluster's servers,
 again pointing to a region type choice of a replicated region.
 
 ## <a id="sample-java-app-connect"></a> A Sample Java Client App for PCC
 
-A sample app written in pure Java has been put together to demonstrate how to connect an app to the service instance.
+[Here is a sample Java app that demonstrates how to connect an app to a service instance.](https://github.com/cf-gemfire-org/cloudcache-sample-app.git)
 
-The code is available at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git)
+The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above. 
 
-The code assumes that you have already created a region named `test` in your cluster using `gfsh` as described in the section above.
-
-Copy, update, and save the following sample manifest:
-
-```
+<ol>
+<li>Copy, update, and save the following sample manifest:
+<pre class="terminal">
 ---
 applications:
 - name: sample_app
@@ -217,11 +209,8 @@ applications:
   services:
   - service0  # replace this with the name of your service. Please refer
               # to docs above on how to create a cloud cache service instance.
-```
-
-Update the `gradle.properties` with your username and password used for [https://commercial-repo.pivotal.io/](https://commercial-repo.pivotal.io/)
-
-Run `cf push -f PATH-TO-MANIFEST` to deploy the app. Replace `PATH-TO-MANIFEST` with the path to the sample manifest you created.
-
-After you push the app and it starts, you should see an entry in the `test` region where `key=1` and `value=one`
-
+</pre></li>
+<li>Update the <code>gradle.properties</code> with your username and password used for <a href="https://commercial-repo.pivotal.io">https://commercial-repo.pivotal.io</a></li>
+<li>Run <code>cf push -f PATH-TO-MANIFEST</code> to deploy the app. Replace <code>PATH-TO-MANIFEST</code> with the path to the sample manifest you created.</li>
+<li>After you push the app and it starts, you should see an entry in the <code>test</code> region where <code>key=1</code> and <code>value=one</code>.</li>
+</ol>
