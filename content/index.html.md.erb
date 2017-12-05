@@ -66,40 +66,22 @@ The following table provides version and version-support information about PCC:
 
 ### <a id='GFBasics'></a>GemFire Basics
 
-Pivotal GemFire is the data store within PCC.
-A small amount of administrative GemFire setup is required
-for a PCC service instance,
-and a limited portion of the GemFire API will be used
-by any application.
+Pivotal GemFire is the data store within Pivotal Cloud Cache (PCC). A small amount of administrative GemFire setup is required for a PCC service instance, and any app will use a limited portion of the GemFire API.
 
-The PCC architectural model is a client-server model.
-Applications (or microservices) are the clients,
-and a PCC service instance maintains a set of GemFire servers.
-The GemFire servers provide a low latency, consistent,
-fault tolerant data store within PCC.
+The PCC architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of GemFire servers maintained by a PCC service instance. The GemFire servers provide a low-latency, consistent, fault-tolerant data store within PCC.
 
 ![Client Server Model](client-server.png)
 
-GemFire holds data in key/value pairs.
-Each pair is called an entry.
-Entries are logically grouped into sets called regions.
-A region is a map (or dictionary) data structure.
+GemFire holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called regions. A region is a map (or dictionary) data structure.
 
-The application (client) uses PCC as a cache.
-A cache lookup (read) is a get operation on a GemFire region.
-The cache operation of a cache write is a put operation
-on a GemFire region.
-The GemFire command-line interface, called `gfsh`,
-facilitates region administration.
-Use gfsh to create and destroy regions within
-the PCC service instance.
+The app (client) uses PCC as a cache. A cache lookup (read) is a get operation on a GemFire region. The cache operation of a cache write is a put operation on a GemFire region.
+The GemFire command-line interface, called `gfsh`, facilitates region administration. Use `gfsh` to create and destroy regions within the PCC service instance.
 
-
-### <a id='PCC-Cluster-Architecture'></a>The PCC Cluster
+### <a id='pcc-cluster-architecture'></a>The PCC Cluster
 
 PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.
 
-When you first spin up a cluster, you'll have three locators and at least four servers.
+When you first spin up a cluster, you have three locators and at least four servers.
 
 <% mermaid_diagram do %>
   graph TD;
@@ -124,8 +106,7 @@ When you first spin up a cluster, you'll have three locators and at least four s
   Client-->Server4
 <% end %>
 
-
-If you scale the cluster up, you'll have more servers, increasing the capacity of the cache. There always will be three locators.
+When you scale the cluster up, you have more servers, increasing the capacity of the cache. There are always three locators.
 
 <% mermaid_diagram do %>
   graph TD;
@@ -179,7 +160,6 @@ When the client wants to read or write data, it sends a request directly to the 
     Client->>+Server1: What's the value for KEY?
     Server1->>-Client: VALUE
 <% end %>
-
 
 If the server doesn't have the data locally, it fetches it from another server.
 
