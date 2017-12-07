@@ -700,41 +700,50 @@ To create continuous queries, perform the following steps:
 
 For more information, see the [Spring Data GemFire documentation](https://docs.spring.io/spring-data/gemfire/docs/2.0.1.RELEASE/reference/html/).
 
-## <a id="deploy-app-jars"></a> Deploy App JAR Files to PCC Servers
+## <a id="deploy-app-jars"></a> Deploy an App JAR File to the Servers
 
-You can deploy your app JAR files to members in your distributed system.
-To deploy app JAR files, do the following: 
+You can deploy or redeploy an app JAR file to the servers in the cluster.
 
-1. Verify that you have the `cluster_operator` role.
+To deploy an app JAR file
+after connecting within gfsh using the cluster_operator role,
+run this gfsh command: 
 
-2. Run this gfsh command: 
+
+1. Run this gfsh command to deploy the JAR file:
 
     <code>deploy --jar=PATH-TO-JAR/FILENAME.jar</code>
 
     For example, 
 
-    <pre class='terminal'> gfsh> deploy --jar=working-directory/myJar.jar </pre>
+    <pre class='terminal'> gfsh>deploy --jar=working-directory/myJar.jar </pre>
 
-To update a JAR file, do the following:
+1. Run this command to restart the cluster and load the updated JAR file:
 
-1. Run this gfsh command to remove the original JAR file:
+     <code> cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}' </code>
 
-    <code>undeploy --jar=FILENAME.jar</code>
+     For example, 
+
+     <pre class='terminal'>$ cf update-service my-service-instance -c '{"restart": true}'</code>
+
+To redeploy an app JAR file
+after connecting within gfsh using the cluster_operator role,
+do the following: 
+
+1. Run this gfsh command to remove the existing JAR file:
+
+    <code>undeploy --jar=PATH-TO-JAR/FILENAME.jar</code>
 
     For example, 
 
-    <pre class='terminal'> gfsh>  undeploy --jar=myJar.jar </pre>
+    <pre class='terminal'> gfsh>undeploy --jar=current-jars/myJar.jar </pre>
 
-1. Run this command to deploy the updated JAR file:
+1. Run this gfsh command to deploy the updated JAR file:
 
-    <code> deploy --jar=FILENAME.jar</code>
+    <code>gfsh>deploy --jar=PATH-TO-UPDATED-JAR/FILENAME.jar</code>
 
     For example, 
 
-    <pre class='terminal'>gfsh> deploy --jar=myJar.jar</pre>
-
-    <p class="note"><strong>Note</strong>: If you have used the JAR file, for example, 
-       in an async event queue, then your cluster won't restart unless you run this command to redeploy the JAR file.</p>
+    <pre class='terminal'>gfsh>deploy --jar=newer-jars/myJar.jar</pre>
 
 1. Run this command to restart the cluster and load the updated JAR file:
 
