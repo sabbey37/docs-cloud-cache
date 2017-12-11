@@ -90,7 +90,7 @@ To use `spring-session` with PCC, follow the steps below:
 1. Make the following changes to the app:
   * Replace existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is seconds.
   * Add the `spring-session-data-geode` and `spring-data-geode` dependencies to the build.
-  * Add beans to the Spring application config.
+  * Add beans to the Spring app config.
 
     For more information, see the [spring-session-data-gemfire-example](https://github.com/jxblum/spring-session-data-gemfire-example) repository.
 

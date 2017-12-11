@@ -324,8 +324,8 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>number</td>
 <td>Sum over 10 minutes</td>
 <td>sum</td>
-<td>Dependent on IaaS and application use case.</td>
-<td>Dependent on IaaS and application use case.</td>
+<td>Dependent on IaaS and app use case.</td>
+<td>Dependent on IaaS and app use case.</td>
 <td>Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.</td>
 <td>If the frequency of GC is high, the system might see high CPU usage, which causes delays in the cluster.</td>
 </tr>
@@ -347,8 +347,8 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>number</td>
 <td>Average over 10 minutes</td>
 <td>avg</td>
-<td>Dependent on IaaS and application use case.</td>
-<td>Dependent on IaaS and application use case.</td>
+<td>Dependent on IaaS and app use case.</td>
+<td>Dependent on IaaS and app use case.</td>
 <td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
 <td>A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
 </tr>
@@ -358,8 +358,8 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>number</td>
 <td>Average over 10 minutes</td>
 <td>avg</td>
-<td>Dependent on IaaS and application use case.</td>
-<td>Dependent on IaaS and application use case.</td>
+<td>Dependent on IaaS and app use case.</td>
+<td>Dependent on IaaS and app use case.</td>
 <td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
 <td>A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
 </tr>
@@ -369,8 +369,8 @@ The table below shows the metrics emitted through the CF Nozzle and their corres
 <td>number</td>
 <td>Sum over 2 seconds</td>
 <td>sum</td>
-<td>Dependent on IaaS and application use case.</td>
-<td>Dependent on IaaS and application use case.</td>
+<td>Dependent on IaaS and app use case.</td>
+<td>Dependent on IaaS and app use case.</td>
 <td>Check the cached object size; if it is greater than &gt;1&nbsp;MB, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.</td>
 <td>Due to a JVM pause, the member stops responding to “are-you-alive” messages, which may cause this member to be kicked out of the cluster.</td>
 </tr>
