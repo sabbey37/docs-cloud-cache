@@ -393,6 +393,11 @@ Value       : thevalue
 
 In practice, you should perform these get/put operations from a deployed PCF app. To do this, you must bind the service instance to these apps.
 
+### <a id="java-build-pack-requirement"></a> Java Build Pack Requirements
+
+To ensure that your app can use all the features from pcc please use the latest buildpack from [cloud foundry](https://github.com/cloudfoundry/java-buildpack) 
+
+
 ### <a id="bind-service"></a> Bind an App to a Service Instance
 
 Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region.
