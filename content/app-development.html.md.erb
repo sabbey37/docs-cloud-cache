@@ -129,7 +129,7 @@ All servers destroy entries when a server (its JVM)
 hits the threshold of being low on memory.
 
 
-### <a id="app-regions"></a> Regions as Used by the Application
+### <a id="app-regions"></a> Regions as Used by the App
 
 The client accesses regions hosted on the servers by creating a cache
 and the regions.
@@ -148,15 +148,15 @@ client region configuration.
 No entries are locally cached.
 Use this client region type unless there is a compelling reason to use 
 one of the other types.
-Use this type for all Twelve-Factor applications
+Use this type for all Twelve-Factor apps
 in order to assure stateless processes are implemented.
 Not caching any entries locally
-prevents the application from accidentally caching state.
+prevents the app from accidentally caching state.
 - `CACHING_PROXY` forwards all region operations to the servers,
 and entries are locally cached.
 - `CACHING_PROXY_HEAP_LRU` forwards all region operations to the servers,
 and entries are locally cached.
-Locally cached entries will be destroyed when the application’s
+Locally cached entries will be destroyed when the app’s
 usage of cache space causes its JVM to hit
 the threshold of being low on memory.
 
@@ -181,10 +181,10 @@ Each region entry represents a single product.
 There are a limited number of products,
 and those products do not often change.
 
-Consider that as the client application goes beyond the most simplistic
+Consider that as the client app goes beyond the most simplistic
 of cases for data representation,
 the PCC instance hosts all of these regions
-such that the application can access all of these regions.
+such that the app can access all of these regions.
 Operations on customer orders, shipments,
 and payments all require product information.
 The product region benefits from access to all its entries 
