@@ -2,6 +2,28 @@
 title: Application Development
 ---
 
+## <a id="design-patterns"></a> Design Patterns
+
+### <a id="lookaside-cache"></a> The Look-Aside Cache
+
+The look-aside pattern of caching places the app in charge
+of communication with both the cache and the backend data store.
+
+![look-aside caching pattern](look-aside.png)
+
+The app will want to accomplish CRUD
+(CREATE, READ, UPDATE, DELETE) operations on its data.
+That data may be 
+
+- in both the data store and the cache
+- in the database, but not in the cache
+- not in either the database or the cache
+
+The app’s implementation of the CRUD operations result in cache operations
+that break down into cache lookups (reads) and/or cache writes.
+
+## <a id="region-design"></a> Region Design
+
 Cached data are held in GemFire regions.
 Each entry within a region is a key/value pair.
 The choice of key and region type affect
@@ -10,8 +32,6 @@ There are two basic types of regions: partitioned and replicated.
 The distinction between the two types is based on how 
 entries are distributed among servers
 that host the region.
-
-## <a id="region-design"></a> Region Design
 
 ### <a id="keys"></a> Keys
 
