@@ -16,11 +16,30 @@ The app will want to accomplish CRUD
 That data may be 
 
 - in both the data store and the cache
-- in the database, but not in the cache
-- not in either the database or the cache
+- in the data store, but not in the cache
+- not in either the data store or the cache
 
 The app’s implementation of the CRUD operations result in cache operations
 that break down into cache lookups (reads) and/or cache writes.
+
+The algorithm for a cache lookup returns the cache entry
+when the entry is in the cache.
+This is a cache hit.
+If the entry is not in the cache, it is a cache miss,
+and the app attempts to retrieve the entry from the data store.
+In the typical implementation,
+the entry returned from the backend data store is written to the cache,
+such that subsequent cache lookups of that same entry result in cache hits.
+
+The look-aside pattern of caching leaves the app free to implement
+whatever it chooses if the data store does not have the entry.
+
+The algorithm for a cache write implements one of these:
+
+- The entry is either updated or created within the data store,
+and the entry is updated within or written to the cache.
+- The entry is either updated or created within the backend data store,
+and the copy currently within the cache is invalidated.
 
 ## <a id="region-design"></a> Region Design
 
@@ -211,3 +230,17 @@ The product region benefits from access to all its entries
 available on all the cluster's servers,
 again pointing to a region type choice of a replicated region.
 
+## <a id="sample-java-app-connect"></a> Connect a Sample Java Client App to PCC
+
+1. Clone the sample Java app at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git) to use in this demonstration of how to connect an app to a service instance.
+1. Create a region named `test` as described in [Create Regions with gfsh](./developer.html#create-regions).
+1. Update the manifest in `manifest.yml` by replacing `service0` with 
+the name of your service instance.
+1. Update the <code>gradle.properties</code> with your username and password for the Pivotal Commercial Maven Repository at [https://commercial-repo.pivotal.io](https://commercial-repo.pivotal.io).
+1. Run 
+
+```
+cf push -f PATH-TO-MANIFEST
+```
+to deploy the app. Replace <code>PATH-TO-MANIFEST</code> with the path to your modified manifest file.
+1. After the app starts, there will be an entry of ("1", "one") in the <code>test</code> region.
