@@ -14,7 +14,10 @@ You must have access to a Service Network in order to install PCC.
 
 #### Minimum Version Requirements
 
-PCC requires PCF v1.10 with PCF Elastic Runtime v1.10.3 or later or PCF v1.11 with PCF Elastic Runtime v1.11.0 or later.
+PCC requires: 
+* PCF v1.10 with PCF Elastic Runtime v1.10.3 or later, or 
+* PCF v1.11 with PCF Elastic Runtime v1.11.0 or later
+\* As of PCF v2.0, <em>Elastic Runtime</em> is renamed <em>Pivotal Application Service (PAS)</em>.
 
 #### Spring Session Data GemFire Apps
 
@@ -65,7 +68,7 @@ To select AZs and networks for VMs used by PCC, do the following:
         <td>Select the AZ(s) you want to use for distributing other GemFire VMs.
             Pivotal recommends selecting all of them.</td></tr>
     <tr><td><strong>Network</strong></td>
-        <td>Select your Elastic Runtime network.</td>
+        <td>Select your Pivotal Application Service (PAS) or Elastic Runtime (ERT) network.</td>
     <tr><td><strong>Service Network</strong></td>
         <td>Select the network to be used for GemFire VMs.</td> 
   </table>
@@ -519,7 +522,7 @@ update.
 #### Client-to-Server Communication
 
 PCC Clients communicate to PCC servers on port 40404 and with
-locators on port 55221. Both of these ports must be reachable from the Elastic Runtime network to service the network.
+locators on port 55221. Both of these ports must be reachable from the Pivotal Application Service (PAS) or Elastic Runtime (ERT) network to service the network.
 
 #### Membership Port Range
 PCC servers and locators communicate with each other using UDP and TCP. The current port range for this communication is `49152-65535`.
