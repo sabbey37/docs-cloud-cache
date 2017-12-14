@@ -3,27 +3,19 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
-## <a id='v120'></a>v1.2.0
+## <a id='v120'></a>v1.3.0
 
-**Release Date:**  November 22, 2017
+**Release Date:**  December 31, 2017
 
 Features included in this release:
 
-- Pivotal Cloud Cache (PCC) supports sending broker and service instance metrics to loggregator
-- PCC is compatible with PCF v1.11 and v1.12
-- PCC ships with the following releases precompiled for faster deployment:
-  * cloudcache-service-adapter
-  * gemfire-release
-  * cloudcache-metrics
-- PCC enables time-based statistics by default
-- `cf create service` creates VMs in parallel when possible
-- Spring Jars have been removed from the server
-
 Known issues in this release:
 
-- If you are running apps that use Spring Session Data GemFire 2.0.0.M1 and you upgrade from PCC v1.1.x to v1.2, those apps experience downtime during the upgrade. Developers must upgrade to Spring Session Data GemFire 2.0.0.M2 and redeploy those apps to run on PCC v1.2. For details, see [Upgrade Spring Session Data Gemfire](./developer.html#spring_session_data_gemfire) in the PCC v1.2 Developer Guide.
+- If you created service keys on PCC prior to installing 1.3.0, you will need to delete and recreate the service keys so that the users are assigned roles in the cluster. You will also need to rebind all your apps.
 
 ## <a id="16x"></a>Release Notes for Earlier Versions
+
+For v1.2.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-2/index.html#release-notes) in the v1.1 version of this documentation.
 
 For v1.1.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-1/index.html#release-notes) in the v1.1 version of this documentation.
 
