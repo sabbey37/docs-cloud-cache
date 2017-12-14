@@ -258,7 +258,10 @@ gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluste
 
 ### <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS) or Elastic Runtime (ERT); that is, the certificate you use where your TLS termination occurs. Before you can connect, you must create a truststore. 
+Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups.
+When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS)
+or Elastic Runtime; that is, the certificate you use where your TLS termination occurs.
+Before you can connect, you must create a truststore. 
 
 #### <a id="truststore"></a> Create a Truststore 
 
