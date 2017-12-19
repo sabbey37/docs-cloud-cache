@@ -229,6 +229,21 @@ The diagram below shows worker VMs in an on-demand service instance, such as Rab
 
 <%= partial '../../p-cloud-cache/odb/service_networks_table' %>
 
+### <a id ="WAN_details"></a>PCC Instances Across WAN
+
+PCC service instances may run within distinct PCF foundations,
+communicating with each other to form a distributed system. 
+Configuration of the networks is required.
+The service networks within the service instances must be connected
+via a VPN such that the servers in one foundation can reach 
+the servers in the other via private IP addresses.
+The steps required to set up each VPN are dependent on the IAAS provider.
+
+Each of the service networks must be configured with
+non-overlapping CIDR blocks prior to deploying the PCC service instances.
+Accomplish this configuration using the "Create Networks" tab
+of the BOSH director tile.
+
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
 - PCC supports the [look-aside cache pattern](./app-development.html#lookaside-cache).
