@@ -473,12 +473,10 @@ To uninstall PCC, follow the steps from below from the **Installation Dashboard*
 
 ###<a id='view-statistics'></a> View Statistics Files
 
-You can visualize the performance of your cluster by downloading the statistics files from your servers. These files are located in the persistent store on each VM. To copy these files to your workstation, run one of the following commands:
+You can visualize the performance of your cluster by downloading the statistics files from your servers.
+These files are located in the persistent store on each VM.
+To copy these files to your workstation, run the following command:
 
-  * **For Ops Manager v1.10 or earlier:**
-    `bosh scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp`
-
-  * **For Ops Manager v1.11 or later:**
     `bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp`
 
 See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
