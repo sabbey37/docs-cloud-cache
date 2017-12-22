@@ -41,6 +41,29 @@ and the entry is updated within or written to the cache.
 - The entry is either updated or created within the backend data store,
 and the copy currently within the cache is invalidated.
 
+### <a id="WAN-pattern"></a> Replication Across a WAN
+
+Two or more PCC service instances may be connected across a WAN to form
+a single distributed system.
+An expected use case replicates all of a region's data
+from one service instance to another.
+The replicate increases the fault tolerance of the system by
+acting as a hot spare.
+In the scenario of the failure of an entire data center or an
+availability zone,
+Apps connected to the failed site can be redirected to the replicate,
+which takes over as the primary.
+
+In this diagram, cluster A is primary, and it replicates all data
+across a WAN to cluster B.
+
+![WAN replication pattern](WAN1.png)
+
+If cluster A fails,
+cluster B takes over.
+
+![WAN replicate becomes primary](WAN2.png)
+
 ## <a id="region-design"></a> Region Design
 
 Cached data are held in GemFire regions.
