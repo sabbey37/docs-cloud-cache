@@ -117,6 +117,22 @@ If the `example_partition_region` has **not** been created,
 it is probably because post-deploy scripts are not enabled for Ops Manager.
 For more information, see [Default Data Region for the Dev Plan](./operator.html#default-data-region).
 
+## <a id="delete"></a> Deleting a Service Instance
+
+You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
+
+1. Run `cf delete-service-key SERVICE-INSTANCE-NAME KEY-NAME` to delete the service key.
+1. Run `cf unbind-service APP-NAME SERVICE-INSTANCE-NAME` to unbind your app from the service instance.
+1. Run `cf delete-service SERVICE-INSTANCE-NAME` to delete the service instance.
+
+<pre class='terminal'>
+$ cf delete-service-key my-cloudcache my-service-key
+$ cf unbind-service my-app my-cloudcache
+$ cf delete-service my-cloudcache
+</pre>
+
+Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
+
 ## <a id="update-service-instance"></a> Updating a Pivotal Cloud Cache Service Instance
 
 You can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
@@ -510,22 +526,6 @@ You can get logs and `.gfs` stats files from your PCC service instances using th
 For more information about the gfsh export command,
 see the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/export.html).
 
-## <a id="delete"></a> Deleting a Service Instance
-
-You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
-
-1. Run `cf delete-service-key SERVICE-INSTANCE-NAME KEY-NAME` to delete the service key.
-1. Run `cf unbind-service APP-NAME SERVICE-INSTANCE-NAME` to unbind your app from the service instance.
-1. Run `cf delete-service SERVICE-INSTANCE-NAME` to delete the service instance.
-
-<pre class='terminal'>
-$ cf delete-service-key my-cloudcache my-service-key
-$ cf unbind-service my-app my-cloudcache
-$ cf delete-service my-cloudcache
-</pre>
-
-Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
-
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to Pivotal Cloud Cache with Session State Caching
 
 This section describes the two ways in which you can connect a Spring Boot app to PCC: 
@@ -672,7 +672,7 @@ After your operator has upgraded to PCC v1.3.0, when you're ready to restart you
 2. Clear the session state region.
 3. Start the rebuilt app.
 
-## <a id="spring-data-gemfire"></a> Creating Continuous Queries Using Spring Data GemFire
+## <a id="CQs-spring-data-gemfire"></a> Creating Continuous Queries Using Spring Data GemFire
 
 To create continuous queries with the Spring Data GemFire library, you must have the following:
 
@@ -709,4 +709,10 @@ To create continuous queries, perform the following steps:
     If you want the continuous query to be durable, you must set the `durable` attribute to `true`.
 
 For more information, see the [Spring Data GemFire documentation](https://docs.spring.io/spring-data/gemfire/docs/2.0.1.RELEASE/reference/html/).
+
+## <a id="WAN-setup"></a> Setting Up WAN Replication
+
+What you are setting up.
+
+The steps to set things up.
 
