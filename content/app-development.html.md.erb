@@ -46,12 +46,12 @@ and the copy currently within the cache is invalidated.
 Two or more PCC service instances may be connected across a WAN to form
 a single distributed system.
 An expected use case replicates all of a region's data
-from one service instance to another.
+from one service instance (the primary) to another.
 The replicate increases the fault tolerance of the system by
 acting as a hot spare.
 In the scenario of the failure of an entire data center or an
 availability zone,
-Apps connected to the failed site can be redirected to the replicate,
+apps connected to the failed site can be redirected to the replicate,
 which takes over as the primary.
 
 In this diagram, cluster A is primary, and it replicates all data
