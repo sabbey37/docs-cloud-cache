@@ -679,34 +679,43 @@ To create continuous queries with the Spring Data GemFire library, you must have
 * Spring Data GemFire v2.0.1 release
 * Spring Boot v2.0.0+
 
-To create continuous queries, perform the following steps:
+To create continuous queries, do the following  items:
 
-1. Set `subscriptionEnabled` and `readyForEvents` to `true` on the client cache object through the annotation `ClientCacheApplication`:
-
-    ```java
-    @ClientCacheApplication(name = "GemFireSpringApplication", readyForEvents = true, subscriptionEnabled = true)
-    ```
-1. To enable durable queries, set `durableClientId` and `keepAlive` through the annotation:
+- Specify attributes `subscriptionEnabled` and `readyForEvents` for
+the `ClientCacheApplication` annotation.
+Apply this annotation to the Spring Boot client application class: 
 
     ```java
-    @ClientCacheApplication(name = "GemFireSpringApplication", durableClientId = "durable-client-id", keepAlive = true, readyForEvents = true, subscriptionEnabled = true)
+    @ClientCacheApplication(name = "GemFireSpringApplication", readyForEvents = true,
+      subscriptionEnabled = true)
     ```
-1. Use the annotation `ContinuousQuery` to specify the continuous query and bind it to a function to handle the query when it is triggered:
+The annotation for a durable event queue for continuous queries also sets the
+`durableClientId` and `keepAlive` attributes. For example:
+
+    ```java
+    @ClientCacheApplication(name = "GemFireSpringApplication",
+      durableClientId = "durable-client-id", keepAlive = true,
+      readyForEvents = true, subscriptionEnabled = true)
+    ```
+-  Annotate the method that handles the events to specify the query.
+To make the event queue durable across server failures and restarts,
+include the `durable = true` attribute in the annotation,
+as is done in the example:
 
     ``` java
     @Component
     public class ContinuousQuery {
 
-        @ContinuousQuery(name = "PestoQuery", query = "SELECT * FROM /Region", durable = true)
-        public void handlehanges(CqEvent event) {
+        @ContinuousQuery(name = "yourQuery",
+           query = "SELECT * FROM /yourRegion WHERE someAttribute == true",
+           durable = true)
+        public void handleChanges(CqEvent event) {
           //PERFORM SOME ACTION
         }
     }
     ```
-    If you want to specify the continuous query in its own class,
-    you must annotate `@Component` on the class so the Spring component scan detects the `@ContinuousQuery` annotation. 
-    <br><br>
-    If you want the continuous query to be durable, you must set the `durable` attribute to `true`.
+    The class that contains the method with the @ContinuousQuery annotation must have the @Component annotation, such that the continuous query is wired up correctly for the server.
+    
 
 For more information, see the [Spring Data GemFire documentation](https://docs.spring.io/spring-data/gemfire/docs/2.0.1.RELEASE/reference/html/).
 
