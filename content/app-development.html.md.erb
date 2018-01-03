@@ -41,12 +41,32 @@ and the entry is updated within or written to the cache.
 - The entry is either updated or created within the backend data store,
 and the copy currently within the cache is invalidated.
 
+### <a id="active-active-WAN-pattern"></a> Bidirectional Replication Across a WAN
+
+Two PCC service instances may be connected across a WAN to form
+a single distributed system.
+The cluster within each of the PCC service instances will host the same region.
+Updates to either PCC service instance
+are propagated across the WAN to the other PCC service instance.
+The distributed system implements an eventual consistency
+of the region
+that also handles write conflicts which occur when a single
+region entry is modified in both PCC service instances at the same
+time.
+
+This diagram shows multiple instances of an app interacting
+with one of the two PCC service instances, cluster A and cluster B.
+Any change made in cluster A is sent to cluster B,
+and any change made in cluster B is sent to cluster A.
+
+![Bidirectional WAN replication pattern](WAN-bidirectional.png)
+
 ### <a id="WAN-pattern"></a> Replication Across a WAN
 
-Two or more PCC service instances may be connected across a WAN to form
+Two PCC service instances may be connected across a WAN to form
 a single distributed system.
-An expected use case replicates all of a region's data
-from one service instance (the primary) to another.
+An expected use case propagates all changes to a region's data
+from the cluster within one service instance (the primary) to the other.
 The replicate increases the fault tolerance of the system by
 acting as a hot spare.
 In the scenario of the failure of an entire data center or an
@@ -63,6 +83,27 @@ If cluster A fails,
 cluster B takes over.
 
 ![WAN replicate becomes primary](WAN2.png)
+
+### <a id="CQRS-WAN-pattern"></a> CQRS Pattern Across a WAN
+
+Two PCC service instances may be connected across a WAN to form
+a single distributed system that implements
+a CQRS (Command Query Responsibility Segregation) pattern.
+Within this pattern, commands are those that change the state,
+where state is represented by region contents.
+All region operations that change state are directed to the cluster within one
+PCC service instance.
+The changes are propagated to the cluster within the other PCC service instance
+via WAN replication,
+and that other cluster provides only query access to the region data.
+
+This diagram shows an app that may update the region
+within the PCC service instance of cluster A.
+Changes are propagated across the WAN to cluster B. 
+The app bound to cluster B may only query the region data;
+it will not create entries or update the region.
+
+![CQRS WAN replication pattern](WAN-CQRS.png)
 
 ## <a id="region-design"></a> Region Design
 
