@@ -231,18 +231,9 @@ The diagram below shows worker VMs in an on-demand service instance, such as Rab
 
 ### <a id ="WAN_details"></a>PCC Instances Across WAN
 
-PCC service instances may run within distinct PCF foundations,
-communicating with each other to form a distributed system. 
-Configuration of the networks is required.
-The service networks within the service instances must be connected
-via a VPN such that the servers in one foundation can reach 
-the servers in the other via private IP addresses.
-The steps required to set up each VPN are dependent on the IAAS provider.
+PCC service instances running within distinct PCF foundations, may communicate with each other to form a muti-site (WAN) system. In a multi-site topology, the members of the participating clusters must be able to communicate in private [RFC1918](https://tools.ietf.org/html/rfc1918) space. This can be acheived by creating a VPN connection between the participating service networks. The steps required to enable private connectivity are dependent on the IAAS provider(s).
 
-Each of the service networks must be configured with
-non-overlapping CIDR blocks prior to deploying the PCC service instances.
-Accomplish this configuration using the "Create Networks" tab
-of the BOSH director tile.
+Each of the participating service networks must be configured with non-overlapping CIDR blocks prior to deploying instances within the network. Documentation on how to create your networks and configure your bosh director for each IAAS can be found [here] (https://docs.pivotal.io/pivotalcf/2-0/installing/index.html)
 
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
