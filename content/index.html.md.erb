@@ -259,8 +259,8 @@ Clusters are created with two default users: `cluster_operator` and `developer`.
 
 Default user roles `cluster_operator` and `developer` have different permissions:
 
-- `cluster_operator` role has DATA:MANAGE, DATA:WRITE, and DATA:READ permissions.
-- `developer` role has DATA:WRITE and DATA:READ permissions.
+- `cluster_operator` role has `CLUSTER:WRITE`, `CLUSTER:READ`, `DATA:MANAGE`, `DATA:WRITE`, and `DATA:READ` permissions.
+- `developer` role has `CLUSTER:READ`, `DATA:WRITE` and `DATA:READ` permissions.
 
 You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
 
