@@ -164,16 +164,10 @@ using a `-c` option with a command of the form:
     "distributed_system_id" : 1 }'
     </pre>
 
-    Verify that the service is running prior to continuing to the next step.
-    Output from the `?? cf service` command will show the status as
-    `?? status ??` when the service is running,
-    as in the example output:
-
-    <pre class='terminal'>
-    $ cf service wan1
-    MORE WILL BE HERE SHOWING the COMMAND'S OUTPUT
-    </pre>
-
+    Verify the completion of service creation prior to continuing
+    to the next step.
+    Output from the `cf services` command will show the `last operation` as
+    `create succeeded` when service creation is completed.
 
 1. Create a service key for cluster A.
 The service key will contain generated credentials that this example
@@ -268,7 +262,10 @@ and the cluster A `sender_credentials`:
     }'
     </pre>
 
-    Verify that the service is running prior to continuing to the next step.
+    Verify the completion of service creation prior to continuing
+    to the next step.
+    Output from the `cf services` command will show the `last operation` as
+    `create succeeded` when service creation is completed.
 
 1. Create the service key of cluster B:
 
