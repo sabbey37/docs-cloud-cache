@@ -256,7 +256,7 @@ Pivotal recommends that you do the following:
 - Run PCC in its own network
 - Use a load balancer to block direct, outside access to the Gorouter
 
-To allow PCC network access from apps, you must create application security groups that allow access on the following ports: 
+To allow PCC network access from apps, you must create application security groups that allow access on the following ports:
 
 * 1099
 * 8080
@@ -271,7 +271,7 @@ see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/add
 
 ### Authentication
 
-Clusters are created with two default users: `cluster_operator` and `developer`.
+Clusters are created with two default users: `cluster_operator-XXXXXXXXXX` and `developer`.
 A cluster can only be accessed using one of these two users.
 All client apps, gfsh, and JMX clients must authenticate as one of these users accounts to access the cluster.
 
