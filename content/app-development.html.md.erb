@@ -54,6 +54,11 @@ that also handles write conflicts which occur when a single
 region entry is modified in both PCC service instances at the same
 time.
 
+In this active-active system, an external entity implements load-balancing 
+by directing app connections to one of the two service instances. 
+If one of the PCC service instances fails,
+apps may be redirected to the remaining service instance.
+
 This diagram shows multiple instances of an app interacting
 with one of the two PCC service instances, cluster A and cluster B.
 Any change made in cluster A is sent to cluster B,
@@ -71,7 +76,8 @@ The replicate increases the fault tolerance of the system by
 acting as a hot spare.
 In the scenario of the failure of an entire data center or an
 availability zone,
-apps connected to the failed site can be redirected to the replicate,
+apps connected to the failed site can be redirected 
+by an external load-balancing entity to the replicate,
 which takes over as the primary.
 
 In this diagram, cluster A is primary, and it replicates all data
