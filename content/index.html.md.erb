@@ -271,18 +271,46 @@ see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/add
 
 ### Authentication
 
-Clusters are created with two default users: `cluster_operator-XXXXXXXXXX` and `developer`.
-A cluster can only be accessed using one of these two users.
-All client apps, gfsh, and JMX clients must authenticate as one of these users accounts to access the cluster.
+PCC service instances are created with three default GemFire user roles for
+interacting with clusters:
+
+- A cluster operator manages the GemFire cluster and can access
+region data.
+- A developer can access region data.
+- A gateway sender propagates region data to another PCC service instance.
+
+All client apps, gfsh, and JMX clients must authenticate as
+one of these user roles to access the cluster.
+
+The identifiers assigned for these roles are detailed in
+[Create Service Keys](developer.html#create-service-key).
+
 
 ### Authorization
 
-Default user roles `cluster_operator` and `developer` have different permissions:
+Each user role is given predefined permissions for cluster operations.
+To accomplish a cluster operation,
+the user authenticates using one of the roles.
+Prior to initiating the requested operation,
+there is a verification that the
+authenticated user role has the permission authorized to do the operation.
+Here are the permissions that each user role has:
 
-- `cluster_operator` role has `CLUSTER:WRITE`, `CLUSTER:READ`, `CLUSTER:MANAGE:DEPLOY`, `CLUSTER:MANAGE:GATEWAY, `DATA:MANAGE`, `DATA:WRITE`, and `DATA:READ` permissions.
-- `developer` role has `CLUSTER:READ`, `DATA:WRITE` and `DATA:READ` permissions.
+- The  cluster operator role has 
+`CLUSTER:WRITE`,
+`CLUSTER:READ`,
+`CLUSTER:MANAGE:DEPLOY`,
+`CLUSTER:MANAGE:GATEWAY`,
+`DATA:MANAGE`,
+`DATA:WRITE`,
+ and `DATA:READ` permissions.
+- The developer role has
+`CLUSTER:READ`,
+`DATA:WRITE`,
+and `DATA:READ` permissions.
+- The gateway sender role has `DATA:WRITE` permission.
 
-You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
+More details about these permissions are in the Pivotal GemFire manual under [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
 
 ## <a id='bugs'></a>Known Issues
 
