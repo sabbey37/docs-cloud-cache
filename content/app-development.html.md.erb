@@ -44,7 +44,7 @@ and the copy currently within the cache is invalidated.
 ### <a id="active-active-WAN-pattern"></a> Bidirectional Replication Across a WAN
 
 Two PCC service instances may be connected across a WAN to form
-a single distributed system.
+a single distributed system with asynchronous communication.
 The cluster within each of the PCC service instances will host the same region.
 Updates to either PCC service instance
 are propagated across the WAN to the other PCC service instance.
@@ -64,7 +64,7 @@ and any change made in cluster B is sent to cluster A.
 ### <a id="WAN-pattern"></a> Replication Across a WAN
 
 Two PCC service instances may be connected across a WAN to form
-a single distributed system.
+a single distributed system with asynchronous communication.
 An expected use case propagates all changes to a region's data
 from the cluster within one service instance (the primary) to the other.
 The replicate increases the fault tolerance of the system by
@@ -93,8 +93,8 @@ Within this pattern, commands are those that change the state,
 where state is represented by region contents.
 All region operations that change state are directed to the cluster within one
 PCC service instance.
-The changes are propagated to the cluster within the other PCC service instance
-via WAN replication,
+The changes are propagated asynchronously to the cluster within the other
+PCC service instance via WAN replication,
 and that other cluster provides only query access to the region data.
 
 This diagram shows an app that may update the region
