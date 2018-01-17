@@ -231,9 +231,23 @@ The diagram below shows worker VMs in an on-demand service instance, such as Rab
 
 ### <a id ="WAN_details"></a>PCC Instances Across WAN
 
-PCC service instances running within distinct PCF foundations, may communicate with each other to form a muti-site (WAN) system. In a multi-site topology, the members of the participating clusters must be able to communicate in private [RFC1918](https://tools.ietf.org/html/rfc1918) space. This can be acheived by creating a VPN connection between the participating service networks. The steps required to enable private connectivity are dependent on the IAAS provider(s).
+PCC service instances running within distinct PCF foundations
+may communicate with each other across a WAN.
+In a topology such as this,
+the members within one service instance use their own private address space,
+as defined in [RFC1918](https://tools.ietf.org/html/rfc1918).
 
-Each of the participating service networks must be configured with non-overlapping CIDR blocks prior to deploying instances within the network. Documentation on how to create your networks and configure your bosh director for each IAAS can be found [here] (https://docs.pivotal.io/pivotalcf/2-0/installing/index.html)
+A VPN may be used to connect the private network spaces that lay
+across the WAN.
+The steps required to enable the connectivity by VPN are dependent
+on the IaaS provider(s).
+
+The private address space for each service instance's network
+must be configured with non-overlapping CIDR blocks
+prior to creating service instances.
+Locate directions for creating a network on the appropriate IAAS provider
+within the section titled
+[Architecture and Installation Overview](https://docs.pivotal.io/pivotalcf/installing/index.html).
 
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
