@@ -1,0 +1,17 @@
+---
+title: Use a Sample Java Client App with PCC
+---
+<a id="sample-java-app-connect"></a>
+
+1. Clone the sample Java app at [https://github.com/cf-gemfire-org/cloudcache-sample-app.git](https://github.com/cf-gemfire-org/cloudcache-sample-app.git) to use in this demonstration of how to connect an app to a service instance.
+1. Create a region named `test` as described in [Create Regions with gfsh](./developer.html#create-regions).
+1. Update the manifest in `manifest.yml` by replacing `service0` with 
+the name of your service instance.
+1. Update the <code>gradle.properties</code> with your username and password for the Pivotal Commercial Maven Repository at [https://commercial-repo.pivotal.io](https://commercial-repo.pivotal.io).
+1. Run 
+
+```
+cf push -f PATH-TO-MANIFEST
+```
+to deploy the app. Replace <code>PATH-TO-MANIFEST</code> with the path to your modified manifest file.
+1. After the app starts, there will be an entry of ("1", "one") in the <code>test</code> region.
