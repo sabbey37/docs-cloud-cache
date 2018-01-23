@@ -118,7 +118,7 @@ When post-deploy scripts are enabled for Ops Manager,
 the service instance is created with a single sample region
 called `example_partition_region`.
 The region is of type `PARTITION_REDUNDANT_HEAP_LRU`,
-as described in [Partitioned Region Types for Creating Regions on the Server](app-development.html#partitioned-types).
+as described in [Partitioned Region Types for Creating Regions on the Server](region-design.html#partitioned-types).
 
 If `example_partition_region` has **not** been created,
 it is probably because post-deploy scripts are not enabled for Ops Manager,
@@ -129,7 +129,7 @@ as described in [Configure a Dev Plan](./operator.html#dev-plan).
 Two service instances may form a single distributed system across a WAN.
 The interaction of the two service instances may follow one of 
 the patterns described within the section on
-[Design Patterns](app-development.html#design-patterns).
+[Design Patterns](design-patterns.html).
 
 Call the two service instances A and B.
 The GemFire cluster within each service instance uses an identifier
@@ -145,7 +145,7 @@ Creating a service instance also creates gateway receivers.
 
 This sequence of steps sets up a bidirectional transfer,
 as will be needed for an active-active pattern, as described in
-[Bidirectional Replication Across a WAN](app-development.html#active-active-WAN-pattern).
+[Bidirectional Replication Across a WAN](design-patterns.html#active-active-WAN-pattern).
 
 1. Create the cluster A service instance
 using the cluster A Cloud Foundry administrative credentials.
