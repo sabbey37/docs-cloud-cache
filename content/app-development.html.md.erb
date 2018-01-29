@@ -180,6 +180,7 @@ The type is used when creating a region.
 Although more region types than these exist,
 use one of these types to ensure that no region data is lost
 during service upgrades or if a server fails.
+These partitioned region types are supported:
 
 - `PARTITION_REDUNDANT` 
 Region entries are placed into the buckets that are
@@ -190,12 +191,40 @@ The default number of redundant copies is 1.
 - `PARTITION_REDUNDANT_HEAP_LRU` 
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region.
-GemFire keeps and maintains a declared number of redundant copies
-in addition to destroying entries when the server (its JVM)
-hits the threshold of being low on memory.
+GemFire keeps and maintains a declared number of redundant copies.
+The default number of redundant copies is 1.
+As a server (JVM) reaches a heap usage of 65% of available heap,
+the server destroys entries as space is needed for updates.
 The oldest entry in the bucket where a new entry lives
 is the one chosen for destruction.
+- `PARTITION_PERSISTENT` 
+Region entries are placed into the buckets that are
+distributed across all servers hosting the region,
+and all servers persist all entries to disk.
+- `PARTITION_REDUNDANT_PERSISTENT` 
+Region entries are placed into the buckets that are
+distributed across all servers hosting the region,
+and all servers persist all entries to disk.
+In addition, GemFire keeps and maintains a declared number of
+redundant copies of all entries.
 The default number of redundant copies is 1.
+- `PARTITION_REDUNDANT_PERSISTENT_OVERFLOW` 
+Region entries are placed into the buckets that are
+distributed across all servers hosting the region,
+and all servers persist all entries to disk.
+In addition, GemFire keeps and maintains a declared number of
+redundant copies of all entries.
+The default number of redundant copies is 1.
+As a server (JVM) reaches a heap usage of 65% of available heap,
+the server overflows entries to disk when it needs to make space
+for updates.
+- `PARTITION_PERSISTENT_OVERFLOW` 
+Region entries are placed into the buckets that are
+distributed across all servers hosting the region,
+and all servers persist all entries to disk.
+As a server (JVM) reaches a heap usage of 65% of available heap,
+the server overflows entries to disk when it needs to make space
+for updates.
 
 ### <a id="replicated-regions"></a> Replicated Regions
 
@@ -228,15 +257,52 @@ leading to better performance.
 #### <a id="replicated-types"></a> Replicated Region Types for Creating Regions on the Server
 
 Region types associate a name a particular region configuration.
-The type is used when creating a region.
+These replicated region types are supported:
 
 - `REPLICATE` 
 All servers hosting the region have a copy of all entries.
 - `REPLICATE_HEAP_LRU` 
 All servers hosting the region have a copy of all entries.
-All servers destroy entries when a server (its JVM)
-hits the threshold of being low on memory.
+As a server (JVM) reaches a heap usage of 65% of available heap,
+the server destroys entries as it needs to make space for updates.
+- `REPLICATE_PERSISTENT` 
+All servers hosting the region have a copy of all entries,
+and all servers persist all entries to disk.
+- `REPLICATE_PERSISTENT_OVERFLOW` 
+All servers hosting the region have a copy of all entries.
+As a server (JVM) reaches a heap usage of 65% of available heap,
+the server overflows entries to disk as it need to make space
+for updates.
 
+
+### <a id="persistent-regions"></a> Persistence
+
+Persistence adds a level of fault tolerance to a PCC service
+instance by writing all region updates to local disk.
+Disk data, hence region data, is not lost upon cluster failures
+that exceed redundancy failure tolerances.
+Upon cluster restart, regions are reloaded using the disk.
+This avoids restarting by reacquiring data using
+a database of record.
+The region can be reloaded from the local disk.
+
+Creating a region with one of the region types that includes
+`PERSISTENT` in its name
+causes the instantiation of local disk resources
+with these default properties:
+
+- Synchronous writes. All updates to the region generate
+operating system disk writes to update the disk store.
+- The disk size is part of the instance configuration.
+See [Configure Service Plans](operator.html#plan-config)
+for details on setting the persistent disk types for the server.
+Choose a size that is twice as large as
+the expected maximum quantity of region data.
+Region data includes both the keys and their entries.
+- Warning messages are issued when a 90% disk usage threshold
+is crossed.
+- Persistence is implemented using an operation log.
+This 1 GB log is automatically compacted.
 
 ### <a id="app-regions"></a> Regions as Used by the App
 
