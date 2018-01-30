@@ -281,10 +281,9 @@ Persistence adds a level of fault tolerance to a PCC service
 instance by writing all region updates to local disk.
 Disk data, hence region data, is not lost upon cluster failures
 that exceed redundancy failure tolerances.
-Upon cluster restart, regions are reloaded using the disk.
-This avoids restarting by reacquiring data using
+Upon cluster restart, regions are reloaded from the disk,
+avoiding the slower method of restart that reacquires data using
 a database of record.
-The region can be reloaded from the local disk.
 
 Creating a region with one of the region types that includes
 `PERSISTENT` in its name
@@ -296,13 +295,12 @@ operating system disk writes to update the disk store.
 - The disk size is part of the instance configuration.
 See [Configure Service Plans](operator.html#plan-config)
 for details on setting the persistent disk types for the server.
-Choose a size that is twice as large as
-the expected maximum quantity of region data.
-Region data includes both the keys and their entries.
+Choose a size that is at least twice as large as
+the expected maximum quantity of region data, with an absolute
+minimum size of 2 GB.
+Region data includes both the keys and their values.
 - Warning messages are issued when a 90% disk usage threshold
 is crossed.
-- Persistence is implemented using an operation log.
-This 1 GB log is automatically compacted.
 
 ### <a id="app-regions"></a> Regions as Used by the App
 
