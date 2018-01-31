@@ -3,8 +3,14 @@ title: Pivotal Cloud Cache Developer Guide
 owner: Cloud Cache Engineers
 ---
 
+
+This document describes how a Pivotal Cloud Foundry (PCF) app developer can choose a service plan, create and delete Pivotal Cloud Cache (PCC) service instances, and bind an app.
+
+You must install the [Cloud Foundry Command Line Interface](http://docs.pivotal.io/pivotalcf/cf-cli/install-go-cli.html) (cf CLI) to run the commands in this topic.
+
 In this topic:
 
+- [Viewing All Plans Available for Pivotal Cloud Cache](view-plans.html)
 - [Creating a Pivotal Cloud Cache Service Instance](create-instance.html)
     - [Provide Optional Parameters](create-instance.html#params)
     - [Enable Session State Caching with the Java Buildpack](create-instance.html#ssc)
@@ -33,26 +39,3 @@ In this topic:
     - [Use the Tomcat App](Spring-SessionState.html#tomcat)
     - [Use a Spring Session Data GemFire App](Spring-SessionState.html#spring-session)
 - [Creating Continuous Queries Using Spring Data GemFire](Spring-CQs.html)
-
-This document describes how a Pivotal Cloud Foundry (PCF) app developer can choose a service plan, create and delete Pivotal Cloud Cache (PCC) service instances, and bind an app.
-
-You must install the [Cloud Foundry Command Line Interface](http://docs.pivotal.io/pivotalcf/cf-cli/install-go-cli.html) (cf CLI) to run the commands in this topic.
-
-## <a id="viewing"></a>Viewing All Plans Available for Pivotal Cloud Cache
-
-Run `cf marketplace -s p-cloudcache` to view all plans available for PCC. The plan names displayed are configured by the operator on tile installation.
-
-<pre class='terminal'>
-$ cf marketplace -s p-cloudcache
-
-Getting service plan information for service p-cloudcache as admin...
-OK
-
-service plan   description      free or paid
-extra-small    Caching Plan 1   free
-small          Caching Plan 2   free
-medium         Caching Plan 3   free
-large          Caching Plan 4   free
-extra-large    Caching Plan 5   free
-</pre>
-
