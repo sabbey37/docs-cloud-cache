@@ -37,13 +37,14 @@ with very few entries to illustrate partitioning.
 
 ![Partitioned Region](partitioned-region.png)
 
-A partitioned region is the proper type of region to use in two cases:
+A partitioned region is the proper type of region to use when
+one or both of these situations exist:
 
-- In one case, the region holds vast quantities of data.
+- The region holds vast quantities of data.
 There may be so much data that you need to add more servers to scale the system up.
 PCC can be scaled up without downtime; to learn more, see [Updating a Pivotal Cloud Cache Service Instance](./update-instance.html).
 
-- In the second case, operations on the region are write-heavy, meaning that there are a lot of entry updates.
+- Operations on the region are write-heavy, meaning that there are a lot of entry updates.
 
 Redundancy adds fault tolerance to a partitioned region.
 Here is that same region,
@@ -128,17 +129,19 @@ all servers that host the region have a copy of every entry.
 GemFire maintains copies of all region entries on all servers.
 GemFire takes care of distribution and keeps the entries
 consistent across the servers.
-A replicated region is the proper type of region to use in three cases:
 
-- In the first case, use a replicated region when region entries do not change often.
+A replicated region is the proper type of region to use when
+one or more of these situations exist:
+
+- Use a replicated region when region entries do not change often.
 Each write of an entry must be propagated to all servers
 that host the region.
 As a consequence,
 performance suffers when many concurrent write accesses
 cause subsequent writes to all other servers hosting the region.
-- In the second case, use a replicated region when the overall quantity of entries is not so large as to push the limits of memory space for a single server.
+- Use a replicated region when the overall quantity of entries is not so large as to push the limits of memory space for a single server.
 The PCF service plan sets the server memory size.
-- In the third case, use a replicated recion when the entries of a region are frequently accessed
+- Use a replicated region when the entries of a region are frequently accessed
 together with entries from other regions.
 The entries in the replicated region are always available
 on the server that receives the access request,
