@@ -447,6 +447,39 @@ This table shows the metrics emitted through the CF Nozzle for gateway senders a
 </tbody>
 </table>
 
+This table shows the metrics emitted through the CF Nozzle for disks.
+
+<table width=100%>
+<thead>
+   <tr>
+   <th><strong>Metric Name</strong></th>
+   <th><strong>Description</strong></th>
+   <th><strong>Metric Type</strong></th>
+   <th><strong>Measurement Type</strong></th>
+   </tr>
+</thead>
+<tbody>
+<tr>
+<td><code>diskstore.DiskWritesAvgLatency</code></td>
+<td>The average latency of disk writes in nanoseconds. </td>
+<td>number</td>
+<td>time in nanoseconds</td>
+</tr>
+<tr>
+<td><code>diskstore.TotalSpace</code></td>
+<td>The total number of bytes on the attached disk. </td>
+<td>number</td>
+<td>count</td>
+</tr>
+<tr>
+<td><code>diskstore.UseableSpace</code></td>
+<td>The total number of bytes of available space on the attached disk. </td>
+<td>number</td>
+<td>count</td>
+</tr>
+</tbody>
+</table>
+
 ### <a id="monitoring-prometheus"></a> Monitoring PCC Service Instances with Prometheus
 
 Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
