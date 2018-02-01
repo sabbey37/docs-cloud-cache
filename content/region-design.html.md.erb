@@ -133,15 +133,15 @@ consistent across the servers.
 A replicated region is the proper type of region to use when
 one or more of these situations exist:
 
-- Use a replicated region when region entries do not change often.
+- The region entries do not change often.
 Each write of an entry must be propagated to all servers
 that host the region.
 As a consequence,
 performance suffers when many concurrent write accesses
 cause subsequent writes to all other servers hosting the region.
-- Use a replicated region when the overall quantity of entries is not so large as to push the limits of memory space for a single server.
+- The overall quantity of entries is not so large as to push the limits of memory space for a single server.
 The PCF service plan sets the server memory size.
-- Use a replicated region when the entries of a region are frequently accessed
+- The entries of a region are frequently accessed
 together with entries from other regions.
 The entries in the replicated region are always available
 on the server that receives the access request,
