@@ -893,6 +893,58 @@ You can get logs and `.gfs` stats files from your PCC service instances using th
 For more information about the gfsh export command,
 see the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/export.html).
 
+### <a id="deploy-app-jars"></a> Deploy an App JAR File to the Servers
+
+You can deploy or redeploy an app JAR file to the servers in the cluster.
+
+To deploy an app JAR file after connecting within gfsh
+using the cluster operator credentials,
+do the following:
+
+1. Run this gfsh command to deploy the JAR file:
+
+    <code>deploy --jar=PATH-TO-JAR/FILENAME.jar</code>
+
+    For example,
+
+    <pre class='terminal'> gfsh>deploy --jar=working-directory/myJar.jar </pre>
+
+1. Run this command to restart the cluster and load the updated JAR file:
+
+    <code> cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}' </code>		
+
+    For example,
+
+    <pre class='terminal'>$ cf update-service my-service-instance -c '{"restart": true}'</code>
+
+To redeploy an app JAR file after connecting within gfsh
+using the cluster operator role,
+do the following: 		
+
+1. Run this gfsh command to remove the existing JAR file:
+
+    <code>undeploy --jar=PATH-TO-JAR/FILENAME.jar</code>
+
+    For example,
+
+    <pre class='terminal'> gfsh>undeploy --jar=current-jars/myJar.jar </pre>
+
+1. Run this gfsh command to deploy the updated JAR file:
+
+    <code>gfsh>deploy --jar=PATH-TO-UPDATED-JAR/FILENAME.jar</code>
+
+    For example,
+
+    <pre class='terminal'>gfsh>deploy --jar=newer-jars/myJar.jar</pre>
+
+1. Run this command to restart the cluster and load the updated JAR file:
+
+     <code> cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}' </code>
+
+     For example,
+
+     <pre class='terminal'>$ cf update-service my-service-instance -c '{"restart": true}'</code>
+
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to Pivotal Cloud Cache with Session State Caching
 
 This section describes the two ways in which you can connect a Spring Boot app to PCC: 
@@ -1085,3 +1137,4 @@ as is done in the example:
     
 
 For more information, see the [Spring Data GemFire documentation](https://docs.spring.io/spring-data/gemfire/docs/2.0.1.RELEASE/reference/html/).
+
