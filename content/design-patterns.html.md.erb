@@ -3,6 +3,38 @@ title: Design Patterns
 ---
 <a id="design-patterns"></a>
 
+## <a id="inline-cache"></a> The Inline Cache
+
+An inline cache places the caching layer between the app
+and the backend data store.
+
+![inline caching pattern](inline.png)
+
+The app will want to accomplish CRUD
+(CREATE, READ, UPDATE, DELETE) operations on its data.
+The app’s implementation of the CRUD operations result in cache operations
+that break down into cache lookups (reads) and/or cache writes.
+
+The algorithm for a cache lookup quickly returns the cache entry
+when the entry is in the cache.
+This is a cache hit.
+If the entry is not in the cache, it is a cache miss,
+and code on the cache server retrieves the entry
+from the backend data store.
+In the typical implementation,
+the entry returned from the backend data store on a cache miss
+is written to the cache,
+such that subsequent cache lookups of that same entry result in cache hits.
+
+The implementation for a cache write typically creates or updates
+the entry within the cache.
+It also creates or updates the data store in one of the following ways:
+
+- Synchronously, in a write-through manner
+- Asynchronously, in a write-behind manner
+
+Developers design the server code to implement this inline-caching pattern.
+
 ## <a id="lookaside-cache"></a> The Look-Aside Cache
 
 The look-aside pattern of caching places the app in charge
