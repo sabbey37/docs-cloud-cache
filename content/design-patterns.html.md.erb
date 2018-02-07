@@ -40,6 +40,10 @@ and the entry is updated within or written to the cache.
 - The entry is either updated or created within the backend data store,
 and the copy currently within the cache is invalidated.
 
+<p class='note'><strong>Note:</strong> SDG (Spring Data GemFire) 
+supports the look-aside pattern, as detailed at
+<a href="https://docs.spring.io/spring-data/gemfire/docs/current/reference/html/#bootstrap-annotation-config-caching">Configuring Spring’s Cache Abstraction</a>.</p>
+
 ## <a id="active-active-WAN-pattern"></a> Bidirectional Replication Across a WAN
 
 Two PCC service instances may be connected across a WAN to form
