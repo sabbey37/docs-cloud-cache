@@ -27,16 +27,14 @@ the entry returned from the backend data store on a cache miss
 is written to the cache,
 such that subsequent cache lookups of that same entry result in cache hits.
 
-The algorithm for a cache write typically creates or updates
-the entry within the cache,
-and the entry is either 
+The implementation for a cache write typically creates or updates
+the entry within the cache.
+It also creates or updates the data store in one of the following ways:
 
-- updated or created within the data store synchronously
-in a write-through manner, or
-- updated or created within the data store asynchronously
-in a write-behind manner
+- Synchronously, in a write-through manner
+- Asynchronously, in a write-behind manner
 
-Developers design the server code to implement this inline caching pattern.
+Developers design the server code to implement this inline-caching pattern.
 
 ### <a id="lookaside-cache"></a> The Look-Aside Cache
 
