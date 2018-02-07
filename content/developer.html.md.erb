@@ -148,7 +148,7 @@ as will be needed for an active-active pattern, as described in
 [Bidirectional Replication Across a WAN](app-development.html#active-active-WAN-pattern).
 
 1. Create the cluster A service instance
-using the cluster A Cloud Foundry administrative credentials.
+using the cluster A Cloud Foundry credentials.
 This example explicitly sets the `distributed_system_id` of cluster A
 using a `-c` option with a command of the form:
 
@@ -237,7 +237,7 @@ will use in the creation of the cluster B service instance:
 `sender_credentials` to the cluster B Cloud Foundry administrator. 
 
 1.  Create the cluster B service instance
-using cluster B Cloud Foundry administrative credentials.
+using cluster B Cloud Foundry credentials.
 This example explicitly sets the `distributed_system_id`.
 Use a `-c` option with the command to specify the `distributed_system_id`,
 the cluster A service instance's locators,
@@ -333,7 +333,7 @@ and the cluster A `sender_credentials`:
 `sender_credentials` to the cluster A Cloud Foundry administrator. 
 
 1. Update the cluster A service instance using the cluster A
-Cloud Foundry administrative credentials to include the cluster B locators
+Cloud Foundry credentials to include the cluster B locators
 and the cluster B `sender_credentials`:
 
     <pre class='terminal'>
@@ -360,7 +360,7 @@ been correctly updated,
 it is necessary to delete and recreate the cluster A service key.
 As designed, the recreated service key will have the same user identifiers
 and passwords; new unique strings and passwords are not generated.
-Use the cluster A Cloud Foundry administrative credentials
+Use the cluster A Cloud Foundry credentials
 in these commands:
 
     <pre class='terminal'>
