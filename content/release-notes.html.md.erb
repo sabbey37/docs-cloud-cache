@@ -3,6 +3,24 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
+## <a id='v131'></a>v1.3.1
+
+**Release Date:**  February 9, 2018
+
+Features included in this release:
+
+- PCC is now running Pivotal GemFire v9.3.0
+- Inline caching is supported,
+which permits both write behind and write through designs for
+interaction with a backend data store. 
+
+Bug fixes:
+
+- The Pivotal GemFire 9.3.0 bug fix for GEM-1739 fixes
+the premature idle-time expiration for replicate type regions.
+- Eliminated a deadlock situation that occurred when recovering
+all locators, due to the use of `gfsh configure pdx`.
+
 ## <a id='v130'></a>v1.3.0
 
 **Release Date:**  January 31, 2018
