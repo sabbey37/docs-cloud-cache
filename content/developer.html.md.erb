@@ -63,22 +63,22 @@ $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
 
-When the service instance name is followed by the `session-replication` tag, the Java buildpack downloads all the required resources for session state caching. This feature is available iin Java buildpack version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
+When the `session-replication` tag is specified, the Java buildpack downloads all the required resources for session state caching. This feature is available in Java buildpack version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
 
-To enable session state caching, do one of the following:
+To enable session state caching, do _one_ of the following items:
 
-+ When creating your service instance name, append it with the `session-replication` tag. For example, for the `p-cloudcache` service:
+- Option 1: When creating your service instance name, specify the `session-replication` tag. For example:
 
     <pre class='terminal'>
-     $ cf create-service p-cloudcache my-service-instance -t session-replication</pre>
+     $ cf create-service p-cloudcache small-plan my-service-instance -t session-replication</pre>
 
-* When updating your service instance name (for example, if the updated name is `new-service-instance`), append it with the `session-replication` tag:
+- Option 2: Update your service instance, specifying the `session-replication` tag:
 
     <pre class='terminal'>
     $ cf update-service new-service-instance -t session-replication</pre>
 
-* End the service instance name with the text `-session-replication`:
- `my-service-instance-session-replication`.
+- Option 3: When creating the service, name the service instance name by appending it with the string `-session-replication`,
+for example `my-service-instance-session-replication`.
 
 ### <a id="ssc-spring-session"></a> Enable Session State Caching Using Spring Session
 
