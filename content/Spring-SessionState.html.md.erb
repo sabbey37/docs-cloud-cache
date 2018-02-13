@@ -79,21 +79,21 @@ For a full example of running a Spring Boot app that connects with SSC, [run thi
 
 ##<a id="spring-session"></a> Use a Spring Session Data GemFire App
 
-You can connect your Spring app to PCC to do session state caching, but you
-must use the correct version of the `spring-session-data-gemfire` library to do so.
-Build the app for PCC v1.3.0 with a dependency on Spring Session Data GemFire v2.0.0.M2.
+You can connect your Spring app to PCC to do session state caching.
+Use the correct version of the `spring-session-data-gemfire` library;
+apps built for PCC v1.3.0 and later versions are compatible with
+Spring Session Data GemFire v2.0.0.M2 and later versions.
 
-###<a id=spring_session_data_gemfire></a> Upgrade Spring Session Data GemFire
+###<a id=spring_session_data_gemfire></a> Upgrade PCC and Spring Session Data GemFire
 
-PCC v1.3.0 only works with Spring Session Data GemFire 2.0.0.M2. 
+1. Before your operator upgades PCC, stop your app.
+This avoids breaking the app in this upgrade process.
 
-Before your operator upgades to PCC v1.3.0, stop your app. If you don't, the upgrade process will break the app. Therefore, Pivotal recommends manually stopping your app before your operator upgrades PCC.
+1. Upgrade PCC. See [Upgrading Pivotal Cloud Cache](operator.html#upgrade) for details.
 
-<p class="note"><strong>Note</strong>: Stopping your app while the operator upgrades to PCC v1.3.0 will cause downtime.</p>
-
-After your operator has upgraded to PCC v1.3.0, when you're ready to restart your app, follow these steps to upgrade to Spring Session Data GemFire 2.0.0.M2:
-
-1. Rebuild your app using a `build.gradle` file that depends on GemFire 9.1.1. For example:
+1. Rebuild your app using a `build.gradle` file that depends on 
+the correct version of Pivotal GemFire.
+Here is an example `build.gradle` file:
 
     ```
     version = '0.0.1-SNAPSHOT'
