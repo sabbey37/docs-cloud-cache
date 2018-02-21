@@ -12,7 +12,7 @@ PCC provides a service broker to create in-memory data clusters on demand.
 These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan. 
 Service operators can create multiple plans to support different use cases.
 
-PCC uses Pivotal GemFire. You can use PCC to store any kind of data objects using the [Pivotal GemFire Java client library](http://gemfire-90-javadocs.docs.pivotal.io/).
+PCC uses Pivotal GemFire. The [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) details the API for client access to data objects within Pivotal GemFire.
 
 This documentation performs the following functions:
 
@@ -30,15 +30,15 @@ The following table provides version and version-support information about PCC:
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.3.0</td>
+        <td>v1.4.0</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>December 29, 2017</td>
+        <td>January 30, 2018</td>
     </tr>
     <tr>
         <td>Software component version</td>
-        <td>GemFire v9.2.0</td>
+        <td>GemFire v9.3.0</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
@@ -229,20 +229,120 @@ The diagram below shows worker VMs in an on-demand service instance, such as Rab
 
 <%= partial '../../p-cloud-cache/odb/service_networks_table' %>
 
+<br>
+Regardless of the specific network layout, the operator must ensure network 
+rules are set up so that connections are open as described in the table below. 
+
+<table class="nice">
+  <th>This component...</th>
+  <th>Must communicate with...</th>
+  <th>Default TCP Port</th>
+  <th>Communication direction(s)</th>
+  <th>Notes</th>
+  <tr>
+    <td><strong>ODB</strong></td>
+    <td>
+        <ul>
+            <li><strong>BOSH Director</strong></li>
+          <li><strong>BOSH UAA</strong></li>
+        </ul>
+    </td>
+    <td>
+      <ul>
+        <li>25555</li>
+        <li>8443</li>
+      </ul>
+    </td>
+    <td>One-way</td>
+    <td>The default ports are not configurable.</td>
+  </tr>
+  <tr>
+    <td><strong>ODB</strong></td>
+    <td><strong>Deployed service instances</strong>
+    </td>
+    <td>Specific to the service (such as RabbitMQ for PCF). 
+      May be one or more ports.</td>
+    <td>One-way</td>
+    <td>This connection is for administrative tasks. 
+      Avoid opening general use, app-specific ports for this connection.</td>
+  </tr>
+  <tr>
+    <td><strong>ODB</strong></td>
+    <td><strong>PAS (or Elastic Runtime) </strong>
+    </td>
+    <td>8443</td>
+    <td>One-way</td>
+    <td>The default port is not configurable.</td>
+  </tr>
+  <tr>
+    <td><strong>Errand VMs</strong></td>
+    <td>
+      <ul>
+        <li><strong>PAS (or Elastic Runtime) </strong></li>
+        <li><strong>ODB</strong></li>
+        <li><strong>Deployed Service Instances</strong></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>8443</li>
+        <li>8080</li>
+        <li>Specific to the service. May be one or more ports.</li>
+      </ul>
+    </td>
+    <td>One-way</td>
+    <td>The default port is not configurable.</td>
+  </tr>
+  <tr>
+    <td><strong>BOSH Agent</strong></td>
+    <td><strong>BOSH Director</strong>
+    </td>
+    <td>4222</td>
+    <td>Two-way</td>
+    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM. 
+      The BOSH Agent initiates the connection with the BOSH Director.<br>
+      The default port is not configurable.  </td>
+  </tr>
+  <tr>
+    <td><strong>Deployed apps on PAS (or Elastic Runtime) </strong></td>
+    <td><strong>Deployed service instances</strong>
+    </td>
+    <td>Specific to the service. May be one or more ports.</td>
+    <td>One-way</td>
+    <td>This connection is for general use, app-specific tasks. 
+      Avoid opening administrative ports for this connection.</td>
+  </tr>
+  <tr>
+    <td><strong>PAS (or Elastic Runtime) </strong></td>
+    <td><strong>ODB</strong>
+    </td>
+    <td>8080</td>
+    <td>One-way</td>
+    <td>This port may be different for individual services. 
+      This port may also be configurable by the operator if allowed by the 
+      tile developer.</td>
+  </tr>
+</table>
+
 ### <a id ="WAN_details"></a>PCC Instances Across WAN
 
-PCC service instances may run within distinct PCF foundations,
-communicating with each other to form a distributed system. 
-Configuration of the networks is required.
-The service networks within the service instances must be connected
-via a VPN such that the servers in one foundation can reach 
-the servers in the other via private IP addresses.
-The steps required to set up each VPN are dependent on the IAAS provider.
+PCC service instances running within distinct PCF foundations
+may communicate with each other across a WAN.
+In a topology such as this,
+the members within one service instance use their own private address space,
+as defined in [RFC1918](https://tools.ietf.org/html/rfc1918).
 
-Each of the service networks must be configured with
-non-overlapping CIDR blocks prior to deploying the PCC service instances.
-Accomplish this configuration using the "Create Networks" tab
-of the BOSH director tile.
+A VPN may be used to connect the private network spaces that lay
+across the WAN.
+The steps required to enable the connectivity by VPN are dependent
+on the IaaS provider(s).
+
+The private address space for each service instance's network
+must be configured with non-overlapping CIDR blocks.
+Configure the network prior to creating service instances.
+Locate directions for creating a network on the appropriate IAAS provider
+within the section titled
+[Architecture and Installation Overview](https://docs.pivotal.io/pivotalcf/installing/index.html).
 
 ## <a id='recommended-usage'></a>Recommended Usage and Limitations
 
@@ -255,8 +355,6 @@ of the BOSH director tile.
 
 - Scale down of the cluster is not supported.
 - Plan migrations, for example, `-p` flag with the `cf update-service` command, are not supported.
-- WAN (Cross Data Center) replication is not supported.
-- Persistent regions are not supported.
 
 ## <a id='security'></a>Security
 
@@ -265,7 +363,7 @@ Pivotal recommends that you do the following:
 - Run PCC in its own network
 - Use a load balancer to block direct, outside access to the Gorouter
 
-To allow PCC network access from apps, you must create application security groups that allow access on the following ports: 
+To allow PCC network access from apps, you must create application security groups that allow access on the following ports:
 
 * 1099
 * 8080
@@ -280,18 +378,46 @@ see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/add
 
 ### Authentication
 
-Clusters are created with two default users: `cluster_operator` and `developer`.
-A cluster can only be accessed using one of these two users.
-All client apps, gfsh, and JMX clients must authenticate as one of these users accounts to access the cluster.
+PCC service instances are created with three default GemFire user roles for
+interacting with clusters:
+
+- A cluster operator manages the GemFire cluster and can access
+region data.
+- A developer can access region data.
+- A gateway sender propagates region data to another PCC service instance.
+
+All client apps, gfsh, and JMX clients must authenticate as
+one of these user roles to access the cluster.
+
+The identifiers assigned for these roles are detailed in
+[Create Service Keys](accessing-instance.html#create-service-key).
+
 
 ### Authorization
 
-Default user roles `cluster_operator` and `developer` have different permissions:
+Each user role is given predefined permissions for cluster operations.
+To accomplish a cluster operation,
+the user authenticates using one of the roles.
+Prior to initiating the requested operation,
+there is a verification that the
+authenticated user role has the permission authorized to do the operation.
+Here are the permissions that each user role has:
 
-- `cluster_operator` role has DATA:MANAGE, DATA:WRITE, and DATA:READ permissions.
-- `developer` role has DATA:WRITE and DATA:READ permissions.
+- The  cluster operator role has 
+`CLUSTER:WRITE`,
+`CLUSTER:READ`,
+`CLUSTER:MANAGE:DEPLOY`,
+`CLUSTER:MANAGE:GATEWAY`,
+`DATA:MANAGE`,
+`DATA:WRITE`,
+ and `DATA:READ` permissions.
+- The developer role has
+`CLUSTER:READ`,
+`DATA:WRITE`,
+and `DATA:READ` permissions.
+- The gateway sender role has `DATA:WRITE` permission.
 
-You can find more details about these permissions in the Pivotal GemFire [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html) topic.
+More details about these permissions are in the Pivotal GemFire manual under [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
 
 ## <a id='bugs'></a>Known Issues
 
@@ -300,4 +426,4 @@ The topology diagram might not be accurate and might show more members than are 
 However, the numerical value displayed on the top bar is accurate.
 
 ## <a id='feedback'></a> Feedback
-Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback list](mailto:cf–feedback@pivotal.io).
+Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback list](mailto:pivotal-cf-feedback@pivotal.io).

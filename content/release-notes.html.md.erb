@@ -3,28 +3,36 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
-## <a id='v130'></a>v1.3.0
+## <a id='v140'></a>v1.4.0
 
-**Release Date:**  December 29, 2017
+**Release Date:**  January 30, 2018
 
 Features included in this release:
 
-- Support for asynchronously replicating data across Pivotal Cloud Foundry (PCF) foundations
-- Support for `AsyncEventListeners` for **write-behind** to a datastore, for example, a database
-- Support for `Functions` to perform Map/Reduce style computation on data
-- Secure GemFire processes using BOSH Process Manager (BPM)
+- First feature listed here
+
+Bug fixes:
+
+- First bug fix described here.
+
 
 Known issues in this release:
 
-- If you are upgrading to Pivotal Cloud Cache (PCC) v1.3.0 and you created service keys on PCC before you installed v1.3.0,
+- If you are upgrading to Pivotal Cloud Cache (PCC) v1.3.0 and you created service keys on PCC before you installed v1.3.0:
   delete and recreate the service keys so that users are assigned roles in the cluster. Then, rebind all your apps.
   For information about how to perform these tasks, see [Delete a Service Key](https://docs.pivotal.io/pivotalcf/2-0/devguide/services/service-keys.html), 
-  [Create Service Keys](developer.html#create-service-key), and [Bind an App to a Service Instance](developer.html#bind-service).
+  [Create Service Keys](accessing-instance.html#create-service-key), and [Bind an App to a Service Instance](using-pcc.html#bind-service).
 
 ## <a id="16x"></a>Release Notes for Earlier Versions
 
-For v1.2.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-2/index.html#release-notes) in the v1.2 version of this documentation.
+For v1.3.x versions of PCC,
+see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-3/release-notes.html) in the v1.3 version of this documentation.
 
-For v1.1.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-1/index.html#release-notes) in the v1.1 version of this documentation.
+For v1.2.x versions of PCC,
+see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-2/release-notes.html) in the v1.2 version of this documentation.
 
-For v1.0.x versions of PCC, see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/index.html#release-notes) in the v1.0 version of this documentation.
+For v1.1.x versions of PCC,
+see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-1/release-notes.html) in the v1.1 version of this documentation.
+
+For v1.0.x versions of PCC,
+see [Release Notes](http://docs.pivotal.io/p-cloud-cache/1-0/release-notes.html) in the v1.0 version of this documentation.

@@ -12,11 +12,6 @@ This document describes how a Pivotal Cloud Foundry (PCF) operator can install, 
 
 You must have access to a Service Network in order to install PCC. 
 
-#### Spring Session Data GemFire Apps
-
-Apps using Spring Session Data GemFire 2.0.0.M1 do not run on PCC v1.3.0.
-To run these apps on PCC v1.3.0, you must [upgrade to Spring Session Data GemFire 2.0.0.M2](./developer.html#spring_session_data_gemfire).
-
 ## <a id="install"></a> Installing and Configuring Pivotal Cloud Cache
 
 Follow the steps below to install PCC on PCF:
@@ -39,8 +34,7 @@ Each section name must show this green check mark before you can complete your i
 
 * [Assign AZs and Networks](#azs)
 * [Settings](#settings)
-* [Service Plans](#plan-config)
-* [Dev Plans](#dev-plan)
+* [Service Plans](#plan-config), including the Dev Plan
 * [Syslog](#syslog)
 * [Errands](#errands)
 * [Resource Config](#resource-config)
@@ -189,27 +183,21 @@ The remaining fields control the VM type and persistent disk type for servers an
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
-####<a id='dev-plan'></a> Configure Dev Plans
+####<a id='dev-plan'></a> Configure a Dev Plan
 
-A dev plan is a type of service plan. You can use a dev plan for minimal development and testing. The plan's locator and server are colocated on a single VM. 
+A Dev Plan is a type of service plan.
+Use a Dev Plan for development and testing.
+The plan provides a single locator and server,
+which are colocated within a single VM. 
 
-<p class="note warning"><strong> WARNING</strong>: All of the dev plan data is stored on a single VM.
-   When you update or upgrade your service instance, the data is wiped from the VM and the VM itself is recycled.
-   Therefore, there is data loss when you perform an update or upgrade.</p>
-
-The page for configuring a dev plan is similar to the page for configuring a [service plan](#plan-config). To configure the dev plan, input information in the fields and make selections from the options on the **Plan for test development** page. 
+The page for configuring a Dev Plan is similar to the page for configuring 
+other service plans.
+To configure the Dev Plan, input information in the fields and make selections from the options on the **Plan for test development** page. 
 
 ![Dev Plan Configuration Sections](dev-plan.png)
 
-<a name='default-data-region'></a> **Default Data Region for the Dev Plan**
-
-If you have enabled post-deploy scripts in your Ops Manager Director,
-a data region called `example partition region` is created automatically with the dev plan.
-
-Generating this region automatically lets developers begin testing without having to take extra steps
-to create a space for testing.
-For more information on data regions, see [Data Regions](https://gemfire.docs.pivotal.io/geode/basic_config/data_regions/chapter_overview.html) in the Pivotal GemFire documentation.
-
+If you have enabled post-deploy scripts in your BOSH Director,
+a region is automatically created.
 To confirm that post-deploy scripts are enabled, navigate to the **Director Config** pane of Ops Manger Director and
 verify that **Enable Post Deploy Scripts** is selected.
 
@@ -241,175 +229,521 @@ You can download the latest available stemcells from the [Pivotal Network](https
 PCC clusters and brokers emit service metrics. 
 You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.
 
-The table below shows the metrics emitted through the CF Nozzle and their corresponding Key Performance Indicatior (KPI) guidelines.
+In the descriptions of the metrics,
+KPI stands for Key Performance Indicator.
+
+### <a id="service-instance-metrics"></a> Service Instance Metrics
+
+#### <a id="service-instance-MemberCount"></a> Member Count
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.MemberCount</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the number of members in the distributed system.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>less than the manifest member count</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>This depends on the expected member count, which is available in the BOSH manifest. If the number expected is different from the number emitted, this is a critical situation that may lead to data loss, and the reasons for node failure should be investigated by examining the service logs.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>Member loss due to any reason can potentially cause data loss.</td>
+   </tr>
+</table>
+
+#### <a id="service-instance-TotalHeapSize"></a> Total Available Heap Size
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.TotalHeapSize</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the total available heap, in megabytes, across all instance members.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+   </tr>
+</table>
+
+#### <a id="service-instance-UsedHeapSize"></a> Total Used Heap Size
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.UsedHeapSize</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the total heap used across all instance members, in megabytes.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+   </tr>
+</table>
+
+#### <a id="service-instance-UnusedHeapSizePercentage"></a> Total Available Heap Size as a Percentage
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.UnusedHeapSizePercentage</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the proportion of total available heap across all instance members, expressed as a percentage.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>percent</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>compount metric</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>40%</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>10%</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is a spike due to eviction catching up with insert frequency, then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+   </tr>
+</table>
+
+### <a id="per-member-metrics"></a> Per Member Metrics
+
+#### <a id="member-UsedMemoryPercentage"></a> Memory Used as a Percentage
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.UsedMemoryPercentage</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>RAM being consumed.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>percent</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>75%</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>85%</td>
+   </tr>
+</table>
+
+#### <a id="member-GC-count"></a> Count of Java Garbage Collections
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.GarbageCollectionCount</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The number of times that garbage has been collected.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Sum over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the frequency of garbage collection is high, the system might see high CPU usage, which causes delays in the cluster.</td>
+   </tr>
+</table>
+
+#### <a id="member-cpuusage"></a> CPU Utilization Percentage
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.HostCpuUsage</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>This member's process CPU utilization, expressed as a percentage.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>percent</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>85%</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>95%</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>High CPU usage causes delayed responses and can also make the member non-responsive. This can cause the member to be kicked out of the cluster, potentially leading to data loss.</td>
+   </tr>
+</table>
+
+#### <a id="member-get-avg-latency"></a> Average Latency of Get Operations
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.GetsAvgLatency</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The average latency of cache get operations, in nanoseconds.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>It is a good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+   </tr>
+</table>
+
+#### <a id="member-put-avg-latency"></a> Average Latency of Put Operations
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.PutsAvgLatency</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The average latency of cache put operations, in nanoseconds.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>It is a good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+   </tr>
+</table>
+
+#### <a id="member-jvm-pauses"></a> JVM pauses
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.JVMPauses</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The quantity of JVM pauses.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Sum over 2 seconds</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>Check the cached object size; if it is greater than 1 MB, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>Due to a JVM pause, the member stops responding to "are-you-alive" messages, which may cause this member to be kicked out of the cluster.</td>
+   </tr>
+</table>
+
+#### <a id="member-file-descriptor-limit"></a> File Descriptor Limit
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.FileDescriptorLimit</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The maximum number of open file descriptors allowed for the member’s host operating system.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the number of open file descriptors exceeds number available, it causes the member to stop responding and crash.</td>
+   </tr>
+</table>
+
+#### <a id="member-total-file-descriptor-open"></a> Open File Descriptors
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.TotalFileDescriptorOpen</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The current number of open file descriptors.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the number of open file descriptors exceeds number available, it causes the member to stop responding and crash.</td>
+   </tr>
+</table>
+
+#### <a id="member-file-descriptor-remaining"></a> Quantity of Remaining File Descriptors
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.FileDescriptorRemaining</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The number of available file descriptors.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>compound metric</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>1000</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>100</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>Scale horizontally to increase capacity.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the number of open file descriptors exceeds number available, it causes the member to stop responding and crash.</td>
+   </tr>
+</table>
+
+
+### <a id="gateway-sender-metrics"></a> Gateway Sender and Gateway Receiver Metrics
+
+This table shows the metrics emitted through the CF Nozzle for gateway senders and gateway receivers.
 
 <table width=100%>
-        <col width="10%">
-        <col width="10%">
-        <col width="5%">
-        <col width="10%">
-        <col width="5%">
-        <col width="10%">
-        <col width="5%">
-        <col width="30%">
-        <col width="15%">
 <thead>
    <tr>
    <th><strong>Metric Name</strong></th>
    <th><strong>Description</strong></th>
    <th><strong>Metric Type</strong></th>
-   <th><strong>Suggested Measurement</strong></th>
    <th><strong>Measurement Type</strong></th>
-   <th><strong>Warning Threshold</strong></th>
-   <th><strong>Critical Threshold</strong></th>
-   <th><strong>Suggested Actions</strong></th>
-   <th><strong>Why a KPI?</strong></th>
    </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>member.UsedMemoryPercentage</code></td>
-<td>RAM being consumed</td>
-<td>percent</td>
-<td>Average over last 10 minutes</td>
-<td>avg</td>
-<td>75%</td>
-<td>85%</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>serviceinstance.MemberCount</code></td>
-<td>Returns the number of members in the distributed system.</td>
+<td><code>gatewaySender.&lt;sender-id&gt;.EventQueueSize</code></td>
+<td>The current size of the gateway sender queue. </td>
 <td>number</td>
-<td>Every second</td>
 <td>count</td>
-<td>&lt; manifest member count</td>
-<td></td>
-<td>This depends on the expected member count, which is available in the BOSH manifest. If the number expected is different from the number emitted, this is a critical situation that may lead to data loss, and the reasons for node failure should be investigated by examining the service logs.</td>
-<td>Member loss due to any reason can cause potential data loss.</td>
 </tr>
 <tr>
-<td><code>serviceinstance.TotalHeapSize</code></td>
-<td>Returns the total available heap (in megabytes) across all distributed members.</td>
+<td><code>gatewaySender.&lt;sender-id&gt;.EventsReceivedRate</code></td>
+<td>A count of the events coming from the region to which the gateway sender is attached. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created. </td>
 <td>number</td>
-<td>Every second</td>
-<td>pulse</td>
-<td></td>
-<td></td>
-<td></td>
-<td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+<td>count</td>
 </tr>
 <tr>
-<td><code>serviceinstance.UsedHeapSize</code></td>
-<td>Returns the total heap used on all members.</td>
+<td><code>gatewaySender.&lt;sender-id&gt;.EventsQueuedRate</code></td>
+<td>A count of the events queued on the gateway sender from the region. This quantity of events might be lower than the quantity of events received, as not all received events are queued. It is a count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created.</td>
 <td>number</td>
-<td>Every second</td>
-<td>pulse</td>
-<td></td>
-<td></td>
-<td></td>
-<td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+<td>count</td>
 </tr>
 <tr>
-<td><code>member.GarbageCollectionCount</code></td>
-<td>Returns the number of times garbage collection has occurred.</td>
+<td><code>gatewayReceiver.EventsReceivedRate</code></td>
+<td>A count of the events received from the gateway sender which will be applied to the region on the gateway receiver's site. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway receiver was created. </td>
 <td>number</td>
-<td>Sum over 10 minutes</td>
-<td>sum</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.</td>
-<td>If the frequency of GC is high, the system might see high CPU usage, which causes delays in the cluster.</td>
+<td>count</td>
 </tr>
+</tbody>
+</table>
+
+
+### <a id="disk-metrics"></a> Disk Metrics
+
+This table shows the metrics emitted through the CF Nozzle for disks.
+
+<table width=100%>
+<thead>
+   <tr>
+   <th><strong>Metric Name</strong></th>
+   <th><strong>Description</strong></th>
+   <th><strong>Metric Type</strong></th>
+   <th><strong>Measurement Type</strong></th>
+   </tr>
+</thead>
+<tbody>
 <tr>
-<td><code>member.HostCpuUsage</code>
-(process cpu usage)</td>
-<td>Amount of CPU utilization</td>
-<td>percent</td>
-<td>Average over 10 minutes</td>
-<td>avg</td>
-<td>85%</td>
-<td>95%</td>
-<td>If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.</td>
-<td>High CPU usage causes delayed responses and can also make the member non-responsive. This eventually causes it to be kicked out of the cluster, potentially leading to data loss.</td>
-</tr>
-<tr>
-<td><code>member.GetsAvgLatency</code></td>
-<td>Returns the cache get average latency.</td>
+<td><code>diskstore.DiskWritesAvgLatency</code></td>
+<td>The average latency of disk writes in nanoseconds. </td>
 <td>number</td>
-<td>Average over 10 minutes</td>
-<td>avg</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
-<td>A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+<td>time in nanoseconds</td>
 </tr>
 <tr>
-<td><code>member.PutsAvgLatency</code></td>
-<td>Returns the cache put average latency.</td>
+<td><code>diskstore.TotalSpace</code></td>
+<td>The total number of bytes on the attached disk. </td>
 <td>number</td>
-<td>Average over 10 minutes</td>
-<td>avg</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
-<td>A good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+<td>count</td>
 </tr>
 <tr>
-<td><code>member.JVMPauses</code></td>
-<td>Returns the number JVM pauses</td>
+<td><code>diskstore.UseableSpace</code></td>
+<td>The total number of bytes of available space on the attached disk. </td>
 <td>number</td>
-<td>Sum over 2 seconds</td>
-<td>sum</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>Dependent on IaaS and app use case.</td>
-<td>Check the cached object size; if it is greater than &gt;1&nbsp;MB, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.</td>
-<td>Due to a JVM pause, the member stops responding to “are-you-alive” messages, which may cause this member to be kicked out of the cluster.</td>
-</tr>
-<tr>
-<td><code>member.FileDescriptorLimit</code></td>
-<td>Returns the maximum number of open file descriptors allowed for the member’s host operating system.</td>
-<td>number</td>
-<td>Every second</td>
-<td>pulse</td>
-<td></td>
-<td></td>
-<td></td>
-<td>If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
-</tr>
-<tr>
-<td><code>member.TotalFileDescriptorOpen</code></td>
-<td>Returns the current number of open file descriptors.</td>
-<td>number</td>
-<td>Every second</td>
-<td>pulse</td>
-<td></td>
-<td></td>
-<td></td>
-<td>If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
-</tr>
-<tr>
-<td><code>serviceinstance.UnusedHeapSizePercentage</code></td>
-<td>Returns the proportion of available heap size as a percentage</td>
-<td>percent</td>
-<td>Every second</td>
-<td>compound metric</td>
-<td>40%</td>
-<td>10%</td>
-<td>If this is a spike due to eviction catching up with insert frequency, then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested</td>
-<td>If the total heap size and used heap size are too close, system might see thrashing due to GC activity. This increases the latency</td>
-</tr>
-<tr>
-<td><code>member.FileDescriptorRemaining</code></td>
-<td>Returns the number of available File Descriptors</td>
-<td>number</td>
-<td>Every second</td>
-<td>compound metric</td>
-<td>1000</td>
-<td>100</td>
-<td>You need to scale horizontally to increase capacity</td>
-<td>If total FD open is higher than total FD available, it causes the member to stop responding and crash.</td>
+<td>count</td>
 </tr>
 </tbody>
 </table>
