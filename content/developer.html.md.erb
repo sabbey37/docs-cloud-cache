@@ -203,8 +203,8 @@ will use in the creation of the cluster B service instance:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -287,8 +287,8 @@ and the cluster A `sender_credentials`:
       "10.0.24.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-2.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-2.example.com/pulse"
+      "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-2.example.com/pulse"
      },
      "users": [
       {
@@ -384,8 +384,8 @@ in these commands:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -435,7 +435,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
         </pre>
     - Create the cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 2 for this example:
@@ -457,7 +457,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
         </pre>
     - Create the cluster B gateway sender:
 
@@ -535,8 +535,8 @@ will use in the creation of the cluster B service instance:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -622,8 +622,8 @@ and the cluster A `sender_credentials`:
       "10.0.24.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-2.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-2.example.com/pulse"
+      "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-2.example.com/pulse"
      },
      "users": [
       {
@@ -713,8 +713,8 @@ in these commands:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -761,7 +761,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
         </pre>
     - Create the cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 2 for this example:
@@ -782,7 +782,7 @@ will be lost.
     - Connect using gfsh and the cluster B `cluster_operator` credentials,
     which are needed to be authorized for the create operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
         </pre>
     - Create the cluster B region:
 
@@ -858,7 +858,7 @@ This error message indicates that the operator has made an update to the plan us
 After you have created a service instance, you can start accessing it.
 Usually, you set up cache regions before using your service instance from a deployed CF app.
 You can do this with the gfsh command line tool.
-To connect, you must set up a service key, see [Create Service Keys](#create-service-key) below.
+To connect, you must set up a service key.
 
 ### <a id="create-service-key"></a> Create Service Keys
 
@@ -932,36 +932,8 @@ upon service instance creation and incorporated in this user role's name.
 which allows monitoring of the service instance status.
 Use the developer credentials to authenticate.
 
-### <a id="gfsh-connect"></a> Connect with gfsh
-You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh`.
-
-Check the product [snapshot](/p-cloud-cache/index.html#snapshot) of the PCC version you are using
- to determine which version of `gfsh` you need in order to connect to your cluster.
-For example, if your tile package uses GemFire v9.3.0, you should be using a 9.3.0 version of the `gfsh` client.
-
-To install gfsh:
-
-1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
-1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
-1. Add the `gfsh` binary to your path.
-1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance specifying the cluster operator credentials:
-
-<pre class='terminal'>
-$ gfsh
-    _________________________     __
-   / _____/ ______/ ______/ /____/ /
-  / /  __/ /___  /_____  / _____  /
- / /__/ / ____/  _____/ / /    / /
-/______/_/      /______/_/    /_/
-
-Monitor and Manage Pivotal GemFire
-
-gfsh>connect --use-http --url=gfsh-url --user=cluster_operator_XXX --password=cluster_operator-password
-</pre>
-
 ### <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups.
 When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS)
 or Elastic Runtime; that is, the certificate you use where your TLS termination occurs.
 Before you can connect, you must create a truststore. 
@@ -1048,7 +1020,7 @@ After you have created the truststore, you can connect using HTTPS.
 and then issue a `connect` command that specifies an HTTPS URL of the form:
 
     ```
-    connect --use-http=true --url=<HTTP-gfsh-URL> 
+    connect --use-http=true --url=<HTTPS-gfsh-URL> 
      --user=<cluster_operator_XXX> 
      --password=<cluster_operator-password>
     ```
@@ -1072,6 +1044,34 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
      --url=<HTTPS-gfsh-URL> --user=<cluster_operator_XXX>
      --password=<cluster_operator-password>
     ```
+
+### <a id="gfsh-connect"></a> Connect with gfsh over HTTP
+You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh`.
+
+Check the product [snapshot](/p-cloud-cache/index.html#snapshot) of the PCC version you are using
+ to determine which version of `gfsh` you need in order to connect to your cluster.
+For example, if your tile package uses GemFire v9.3.0, you should be using a 9.3.0 version of the `gfsh` client.
+
+To install gfsh:
+
+1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
+1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
+1. Add the `gfsh` binary to your path.
+1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance specifying the cluster operator credentials:
+
+<pre class='terminal'>
+$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  /
+ / /__/ / ____/  _____/ / /    / /
+/______/_/      /______/_/    /_/
+
+Monitor and Manage Pivotal GemFire
+
+gfsh>connect --use-http --url=gfsh-url --user=cluster_operator_XXX --password=cluster_operator-password
+</pre>
+
 
 ## <a id="use"></a> Using Pivotal Cloud Cache
 
@@ -1149,8 +1149,8 @@ The following is a sample `VCAP_SERVICES` environment variable:
 	  "10.244.0.130[55221]"
 	],
 	"urls": {
-	  "gfsh": "http://cloudcache-5574c540-1464-4f9e-b56b-74d8387cb50d.local.pcfdev.io/gemfire/v1",
-	  "pulse": "http://cloudcache-5574c540-1464-4f9e-b56b-74d8387cb50d.local.pcfdev.io/pulse"
+	  "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+	  "pulse": "https://cloudcache-1.example.com/pulse"
 	},
 	"users": [
 	  {
@@ -1220,7 +1220,7 @@ Service broker metrics are on by default and can be accessed through the [Fireho
 
 You can get logs and `.gfs` stats files from your PCC service instances using the `export logs` command in gfsh.
 
-1. Use the [Connect with gfsh](#gfsh-connect) procedure to connect to the service instance for which you want to see logs.
+1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to connect to the service instance for which you want to see logs.
 1. Run `export logs`.
 1. Find the ZIP file in the directory where you started gfsh. 
    This file contains a folder for each member of the cluster.
