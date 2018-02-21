@@ -76,8 +76,8 @@ The following is a sample `VCAP_SERVICES` environment variable:
 	  "10.244.0.130[55221]"
 	],
 	"urls": {
-	  "gfsh": "http://cloudcache-5574c540-1464-4f9e-b56b-74d8387cb50d.local.pcfdev.io/gemfire/v1",
-	  "pulse": "http://cloudcache-5574c540-1464-4f9e-b56b-74d8387cb50d.local.pcfdev.io/pulse"
+	  "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+	  "pulse": "https://cloudcache-1.example.com/pulse"
 	},
 	"users": [
 	  {
@@ -147,7 +147,7 @@ Service broker metrics are on by default and can be accessed through the [Fireho
 
 You can get logs and `.gfs` stats files from your PCC service instances using the `export logs` command in gfsh.
 
-1. Use the [Connect with gfsh](#gfsh-connect) procedure to connect to the service instance for which you want to see logs.
+1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to connect to the service instance for which you want to see logs.
 1. Run `export logs`.
 1. Find the ZIP file in the directory where you started gfsh. 
    This file contains a folder for each member of the cluster.

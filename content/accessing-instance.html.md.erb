@@ -5,7 +5,7 @@ title: Accessing a Service Instance
 After you have created a service instance, you can start accessing it.
 Usually, you set up cache regions before using your service instance from a deployed CF app.
 You can do this with the gfsh command line tool.
-To connect, you must set up a service key, see [Create Service Keys](#create-service-key) below.
+To connect, you must set up a service key.
 
 ## <a id="create-service-key"></a> Create Service Keys
 
@@ -79,36 +79,8 @@ upon service instance creation and incorporated in this user role's name.
 which allows monitoring of the service instance status.
 Use the developer credentials to authenticate.
 
-## <a id="gfsh-connect"></a> Connect with gfsh
-You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh`.
-
-Check the product [snapshot](/p-cloud-cache/index.html#snapshot) of the PCC version you are using
- to determine which version of `gfsh` you need in order to connect to your cluster.
-For example, if your tile package uses GemFire v9.2.0, you should be using a 9.2.0 version of the `gfsh` client.
-
-To install gfsh:
-
-1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
-1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
-1. Add the `gfsh` binary to your path.
-1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance specifying the cluster operator credentials:
-
-<pre class='terminal'>
-$ gfsh
-    _________________________     __
-   / _____/ ______/ ______/ /____/ /
-  / /  __/ /___  /_____  / _____  /
- / /__/ / ____/  _____/ / /    / /
-/______/_/      /______/_/    /_/
-
-Monitor and Manage Pivotal GemFire
-
-gfsh>connect --use-http --url=gfsh-url --user=cluster_operator_XXX --password=cluster_operator-password
-</pre>
-
 ## <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups.
 When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS)
 or Elastic Runtime; that is, the certificate you use where your TLS termination occurs.
 Before you can connect, you must create a truststore. 
@@ -193,7 +165,7 @@ After you have created the truststore, you can connect using HTTPS.
 and then issue a `connect` command that specifies an HTTPS URL of the form:
 
     ```
-    connect --use-http=true --url=<HTTP-gfsh-URL>
+    connect --use-http=true --url=<HTTPS-gfsh-URL>
      --user=<cluster_operator_XXX>
      --password=<cluster_operator-password>
     ```
@@ -217,4 +189,31 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
      --url=<HTTPS-gfsh-URL> --user=<cluster_operator_XXX>
      --password=<cluster_operator-password>
     ```
+
+## <a id="gfsh-connect"></a> Connect with gfsh over HTTP
+You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh`.
+
+Check the product [snapshot](/p-cloud-cache/index.html#snapshot) of the PCC version you are using
+ to determine which version of `gfsh` you need in order to connect to your cluster.
+For example, if your tile package uses GemFire v9.2.0, you should be using a 9.2.0 version of the `gfsh` client.
+
+To install gfsh:
+
+1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
+1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
+1. Add the `gfsh` binary to your path.
+1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance specifying the cluster operator credentials:
+
+<pre class='terminal'>
+$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  /
+ / /__/ / ____/  _____/ / /    / /
+/______/_/      /______/_/    /_/
+
+Monitor and Manage Pivotal GemFire
+
+gfsh>connect --use-http --url=gfsh-url --user=cluster_operator_XXX --password=cluster_operator-password
+</pre>
 

@@ -79,8 +79,8 @@ will use in the creation of the cluster B service instance:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -163,8 +163,8 @@ and the cluster A `sender_credentials`:
       "10.0.24.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-2.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-2.example.com/pulse"
+      "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-2.example.com/pulse"
      },
      "users": [
       {
@@ -260,8 +260,8 @@ in these commands:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -311,7 +311,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
         </pre>
     - Create the cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 2 for this example:
@@ -333,7 +333,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
         </pre>
     - Create the cluster B gateway sender:
 
@@ -411,8 +411,8 @@ will use in the creation of the cluster B service instance:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -498,8 +498,8 @@ and the cluster A `sender_credentials`:
       "10.0.24.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-2.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-2.example.com/pulse"
+      "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-2.example.com/pulse"
      },
      "users": [
       {
@@ -589,8 +589,8 @@ in these commands:
       "10.0.16.23[55221]"
      ],
      "urls": {
-      "gfsh": "http://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "http://cloudcache-1.example.com/pulse"
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
      },
      "users": [
       {
@@ -637,7 +637,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
         </pre>
     - Create the cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 2 for this example:
@@ -658,7 +658,7 @@ will be lost.
     - Connect using gfsh and the cluster B `cluster_operator` credentials,
     which are needed to be authorized for the create operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>p</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
         </pre>
     - Create the cluster B region:
 
