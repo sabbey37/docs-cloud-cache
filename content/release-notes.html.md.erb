@@ -21,6 +21,10 @@ the premature idle-time expiration for replicate type regions.
 - Eliminated a deadlock situation that occurred when recovering
 all locators, due to the use of `gfsh configure pdx`.
 
+Known issues in this release:
+
+- If you are iterating on the Async Queue, current `cluster_operator` role does not have the capability to delete the queue. This will be fixed in the future patch releases. 
+
 ## <a id='v130'></a>v1.3.0
 
 **Release Date:**  January 31, 2018
