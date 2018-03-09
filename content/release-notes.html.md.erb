@@ -14,6 +14,11 @@ Features included in this release:
 which permits both write behind and write through designs for
 interaction with a backend data store. 
 
+Bug fixes:
+
+- Eliminated a deadlock situation that occurred when recovering all locators, due to the use of `gfsh configure pdx`.
+
+
 ## <a id='v130'></a>v1.3.0
 
 **Release Date:**  January 31, 2018
