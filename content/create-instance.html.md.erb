@@ -57,10 +57,9 @@ for example `my-service-instance-session-replication`.
 
 ## <a id="ssc-spring-session"></a> Enable Session State Caching Using Spring Session
 
-Session state caching for apps using [Spring Session](http://projects.spring.io/spring-session/) is a beta feature.
-It uses pre-release versions of Spring Session libraries.
-
-To use `spring-session` with PCC, follow the steps below:
+To use
+[Spring Session](http://projects.spring.io/spring-session/)
+for session state caching for apps with PCC, follow the steps below:
 
 1. Make the following changes to the app:
   * Replace existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is seconds.
