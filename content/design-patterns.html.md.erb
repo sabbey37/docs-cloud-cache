@@ -146,3 +146,46 @@ it will not create entries or update the region.
 
 ![CQRS WAN replication pattern](WAN-CQRS.png)
 
+## <a id="hub-spoke-pattern"></a> Hub-and-Spoke Topology with WAN Replication
+
+Multiple PCC service instances connected across a WAN
+form a single hub and a set of spokes.
+This diagram shows PCC service instance A is the hub,
+and PCC service instances B, C, and D are spokes.
+
+![Hub-and-Spoke pattern](hub-spoke.png)
+
+A common implementation that uses this topology directs all app operations
+that write or update region contents to the hub.
+Writes and updates are then propagated asynchronously across the WAN
+from the hub to the spokes.
+
+## <a id="follow-the-sun-pattern"></a> Follow-the-Sun Pattern
+
+Performance improves when operation requests originate
+in close proximity to the service instance that handles
+those requests.
+Yet many data sets are relevant and used all over the world.
+If the most active location for write and update operations moves over the
+course of a day,
+then a performant design pattern is a variation on the hub-and-spoke
+implementation that changes which PCC service instance is the hub
+to the most active location.
+
+Form a ring that contains each PCC service instance that will
+act as the hub.
+Define a token to identify the hub.
+Over time, pass the token from one PCC service instance to the 
+next, around the ring.
+
+This diagram shows PCC service instance A is the hub,
+as it has the token, represented in this diagram as a star.
+PCC service instances B, C, and D are spokes.
+Write and update operations are directed to the hub.
+
+![Follow-the-Sun pattern, A is the hub](follow-the-sun-1.png)
+
+This diagram shows that the token has passed from A to B,
+and B has become the hub.
+
+![Follow-the-Sun pattern, B is the hub](follow-the-sun-2.png)
