@@ -12,10 +12,6 @@ This document describes how a Pivotal Cloud Foundry (PCF) operator can install, 
 
 You must have access to a Service Network in order to install PCC. 
 
-## <a id="set_quotas"></a> Setting Service Instance Quotas
-
-<%= partial '../../p-cloud-cache/odb/set_quotas' %>
-
 ## <a id="install"></a> Installing and Configuring Pivotal Cloud Cache
 
 With an Ops Manager role (detailed in [Understand Roles in Ops Manager](https://docs.pivotal.io/pivotalcf/opsguide/config-rbac.html#about))
@@ -229,6 +225,10 @@ Ensure you import the correct type of stemcell indicated on this tab.
 
 You can download the latest available stemcells from the [Pivotal Network](https://network.pivotal.io/products/stemcells/).
 
+
+## <a id="set_quotas"></a> Setting Service Instance Quotas
+
+<%= partial '../../p-cloud-cache/odb/set_quotas' %>
 
 ## <a id="monitoring"></a> Monitoring Pivotal Cloud Cache Service Instances
 
