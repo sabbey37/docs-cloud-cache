@@ -70,25 +70,25 @@ will use in the creation of the cluster B service instance:
      },
      "users": [
       {
-       "password": "cl-op-ABCDE-password",
+       "password": "cl-op-ABC-password",
        "roles": [
         "cluster_operator"
        ],
-       "username": "cluster_operator_ABCDE"
+       "username": "cluster_operator_ABC"
       },
       {
-       "password": "dev-FGHIJ-password",
+       "password": "dev-DEF-password",
        "roles": [
         "developer"
        ],
-       "username": "developer_FGHIJ"
+       "username": "developer_DEF"
       }
      ],
      "wan": {
       "sender_credentials": {
        "active": {
-        "password": "gws-KLMNO-password",
-        "username": "gateway_sender_KLMNO"
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
        }
       }
      }
@@ -117,8 +117,8 @@ and the cluster A `sender_credentials`:
           "10.0.16.23[55221]"],
         "trusted_sender_credentials":[
         {
-          "username": "gateway_sender_KLMNO",
-          "password":"gws-KLMNO-password"
+          "username": "gateway_sender_GHI",
+          "password":"gws-GHI-password"
         }]
       }]
     }'
@@ -157,18 +157,18 @@ and the cluster A `sender_credentials`:
      },
      "users": [
       {
-       "password": "cl-op-PQRST-password",
+       "password": "cl-op-JKL-password",
        "roles": [
         "cluster_operator"
        ],
-       "username": "cluster_operator_PQRST"
+       "username": "cluster_operator_JKL"
       },
       {
-       "password": "dev-UVWXY-password",
+       "password": "dev-MNO-password",
        "roles": [
         "developer"
        ],
-       "username": "developer_UVWXY"
+       "username": "developer_MNO"
       }
      ],
      "wan": {
@@ -180,14 +180,14 @@ and the cluster A `sender_credentials`:
           "10.0.16.21[55221]"
         ],
         "trusted_sender_credentials": [
-         "gateway_sender_KLMNO"
+         "gateway_sender_GHI"
         ]
        }
       ],
       "sender_credentials": {
        "active": {
-        "password": "gws-ZABCD-password",
-        "username": "gateway_sender_ZABCD"
+        "password": "gws-PQR-password",
+        "username": "gateway_sender_PQR"
        }
       }
      }
@@ -248,18 +248,18 @@ in these commands:
      },
      "users": [
       {
-       "password": "cl-op-ABCDE-password",
+       "password": "cl-op-ABC-password",
        "roles": [
         "cluster_operator"
        ],
-       "username": "cluster_operator_ABCDE"
+       "username": "cluster_operator_ABC"
       },
       {
-       "password": "dev-FGHIJ-password",
+       "password": "dev-DEF-password",
        "roles": [
         "developer"
        ],
-       "username": "developer_FGHIJ"
+       "username": "developer_DEF"
       }
      ],
      "wan": {
@@ -274,8 +274,8 @@ in these commands:
       ],
       "sender_credentials": {
        "active": {
-        "password": "gws-KLMNO-password",
-        "username": "gateway_sender_KLMNO"
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
        }
       }
      }
@@ -291,7 +291,7 @@ will be lost.
     which are needed to be authorized for the gateway sender
     creation operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABCDE --password=cl-op-ABCDE-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABC --password=cl-op-ABC-password
         </pre>
     - Create the cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 2 for this example:
@@ -312,7 +312,7 @@ will be lost.
     - Connect using gfsh and the cluster B `cluster_operator` credentials,
     which are needed to be authorized for the create operation:
         <pre class='terminal'>
-        gfsh>connect --url=htt<span>ps</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_PQRST --password=cl-op-PQRST-password
+        gfsh>connect --url=htt<span>ps</span>://cloudcache-2.example.com/gemfire/v1 --use-http --user=cluster\_operator\_JKL --password=cl-op-JKL-password
         </pre>
     - Create the cluster B region:
 
