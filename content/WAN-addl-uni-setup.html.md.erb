@@ -19,11 +19,11 @@ for cluster A,
 `distributed_system_id = 2` for cluster B,
 and `distributed_system_id = 3` for cluster C.
 
-1. Communicate the cluster A locators IP and port addresses and
+1. Communicate the cluster A locators' IP and port addresses and
 `sender_credentials` to the cluster C Cloud Foundry administrator. 
 
 1.  Create the cluster C service instance
-using cluster A Cloud Foundry credentials.
+using the cluster A Cloud Foundry credentials.
 This example explicitly sets the `distributed_system_id`.
 Use a `-c` option with the command to specify the `distributed_system_id`,
 the cluster A service instance's locators,
@@ -51,7 +51,7 @@ and the cluster A `sender_credentials`:
     Verify the completion of service creation prior to continuing
     to the next step.
     Output from the `cf services` command will show the `last operation` as
-    `create succeeded` when service creation is completed.
+    `create succeeded` when service creation completes.
 
 1. Create the service key of cluster C:
 
@@ -60,8 +60,8 @@ and the cluster A `sender_credentials`:
     </pre>
 
     Note that the cluster C service key will contain unneeded
-    (for the unidirectional setup),
-    but automatically-created `sender_credentials`.
+    (for the unidirectional setup)
+    but automatically created `sender_credentials`.
     Here is sample output from `cf service-key wan3 k3`,
     which outputs details of the cluster C service key:
 
@@ -118,7 +118,7 @@ and the cluster A `sender_credentials`:
     }
     </pre>
 
-1. Communicate the cluster C locators IP and port addresses 
+1. Communicate the cluster C locators' IP and port addresses 
 to the cluster A Cloud Foundry administrator. 
 
 1. Update the cluster A service instance using the cluster A
