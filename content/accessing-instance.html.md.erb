@@ -25,32 +25,40 @@ The `cf service-key` returns output in the following format:
 
 <pre class='terminal'>
 {
-  "distributed_system_id": "0",
-  "locators": [
-    "10.244.0.66[55221]",
-    "10.244.0.4[55221]",
-    "10.244.0.3[55221]"
-  ],
-  "urls": {
-    "gfsh": "gfsh-url",
-    "pulse": "pulse-url"
+ "distributed_system_id": "0",
+ "locators": [
+  "10.244.0.66[55221]",
+  "10.244.0.4[55221]",
+  "10.244.0.3[55221]"
+ ],
+ "urls": {
+  "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+  "pulse": "https://cloudcache-1.example.com/pulse"
+ },
+ "users": [
+  {
+   "password": "developer-password",
+   "roles": [
+    "developer"
+   ],
+   "username": "developer_XXX"
   },
-  "users": [
-    {
-      "password": "developer-password",
-      "username": "developer_XXX",
-      "roles": [
-       "developer"
-      ]
-    },
-    {
-      "password": "cluster_operator-password",
-      "username": "cluster_operator_XXX",
-      "roles": [
-       "cluster_operator"
-      ]
-    }
-  ]
+  {
+   "password": "cluster_operator-password",
+   "roles": [
+    "cluster_operator"
+   ],
+   "username": "cluster_operator_XXX"
+   }
+ ],
+ "wan": {
+  "sender_credentials": {
+   "active": {
+    "password": "gws-XXX-password",
+    "username": "gateway_sender_XXX"
+   }
+  }
+ }
 }
 </pre>
 
