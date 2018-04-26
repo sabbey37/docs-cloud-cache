@@ -130,11 +130,10 @@ To enable remote syslog for the service broker, do the following:
     <tr><td><strong></strong>External Syslog Port</td>
         <td>Enter the port of the syslog server for sending logs, for example,` 29279`.</td></tr>
     <tr><td><strong>Enable TLS for Syslog</strong></td>
-        <td>Click to enable secure log transmission through TLS.
-            Otherwise, remote syslog sends unencrypted logs.</td></tr>
+    <td>Known Issue: TLS must be enabled for syslog to work. It ensures secure log transmission through TLS.</td></tr>
     <tr><td><strong>Permitted Peer for TLS Communication. This is required if TLS is enabled.</strong></td>
         <td>If there are several peer servers that can respond to remote syslog connections, then
-            provide a regex, such as `*.example.com`.</td></tr> 
+            provide a regex, such as `*.example.com`.</td></tr>
     <tr><td><strong>CA Certificate for TLS Communication</td>
         <td>If the server certificate is not signed by a known authority, for example, an internal syslog server,
             provide the CA certificate of the log management service endpoint.</td></tr>
