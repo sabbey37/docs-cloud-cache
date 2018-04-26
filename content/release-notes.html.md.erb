@@ -20,11 +20,12 @@ Known issues in this release:
 
 - If you are upgrading to Pivotal Cloud Cache (PCC) v1.3.0 and you created service keys on PCC before you installed v1.3.0:
   delete and recreate the service keys so that users are assigned roles in the cluster. Then, rebind all your apps.
-  For information about how to perform these tasks, see [Delete a Service Key](https://docs.pivotal.io/pivotalcf/2-0/devguide/services/service-keys.html), 
+  For information about how to perform these tasks, see [Delete a Service Key](https://docs.pivotal.io/pivotalcf/2-0/devguide/services/service-keys.html),
   [Create Service Keys](accessing-instance.html#create-service-key), and [Bind an App to a Service Instance](using-pcc.html#bind-service).
 
 - A Pulse topology diagram might not be accurate and might show more members than are actually in the cluster. However, the numerical value displayed on the top bar is accurate.
 
+- There is a selector `Enable TLS for Syslog` in the syslog section of the operator guide. It must be enabled for syslog to work.
 
 ## <a id="16x"></a>Release Notes for Earlier Versions
 
