@@ -67,7 +67,7 @@ PCC supports forwarding syslog to an external log management service (e.g. paper
 
 The broker logs are useful for debugging problems creating, updating, and binding service instances.
 
-Remote syslog sends unencrypted logs by default. To secure log transmission, you can enable TLS by selecting the **Enable TLS** option button. If there are several peer servers that may respond to remote syslog connections, you need to provide a regex in the **Permitted Peer for TLS Communication** field (shown here as *.example.com). You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority (for exampe, an internal syslog server). 
+Remote syslog sends unencrypted logs by default. To secure log transmission, you can enable TLS by selecting the **Enable TLS** option button. We recommend enabling TLS, as most syslog endpoints such as Papertrail and Logsearch require TLS. If there are several peer servers that may respond to remote syslog connections, you need to provide a regex in the **Permitted Peer for TLS Communication** field (shown here as *.example.com). You may need to provide the CA certificate of the log management service endpoint if the server certificate is not signed by a known authority (for exampe, an internal syslog server). 
 
 ![Configuring Log Management Service TLS](syslog-tls-config.png)
 
