@@ -107,14 +107,14 @@ To enable remote syslog for the service broker, do the following:
    <table>
     <tr><th>Field</th><th>Instructions</th></tr>
     <tr><td><strong>Enable Remote Syslog</strong></td>
-        <td>Click to select this button.</td></tr>
+        <td>Select to enable.</td></tr>
     <tr><td><strong>External Syslog Address</strong>/td>
         <td>Enter the address or host of the syslog server for sending logs, for example, `logs.example.com`.</td></tr>
     <tr><td><strong>External Syslog Port</strong></td>
         <td>Enter the port of the syslog server for sending logs, for example,` 29279`.</td></tr>
     <tr><td><strong>Enable TLS for Syslog</strong></td>
-        <td>Click to enable secure log transmission through TLS.
-            Otherwise, remote syslog sends unencrypted logs.</td></tr>
+        <td>Select to enable secure log transmission through TLS. Without this, remote syslog sends unencrypted logs. We recommend enabling TLS, as most syslog endpoints such as Papertrail and Logsearch require TLS.
+         </td></tr>
     <tr><td><strong>Permitted Peer for TLS Communication. This is required if TLS is enabled.</strong></td>
         <td>If there are several peer servers that can respond to remote syslog connections, then
             provide a regex, such as `*.example.com`.</td></tr> 
