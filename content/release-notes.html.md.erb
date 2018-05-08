@@ -12,16 +12,22 @@ Features included in this release:
 - PCC is now running Pivotal Gemfire 9.4.0.
 - PCC now supports connecting more than two clusters via WAN.
 This facilitates implementing design patterns such as Hub-and-Spoke.
-- A new errand is added called `mem-check` on PCC broker, which generates a report of the current data consumption by PCC service instances and total JVM sizes.
+- The new `mem-check` BOSH errand generates a report containing
+the current data consumption by PCC service instances and total JVM sizes.
 - PCC now supports Pivotal Application Service (PAS) 2.1.
 - PCC selects minimum default values for VM types on PAS 2.1 and 2.0.
 
 Known issues in this release:
 
-- If you are upgrading to Pivotal Cloud Cache (PCC) v1.3.0 and you created service keys on PCC before you installed v1.3.0:
-  delete and recreate the service keys so that users are assigned roles in the cluster. Then, rebind all your apps.
-  For information about how to perform these tasks, see [Delete a Service Key](https://docs.pivotal.io/pivotalcf/2-0/devguide/services/service-keys.html),
-  [Create Service Keys](accessing-instance.html#create-service-key), and [Bind an App to a Service Instance](using-pcc.html#bind-service).
+- If you upgrade to PCC v1.3 as part of the process of upgrading to this
+1.4 release, and you created service keys on PCC before you installed v1.3:
+delete and recreate the service keys so that users are properly
+assigned roles for authentication and authorization within the cluster.
+Then, rebind all your apps.
+For information about how to perform these tasks,
+see [Delete a Service Key](https://docs.pivotal.io/pivotalcf/2-0/devguide/services/service-keys.html),
+[Create Service Keys](accessing-instance.html#create-service-key),
+and [Bind an App to a Service Instance](using-pcc.html#bind-service).
 
 - A Pulse topology diagram might not be accurate and might show more members than are actually in the cluster. However, the numerical value displayed on the top bar is accurate.
 
