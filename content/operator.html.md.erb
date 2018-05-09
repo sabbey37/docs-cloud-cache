@@ -753,6 +753,44 @@ This table shows the metrics emitted through the CF Nozzle for disks.
 </tbody>
 </table>
 
+### <a id="bosh-errand-report"></a> Total Memory Consumption
+
+The BOSH `mem-check` errand calculates and outputs
+the quantity of memory used across all PCC service instances.
+This errand helps PCF operators monitor resource costs,
+which are based on memory usage.
+
+From the director, run a bosh command of the form:
+
+``` pre
+bosh -d <service broker name> run-errand mem-check
+```
+
+With this command:
+
+``` pre
+bosh -d cloudcache-service-broker run-errand mem-check
+```
+
+Here is an anonymized portion of example output from the `mem-check` errand
+for a two cluster deployment:
+
+``` pre
+           Analyzing deployment xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx1...
+           JVM heap usage for service instance xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx1
+           Used Total = 1204 MB
+           Max Total = 3201 MB
+
+           Analyzing deployment xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx2...
+           JVM heap usage for service instance xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx2
+           Used Total = 986 MB
+           Max Total = 3201 MB
+
+           JVM heap usage for all clusters everywhere:
+           Used Global Total = 2390 MB
+           Max Global Total = 6402 MB
+```
+
 ### <a id="monitoring-prometheus"></a> Monitoring PCC Service Instances with Prometheus
 
 Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
