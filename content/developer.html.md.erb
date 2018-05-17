@@ -205,36 +205,9 @@ You can use the `cluster_operator` credentials to administer the service instanc
 
 You can use the `developer` credentials to perform create, retrieve, update, and delete (CRUD) data operations. You can also use the `cluster_operator` credentials to perform the same functions the `developer` credentials. As a best practice, you should use the role with the least amount of permissions necessary.
 
-### <a id="gfsh-connect"></a> Connect with gfsh
-
-You can manage your cluster and data with the `gfsh` command-line interface. PCC works with `gfsh`.
-
-Check the product [snapshot](/p-cloud-cache/index.html#snapshot) of the pcc version you are using to determine the `gfsh` version you need to use to connect to your cluster. 
-For example, if your tile packages GemFire version 9.1.1, you should be using a 9.1.1 version of the `gfsh` client.
-
-To install gfsh:
-
-1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
-1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix, or `gfsh.bat` with Windows.
-1. Add the `gfsh` binary to your path.
-1. Start the `gfsh` command-line tool. Then, from the `gfsh>` prompt, connect to your service instance as `cluster_operator`:
-
-<pre class='terminal'>
-$ gfsh
-    _________________________     __
-   / _____/ ______/ ______/ /____/ /
-  / /  __/ /___  /_____  / _____  /
- / /__/ / ____/  _____/ / /    / /
-/______/_/      /______/_/    /_/    9.0.1
-
-Monitor and Manage Pivotal GemFire
-
-gfsh>connect --use-http --url=gfsh-url --user=cluster_operator --password=cluster_operator-password
-</pre>
-
 ### <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-Connecting over HTTPS involves a few more steps than connecting over HTTP, but it is required for some network setups. When connecting over HTTPS, you must use the same certificate you use to secure traffic into ERT; that is, the certificate you use where your TLS termination occurs. Before you can connect, you must create a truststore. 
+Connecting over HTTPS uses the same certificate you use to secure traffic into ERT; that is, the certificate you use where your TLS termination occurs. Before you can connect, you must create a truststore. 
 
 #### <a id="truststore"></a> Create a Truststore 
 
