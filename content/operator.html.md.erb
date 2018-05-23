@@ -683,79 +683,136 @@ KPI stands for Key Performance Indicator.
 
 ### <a id="gateway-sender-metrics"></a> Gateway Sender and Gateway Receiver Metrics
 
-This table shows the metrics emitted through the CF Nozzle for gateway senders and gateway receivers.
+These are metrics emitted through the CF Nozzle for gateway senders and gateway receivers.
 
-<table width=100%>
-<thead>
+#### <a id="gs-event-queue-size"></a> Queue Size for the Gateway Sender
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewaySender.&lt;sender-id&gt;.EventQueueSize</code> </th></tr>
    <tr>
-   <th><strong>Metric Name</strong></th>
-   <th><strong>Description</strong></th>
-   <th><strong>Metric Type</strong></th>
-   <th><strong>Measurement Type</strong></th>
+      <th width="25%">Description</th>
+      <td>The current size of the gateway sender queue. </td>
    </tr>
-</thead>
-<tbody>
-<tr>
-<td><code>gatewaySender.&lt;sender-id&gt;.EventQueueSize</code></td>
-<td>The current size of the gateway sender queue. </td>
-<td>number</td>
-<td>count</td>
-</tr>
-<tr>
-<td><code>gatewaySender.&lt;sender-id&gt;.EventsReceivedRate</code></td>
-<td>A count of the events coming from the region to which the gateway sender is attached. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created. </td>
-<td>number</td>
-<td>count</td>
-</tr>
-<tr>
-<td><code>gatewaySender.&lt;sender-id&gt;.EventsQueuedRate</code></td>
-<td>A count of the events queued on the gateway sender from the region. This quantity of events might be lower than the quantity of events received, as not all received events are queued. It is a count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created.</td>
-<td>number</td>
-<td>count</td>
-</tr>
-<tr>
-<td><code>gatewayReceiver.EventsReceivedRate</code></td>
-<td>A count of the events received from the gateway sender which will be applied to the region on the gateway receiver's site. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway receiver was created. </td>
-<td>number</td>
-<td>count</td>
-</tr>
-</tbody>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
 </table>
 
+#### <a id="gs-event-received-rate"></a> Events Received at the Gateway Sender
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewaySender.&lt;sender-id&gt;.EventsReceivedRate</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>A count of the events coming from the region to which the gateway sender is attached. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+#### <a id="gs-events-queued-rate"></a> Events Queued by the Gateway Sender
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewaySender.&lt;sender-id&gt;.EventsQueuedRate</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>A count of the events queued on the gateway sender from the region. This quantity of events might be lower than the quantity of events received, as not all received events are queued. It is a count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+#### <a id="gr-event-received-rate"></a> Events Received by the Gateway Receiver
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewayReceiver.EventsReceivedRate</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>A count of the events received from the gateway sender which will be applied to the region on the gateway receiver's site. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway receiver was created. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
 
 ### <a id="disk-metrics"></a> Disk Metrics
 
-This table shows the metrics emitted through the CF Nozzle for disks.
+These are metrics emitted through the CF Nozzle for disks.
 
-<table width=100%>
-<thead>
+#### <a id="disk-writes-avg-latency"></a> Average Latency of Disk Writes
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>diskstore.DiskWritesAvgLatency</code> </th></tr>
    <tr>
-   <th><strong>Metric Name</strong></th>
-   <th><strong>Description</strong></th>
-   <th><strong>Metric Type</strong></th>
-   <th><strong>Measurement Type</strong></th>
+      <th width="25%">Description</th>
+      <td>The average latency of disk writes in nanoseconds. </td>
    </tr>
-</thead>
-<tbody>
-<tr>
-<td><code>diskstore.DiskWritesAvgLatency</code></td>
-<td>The average latency of disk writes in nanoseconds. </td>
-<td>number</td>
-<td>time in nanoseconds</td>
-</tr>
-<tr>
-<td><code>diskstore.TotalSpace</code></td>
-<td>The total number of bytes on the attached disk. </td>
-<td>number</td>
-<td>count</td>
-</tr>
-<tr>
-<td><code>diskstore.UseableSpace</code></td>
-<td>The total number of bytes of available space on the attached disk. </td>
-<td>number</td>
-<td>count</td>
-</tr>
-</tbody>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>time in nanoseconds</td>
+   </tr>
+</table>
+
+#### <a id="total-disk-space"></a> Quantity of Bytes on Disk
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>diskstore.TotalSpace</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The total number of bytes on the attached disk. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+#### <a id="total-available-disk-space"></a> Quantity of Available Bytes on Disk
+
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>diskstore.UseableSpace</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The total number of bytes of available space on the attached disk. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
 </table>
 
 ### <a id="bosh-errand-report"></a> Total Memory Consumption
