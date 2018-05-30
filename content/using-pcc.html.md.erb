@@ -160,25 +160,15 @@ see the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_
 
 You can deploy or redeploy an app JAR file to the servers in the cluster.
 
-To deploy an app JAR file after connecting within gfsh
+To do an initial deploy of an app JAR file after connecting within gfsh
 using the cluster operator credentials,
-do the following:
+run this gfsh command:
 
-1. Run this gfsh command to deploy the JAR file:
+<code>deploy --jar=PATH-TO-JAR/FILENAME.jar</code>
 
-    <code>deploy --jar=PATH-TO-JAR/FILENAME.jar</code>
+For example,
 
-    For example,
-
-    <pre class='terminal'> gfsh>deploy --jar=working-directory/myJar.jar </pre>
-
-1. Run this command to restart the cluster and load the updated JAR file:
-
-    <code> cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}' </code>		
-
-    For example,
-
-    <pre class='terminal'>$ cf update-service my-service-instance -c '{"restart": true}'</code>
+<pre class='terminal'> gfsh>deploy --jar=working-directory/myJar.jar </pre>
 
 To redeploy an app JAR file after connecting within gfsh
 using the cluster operator role,
