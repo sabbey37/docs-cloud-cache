@@ -20,13 +20,54 @@ $ cf update-service my-cloudcache -c '{"new_size_percentage": 50}'
 
 Then the resulting service instance has `5` servers and `new_size_percentage` of 50% of heap.
 
-## <a id="cluster-rebalancing"></a>Cluster Rebalancing
+## <a id="cluster-rebalancing"></a>Rebalancing a Cluster
 
 When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC automatically rebalances data in the cache to distribute data across the cluster.
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored.
  In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator. 
 <p class="note"><strong>Note</strong>: You must first [connect with gfsh](#gfsh-connect) before you can use the `rebalance` command.</p>
+
+## <a id="cluster-restart"></a>Restarting a Cluster
+
+Restarting a cluster stops and restarts each cluster member in turn,
+issuing a rebalance as each restarted server joins the cluster.
+
+There is a potential for data loss when restarting a cluster;
+the region type and number of servers in the cluster
+determine whether or not data is lost.
+
+- **All data is lost when restarting a cluster with these region types and
+number of servers:**
+
+    - Partitioned regions without redundancy or persistence.
+As each server is stopped, the region entries hosted in buckets on
+that stopped server are permenently lost.
+    - Replicated regions without persistence on a cluster that has
+a single server.
+    - A Dev Plan cluster loses all data, as there is a single server
+and no region persistence.
+
+- **No data is lost when restarting the cluster with these region types
+and number of servers:**
+
+    - Replicated regions for clusters with more than one server.
+    - Persistent regions will not lose data,
+as all data is on the disk and available upon restart of a server.
+    - Partitioned regions with redundancy.
+When the server with the primary copy of an entry is stopped,
+the redundant copy still exists on a running server.
+
+To restart a cluster, use the cluster operator credentials to
+run the command:
+
+<code>cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}'</code>
+
+For example:
+
+<pre class='terminal'>
+$ cf update-service my-cluster -c '{"restart": true}'
+</pre>
 
 ## <a id="plan-updates"></a> About Changes to the Service Plan
 
