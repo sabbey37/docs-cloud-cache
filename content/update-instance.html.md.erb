@@ -33,6 +33,8 @@ This automatic rebalancing does not occur when a server leaves the cluster and l
 Restarting a cluster stops and restarts each cluster member in turn,
 issuing a rebalance as each restarted server joins the cluster.
 
+<p class="note warning"><strong> WARNING:</strong> Restart of a cluster may cause data loss.</p>
+
 There is a potential for data loss when restarting a cluster;
 the region type and number of servers in the cluster
 determine whether or not data is lost.
