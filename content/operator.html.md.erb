@@ -897,8 +897,17 @@ Changes to fields that can be overridden by optional parameters, for example  `n
 
 If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits are not modified.
 
-When existing instances are upgraded, all plan changes are applied to them. Upgrades to service instances will require a rolling upgrade touching each virtual machine in the cluster and restarting the of GemFire cache processes. The restart of the cache processes can
-have a performance impact as the cache instances rebalance data to maintain redudancy. In some specific configurations a restart of a cache process during an upgrade can cause data loss, as described in [Restarting a Cluster](update-instance.html#cluster-restart).
+When existing instances are upgraded, all plan changes are applied to them.
+Upgrades and updates to service instances can cause a rolling restart
+of GemFire servers.
+Be aware that the rebalancing of data to maintain redundancy
+may impact the performance of the remainder of
+the servers within the service instance.
+
+<p class="note warning"><strong> WARNING:</strong> Data loss may result
+from the restart of a cluster. See
+<a href="./update-instance.html#cluster-restart">Restarting a Cluster</a>
+for the conditions under which data loss occurs.</p>
 
 ## <a id="uninstall"></a> Uninstalling Pivotal Cloud Cache
 
