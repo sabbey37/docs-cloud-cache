@@ -218,8 +218,6 @@ This section describes networking considerations for Pivotal Cloud Cache.
 
 ### <a id ="architecture_networks"></a>Default Network and Service Network
 
-Like other on-demand PCF services, PCC relies on the BOSH 2.0 ability to dynamically deploy VMs in a dedicated network. The on-demand service broker uses this capability to create single-tenant service instances in a dedicated service network.
-
 <%= partial '../../p-cloud-cache/odb/on_demand_architecture' %>
 
 The diagram below shows worker VMs in an on-demand service instance, such as RabbitMQ for PCF, running on a separate services network, while other components run on the default network.
