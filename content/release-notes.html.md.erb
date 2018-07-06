@@ -3,6 +3,20 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
+## <a id='v133'></a>v1.3.3
+
+**Release Date:**  July 9, 2018
+
+Features included in this release:
+
+- PCC is now running Pivotal GemFire v9.3.0. This release supports
+upgrades from PCC v1.3.1 to this 1.3.3 version.
+- The cluster operator role adds the `CLUSTER:MANAGE` permission
+to its already-defined permissions.
+- This release improves performance and maintains high availability
+for WAN-separated clusters by creating a gateway receiver on each
+server, instead of creating only one gateway receiver per cluster.
+
 ## <a id='v132'></a>v1.3.2 (Limited availability)
 
 **Release Date:**  March 21, 2018
