@@ -192,6 +192,28 @@ Region data includes both the keys and their values.
 - Warning messages are issued when a 90% disk usage threshold
 is crossed.
 
+## <a id="overflow"></a> Overflow
+
+Region overflow is an eviction action that keeps heap memory space
+usage below a fixed threshold of 65% of available heap memory space.
+For a region that pushes at the limits of memory usage,
+overflow reduces the number of or eliminates pauses for
+stop-the-world garbage collection.
+
+The action of overflow writes one or more least recently used region
+entries to disk to make room in memory for another entry.
+The least recently used entry within the bucket to which new
+entry maps is the chosen overflow victim.
+The key of the victim remains in memory, but
+the value of the entry is written to disk.
+An operation on an entry that has overflowed to disk causes the
+entry to be swapped back into memory.
+
+If using a region type with overflow,
+be sure to configure a plan with sufficient disk space for the Server VM,
+and create the disk store using `gfsh`, as described in
+[Working with Disk Stores](using-pcc.html#disk-stores).
+
 ## <a id="app-regions"></a> Regions as Used by the App
 
 The client accesses regions hosted on the servers by creating a cache
