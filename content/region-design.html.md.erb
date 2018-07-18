@@ -210,9 +210,22 @@ An operation on an entry that has overflowed to disk causes the
 entry to be swapped back into memory.
 
 If using a region type with overflow,
-be sure to configure a plan with sufficient disk space for the Server VM,
-and create the disk store using `gfsh`, as described in
+be sure to configure a plan with sufficient disk space for the Server VM.
+
+If no disk store is created, region creation with a region type that
+uses a disk store will cause the creation of one called
+`DEFAULT` with a default size (2 Gbyte).
+Alternatively, 
+create the disk store using `gfsh`, as described in
 [Working with Disk Stores](using-pcc.html#disk-stores).
+Then, create the region using the `--disk-store` option to
+specify the created disk store.
+If the disk store has been created, but the gfsh region creation
+command neglects to specify a disk store, 
+a new `DEFAULT` disk store will be created and used.
+For more details on region creation options, see the Pivotal GemFire
+[create region Command Reference Page](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/create.html#topic_54B0985FEC5241CA9D26B0CE0A5EA863).
+
 
 ## <a id="app-regions"></a> Regions as Used by the App
 
