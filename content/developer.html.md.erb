@@ -997,11 +997,19 @@ Certificate was added to keystore
 
 #### <a id="establish-https"></a> Establish the Connection with HTTPS 
 
-After you have created the truststore, you can connect using HTTPS.
+After you have created the truststore,
+you can use the Pivotal GemFire command line interface, `gfsh`,
+to connect to the cluster over HTTPS.
 
-1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
-1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Add the `gfsh` binary to your path.
+1. Acquire `gfsh` by downloading the correct Pivotal GemFire ZIP archive
+from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
+The correct version of Pivotal GemFire to download is any patch version
+of the Pivotal GemFire version listed in the PCC release notes.
+A link to the PCC release notes is on Pivotal Network
+in the Release Details for your PCC version.
+1. Unzip the Pivotal GemFire ZIP archive.
+`gfsh` is within the `bin` directory in the expanded Pivotal GemFire.
+Use `gfsh` with Unix or `gfsh.bat` with Windows.
 1. Set the `JAVA_ARGS` environment variable with the following command:
 
     `export JAVA_ARGS="-Djavax.net.ssl.trustStore=TRUSTSTORE-FILE-PATH"`
@@ -1015,7 +1023,7 @@ After you have created the truststore, you can connect using HTTPS.
     <pre class='terminal'>
     $ export JAVA_ARGS="-Djavax.net.ssl.trustStore=/tmp/truststore/prod.myTrustStore"
     </pre>
-5. Run the `gfsh` command-line interface, 
+5. Run `gfsh`, 
 and then issue a `connect` command that specifies an HTTPS URL of the form:
 
     ```
@@ -1023,6 +1031,9 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
      --user=<cluster_operator_XXX> 
      --password=<cluster_operator-password>
     ```
+    The cluster operator user name and password are in the service key.
+    See [Create Service Keys](developer.html#create-service-key)
+    for instructions on how to view the service key.
 
 #### <a id="dev-establish-https"></a> Establish the Connection with HTTPS in a Development Environment 
 
@@ -1032,10 +1043,16 @@ by eliminating the truststore and SSL mutual authentication.
 
 The steps to establish the `gfsh` connection become:
 
-1. Download the Pivotal GemFire ZIP archive from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
-1. Unzip and locate the correct binary for your architecture. Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Add the `gfsh` binary to your path.
-1. Run the `gfsh` command-line interface, 
+1. Acquire `gfsh` by downloading the correct Pivotal GemFire ZIP archive
+from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
+The correct version of Pivotal GemFire to download is any patch version
+of the Pivotal GemFire version listed in the PCC release notes.
+A link to the PCC release notes is on Pivotal Network
+in the Release Details for your PCC version.
+1. Unzip the Pivotal GemFire ZIP archive.
+`gfsh` is within the `bin` directory in the expanded Pivotal GemFire.
+Use `gfsh` with Unix or `gfsh.bat` with Windows.
+1. Run `gfsh`, 
 and then issue a `connect` command that specifies an HTTPS URL of the form:
 
     ```
@@ -1043,6 +1060,9 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
      --url=<HTTPS-gfsh-URL> --user=<cluster_operator_XXX>
      --password=<cluster_operator-password>
     ```
+    The cluster operator user name and password are in the service key.
+    See [Create Service Keys](developer.html#create-service-key)
+    for instructions on how to view the service key.
 
 ## <a id="use"></a> Using Pivotal Cloud Cache
 
