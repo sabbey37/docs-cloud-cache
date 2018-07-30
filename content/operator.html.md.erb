@@ -31,7 +31,8 @@ Configure the sections listed on the left side of the page.
 
 ![Tile Configuration Sections](tile-configuration-sections.png)
 
-After you complete a section, a green check mark appears next to the section name.
+As you complete a section, save it.
+A green check mark appears next to the section name.
 Each section name must show this green check mark before you can complete your installation.
 
 * [Assign AZs and Networks](#azs)
@@ -64,7 +65,7 @@ To select AZs and networks for VMs used by PCC, do the following:
 
 1. Click **Save**.
 
-####<a name='settings'></a> Settings: Smoke Tests
+####<a name='settings'></a> Smoke Test Settings
 
 The smoke-tests errand that runs after tile installation.
 The errand verifies that your installation was successful.
@@ -74,41 +75,46 @@ By default, the `smoke-test` errand runs on the `system` org and the `p-cloudcac
 
 To select which plan you want to use for smoke tests, do the following:
 
-1. Click **Settings**.
+Select a plan to use when the `smoke-tests` errand runs.
 
-2. Select a plan to use when the `smoke-tests` errand runs.
+Ensure the selected plan is enabled and configured.
+For information about configuring plans, see [Configure Service Plans](#plan-config) below.
+If the selected plan is not enabled, the `smoke-tests` errand fails.
 
-     Ensure the selected plan is enabled and configured.
-     For information about configuring plans, see [Configure Service Plans](#plan-config) below.
-     If the selected plan is not enabled, the `smoke-tests` errand fails.
+Pivotal recommends that you use the smallest four-server plan for smoke tests.
+Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
+![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
-     Pivotal recommends that you use the smallest four-server plan for smoke tests.
-     Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
-     ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
-
-3. Click **Save**.
-
-#### Settings: Allow Outbound Internet Access
+#### Allow Outbound Internet Access Settings
 
 By default, outbound internet access is not allowed from service instances. 
 
 If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances.
 Log forwarding and backups, which require external endpoints, might also require internet access.
 
-To allow outbound internet access from service instance, do the following:
+To allow outbound internet access from service instance,
+from the VM options portion of the Settings configuration,
+do the following:
 
-1. Click **Settings**.
+Select **Allow outbound internet access from service instances (IaaS-dependent)**.
 
-2. Select **Allow outbound internet access from service instances (IaaS-dependent)**.
+![Outbound Internet Access](allow-outbound-access.png)
 
-    ![Outbound Internet Access](allow-outbound-access.png)
+<p class="note"><strong>Note</strong>: Outbound network traffic rules also depend on your IaaS settings. 
+Consult your network or IaaS administrator to ensure that your IaaS allows outbound traffic to the external networks you need.</p>
 
-    <p class="note"><strong>Note</strong>: Outbound network traffic rules also depend on your IaaS settings. 
-      Consult your network or IaaS administrator to ensure that your IaaS allows outbound traffic to the external networks you need.</p>
+#### Default Distributed System ID Setting
 
+Every service instance has an integer identifier called a distributed system ID.
+The ID defaults to the value 0. 
+Service instances that form a distributed system that communicates
+across a WAN will need distinct IDs.
+Those distinct ID values are set when creating the service instance.
 
-3. Click **Save**.
+To change the default distributed system ID value,
+replace the default value of 0 with your new default value.
 
+![Default Distributed System ID setting](dist-sys-ID-default.png)
 
 ####<a name='syslog'></a> Syslog
 
