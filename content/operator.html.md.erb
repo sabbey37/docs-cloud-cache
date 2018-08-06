@@ -65,7 +65,9 @@ To select AZs and networks for VMs used by PCC, do the following:
 
 1. Click **Save**.
 
-####<a name='settings'></a> Smoke Test Settings
+####<a name='settings'></a> Settings
+
+####<a name='smoke-test-settings'></a> Smoke Test Settings
 
 The smoke-tests errand that runs after tile installation.
 The errand verifies that your installation was successful.
@@ -117,43 +119,6 @@ Acceptable values are integers greater than or equal to 0 and
 less than or equal to 255.
 
 ![Default Distributed System ID setting](dist-sys-ID-default.png)
-
-####<a name='syslog'></a> Syslog
-
-By default, syslog forwarding is not enabled in PCC.
-However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
-The broker logs are useful for debugging problems creating, updating, and binding service instances.
-
-To enable remote syslog for the service broker, do the following:
-
-1. Click **Syslog**.
-   ![Configuring Log Management Service](syslog-config.png)
-2. Configure the fields on the **Syslog** pane as follows:
-   <table>
-    <tr><th>Field</th><th>Instructions</th></tr>
-    <tr><td><strong>Enable Remote Syslog</strong></td>
-        <td>Select to enable.</td></tr>
-    <tr><td><strong></strong>External Syslog Address</td>
-        <td>Enter the address or host of the syslog server for sending logs, for example, `logs.example.com`.</td></tr>
-    <tr><td><strong></strong>External Syslog Port</td>
-        <td>Enter the port of the syslog server for sending logs, for example,` 29279`.</td></tr>
-    <tr><td><strong>Enable TLS for Syslog</strong></td>
-    <td>Select to enable secure log transmission through TLS. Without this, remote syslog sends unencrypted logs. We recommend enabling TLS, as most syslog endpoints such as Papertrail and Logsearch require TLS.</td></tr>
-    <tr><td><strong>Permitted Peer for TLS Communication. This is required if TLS is enabled.</strong></td>
-        <td>If there are several peer servers that can respond to remote syslog connections, then
-            provide a regex, such as `*.example.com`.</td></tr>
-    <tr><td><strong>CA Certificate for TLS Communication</td>
-        <td>If the server certificate is not signed by a known authority, for example, an internal syslog server,
-            provide the CA certificate of the log management service endpoint.</td></tr>
-    <tr><td><strong>Send service instance logs to external</td>
-        <td>By default, only the broker logs are forwarded to your configured log management service.
-            If you want to forward server and locator logs from all service instances, select this.
-            This lets you monitor the health of the clusters, although it generates a large volume of logs.<br><br>
-            If you don't enable this, you get only the broker logs which include information about service instance creation, 
-            but not about on-going cluster health.</td></tr>
-  </table>
-
-3. Click **Save**.
 
 <a name="plan-config"></a>
 #### Configure Service Plans
@@ -212,6 +177,43 @@ To confirm that post-deploy scripts are enabled, navigate to the **Director Conf
 verify that **Enable Post Deploy Scripts** is selected.
 
 ![Enable post deploy scripts](ops-man-post-deploy.png)
+
+####<a name='syslog'></a> Syslog
+
+By default, syslog forwarding is not enabled in PCC.
+However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
+The broker logs are useful for debugging problems creating, updating, and binding service instances.
+
+To enable remote syslog for the service broker, do the following:
+
+1. Click **Syslog**.
+   ![Configuring Log Management Service](syslog-config.png)
+2. Configure the fields on the **Syslog** pane as follows:
+   <table>
+    <tr><th>Field</th><th>Instructions</th></tr>
+    <tr><td><strong>Enable Remote Syslog</strong></td>
+        <td>Select to enable.</td></tr>
+    <tr><td><strong></strong>External Syslog Address</td>
+        <td>Enter the address or host of the syslog server for sending logs, for example, `logs.example.com`.</td></tr>
+    <tr><td><strong></strong>External Syslog Port</td>
+        <td>Enter the port of the syslog server for sending logs, for example,` 29279`.</td></tr>
+    <tr><td><strong>Enable TLS for Syslog</strong></td>
+    <td>Select to enable secure log transmission through TLS. Without this, remote syslog sends unencrypted logs. We recommend enabling TLS, as most syslog endpoints such as Papertrail and Logsearch require TLS.</td></tr>
+    <tr><td><strong>Permitted Peer for TLS Communication. This is required if TLS is enabled.</strong></td>
+        <td>If there are several peer servers that can respond to remote syslog connections, then
+            provide a regex, such as `*.example.com`.</td></tr>
+    <tr><td><strong>CA Certificate for TLS Communication</td>
+        <td>If the server certificate is not signed by a known authority, for example, an internal syslog server,
+            provide the CA certificate of the log management service endpoint.</td></tr>
+    <tr><td><strong>Send service instance logs to external</td>
+        <td>By default, only the broker logs are forwarded to your configured log management service.
+            If you want to forward server and locator logs from all service instances, select this.
+            This lets you monitor the health of the clusters, although it generates a large volume of logs.<br><br>
+            If you don't enable this, you get only the broker logs which include information about service instance creation, 
+            but not about on-going cluster health.</td></tr>
+  </table>
+
+3. Click **Save**.
 
 ####<a name='errands'></a> Errands
 
