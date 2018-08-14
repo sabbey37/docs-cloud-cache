@@ -12,7 +12,7 @@ and the backend data store.
 
 The app will want to accomplish CRUD
 (CREATE, READ, UPDATE, DELETE) operations on its data.
-The app’s implementation of the CRUD operations result in cache operations
+The app's implementation of the CRUD operations result in cache operations
 that break down into cache lookups (reads) and/or cache writes.
 
 The algorithm for a cache lookup quickly returns the cache entry
@@ -53,7 +53,7 @@ That data may be
 - in the data store, but not in the cache
 - not in either the data store or the cache
 
-The app’s implementation of the CRUD operations result in cache operations
+The app's implementation of the CRUD operations result in cache operations
 that break down into cache lookups (reads) and/or cache writes.
 
 The algorithm for a cache lookup returns the cache entry
@@ -77,7 +77,7 @@ and the copy currently within the cache is invalidated.
 
 <p class='note'><strong>Note:</strong> SDG (Spring Data GemFire) 
 supports the look-aside pattern, as detailed at
-<a href="https://docs.spring.io/spring-data/gemfire/docs/current/reference/html/#bootstrap-annotation-config-caching">Configuring Spring’s Cache Abstraction</a>.</p>
+<a href="https://docs.spring.io/spring-data/gemfire/docs/current/reference/html/#bootstrap-annotation-config-caching">Configuring Spring's Cache Abstraction</a>.</p>
 
 ## <a id="active-active-WAN-pattern"></a> Bidirectional Replication Across a WAN
 

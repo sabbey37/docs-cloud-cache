@@ -219,7 +219,7 @@ prevents the app from accidentally caching state.
 and entries are locally cached.
 - `CACHING_PROXY_HEAP_LRU` forwards all region operations to the servers,
 and entries are locally cached.
-Locally cached entries are destroyed when the app’s
+Locally cached entries are destroyed when the app's
 usage of cache space causes its JVM to hit
 the threshold of being low on memory.
 
@@ -239,7 +239,7 @@ and updates are often made to those entries,
 making the data somewhat write heavy.
 
 A good candidate for a replicated region would be the data
-associated with the company’s products.
+associated with the company's products.
 Each region entry represents a single product.
 There are a limited number of products,
 and those products do not often change.

@@ -16,7 +16,7 @@ you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead
 For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
 because the Java buildpack does not pull in the necessary JAR files for SSC when it detects a Spring JAR file.
 
-To build your WAR file, add this depedency to your `pom.xml`:
+To build your WAR file, add this dependency to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -86,7 +86,7 @@ Spring Session Data GemFire v2.0.0.M2 and later versions.
 
 ###<a id=spring_session_data_gemfire></a> Upgrade PCC and Spring Session Data GemFire
 
-1. Before your operator upgades PCC, stop your app.
+1. Before your operator upgrades PCC, stop your app.
 This avoids breaking the app in this upgrade process.
 
 1. Upgrade PCC. See [Upgrading Pivotal Cloud Cache](operator.html#upgrade) for details.
