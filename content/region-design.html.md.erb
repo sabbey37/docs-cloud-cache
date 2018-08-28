@@ -210,7 +210,10 @@ An operation on an entry that has overflowed to disk causes the
 entry to be swapped back into memory.
 
 If using a region type with overflow,
-be sure to configure a plan with sufficient disk space for the Server VM.
+be sure to configure a plan with sufficient disk space for the Server VM,
+allocating at least the minimums given for the 
+_Persistent disk type for the Server VMs_, as described in
+[Configure Tile Properties](operator.html#settings-config).
 
 If no disk store is created, region creation with a region type that
 uses a disk store will cause the creation of one called
