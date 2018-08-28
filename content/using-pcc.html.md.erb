@@ -42,6 +42,52 @@ Value       : thevalue
 
 In practice, you should perform these get/put operations from a deployed PCF app. To do this, you must bind the service instance to these apps.
 
+## <a id="disk-stores"></a> Working with Disk Stores
+
+Persistent regions and regions that overflow upon eviction use
+disk stores.
+Use `gfsh` to create or destroy a disk store.
+
+### <a id="disk-store-create"></a> Create a Disk Store
+
+To create a disk store for use with a persistent or overflow
+type of region:
+
+1. Use the directions in
+[Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
+to connect to the PCC service instance using the
+cluster operator credentials.
+
+2. Create the disk store with a gfsh command of the form:
+
+    ```
+    create disk-store --name=<name-of-disk-store>
+     --dir=<relative/path/to/diskstore/directory>
+    ```
+
+    Specify a relative path for the disk store location.
+    That relative path will be created within `/var/vcap/store/gemfire-server/`.
+    For more details on further options, see the Pivotal GemFire
+    [create disk-store Command Reference Page](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/create.html#topic_bkn_zty_ck).
+
+### <a id="disk-store-destroy"></a> Destroy a Disk Store
+
+To destroy a disk store:
+
+1. Use the directions in
+[Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
+to connect to the PCC service instance using the
+cluster operator credentials.
+
+2. Destroy the disk store with a gfsh command of the form:
+
+    ```
+    destroy disk-store --name=<name-of-disk-store>
+    ```
+
+    For more details on further options, see the Pivotal GemFire
+    [destroy disk-store Command Reference Page](http://gemfire.docs.pivotal.io/95/geode/tools_modules/gfsh/command-pages/destroy.html#topic_yfr_l2z_ck).
+
 ## <a id="java-build-pack-requirement"></a> Java Build Pack Requirements
 
 To ensure that your app can use all the features from PCC,
