@@ -62,9 +62,11 @@ cluster operator credentials.
 
     ```
     create disk-store --name=<name-of-disk-store>
-     --dir=<path/to/diskstore/directory>
+     --dir=<relative/path/to/diskstore/directory>
     ```
 
+    Specify a relative path for the disk store location.
+    That relative path will be created within `/var/vcap/store/gemfire-server/`.
     For more details on further options, see the Pivotal GemFire
     [create disk-store Command Reference Page](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/create.html#topic_bkn_zty_ck).
 
