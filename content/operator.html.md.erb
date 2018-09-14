@@ -39,6 +39,7 @@ Each section name must show this green check mark before you can complete your i
 * [Settings](#settings)
 * [Service Plans](#plan-config), including the Dev Plan
 * [Syslog](#syslog)
+* [Security](#security-section)
 * [Errands](#errands)
 * [Resource Config](#resource-config)
 * [Stemcell](#stemcell)
@@ -210,6 +211,22 @@ To enable remote syslog for the service broker, do the following:
             If you don't enable this, you get only the broker logs which include information about service instance creation, 
             but not about on-going cluster health.</td></tr>
   </table>
+
+3. Click **Save**.
+
+####<a name='security-section'></a> Security
+
+The environment may be configured to more securely store service keys
+within CredHub,
+instead of within the cloud controller's data store.
+To enable this functionality:
+
+1. Click **Security**.
+
+2. Click on the box labelled **Enable Secure Service Instance Credentials**
+to enable use of CredHub.
+
+![Security section](security-configuration-section.png)
 
 3. Click **Save**.
 
