@@ -39,6 +39,7 @@ Each section name must show this green check mark before you can complete your i
 * [Settings](#settings)
 * [Service Plans](#plan-config), including the Dev Plan
 * [Syslog](#syslog)
+* [Service Instance Upgrades](#parallel-upgrades)
 * [Security](#security-section)
 * [Errands](#errands)
 * [Resource Config](#resource-config)
@@ -212,6 +213,25 @@ To enable remote syslog for the service broker, do the following:
   </table>
 
 3. Click **Save**.
+
+####<a name='parallel-upgrades'></a>Service Instance Upgrades
+
+A configurable number of service instances may be upgraded 
+concurrently by entering a new
+value that is greater than one and less than the BOSH worker count
+for the **Number of simultaneous upgrades**.
+
+Specify a set of service instances to act as canaries for the
+upgrade process by changing the **Number of upgrade canary instances**
+to a value greater than 0.
+If all canary instances successfully upgrade,
+the remaining instances are upgraded.
+If any canary instance fails to upgrade, the upgrade fails
+and no further instances are upgraded.
+
+Click **Save** after changing values.
+
+![Instance Upgrades section](instance-upgrades-section.png)
 
 ####<a name='security-section'></a> Security
 
@@ -901,7 +921,13 @@ Follow the steps below to upgrade PCC:
 1. Download the new version of the tile from the Pivotal Network.
 1. Upload the product to Ops Manager.
 1. Click **Add** next to the uploaded product.
-1. Click on the Cloud Cache tile and review your configuration options.
+1. Click on the Cloud Cache tile and configure the upgrade options.
+    - To try the upgrade on a small number of service instances first, continuing the upgrade of all instances if these canary upgrades are successful, set the quantity of canary service instances in the **Service Instance Upgrades** section of the tile. **Save** the change.
+    - Set the number of instances that are to be upgraded in parallel in the **Service Instance Upgrades** section of the tile.  **Save** the change.
+    - Make sure that under the **Errands** section, the **Upgrade All 
+    Service Instances Post-Deploy Errand** is Default (On). 
+    **Save** the change.
+
 1. Click **Apply Changes**.
 
 ## <a id="update-plans"></a> Updating Pivotal Cloud Cache Plans
