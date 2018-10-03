@@ -89,8 +89,10 @@ Use the developer credentials to authenticate.
 
 ## <a id="gfsh-connect-https"></a> Connect with gfsh over HTTPS
 
-When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS)
-or Elastic Runtime; that is, the certificate you use where your TLS termination occurs.
+When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS);
+that is, the certificate you use where your TLS termination occurs.
+See [Determine Your TLS Termination](#tls-termination).
+
 Before you can connect, you must create a truststore. 
 
 ### <a id="truststore"></a> Create a Truststore 
@@ -98,16 +100,14 @@ Before you can connect, you must create a truststore.
 To create a truststore, use the same certificate you used to configure TLS termination. We suggest using the `keytool` command line utility to create a truststore file. 
 
 1. Locate the certificate you use to configure TLS termination. 
-1. Using your certificate, run the `keytool` command.
+1. Using your certificate, run the `keytool` command:
 
-    For example:
+    `keytool -import -alias ENV -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH -storetype JKS`
 
-    `$ keytool -import -alias ENV -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH"`
-
-    Where:<br>
-    + `ENV` is your system environment.
-    + `CERTIFICATE.CER` is your certificate file.
-    + `TRUSTSTORE-FILE-PATH` is the path to the location where you want to create the truststore file, including the name you want to give the file.
+    where
+    + `ENV` is your system environment
+    + `CERTIFICATE.CER` is your certificate file
+    + `TRUSTSTORE-FILE-PATH` is the path to the location where you want to create the truststore file, including the name you want to give the file
 
 3. When you run this command, you are prompted to enter a keystore password. Create a password and remember it!
 4. When prompted for the certificate details, enter **yes** to trust the certificate.
@@ -115,7 +115,7 @@ To create a truststore, use the same certificate you used to configure TLS termi
 The following example shows how to run `keytool` and what the output looks like:
 
 <pre class='terminal'>
-$ keytool -import -alias prod-ssl -file /tmp/loadbalancer.cer -keystore /tmp/truststore/prod.myTrustStore 
+$ keytool -import -alias prod-ssl -file /tmp/loadbalancer.cer -keystore /tmp/truststore/prod.myTrustStore -storetype JKS
 Enter keystore password:
 Re-enter new password:
 Owner: CN=*.url.example.com, OU=Cloud Foundry, O=Pivotal, L=New York, ST=New York, C=US
@@ -219,3 +219,16 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
     The cluster operator user name and password are in the service key.
     See [Create Service Keys](accessing-instance.html#create-service-key)
     for instructions on how to view the service key.
+
+## <a id="tls-termination"></a> Determine Your TLS Termination
+
+The TLS termination may be at the Gorouter, at your load balancer, or at both.
+To determine the location of your TLS termination and see your certificate:
+
+1. Bring up the Ops Manager dashboard.
+1. Click on the PAS product tile.
+1. Click on the Networking section under the Settings tab.
+
+The choice of TLS termination is labelled with **Configure support for the X-Forwarded-Client-Cert**.
+
+The certificate is labelled with **Certificate and Private Key for HAProxy and Router**.
