@@ -222,8 +222,12 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
 
 ## <a id="tls-termination"></a> Determine Your TLS Termination
 
+To connect your PCC service instance using `gfsh`, you will need
+the certificate from where your TLS termination occurs.
 The TLS termination may be at the Gorouter, at your load balancer, or at both.
-To determine the location of your TLS termination and see your certificate:
+Request the needed certificate from your Pivotal Cloud Foundry (PCF) operator.
+
+The PCF operator determines the location of your TLS termination:
 
 1. Bring up the Ops Manager dashboard.
 1. Click on the PAS product tile.
@@ -231,4 +235,14 @@ To determine the location of your TLS termination and see your certificate:
 
 The choice of TLS termination is labelled with **Configure support for the X-Forwarded-Client-Cert**.
 
-The certificate is labelled with **Certificate and Private Key for HAProxy and Router**.
+If the choice names the **Router**,
+then the TLS termination is at the Gorouter.
+In this case, the certificate is in the same section,
+labelled with **Certificate and Private Key for HAProxy and Router**.
+
+If the choice names the **infrastructure load balancer**,
+then the PCF operator can retrieve the certificate from the load balancer.
+
+If TLS termination occurs at both the Gorouter and the load balancer,
+use the certificate from the load balancer.
+The PCF operator can retrieve the certificate from the load balancer.
