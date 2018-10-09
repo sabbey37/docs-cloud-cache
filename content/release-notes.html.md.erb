@@ -5,10 +5,18 @@ owner: Cloud Cache Engineers
 
 ## <a id='v150'></a>v1.5.0
 
-**Release Date:**  September 28, 2018
+**Release Date:**  October 12, 2018
 
 Features included in this release:
 
+- TLS authentication and encryption may be enabled for all
+communication within a PCC service instance.
+- A PCC service instance stores credentials in CredHub
+when sharing the credentials with applications.
+- The upgrade of service instances can be executed in parallel,
+after trying the upgrade on a set of canary instances first.
+- BOSH errands are colocated with the Broker VM, which decreases the installation time for the tile.
+- The dev plan may be selected for use in smoke tests.
 - PCC is now running Pivotal GemFire 9.6.0.
 Using `gfsh` with this GemFire version requires a JDK or JRE
 with Java 8 release 121 or a more recent version 8 update.
