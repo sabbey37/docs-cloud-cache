@@ -155,7 +155,7 @@ Certificate was added to keystore
 
 After you have created the truststore, you can use the Pivotal GemFire command line interface, `gfsh`, to connect to the cluster over HTTPS.
 
-1. Acquire `gfsh` by downloading the correct Pivotal GemFire ZIP archive
+1. Acquire the correct `gfsh` by downloading the correct Pivotal GemFire ZIP archive
 from [Pivotal Network](https://network.pivotal.io/products/pivotal-gemfire).
 The correct version of Pivotal GemFire to download is any patch
 version of the Pivotal GemFire version listed in the PCC release notes.
@@ -163,6 +163,7 @@ A link to the PCC release notes is on Pivotal Network in the Release Details
 for your PCC version.
 Note that a JDK or JRE will also be required,
 as specified in the release notes.
+<p class="note"><strong>Note</strong>: An attempt to use the wrong `gfsh` version will result in an error message indicating that there is a version mismatch.</p>
 1. Unzip the Pivotal GemFire ZIP archive. 
 `gfsh` is within the `bin` directory in the expanded Pivotal GemFire.
 Use `gfsh` with Unix or `gfsh.bat` with Windows.
@@ -185,7 +186,8 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
      --user=<cluster_operator_XXX>
      --password=<cluster_operator-password>
     ```
-    The cluster operator user name and password are in the service key.
+    The HTTPS URL, the cluster operator user name, and the password
+    are in the service key.
     See [Create Service Keys](accessing-instance.html#create-service-key)
     for instructions on how to view the service key.
 
@@ -224,7 +226,7 @@ and then issue a `connect` command that specifies an HTTPS URL of the form:
 
 To connect your PCC service instance using `gfsh`, you will need
 the certificate from where your TLS termination occurs.
-The TLS termination may be at the Gorouter, at your load balancer, or at both.
+The TLS termination may be at the Gorouter, at the HAProxy, or at your load balancer.
 Request the needed certificate from your Pivotal Cloud Foundry (PCF) operator.
 
 The PCF operator determines the location of your TLS termination:
@@ -235,14 +237,9 @@ The PCF operator determines the location of your TLS termination:
 
 The choice of TLS termination is labelled with **Configure support for the X-Forwarded-Client-Cert**.
 
-If the choice names the **Router**,
-then the TLS termination is at the Gorouter.
-In this case, the certificate is in the same section,
+If the choice names the **Router** or **HAProxy**,
+the certificate is in the same section,
 labelled with **Certificate and Private Key for HAProxy and Router**.
 
 If the choice names the **infrastructure load balancer**,
 then the PCF operator can retrieve the certificate from the load balancer.
-
-If TLS termination occurs at both the Gorouter and the load balancer,
-use the certificate from the load balancer.
-The PCF operator can retrieve the certificate from the load balancer.
