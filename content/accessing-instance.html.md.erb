@@ -100,6 +100,7 @@ Before you can connect, you must create a truststore.
 To create a truststore, use the same certificate you used to configure TLS termination. We suggest using the `keytool` command line utility to create a truststore file. 
 
 1. Locate the certificate you use to configure TLS termination. 
+See [Determine Your TLS Termination](#tls-termination).
 1. Using your certificate, run the `keytool` command:
 
     `keytool -import -alias ENV -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH -storetype JKS`
