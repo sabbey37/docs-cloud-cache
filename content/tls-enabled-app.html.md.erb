@@ -4,9 +4,11 @@ title: Developing an App Under TLS
 
 Apps that connect to a TLS-enabled PCC service instance
 require a truststore containing the certificate from where the
-PAS environment TLS termination occurs.
+PAS environment TLS termination occurs,
+and they must set properties to configure the communication with
+the Pivotal GemFire components within the PCC service instance.
 
-Follow this brief procedure to set up the truststore:
+Follow this procedure to set up the truststore:
 
 1. Acquire the certificate you use to configure TLS termination.
 See [Determine Your TLS Termination](accessing-instance.html#tls-termination).
@@ -18,5 +20,19 @@ The location for this truststore is fixed.
 If the app uses a truststore located in a different spot than
 the `src/main/resources` folder,
 create a new truststore in this required location.
-3. The build and `cf push` of the app does not require any changes
+
+Four GemFire properties must be set to configure communication:
+
+1. Set `SSL_ENABLED_COMPONENTS` to `"ALL"`.
+1. Set `SSL_TRUSTSTORE` to the absolute path and file name of the
+truststore as it will exist within the expanded JAR file of the deployed app.
+For example, a Spring Data GemFire app that places its truststore in
+`src/main/resources` will result in an absolute path and file name of 
+`/home/vcap/app/BOOD-INF/classes/truststore.jks`.
+1. Set `SSL_TRUSTSTORE_PASSWORD` to the password chosen when
+the truststore was created.
+1. Set `SSL_REQUIRE_AUTHENTICATION` to `false`, such that there will
+be one-way authentication of the GemFire component to the app.
+
+The build and `cf push` of the app does not require any changes
 to work with a TLS-enabled PCC service instance.
