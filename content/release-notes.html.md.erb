@@ -31,6 +31,32 @@ the upgrade from PCC limited availability v1.3.2 to PCC v1.5.0.
 
 ## <a id='v15-known-issues'></a>Known Issues
 
+- The locator log of a TLS-enabled cluster will grow over
+time with repeated logging of this exception at 10-second intervals:
+
+    ```
+    [info 2018/08/14 23:28:41.343 UTC locator-ID
+    <locator request thread[3]> tid=0x75] Exception in processing request
+    from 127.0.0.1
+    javax.net.ssl.SSLHandshakeException: Remote host closed connection during handshake
+        at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1002)
+        at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1385)
+        at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1413)
+        at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1397)
+        at org.apache.geode.internal.net.SocketCreator.configureServerSSLSocket
+        (SocketCreator.java:1013)
+        at org.apache.geode.distributed.internal.tcpserver.TcpServer
+        .lambda$processRequest$0(TcpServer.java:367)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+    Caused by: java.io.EOFException: SSL peer shut down incorrectly
+        at sun.security.ssl.InputRecord.read(InputRecord.java:505)
+        at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:983)
+        ... 8 more
+    ```
+
+    This exception from the monit port check of the locator process may be ignored.
 - If you upgrade to PCC v1.3 as part of the process of upgrading to this
 1.5 release, and you created service keys on PCC before you installed v1.3:
 delete and recreate the service keys so that users are properly
