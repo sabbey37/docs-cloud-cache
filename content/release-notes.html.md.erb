@@ -3,18 +3,43 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
-## <a id='v160'></a>v1.6.0
+## <a id='v150'></a>v1.5.0
 
-**Release Date:**  Month Date, 2018
+**Release Date:**  October 12, 2018
 
 Features included in this release:
 
-- PCC is now running Pivotal GemFire ?.?.?.
+- TLS authentication and encryption may be enabled for all
+communication within a PCC service instance.
+- A PCC service instance stores credentials in CredHub
+when sharing the credentials with applications.
+- The upgrade of service instances can be executed in parallel,
+after trying the upgrade on a set of canary instances first.
+- BOSH errands are colocated with the Broker VM, which decreases the installation time for the tile.
+- The dev plan may be selected for use in smoke tests.
+- PCC is now running Pivotal GemFire 9.6.0.
 Using `gfsh` with this GemFire version requires a JDK or JRE
 with Java 8 release 121 or a more recent version 8 update.
-- PCC now supports Pivotal Application Service (PAS) 2.?.
+- The GemFire-Greenplum Connector v3.3.0 makes it possible to import and
+export PCC's region entries from and to a Greenplum database table.
+See [Use the GemFire-Greenplum Connector](using-pcc.html#use-GGC).
+- PCC now supports Pivotal Application Service (PAS) 2.3.
+- Users upgrading from the PCC limited availability v1.3.2 release will
+automatically upgrade to this PCC v1.5.0 release without upgrading to v1.4.
+Make sure to upgrade to PAS/Ops Manager v2.2 prior to doing
+the upgrade from PCC limited availability v1.3.2 to PCC v1.5.0. 
 
 ## <a id='v15-known-issues'></a>Known Issues
+
+- If you upgrade to PCC v1.3 as part of the process of upgrading to this
+1.5 release, and you created service keys on PCC before you installed v1.3:
+delete and recreate the service keys so that users are properly
+assigned roles for authentication and authorization within the cluster.
+Then, rebind all your apps.
+For information about how to perform these tasks,
+see [Delete a Service Key](https://docs.pivotal.io/pivotalcf/2-0/devguide/services/service-keys.html),
+[Create Service Keys](accessing-instance.html#create-service-key),
+and [Bind an App to a Service Instance](using-pcc.html#bind-service).
 
 - Current versions of the Cloud Foundry Command Line Interface (CLI) tool
 have a known bug that omits the documentation URL when
