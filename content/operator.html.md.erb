@@ -43,7 +43,6 @@ Each section name must show this green check mark before you can complete your i
 * [Service Instance Upgrades](#parallel-upgrades)
 * [Security](#security-section)
 * [Errands](#errands)
-* [Resource Config](#resource-config)
 
 ####<a name='azs'></a> Assign Availability Zones and Networks
 
@@ -246,9 +245,13 @@ To enable this functionality:
 2. Click on the box labeled **Enable Secure Service Instance Credentials**
 to enable use of CredHub.
 
-![Security section](security-configuration-section.png)
+3. An 'X' is required in the text box to promote the understanding that
+a TLS-enabled service instance cannot be created if the PCF environment
+is not set up to handle TLS. See [Preparing for TLS](#preparing-for-TLS) for how to prepare the PCF environment.
 
 3. Click **Save**.
+
+![Security section](security-configuration-section.png)
 
 ####<a name='errands'></a> Errands
 
@@ -273,7 +276,7 @@ For general information about errands in PCF, see [Managing Errands in Ops Manag
 This topic describes how to provide an existing Certificate Authority (CA)
 certificate to [BOSH CredHub](https://docs.pivotal.io/tiledev/credhub.html) and how to generate a new CA
 certificate with BOSH CredHub, if you do not already have one.
-<p class="note"><strong>Note</strong>: To enable TLS for a new PCC service instance, you must perform the procedures in this topic <strong>before installing and configuring the PCC tile</strong>.</p>
+<p class="note"><strong>Note</strong>: Before creating a new TLS-enabled PCC instance, you must perform the procedures in this topic. The procedures will change your PCF deployment.</p>
 
 <p class="note warning"><strong>WARNING</strong>: This procedure involves restarting all of the VMs in your PCF deployment in order to propagate a CA certificate. The operation can take a long time to complete.</p>
 
@@ -583,7 +586,7 @@ KPI stands for Key Performance Indicator.
    </tr>
    <tr>
       <th>Measurement Type</th>
-      <td>compount metric</td>
+      <td>compound metric</td>
    </tr>
    <tr>
       <th>Warning Threshold</th>
