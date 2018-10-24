@@ -44,7 +44,7 @@ Have your PCF operator follow this procedure to acquire and provide you with the
 
 1. Run this command to print the Services CA certificate:
     <pre class="terminal">
-    $ credhub get -n /services/tls_ca -k certificate
+    $ credhub get --name="/services/tls_ca" -j | jq -r .value.certificate
     </pre>
 
 Follow this procedure to set up the truststore:
