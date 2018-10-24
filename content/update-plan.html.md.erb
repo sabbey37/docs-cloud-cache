@@ -1,0 +1,31 @@
+---
+title: Updating Pivotal Cloud Cache Plans
+---
+
+Follow the steps below to update plans in Ops Manager.
+
+1. Click on the Cloud Cache tile.
+1. Click on the plan you want to update under the **Information** section.
+1. Edit the fields with the changes you want to make to the plan.
+1. Click **Save** button on the bottom of the page.
+1. Click on the **PCF Ops Manager** to navigate to the **Installation Dashboard**.
+1.  Optionally, if you are using Ops Manager v2.3 or later, click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
+1.  Click **Apply Changes**.
+
+Plan changes are not applied to existing services instances until you run the `upgrade-all-service-instances` BOSH errand. You must use the BOSH CLI to run this errand. Until you run this errand, developers cannot update service instances.
+
+Changes to fields that can be overridden by optional parameters, for example  `num_servers` or `new_size_percentage`, change the default value of these instance properties, but do not affect existing service instances.
+
+If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits are not modified.
+
+When existing instances are upgraded, all plan changes are applied to them.
+Upgrades and updates to service instances can cause a rolling restart
+of GemFire servers.
+Be aware that the rebalancing of data to maintain redundancy
+may impact the performance of the remainder of
+the servers within the service instance.
+
+<p class="note warning"><strong> WARNING:</strong> Data loss may result
+from the restart of a cluster. See
+<a href="./update-instance.html#cluster-restart">Restarting a Cluster</a>
+for the conditions under which data loss occurs.</p>
