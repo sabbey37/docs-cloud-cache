@@ -220,14 +220,6 @@ To redeploy an app JAR file after connecting within gfsh
 using the cluster operator role,
 do the following: 		
 
-1. Run this gfsh command to remove the existing JAR file:
-
-    <code>undeploy --jar=PATH-TO-JAR/FILENAME.jar</code>
-
-    For example,
-
-    <pre class='terminal'> gfsh>undeploy --jar=current-jars/myJar.jar </pre>
-
 1. Run this gfsh command to deploy the updated JAR file:
 
     <code>gfsh>deploy --jar=PATH-TO-UPDATED-JAR/FILENAME.jar</code>
