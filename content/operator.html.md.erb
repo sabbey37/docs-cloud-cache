@@ -9,7 +9,7 @@ This document describes how a Pivotal Cloud Foundry (PCF) operator can install, 
 
 #### Service Network
 
-You must have access to a Service Network in order to install PCC. 
+You must have access to a Service Network in order to install PCC.
 
 ## <a id="install"></a> Installing and Configuring Pivotal Cloud Cache
 
@@ -24,11 +24,11 @@ follow these steps to install PCC on PCF:
 1. Complete all the configuration steps in the [Configure Tile Properties](#settings-config) section below.
 1. Return to the Ops Manager Installation Dashboard.
 Optionally, if you are using Ops Manager v2.3 or later, click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
-1.  Click **Apply Changes** to complete the installation of the PCC tile.  
+1.  Click **Apply Changes** to complete the installation of the PCC tile.
 
 ### <a id="settings-config"></a> Configure Tile Properties
 
-Configure the sections listed on the left side of the page. 
+Configure the sections listed on the left side of the page.
 
 ![Tile Configuration Sections](tile-configuration-sections.png)
 
@@ -61,7 +61,7 @@ To select AZs and networks for VMs used by PCC, do the following:
     <tr><td><strong>Network</strong></td>
         <td>Select your PAS (or Elastic Runtime) network.</td>
     <tr><td><strong>Service Network</strong></td>
-        <td>Select the network to be used for GemFire VMs.</td> 
+        <td>Select the network to be used for GemFire VMs.</td>
   </table>
 
 1. Click **Save**.
@@ -90,7 +90,7 @@ Because smoke tests create and later destroy this plan, using a very small plan 
 
 #### Settings: Allow Outbound Internet Access Settings
 
-By default, outbound internet access is not allowed from service instances. 
+By default, outbound internet access is not allowed from service instances.
 
 If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances.
 Log forwarding and backups, which require external endpoints, might also require internet access.
@@ -101,7 +101,7 @@ Select **Allow outbound internet access from service instances (IaaS-dependent)*
 
 ![Outbound Internet Access](allow-outbound-access.png)
 
-<p class="note"><strong>Note</strong>: Outbound network traffic rules also depend on your IaaS settings. 
+<p class="note"><strong>Note</strong>: Outbound network traffic rules also depend on your IaaS settings.
 Consult your network or IaaS administrator to ensure that your IaaS allows outbound traffic to the external networks you need.</p>
 
 #### Default Distributed System ID Setting
@@ -137,7 +137,7 @@ Once enabled, the metrics are sent to the Loggregator Firehose.
 
 The **CF Service Access** drop-down menu gives you the option to display or not display the service plan in the Marketplace.
 **Enable Service Access** displays the service plan the Marketplace.
-**Disable Service Access** makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time. 
+**Disable Service Access** makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time.
 **Leave Service Access Unchanged** makes the plan unavailable in the Marketplace by default, but allows you to make it available at a later time.
 
 The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
@@ -162,11 +162,11 @@ When you finish configuring the plan, click **Save** to save your configuration 
 A Dev Plan is a type of service plan.
 Use a Dev Plan for development and testing.
 The plan provides a single locator and server,
-which are colocated within a single VM. 
+which are colocated within a single VM.
 
-The page for configuring a Dev Plan is similar to the page for configuring 
+The page for configuring a Dev Plan is similar to the page for configuring
 other service plans.
-To configure the Dev Plan, input information in the fields and make selections from the options on the **Plan for test development** page. 
+To configure the Dev Plan, input information in the fields and make selections from the options on the **Plan for test development** page.
 
 ![Dev Plan Configuration Sections](dev-plan.png)
 
@@ -208,7 +208,7 @@ To enable remote syslog for the service broker, do the following:
         <td>By default, only the broker logs are forwarded to your configured log management service.
             If you want to forward server and locator logs from all service instances, select this.
             This lets you monitor the health of the clusters, although it generates a large volume of logs.<br><br>
-            If you don't enable this, you get only the broker logs which include information about service instance creation, 
+            If you don't enable this, you get only the broker logs which include information about service instance creation,
             but not about on-going cluster health.</td></tr>
   </table>
 
@@ -216,7 +216,7 @@ To enable remote syslog for the service broker, do the following:
 
 ####<a name='parallel-upgrades'></a>Service Instance Upgrades
 
-A configurable number of service instances may be upgraded 
+A configurable number of service instances may be upgraded
 concurrently by entering a new
 value that is greater than one and less than the BOSH worker count
 for the **Number of simultaneous upgrades**.
@@ -255,7 +255,7 @@ is not set up to handle TLS. See [Preparing for TLS](#preparing-for-TLS) for how
 
 ####<a name='errands'></a> Errands
 
-By default, post-deploy and pre-delete errands always run. 
+By default, post-deploy and pre-delete errands always run.
 Pivotal recommends keeping these defaults.
 However, if necessary, you can change these defaults as follows.
 
@@ -298,7 +298,7 @@ Apps that communicate with PCC must have access to the CA certificate
 in order to validate that the server certificate can be trusted.
 
 <p class="note warning"><strong>WARNING</strong>: An operator must rotate the CA certificate if it expires or if it becomes compromised.
-To rotate your CA certificate, see 
+To rotate your CA certificate, see
 <a href="https://discuss.pivotal.io/hc/en-us/articles/360002542194-Rotating-CA-Certificates-for-Pivotal-Cloud-Foundry-Services">Rotating CA Certificates for Pivotal Cloud Foundry Services</a>
 in the Pivotal Knowledge Base.
 Do not attempt to rotate a CA certificate on your own.
@@ -433,6 +433,15 @@ Perform the following steps to log in to CredHub, provide or generate a CA certi
     	--client-secret=abcdefghijklm123456789
     </pre>
 
+1. Use the CredHub CLI to check whether a services CA certificate already is present.
+    <br><br>
+	* Enter the following command:
+  	<pre class="terminal">
+  	$ credhub get \
+  		--name="/services/tls_ca"
+  	</pre>
+  * If you already have a certificate at the 'services/tls_ca' path, skip to step 5.
+
 1. Use the CredHub CLI to generate a CA certificate or provide an existing one.
     <p class="note"><strong>Note</strong>: Your PCF deployment may have multiple CA certificates.
        Pivotal recommends a dedicated CA certificate for services.</p>
@@ -474,7 +483,7 @@ Add the CA certificate to the box labeled **Certificate Authorities Trusted by R
 
 ## <a id="monitoring"></a> Monitoring Pivotal Cloud Cache Service Instances
 
-PCC clusters and brokers emit service metrics. 
+PCC clusters and brokers emit service metrics.
 You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.
 
 In the descriptions of the metrics,
@@ -1116,7 +1125,7 @@ upgrading to PCC v1.4.
 Note that each PCC release is compatible with two
 Pivotal Application Service (PAS) and Ops Manager versions,
 as specified in the [Product Snapshot](index.html#snapshot).
-Incorporate those upgrades to PAS and Ops Manager in your upgrade process 
+Incorporate those upgrades to PAS and Ops Manager in your upgrade process
 as required to maintain compatibility,
 as described in
 [Upgrading Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/customizing/upgrading-pcf.html).
@@ -1127,10 +1136,10 @@ Follow the steps below to upgrade PCC:
 1. Upload the product to Ops Manager.
 1. Click **Add** next to the uploaded product.
 1. Click on the Cloud Cache tile and configure the upgrade options.
-    - To try the upgrade on a small number of service instances first, set the quantity of canary service instances as described in [Service Instance Upgrades](operator.html#parallel-upgrades). 
+    - To try the upgrade on a small number of service instances first, set the quantity of canary service instances as described in [Service Instance Upgrades](operator.html#parallel-upgrades).
     - Set the number of instances that are to be upgraded in parallel as described in [Service Instance Upgrades](operator.html#parallel-upgrades).
-    - Make sure that under the **Errands** section, the **Upgrade All 
-    Service Instances Post-Deploy Errand** is Default (On). 
+    - Make sure that under the **Errands** section, the **Upgrade All
+    Service Instances Post-Deploy Errand** is Default (On).
     **Save** the change.
 
 1.  Optionally, if you are using Ops Manager v2.3 or later, click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
