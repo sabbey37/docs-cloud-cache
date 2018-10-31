@@ -17,6 +17,12 @@ Other branches are sometimes created to PR corrections/edits back into live docs
 
 The above info about branches comes from Megan Moore and Jane Day and is correct as of November 22, 2017.
 
+## Partials
+
+Cross-product partials for **Pivotal Cloud Cache** are single sourced from the [Services Partials](https://github.com/pivotal-cf/docs-services-partials) repo.
+
+Previously, these partials were sourced from the v018.x branch of the [On Demand Service Broker SDK](https://github.com/pivotal-cf/docs-on-demand-service-broker/tree/v0.18.x) content repo.
+
 ## Staging
 
 The staging docs are on PWS using https://docs-pcf-staging.cfapps.io/.
