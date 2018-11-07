@@ -91,10 +91,8 @@ ssl-require-authentication=false
 
 where `TRUSTSTORE-PASSWORD` is the password chosen during truststore
 creation.
-An app may set properties with the `java.util.Properties.setProperty()` method,
-handing those properties to the `ClientCacheFactory` constructor.
-Alternatively, override initially-set properties
-with the `ClientCacheFactory.set()` method.
+An app may set these properties with the `ClientCacheFactory.set()` method,
+prior to creating a `ClientCache` instance.
 
 The build and `cf push` of the app does not require any changes
 to work with a TLS-enabled PCC service instance.
