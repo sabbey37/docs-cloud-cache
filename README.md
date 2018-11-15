@@ -7,15 +7,25 @@ The name can be abbreviated after first use in body text on the page.
 For example: first use in body text is "Pivotal Cloud Cache (PCC)". 
 In titles and headings and in subsequent use on the page, use "PCC".
 
-## About Branches 
+## Branches in this Content Repo 
 
-Currently, **v1.2-branch**, **v1.1-branch** and **v1.0-branch** are your branches for (already released) v1.2, v1.1, and v1.0 documentation.
+**master** - use for unreleased documentation, currently available on http://docs-pcf-staging.cfapps.io/p-cloud-cache/1-6.
+The master branch is the tree-trunk, so ALWAYS make changes you want carried forward in this branch. This includes:
 
-Use the **master** branch for unreleased, v1.3, documentation; you can make changes or PRs relevant to v1.2 on that branch.
+Unreleased features
+Doc bug fixes
+Doc reorganization or enhancement
+Then, if necessary, immediately cherry-pick/copy any changes that you want to push immediately to production into the appropriate "-live" branch below:
+
+**1.5-branch** - current branch for documentation that is assumed/expected to be live on http://docs.pivotal.io/p-cloud-cache/1-5.
+**1.4-branch** - current branch for documentation that is assumed/expected to be live on http://docs.pivotal.io/p-cloud-cache/1-4.
+**1.3-branch** - current branch for documentation that is assumed/expected to be live on http://docs.pivotal.io/p-cloud-cache/1-3.
+**1.2-branch** - not in use because the docs are no longer live. PDF available at http://docs.pivotal.io/archives/p-cloud-cache-1.2.2.pdf
+**1.1-branch** - not in use because the docs are no longer live. PDF available at http://docs.pivotal.io/archives/p-cloud-cache-1.1.5.pdf
+**1.0-branch** - not in use because the docs are no longer live. PDF available at http://docs.pivotal.io/archives/p-cloud-cache-1.0.8.pdf
 
 Other branches are sometimes created to PR corrections/edits back into live docs.
-
-The above info about branches comes from Megan Moore and Jane Day and is correct as of November 22, 2017.
+The above info about branches comes from Samia Nneji and Chris Wong and is correct as of November 15, 2018.
 
 ## Partials
 
@@ -27,7 +37,7 @@ Previously, these partials were sourced from the v018.x branch of the [On Demand
 
 The staging docs are on PWS using https://docs-pcf-staging.cfapps.io/.
 
-Staging docs for the v1.3 release are on https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-3/index.html . 
+Staging docs for the v1.6 release are on https://docs-pcf-staging.cfapps.io/p-cloud-cache/1-6/index.html . 
 Ask in the pcf-docs Slack channel if you need access.
 
 ## Developing docs locally
