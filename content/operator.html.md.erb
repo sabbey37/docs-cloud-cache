@@ -1145,6 +1145,102 @@ Follow the steps below to upgrade PCC:
 1.  Optionally, if you are using Ops Manager v2.3 or later, click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
 1.  Click **Apply Changes**.
 
+## <a id="migrate-to-TLS"></a> Migrating to a TLS-Enabled Cluster
+
+An existing PCC service instance that does not use TLS encryption
+may be migrated to become a PCC service instance with TLS encryption enabled.
+*This procedure will require downtime for the service instance
+during the migration.*
+Follow the procedure given here _after_:
+
+- All steps within [Preparing for TLS]() have been completed.
+- The service instance has been upgraded to PCC v1.5.1
+or a more recent PCC version. There will be no PCC version change during
+the migration.
+
+Follow this procedure to migrate the existing PCC service instance:
+
+1. As a PCF operator, stop all apps.
+
+    ```
+    $ cf apps
+    ```
+    lists all apps, to identify the `APP_NAME`.
+
+
+    Then, each app may be stopped with:
+
+    ```
+    $ cf stop APP_NAME
+    ```
+
+1. For all non-persistent regions, export the data.
+Cuz' if you don't, you a-gonna lose the region contents.  Completely. Forever.
+    - Get the right `gfsh`. Run it. 
+    - Connect.  Use cluster operator role/credentials.
+
+        ```
+        gfsh>connect
+        ```
+    - List regions.  Use cluster operator role/credentials from the service key.
+
+        ```
+        gfsh>list regions
+        ```
+    - For each region, use `describe` to determine if the region
+    is persistent or not and acquire a server name.  Use cluster operator role/credentials.
+
+        ```
+        gfsh>describe region --name=REGION_NAME
+        ```
+    - For each non-persistent region, export its data.
+    Use cluster operator role/credentials.
+
+        ```
+        gfsh>export data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var/vcap/store/gemfire-server
+        ```
+
+1. From Step 4 in Preparing (?) you did a target step of the
+BOSH Director.  Go acquire it again if you have to.
+Using PCF operator credentials, stop the BOSH director:
+
+    ```
+    $ bosh -d SERVICE-INSTANCE-NAME stop
+    ```
+
+1. Acquire the BOSH manifest with:
+
+    ```
+    $ bosh -d SERVICE-INSTANCE-NAME manifest > SERVICE-INSTANCE-NAME-manifest.yml
+    ```
+
+1. Edit the BOSH manifest.  Add `tls: true` in the locator properties.  _Plus a bunch of other stuff._
+
+1. Do a BOSH deploy using the edited BOSH manifest:
+
+    ```
+    $ bosh -d SERVICE-INSTANCE-NAME deploy SERVICE-INSTANCE-NAME-manifest.yml
+    ```
+
+1. Do a sequential BOSH start with:
+
+    ```
+    $ bosh -d SERVICE-INSTANCE-NAME start --max-in-flight=1
+    ```
+
+1. Run `gfsh` and follow the directions in [link needed here] to 
+to connect to the TLS-enabled cluster.
+
+1. Use `gfsh` to import all region data that was exported
+earlier in this procedure. For each earlier-exported region, do:
+
+    ```
+    gfsh>import data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var/vcap/store/gemfire-server
+    ```
+
+1. Do good stuff to the app.  Re-build. Re-deploy. Start the apps.
+This is probably more than one step.
+
 ## <a id="update-plans"></a> Updating Pivotal Cloud Cache Plans
 
 Follow the steps below to update plans in Ops Manager.
