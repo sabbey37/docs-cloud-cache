@@ -53,3 +53,14 @@ Both of these ports must be reachable from the PAS (or Elastic Runtime) network 
 PCC servers and locators communicate with each other using UDP and TCP. The current port range for this communication is `49152-65535`.
 
 If you have a firewall between VMs, ensure this port range is open.
+
+### Port Range Usage Across a WAN
+
+Gateway receivers and gateway senders communicate across WAN-separated
+service instances.
+Each PCC service instance uses GemFire defaults for the
+gateway receiver ports.
+The default is the inclusive range of port numbers 5000 to 5499.
+
+Ensure this port range is open when WAN-separated service instances
+will communicate.
