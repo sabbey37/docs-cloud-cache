@@ -3,6 +3,20 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
+## <a id='v141'></a>v1.4.1
+
+**Release Date:**  November 26, 2018
+
+Features included in this release:
+
+- **Security Vulnerability**: PCC depends upon the Pivotal Cloud Foundry On Demand Services Broker, which addressed the following security vulnerability:
+
+    - [CVE-2018-15759](https://pivotal.io/security/cve-2018-15759):
+    On Demand Services SDK timing attack vulnerability
+- PCC is now running Pivotal GemFire 9.3.0.
+Using `gfsh` with this GemFire version requires a JDK or JRE
+with Java 8 release 92 or a more recent version 8 update.
+
 ## <a id='v140'></a>v1.4.0
 
 **Release Date:**  June 1, 2018
