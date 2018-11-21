@@ -1151,9 +1151,11 @@ An existing PCC service instance that does not use TLS encryption
 may be migrated to become a PCC service instance with TLS encryption enabled.
 *This procedure will require downtime for the service instance
 during the migration.*
-Follow the procedure given here _after_:
+Follow the procedure given here _after_ these prerequisites have
+been met:
 
-- All steps within [Preparing for TLS]() have been completed.
+- All steps within [Preparing for TLS](#preparing-for-TLS)
+have been completed.
 - The service instance has been upgraded to PCC v1.5.1
 or a more recent PCC version. There will be no PCC version change during
 the migration.
@@ -1161,62 +1163,208 @@ the migration.
 Follow this procedure to migrate the existing PCC service instance:
 
 1. As a PCF operator, stop all apps.
+First, lists all apps to identify the `APP_NAME`.
 
     ```
     $ cf apps
     ```
-    lists all apps, to identify the `APP_NAME`.
 
-
-    Then, each app may be stopped with:
+    Then, stop each app with:
 
     ```
     $ cf stop APP_NAME
     ```
 
-1. For all non-persistent regions, export the data.
-Cuz' if you don't, you a-gonna lose the region contents.  Completely. Forever.
-    - Get the right `gfsh`. Run it. 
-    - Connect.  Use cluster operator role/credentials.
-
-        ```
-        gfsh>connect
-        ```
-    - List regions.  Use cluster operator role/credentials from the service key.
+1. For all non-persistent regions, use the `gfsh` command line tool
+to export the data.
+_Without an export, all non-persistent region entries will be irretrievably lost._
+    - Complete the steps within
+    [Accessing a Service Instance](accessing-instance.html#gfsh-connect-https)
+    to acquire the correct version of `gfsh`, run it,
+    and connect to the cluster using the cluster operator role/credentials from the service key.
+    - List the regions.
 
         ```
         gfsh>list regions
         ```
-    - For each region, use `describe` to determine if the region
-    is persistent or not and acquire a server name.  Use cluster operator role/credentials.
+    - For each region, use `gfsh describe` to determine if the region
+    is persistent or not and to acquire a server name.
 
         ```
         gfsh>describe region --name=REGION_NAME
         ```
-    - For each non-persistent region, export its data.
-    Use cluster operator role/credentials.
+    - For each non-persistent region, use this single `gfsh` command
+    to export all the data within the region.
+    The `SERVER_NAME` identifies which GemFire server receives the
+    `export` command and propagates the command to all other GemFire
+    servers within the cluster.
 
         ```
         gfsh>export data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var/vcap/store/gemfire-server
         ```
 
-1. **How do we do this?** Target the BOSH Director.
-`bosh log-in` to the BOSH Director.
+1.  Your PCF operator needs to target the BOSH Director
+in order to acquire the `DEPLOYMENT_NAME`.
+    - Run
+
+        ```
+        $ cf service SERVICE_INSTANCE_NAME
+        ```
+    to acquire the digits that uniquely identify the service instance.
+    The digits (`XXX-XXX` in the following instructions) are those
+    between `cloudcache-` and the period `.`.
+    - Log in to the BOSH Director.
+
+        ```
+        $ bosh log-in
+        ```
+    - The `DEPLOYMENT_NAME` will appear in the output of
+
+        ```
+        $ bosh deployments | grep XXX-XXX
+        ```
 
 1.  Using PCF operator credentials, stop the BOSH director:
 
     ```
-    $ bosh -d SERVICE-INSTANCE-NAME stop
+    $ bosh -d DEPLOYMENT_NAME stop
     ```
     and say "y" when prompted.
 
 1. Acquire the BOSH manifest with:
 
     ```
-    $ bosh -d SERVICE-INSTANCE-NAME manifest > SERVICE-INSTANCE-NAME-manifest.yml
+    $ bosh -d DEPLOYMENT_NAME manifest > DEPLOYMENT_NAME-manifest.yml
     ```
 
-1. Edit the BOSH manifest.  Add `tls: true` in the locator properties.  _Plus a bunch of other stuff._
+1. Edit the BOSH manifest.
+    - Before the edit, the manifest will be similar to
+
+<pre>
+---
+name: service-instance_d4541809-5537-491a-b2d3-2faafe08f7a1
+releases:
+- name: gemfire
+  version: 1.6.0-build.18
+- name: routing
+  version: 0.183.0+stemcell.97.32
+- name: syslog-migration
+  version: 11.1.1+stemcell.97.28
+- name: bpm
+  version: 0.13.0+stemcell.97.28
+stemcells:
+- alias: stemcell
+  os: ubuntu-xenial
+  version: '97.32'
+instance_groups:
+- name: locator
+  instances: 3
+  jobs:
+  - name: gemfire-locator
+    release: gemfire
+    properties:
+      gemfire:
+        distributed-system-id: 0
+        locator:
+          bpm_enabled: true
+          port: '55221'
+          properties:
+            enable-time-statistics: true
+        persist-pdx: true
+        security:
+          internal_cluster_password: LuFIsIp1e0ampE6JzrunvA
+          internal_cluster_username: TdaOHRTxEnh48XhOfQQQ
+          roles:
+            cluster_operator:
+            - CLUSTER:WRITE
+            - CLUSTER:READ
+            - DATA:MANAGE
+            - DATA:WRITE
+            - DATA:READ
+            - CLUSTER:MANAGE:DEPLOY
+            - CLUSTER:MANAGE
+            - CLUSTER:MANAGE:GATEWAY
+            developer:
+            - CLUSTER:READ
+            - DATA:WRITE
+            - DATA:READ
+            gateway:
+            - DATA:WRITE
+          users:
+            cluster_operator_fFdMqRzRp6HEkZBBt6CXBw:
+              password: EcnspglmAcf1EXRm7jJA
+              roles:
+              - cluster_operator
+            developer_IxPnGiIVWZZSm4UuHW8A:
+              password: YbUTmUtBqCG6VmHSdAnUg
+              roles:
+              - developer
+  - name: route_registrar
+    release: routing
+    consumes:
+      nats:
+        deployment: cf-5d27718de3fc1e896c0c
+        from: nats
+    properties:
+      route_registrar:
+        routes:
+        - name: cloudcache
+          port: 8080
+          registration_interval: 20s
+          uris:
+          - cloudcache-d4541809-5537-491a-b2d3-2faafe08f7a1.sys.metallicyellow.cf-app.com
+  - name: bpm
+    release: bpm
+  vm_type: micro.cpu
+  stemcell: stemcell
+  persistent_disk_type: '10240'
+  azs:
+  - us-central1-f
+  networks:
+  - name: metallicyellow-services-subnet
+- name: server
+  instances: 4
+  jobs:
+  - name: gemfire-server
+    release: gemfire
+    properties:
+      gemfire:
+        server:
+          bpm_enabled: true
+          create-gateway-receiver: true
+          development-mode: false
+          properties:
+            enable-time-statistics: true
+            jmx-manager-start: true
+          security:
+            gateway_password: myv71AKur2TndY2XNx9hrQ
+            gateway_username: gateway_sender_u7ZQz7zerbLOnlE3438yUw
+  - name: prime-cluster-for-pcc
+    release: gemfire
+  - name: bpm
+    release: bpm
+  vm_type: medium.cpu
+  stemcell: stemcell
+  persistent_disk_type: '10240'
+  azs:
+  - us-central1-f
+  networks:
+  - name: metallicyellow-services-subnet
+update:
+  canaries: 1
+  canary_watch_time: 1000-600000
+  update_watch_time: 1000-600000
+  max_in_flight: 32
+  serial: true
+features:
+  converge_variables: true
+</pre>
+
+<pre>
+Trying a 1 in a circle  &#9312
+Trying a 2 in a circle  &#9313
+Trying a 3 in a circle  &#9314
+</pre>
 
 1. REDEPLOY THE MANIFEST: Do a BOSH deploy using the edited BOSH manifest:
 
