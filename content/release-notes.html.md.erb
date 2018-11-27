@@ -5,7 +5,7 @@ owner: Cloud Cache Engineers
 
 ## <a id='v151'></a>v1.5.1
 
-**Release Date:**  November 26, 2018
+**Release Date:**  November 27, 2018
 
 Features included in this release:
 
@@ -13,9 +13,13 @@ Features included in this release:
 
     - [CVE-2018-15759](https://pivotal.io/security/cve-2018-15759):
     On Demand Services SDK timing attack vulnerability
+- **Security Vulnerability**: PCC depends upon an included Java SE,
+which addressed the following security vulnerabilities:
+    - [CVE-2018-3149](https://nvd.nist.gov/vuln/detail/CVE-2018-3149)
+    - [CVE-2018-3180](https://nvd.nist.gov/vuln/detail/CVE-2018-3180)
+    - [CVE-2018-3183](https://nvd.nist.gov/vuln/detail/CVE-2018-3183)
+    - [CVE-2018-3214](https://nvd.nist.gov/vuln/detail/CVE-2018-3214)
 - PCC is now running Pivotal GemFire 9.6.0.
-Using `gfsh` with this GemFire version requires a JDK or JRE
-with Java 8 release 121 or a more recent version 8 update.
 - PCC now runs with a Xenial stemcell, version 170.9 or a more recent version.
 
 ## <a id='v150'></a>v1.5.0
