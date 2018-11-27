@@ -1434,7 +1434,7 @@ gfsh>describe region --name=REGION_NAME </pre>
     <li> For each non-persistent region, use this single <code>gfsh</code> command
     to export all the data within the region.
     The <code>SERVER_NAME</code> identifies which GemFire server receives the
-    `export` command and propagates the command to all other GemFire
+    <code>export</code> command and propagates the command to all other GemFire
     servers within the cluster.
 
         <pre>
@@ -1468,7 +1468,7 @@ $ bosh deployments | grep XXX-XXX </pre>
 
     <pre>
 $ bosh -d DEPLOYMENT_NAME stop </pre>
-    and say "y" when prompted.
+    and type "y" when prompted.
 </li>
 <li> Acquire the BOSH manifest with:
 
@@ -1730,14 +1730,14 @@ features:
     <pre>
 $ bosh -d SERVICE-INSTANCE-NAME deploy SERVICE-INSTANCE-NAME-manifest.yml </pre>
 
-    and say "y" when prompted.
+    and type "y" when prompted.
 </li>
 <li> Restart the cluster with a sequential BOSH start:
 
     <pre>
 $ bosh start -d SERVICE-INSTANCE-NAME  --max-in-flight=1 </pre>
 
-    and say "y" when prompted.
+    and type "y" when prompted.
 </li>
 <li> Run <code>gfsh</code> and follow the directions in 
 <a href="./accessing-instance.html#gfsh-connect-https">Connect with gfsh over HTTPS</a>
