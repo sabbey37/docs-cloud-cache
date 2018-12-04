@@ -3,6 +3,10 @@ title: Pivotal Cloud Cache
 owner: Cloud Cache Engineers
 ---
 
+In this topic:
+
+- [Security](security.html)
+
 ## <a id='overview'></a>Overview
 
 Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF). 
@@ -354,67 +358,3 @@ for descriptions of the variety of design patterns that PCC supports.
 - Scale down of the cluster is not supported.
 - Plan migrations, for example, `-p` flag with the `cf update-service` command, are not supported.
 
-## <a id='security'></a>Security
-
-Pivotal recommends that you do the following:
-
-- Run PCC in its own network
-- Use a load balancer to block direct, outside access to the Gorouter
-
-To allow PCC network access from apps, you must create application security groups that allow access on the following ports:
-
-* 1099
-* 8080
-* 40404
-* 55221
-
-For more information, see the PCF [Application Security Groups](https://docs.pivotal.io/pivotalcf/adminguide/app-sec-groups.html#creating-groups) topic.
-
-PCC works with the IPsec Add-on for PCF.
-For information about the IPsec Add-on for PCF,
-see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html).
-
-### Authentication
-
-PCC service instances are created with three default GemFire user roles for
-interacting with clusters:
-
-- A cluster operator manages the GemFire cluster and can access
-region data.
-- A developer can access region data.
-- A gateway sender propagates region data to another PCC service instance.
-
-All client apps, gfsh, and JMX clients must authenticate as
-one of these user roles to access the cluster.
-
-The identifiers assigned for these roles are detailed in
-[Create Service Keys](accessing-instance.html#create-service-key).
-
-
-### Authorization
-
-Each user role is given predefined permissions for cluster operations.
-To accomplish a cluster operation,
-the user authenticates using one of the roles.
-Prior to initiating the requested operation,
-there is a verification that the
-authenticated user role has the permission authorized to do the operation.
-Here are the permissions that each user role has:
-
-- The  cluster operator role has 
-`CLUSTER:MANAGE`,
-`CLUSTER:WRITE`,
-`CLUSTER:READ`,
-`DATA:MANAGE`,
-`DATA:WRITE`,
- and `DATA:READ` permissions.
-- The developer role has
-`CLUSTER:READ`,
-`DATA:WRITE`,
-and `DATA:READ` permissions.
-- The gateway sender role has `DATA:WRITE` permission.
-
-More details about these permissions are in the Pivotal GemFire manual under [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
-
-## <a id='feedback'></a> Feedback
-Please provide any bugs, feature requests, or questions to the [Pivotal Cloud Foundry Feedback list](mailto:pivotal-cf-feedback@pivotal.io).
