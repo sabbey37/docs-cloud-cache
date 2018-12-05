@@ -1,0 +1,28 @@
+---
+title: Workflow to Set Up a PCC Service
+---
+
+The workflow for the PCF admin setting up a PCC service plan:
+
+<% mermaid_diagram do %>
+  graph TD;
+  subgraph PCF Admin Actions
+  s1
+  s2
+  end
+
+  subgraph Developer Actions
+  s4
+  end
+
+  s1[1. Upload P-CloudCache.pivotal to Ops Manager]
+  s2[2. Configure CloudCache Service Plans, i.e. caching-small]
+  s1-->s2
+  s3[3. Ops Manager deploys CloudCache Service Broker]
+  s2-->s3
+  s4[4. Developer calls `cf create-service p-cloudcache caching-small test`]
+  s3-->s4
+  s5[5. Ops Manager creates a CloudCache cluster following the caching-small specifications]
+  s4-->s5
+<% end %>
+
