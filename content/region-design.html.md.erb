@@ -183,7 +183,7 @@ with these default properties:
 - Synchronous writes. All updates to the region generate
 operating system disk writes to update the disk store.
 - The disk size is part of the instance configuration.
-See [Configure Service Plans](operator.html#plan-config)
+See [Configure Service Plans](install-configure.html#plan-config)
 for details on setting the persistent disk types for the server.
 Choose a size that is at least twice as large as
 the expected maximum quantity of region data, with an absolute
@@ -213,7 +213,7 @@ If using a region type with overflow,
 be sure to configure a plan with sufficient disk space for the Server VM,
 allocating at least the minimums given for the 
 _Persistent disk type for the Server VMs_, as described in
-[Configure Tile Properties](operator.html#settings-config).
+[Configure Tile Properties](install-configure.html#settings-config).
 
 If no disk store is created, region creation with a region type that
 uses a disk store will cause the creation of one called
