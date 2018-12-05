@@ -5,6 +5,7 @@ owner: Cloud Cache Engineers
 
 In this topic:
 
+- [Recommended Usage and Limitations](usage.html)
 - [Security](security.html)
 
 ## <a id='overview'></a>Overview
@@ -345,16 +346,3 @@ Configure the network prior to creating service instances.
 Locate directions for creating a network on the appropriate IAAS provider
 within the section titled
 [Architecture and Installation Overview](https://docs.pivotal.io/pivotalcf/installing/index.html).
-
-## <a id='recommended-usage'></a>Recommended Usage and Limitations
-
-- See [Design Patterns](./design-patterns.html)
-for descriptions of the variety of design patterns that PCC supports.
-- PCC stores objects in key/value format, where value can be any object.
-- See [gfsh Command Restrictions](permitted-gfsh.html) for limitations on the use of gfsh commands.
-
-### Limitations
-
-- Scale down of the cluster is not supported.
-- Plan migrations, for example, `-p` flag with the `cf update-service` command, are not supported.
-
