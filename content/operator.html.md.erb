@@ -1413,7 +1413,7 @@ $ cf stop APP_NAME
 
 <li> For all non-persistent regions, use the <code>gfsh</code> command line tool
 to export the data.
-<i>Without an export, all non-persistent region entries will be irretrievably lost.</i>
+<p class="note warning"><strong> WARNING!</strong> Without an export, all non-persistent region entries will be irretrievably lost. </p>
     <ul>
     <li> Complete the steps within
     <a href="./accessing-instance.html">Accessing a Service Instance</a>
@@ -1464,7 +1464,7 @@ $ bosh deployments | grep XXX-XXX </pre>
     </li>
     </ul>
 </li>
-<li> Using PCF operator credentials, stop the BOSH director:
+<li> Using PCF operator credentials, stop the BOSH deployment:
 
     <pre>
 $ bosh -d DEPLOYMENT_NAME stop </pre>
