@@ -1,0 +1,378 @@
+---
+title: Migrating to a TLS-Enabled Cluster
+---
+
+An existing PCC service instance that does not use TLS encryption
+may be migrated to become a PCC service instance with TLS encryption enabled.
+<p class="note warning"><strong> WARNING!</strong> This procedure will require downtime for the service instance
+during the migration. </p>
+Follow the procedure given here _after_ these prerequisites have
+been met:
+
+- All steps within [Preparing for TLS](prepare-TLS.html)
+have been completed.
+- The service instance has been upgraded to PCC v1.5.2
+or a more recent PCC version. There will be no PCC version change during
+the migration.
+
+Follow this procedure to migrate the existing PCC service instance:
+
+<ol>
+<li> As a PCF operator, stop all apps.
+First, list all apps to identify the <code>APP_NAME</code>.
+
+<pre>
+$ cf apps
+</pre>
+
+    Then, stop each app with:
+
+<pre>
+$ cf stop APP_NAME
+</pre>
+</li>
+
+<li> For all non-persistent regions, use the <code>gfsh</code> command line tool
+to export the data.
+<p class="note warning"><strong> WARNING!</strong> Without an export, all non-persistent region entries will be irretrievably lost. </p>
+    <ul>
+    <li> Complete the steps within
+    <a href="./accessing-instance.html">Accessing a Service Instance</a>
+    to acquire the correct version of <code>gfsh</code>, run it,
+    and connect to the cluster using the cluster operator role/credentials from the service key.
+    </li>
+    <li> List the regions.
+
+        <pre>
+gfsh>list regions </pre>
+    </li>
+    <li> For each region, use <code>gfsh describe</code> to determine if the region
+    is persistent or not and to acquire a server name.
+
+        <pre>
+gfsh>describe region --name=REGION_NAME </pre>
+    </li>
+    <li> For each non-persistent region, use this single <code>gfsh</code> command
+    to export all the data within the region.
+    The <code>SERVER_NAME</code> identifies which GemFire server receives the
+    <code>export</code> command and propagates the command to all other GemFire
+    servers within the cluster.
+
+        <pre>
+gfsh>export data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var/vcap/store/gemfire-server </pre>
+    </li>
+    </ul>
+</li>
+<li> Your PCF operator needs to target the BOSH Director
+in order to acquire the <code>DEPLOYMENT_NAME</code>.
+    <ul>
+    <li> Run
+
+        <pre>
+$ cf service SERVICE_INSTANCE_NAME </pre>
+    to acquire the digits that uniquely identify the service instance.
+    The digits (<code>XXX-XXX</code> in the following instructions) are those
+    between <code>cloudcache-</code> and the period <code>.</code>.
+    <li> Log in to the BOSH Director.
+
+        <pre>
+$ bosh log-in </pre>
+    </li>
+    <li> The <code>DEPLOYMENT_NAME</code> will appear in the output of
+
+        <pre>
+$ bosh deployments | grep XXX-XXX </pre>
+    </li>
+    </ul>
+</li>
+<li> Using PCF operator credentials, stop the BOSH deployment:
+
+    <pre>
+$ bosh -d DEPLOYMENT_NAME stop </pre>
+    and type "y" when prompted.
+</li>
+<li> Acquire the BOSH manifest with:
+
+    <pre>
+$ bosh -d DEPLOYMENT_NAME manifest > DEPLOYMENT_NAME-manifest.yml </pre>
+</li>
+
+<li> Edit the acquired BOSH manifest.
+There are three locations within the manifest
+file that will require additions.
+These three locations are identified within this anonymized portion of the
+manifest file with the symbols <font color=red> &#9312 </font>,
+<font color=red> &#9313 </font>, and <font color=red> &#9314 </font>.
+The first part of the manifest file is omitted,
+as its listed values change based on the PCC version.
+Real passwords have been replaced with the placeholder <code>password</code>,
+and user names have been replaced with the placeholder <code>userX</code>
+within this example.
+
+<pre>
+instance_groups:
+- name: locator
+  instances: 3
+  jobs:
+  - name: gemfire-locator
+    release: gemfire
+    properties:
+      gemfire:  <font color=red> &#9312 </font>
+        distributed-system-id: 0
+        locator:
+          bpm_enabled: true
+          port: '55221'
+          properties:
+            enable-time-statistics: true
+        persist-pdx: true
+        security:
+          internal_cluster_password: password
+          internal_cluster_username: userX
+          roles:
+            cluster_operator:
+            - CLUSTER:WRITE
+            - CLUSTER:READ
+            - DATA:MANAGE
+            - DATA:WRITE
+            - DATA:READ
+            - CLUSTER:MANAGE:DEPLOY
+            - CLUSTER:MANAGE
+            - CLUSTER:MANAGE:GATEWAY
+            developer:
+            - CLUSTER:READ
+            - DATA:WRITE
+            - DATA:READ
+            gateway:
+            - DATA:WRITE
+          users:
+            cluster_operator_userX:
+              password: password
+              roles:
+              - cluster_operator
+            developer_userX:
+              password: password
+              roles:
+              - developer
+  - name: route_registrar
+    release: routing
+    consumes:
+      nats:
+        deployment: cf-NNNNNNNNNNN
+        from: nats
+    properties:
+      route_registrar:
+        routes:
+        - name: cloudcache
+          port: 8080  <font color=red> &#9313 </font>
+          registration_interval: 20s
+          uris:
+          - cloudcache-XXX-XXX.example.com
+  - name: bpm
+    release: bpm
+  vm_type: micro.cpu
+  stemcell: stemcell
+  persistent_disk_type: '10240'
+  azs:
+  - us-central1-f
+  networks:
+  - name: example-services-subnet
+- name: server
+  instances: 4
+  jobs:
+  - name: gemfire-server
+    release: gemfire
+    properties:
+      gemfire:
+        server:
+          bpm_enabled: true
+          create-gateway-receiver: true
+          development-mode: false
+          properties:
+            enable-time-statistics: true
+            jmx-manager-start: true
+          security:
+            gateway_password: password
+            gateway_username: gateway_sender_userX
+  - name: prime-cluster-for-pcc
+    release: gemfire
+  - name: bpm
+    release: bpm
+  vm_type: medium.cpu
+  stemcell: stemcell
+  persistent_disk_type: '10240'
+  azs:
+  - us-central1-f
+  networks:
+  - name: example-services-subnet
+update:
+  canaries: 1
+  canary_watch_time: 1000-600000
+  update_watch_time: 1000-600000
+  max_in_flight: 32
+  serial: true
+features:
+  converge_variables: true  <font color=red> &#9314 </font>
+</pre>
+Add lines to the BOSH manifest,
+using the lines as shown in red in the following modified version of the
+manifest. 
+Substitute your digits that uniquely identify your service instance
+for <code>XXX-XXX</code> within the <i>added</i> lines.
+<pre>
+instance_groups:
+- name: locator
+  instances: 3
+  jobs:
+  - name: gemfire-locator
+    release: gemfire
+    properties:
+      gemfire:  <font color=red> &#9312 </font>
+        <font color=red>tls: true
+        truststore_password: ((trust-store-password))
+        keystore_password: ((key-store-password))
+        certificate: ((gemfire-certificate))
+        trusted_certs:
+        - ((/cf/diego-instance-identity-root-ca))
+        - ((/services/tls_ca))</font>
+        distributed-system-id: 0
+        locator:
+          bpm_enabled: true
+          port: '55221'
+          properties:
+            enable-time-statistics: true
+        persist-pdx: true
+        security:
+          internal_cluster_password: password
+          internal_cluster_username: userX
+          roles:
+            cluster_operator:
+            - CLUSTER:WRITE
+            - CLUSTER:READ
+            - DATA:MANAGE
+            - DATA:WRITE
+            - DATA:READ
+            - CLUSTER:MANAGE:DEPLOY
+            - CLUSTER:MANAGE
+            - CLUSTER:MANAGE:GATEWAY
+            developer:
+            - CLUSTER:READ
+            - DATA:WRITE
+            - DATA:READ
+            gateway:
+            - DATA:WRITE
+          users:
+            cluster_operator_userX:
+              password: password
+              roles:
+              - cluster_operator
+            developer_userX:
+              password: password
+              roles:
+              - developer
+  - name: route_registrar
+    release: routing
+    consumes:
+      nats:
+        deployment: cf-NNNNNNNNNNN
+        from: nats
+    properties:
+      route_registrar:
+        routes:
+        - name: cloudcache
+          port: 8080  <font color=red> &#9313 </font>
+          <font color=red>tls_port: 8080
+          server_cert_domain_san: cloudcache-XXX-XXX.example.com</font>
+          registration_interval: 20s
+          uris:
+          - cloudcache-XXX-XXX.example.com
+  - name: bpm
+    release: bpm
+  vm_type: micro.cpu
+  stemcell: stemcell
+  persistent_disk_type: '10240'
+  azs:
+  - us-central1-f
+  networks:
+  - name: example-services-subnet
+- name: server
+  instances: 4
+  jobs:
+  - name: gemfire-server
+    release: gemfire
+    properties:
+      gemfire:
+        server:
+          bpm_enabled: true
+          create-gateway-receiver: true
+          development-mode: false
+          properties:
+            enable-time-statistics: true
+            jmx-manager-start: true
+          security:
+            gateway_password: password
+            gateway_username: gateway_sender_userX
+  - name: prime-cluster-for-pcc
+    release: gemfire
+  - name: bpm
+    release: bpm
+  vm_type: medium.cpu
+  stemcell: stemcell
+  persistent_disk_type: '10240'
+  azs:
+  - us-central1-f
+  networks:
+  - name: example-services-subnet
+update:
+  canaries: 1
+  canary_watch_time: 1000-600000
+  update_watch_time: 1000-600000
+  max_in_flight: 32
+  serial: true
+features:
+  converge_variables: true  <font color=red> &#9314 </font>
+<font color=red>variables:
+- name: trust-store-password
+  type: password
+- name: key-store-password
+  type: password
+- name: gemfire-certificate
+  type: certificate
+  options:
+    ca: /services/tls_ca
+    common_name: gemfire-ssl
+    alternative_names:
+    - gemfire-ssl
+    - cloudcache-XXX-XXX.example.com</font>
+</pre>
+</li>
+
+<li> Redeploy the BOSH manifest. Do a BOSH deploy using the edited BOSH manifest:
+
+    <pre>
+$ bosh -d SERVICE-INSTANCE-NAME deploy SERVICE-INSTANCE-NAME-manifest.yml </pre>
+
+    and type "y" when prompted.
+</li>
+<li> Restart the cluster with a sequential BOSH start:
+
+    <pre>
+$ bosh start -d SERVICE-INSTANCE-NAME  --max-in-flight=1 </pre>
+
+    and type "y" when prompted.
+</li>
+<li> Run <code>gfsh</code> and follow the directions in 
+<a href="./accessing-instance.html#gfsh-connect-https">Connect with gfsh over HTTPS</a>
+to connect to the TLS-enabled cluster.
+</li>
+<li> Use <code>gfsh</code> to import all region data that was exported
+earlier in this procedure. For each earlier-exported region, do:
+
+    <pre>
+gfsh>import data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var/vcap/store/gemfire-server </pre>
+</li>
+<li> Revise the app such that it works with a TLS-enabled PCC
+service instance by following the instructions within
+<a href="./tls-enabled-app.html">Developing an App Under TLS</a>.
+Re-build, re-deploy, and start the app.
+</li>
+</ol>
