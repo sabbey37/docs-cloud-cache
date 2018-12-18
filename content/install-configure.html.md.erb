@@ -27,7 +27,7 @@ Each section name must show this green check mark before you can complete your i
 
 * [Assign AZs and Networks](#azs)
 * [Settings](#settings)
-* [Service Plans](#plan-config), including the Dev Plan
+* [Service Plans](#plan-config), including the Dev Plan and the Small Footprint Plan
 * [Syslog](#syslog)
 * [Service Instance Upgrades](#parallel-upgrades)
 * [Security](#security-section)
@@ -145,6 +145,51 @@ The remaining fields control the VM type and persistent disk type for servers an
 * For the **Persistent disk type for the server VMs** field, select 10 GB or higher.
 
 When you finish configuring the plan, click **Save** to save your configuration options.
+
+###<a id='small-footprint-plan'></a> Configure a Small Footprint Plan
+
+The Small Footprint Plan uses three VMs to implement a default
+plan with three locators and three servers.
+Each of the three VMs has one locator and one server.
+
+This plan is appropriate for production installations that can tolerate the
+diminished load-handling capacity and reduced resilience that would
+result from the loss of a VM.
+Installations needing resilience in the face of a VM loss
+should use a plan in which each PCC cluster member resides within
+its own VM.
+
+A PCC service instance using the Small Footprint Plan may be created
+with more servers than the default three servers.
+Follow the instructions within
+[Creating a Pivotal Cloud Cache Service Instance](create-instance.html)
+to increase the number of servers.
+
+Scale up an existing service instance by increasing the number of servers,
+as specified in 
+[Updating a Pivotal Cloud Cache Service Instance](update-instance.html).
+
+Whether creating a new service instance or updating an existing service
+instance to have more servers,
+each additional server will be within its own VM.
+
+Scaling down the quantity of servers within an existing service instance
+is accomplished one server at a time to ensure redundancy is 
+correctly maintained.
+To scale down, use the `cf update-service` command as described in
+[Updating a Pivotal Cloud Cache Service Instance](update-instance.html)
+to specify one server fewer than the total quantity of servers currently
+running.
+
+An error message will be issued if an attempt is made to scale down
+by more than one server at a time,
+or if an attempt is made to reduce the number of servers below the
+minimum size of the default Small Footprint Plan size of three servers.
+
+To configure a Small Footprint Plan,
+enable the plan with the Small Footprint Plan tab.
+
+![Configuring a Small Footprint Plan](configure-sf-plan.png)
 
 ###<a id='dev-plan'></a> Configure a Dev Plan
 
