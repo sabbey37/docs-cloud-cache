@@ -1,0 +1,1388 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Pivotal Cloud Cache">
+      
+      
+      
+        <meta name="author" content="Pulkit Chandra">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.9.2">
+    
+    
+      
+        <title>Pivotal Cloud Cache Operator Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.ba0fd1a6.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.6079476c.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="orange">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#service-network" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="p-cloudcache" class="md-header-nav__button md-logo">
+          
+            <img src="../images/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                p-cloudcache
+              </span>
+              <span class="md-header-nav__topic">
+                Operator
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="../images/logo.png" width="48" height="48">
+      
+    </span>
+    p-cloudcache
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../app-development/" title="Application Development" class="md-nav__link">
+      Application Development
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../developer/" title="Developer" class="md-nav__link">
+      Developer
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Operator
+      </label>
+    
+    <a href="./" title="Operator" class="md-nav__link md-nav__link--active">
+      Operator
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#service-network" title="Service Network" class="md-nav__link">
+    Service Network
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-allow-outbound-internet-access" title="Settings: Allow Outbound Internet Access" class="md-nav__link">
+    Settings: Allow Outbound Internet Access
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-service-plans" title="Configure Service Plans" class="md-nav__link">
+    Configure Service Plans
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-creating-p-cloudcache-service-name-failed" title="Error: "Creating p-cloudcache SERVICE-NAME failed"" class="md-nav__link">
+    Error: "Creating p-cloudcache SERVICE-NAME failed"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-deleting-service-name-failed" title="Error: "Deleting SERVICE-NAME failed"" class="md-nav__link">
+    Error: "Deleting SERVICE-NAME failed"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-cannot-connect-to-the-cluster-service-name" title="Error: Cannot connect to the cluster SERVICE-NAME" class="md-nav__link">
+    Error: Cannot connect to the cluster SERVICE-NAME
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-could-not-perform-createput-on-cloud-cache-cluster" title="Error: "Could not perform create/put on Cloud Cache cluster"" class="md-nav__link">
+    Error: "Could not perform create/put on Cloud Cache cluster"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-could-not-retrieve-value-from-cloud-cache-cluster" title="Error: "Could not retrieve value from Cloud Cache cluster"" class="md-nav__link">
+    Error: "Could not retrieve value from Cloud Cache cluster"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-to-server-communication" title="Client-to-Server Communication" class="md-nav__link">
+    Client-to-Server Communication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#membership-port-range" title="Membership Port Range" class="md-nav__link">
+    Membership Port Range
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#service-network" title="Service Network" class="md-nav__link">
+    Service Network
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-allow-outbound-internet-access" title="Settings: Allow Outbound Internet Access" class="md-nav__link">
+    Settings: Allow Outbound Internet Access
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-service-plans" title="Configure Service Plans" class="md-nav__link">
+    Configure Service Plans
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-creating-p-cloudcache-service-name-failed" title="Error: "Creating p-cloudcache SERVICE-NAME failed"" class="md-nav__link">
+    Error: "Creating p-cloudcache SERVICE-NAME failed"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-deleting-service-name-failed" title="Error: "Deleting SERVICE-NAME failed"" class="md-nav__link">
+    Error: "Deleting SERVICE-NAME failed"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-cannot-connect-to-the-cluster-service-name" title="Error: Cannot connect to the cluster SERVICE-NAME" class="md-nav__link">
+    Error: Cannot connect to the cluster SERVICE-NAME
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-could-not-perform-createput-on-cloud-cache-cluster" title="Error: "Could not perform create/put on Cloud Cache cluster"" class="md-nav__link">
+    Error: "Could not perform create/put on Cloud Cache cluster"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-could-not-retrieve-value-from-cloud-cache-cluster" title="Error: "Could not retrieve value from Cloud Cache cluster"" class="md-nav__link">
+    Error: "Could not retrieve value from Cloud Cache cluster"
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-to-server-communication" title="Client-to-Server Communication" class="md-nav__link">
+    Client-to-Server Communication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#membership-port-range" title="Membership Port Range" class="md-nav__link">
+    Membership Port Range
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Operator</h1>
+                
+                <p>This document describes how a Pivotal Cloud Foundry (PCF) operator can install, configure, and maintain Pivotal Cloud Cache (PCC).</p>
+<h2 id="requirements-for-pivotal-cloud-cache"><a id="requirements"></a> Requirements for Pivotal Cloud Cache<a class="headerlink" href="#requirements-for-pivotal-cloud-cache" title="Permanent link">&para;</a></h2>
+<h4 id="service-network">Service Network<a class="headerlink" href="#service-network" title="Permanent link">&para;</a></h4>
+<p>You must have access to a Service Network in order to install PCC. </p>
+<h2 id="installing-and-configuring-pivotal-cloud-cache"><a id="install"></a> Installing and Configuring Pivotal Cloud Cache<a class="headerlink" href="#installing-and-configuring-pivotal-cloud-cache" title="Permanent link">&para;</a></h2>
+<p>With an Ops Manager role (detailed in <a href="https://docs.pivotal.io/pivotalcf/opsguide/config-rbac.html#about">Understand Roles in Ops Manager</a>)
+that has the proper permissions to install and configure,
+follow these steps to install PCC on PCF:</p>
+<ol>
+<li>Download the tile from the <a href="https://network.pivotal.io/products/cloud-cache">Pivotal Network</a>.</li>
+<li>Click <strong>Import a Product</strong> to import the tile into Ops Manager.</li>
+<li>Click the <strong>+</strong> symbol next to the uploaded product description.</li>
+<li>Click on the Cloud Cache tile.</li>
+<li>Complete all the configuration steps in the <a href="#settings-config">Configure Tile Properties</a> section below.</li>
+<li>Return to the Ops Manager Installation Dashboard and click <strong>Apply Changes</strong> to complete the installation of the PCC tile.  </li>
+</ol>
+<h3 id="configure-tile-properties"><a id="settings-config"></a> Configure Tile Properties<a class="headerlink" href="#configure-tile-properties" title="Permanent link">&para;</a></h3>
+<p>Configure the sections listed on the left side of the page. </p>
+<p><img alt="Tile Configuration Sections" src="../tile-configuration-sections.png" /></p>
+<p>After you complete a section, a green check mark appears next to the section name.
+Each section name must show this green check mark before you can complete your installation.</p>
+<ul>
+<li><a href="#azs">Assign AZs and Networks</a></li>
+<li><a href="#settings">Settings</a></li>
+<li><a href="#plan-config">Service Plans</a>, including the Dev Plan</li>
+<li><a href="#syslog">Syslog</a></li>
+<li><a href="#errands">Errands</a></li>
+<li><a href="#resource-config">Resource Config</a></li>
+<li><a href="#stemcell">Stemcell</a></li>
+</ul>
+<h4 id="assign-availability-zones-and-networks"><a name='azs'></a> Assign Availability Zones and Networks<a class="headerlink" href="#assign-availability-zones-and-networks" title="Permanent link">&para;</a></h4>
+<p>To select AZs and networks for VMs used by PCC, do the following:</p>
+<ol>
+<li>
+<p>Click <strong>Assign AZs and Networks</strong>.</p>
+</li>
+<li>
+<p>Configure the fields on the <strong>Assign AZs and Networks</strong> pane as follows:
+   <table>
+    <tr><th>Field</th><th>Instructions</th></tr>
+    <tr><td><strong>Place singleton jobs in</strong></td>
+        <td>Select the region that you want for singleton VMs.</td></tr>
+    <tr><td><strong>Balance other jobs in</strong></td>
+        <td>Select the AZ(s) you want to use for distributing other GemFire VMs.
+            Pivotal recommends selecting all of them.</td></tr>
+    <tr><td><strong>Network</strong></td>
+        <td>Select your PAS (or Elastic Runtime) network.</td>
+    <tr><td><strong>Service Network</strong></td>
+        <td>Select the network to be used for GemFire VMs.</td> 
+  </table></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<h4 id="settings-smoke-tests"><a name='settings'></a> Settings: Smoke Tests<a class="headerlink" href="#settings-smoke-tests" title="Permanent link">&para;</a></h4>
+<p>The smoke-tests errand that runs after tile installation.
+The errand verifies that your installation was successful.
+By default, the <code class="codehilite">smoke-test</code> errand runs on the <code class="codehilite">system</code> org and the <code class="codehilite">p-cloudcache-smoke-test</code> space.</p>
+<p class="note"><strong>Note</strong>: Smoke tests will fail unless you enable global default application security groups (ASGs). You can enable global default ASGs by binding the ASG to the <code>system</code> org without specifying a space. To enable global default ASGs, use <code>cf bind-running-security-group</code>.</p>
+
+<p>To select which plan you want to use for smoke tests, do the following:</p>
+<ol>
+<li>
+<p>Click <strong>Settings</strong>.</p>
+</li>
+<li>
+<p>Select a plan to use when the <code class="codehilite">smoke-tests</code> errand runs.</p>
+<p>Ensure the selected plan is enabled and configured.
+ For information about configuring plans, see <a href="#plan-config">Configure Service Plans</a> below.
+ If the selected plan is not enabled, the <code class="codehilite">smoke-tests</code> errand fails.</p>
+<p>Pivotal recommends that you use the smallest four-server plan for smoke tests.
+ Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
+ <img alt="Configuring Smoke Tests Plan" src="../select-smoke-test-plan.png" /></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<h4 id="settings-allow-outbound-internet-access">Settings: Allow Outbound Internet Access<a class="headerlink" href="#settings-allow-outbound-internet-access" title="Permanent link">&para;</a></h4>
+<p>By default, outbound internet access is not allowed from service instances. </p>
+<p>If BOSH is configured to use an external blob store, you need allow outbound internet access from service instances.
+Log forwarding and backups, which require external endpoints, might also require internet access.</p>
+<p>To allow outbound internet access from service instance, do the following:</p>
+<ol>
+<li>
+<p>Click <strong>Settings</strong>.</p>
+</li>
+<li>
+<p>Select <strong>Allow outbound internet access from service instances (IaaS-dependent)</strong>.</p>
+<p><img alt="Outbound Internet Access" src="../allow-outbound-access.png" /></p>
+<p><p class="note"><strong>Note</strong>: Outbound network traffic rules also depend on your IaaS settings. 
+  Consult your network or IaaS administrator to ensure that your IaaS allows outbound traffic to the external networks you need.</p></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<h4 id="syslog"><a name='syslog'></a> Syslog<a class="headerlink" href="#syslog" title="Permanent link">&para;</a></h4>
+<p>By default, syslog forwarding is not enabled in PCC.
+However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
+The broker logs are useful for debugging problems creating, updating, and binding service instances.</p>
+<p>To enable remote syslog for the service broker, do the following:</p>
+<ol>
+<li>Click <strong>Syslog</strong>.
+   <img alt="Configuring Log Management Service" src="../syslog-config.png" /></li>
+<li>
+<p>Configure the fields on the <strong>Syslog</strong> pane as follows:
+   <table>
+    <tr><th>Field</th><th>Instructions</th></tr>
+    <tr><td><strong>Enable Remote Syslog</strong></td>
+        <td>Select to enable.</td></tr>
+    <tr><td><strong></strong>External Syslog Address</td>
+        <td>Enter the address or host of the syslog server for sending logs, for example, <code class="codehilite">logs.example.com</code>.</td></tr>
+    <tr><td><strong></strong>External Syslog Port</td>
+        <td>Enter the port of the syslog server for sending logs, for example,<code class="codehilite">29279</code>.</td></tr>
+    <tr><td><strong>Enable TLS for Syslog</strong></td>
+    <td>Select to enable secure log transmission through TLS. Without this, remote syslog sends unencrypted logs. We recommend enabling TLS, as most syslog endpoints such as Papertrail and Logsearch require TLS.</td></tr>
+    <tr><td><strong>Permitted Peer for TLS Communication. This is required if TLS is enabled.</strong></td>
+        <td>If there are several peer servers that can respond to remote syslog connections, then
+            provide a regex, such as <code class="codehilite">*.example.com</code>.</td></tr>
+    <tr><td><strong>CA Certificate for TLS Communication</td>
+        <td>If the server certificate is not signed by a known authority, for example, an internal syslog server,
+            provide the CA certificate of the log management service endpoint.</td></tr>
+    <tr><td><strong>Send service instance logs to external</td>
+        <td>By default, only the broker logs are forwarded to your configured log management service.
+            If you want to forward server and locator logs from all service instances, select this.
+            This lets you monitor the health of the clusters, although it generates a large volume of logs.<br><br>
+            If you don't enable this, you get only the broker logs which include information about service instance creation, 
+            but not about on-going cluster health.</td></tr>
+  </table></p>
+</li>
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<p><a name="plan-config"></a></p>
+<h4 id="configure-service-plans">Configure Service Plans<a class="headerlink" href="#configure-service-plans" title="Permanent link">&para;</a></h4>
+<p>You can configure five individual plans for your developers. Select the <strong>Plan 1</strong> through <strong>Plan 5</strong> tabs to configure each of them.</p>
+<p><img alt="Configuring a Plan" src="../configure-plan.png" /></p>
+<p>The <strong>Plan Enabled</strong> option is selected by default. If you do not want to add this plan to the CF service catalog, select <strong>Plan Disabled</strong>. You must enable at least one plan.</p>
+<p>The <strong>Plan Name</strong> text field allows you to customize the name of the plan. This plan name is displayed to developers when they view the service in the Marketplace.</p>
+<p>The <strong>Plan Description</strong> text field allows you to supply a plan description. The description is displayed to developers when they view the service in the Marketplace.</p>
+<p>The <strong>Enable metrics for service instances</strong> checkbox enables metrics for service instances created using the plan.
+Once enabled, the metrics are sent to the Loggregator Firehose.</p>
+<p>The <strong>CF Service Access</strong> drop-down menu gives you the option to display or not display the service plan in the Marketplace.
+<strong>Enable Service Access</strong> displays the service plan the Marketplace.
+<strong>Disable Service Access</strong> makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time. 
+<strong>Leave Service Access Unchanged</strong> makes the plan unavailable in the Marketplace by default, but allows you to make it available at a later time.</p>
+<p>The <strong>Service Instance Quota</strong> sets the maximum number of PCC clusters that can exist simultaneously.</p>
+<p>When developers create or update a service instance, they can specify the number of servers in the cluster. The <strong>Maximum servers per cluster</strong> field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, a new cluster has the number of servers specified in the <strong>Default Number of Servers</strong> field.</p>
+<p>The <strong>Availability zones for service instances</strong> setting determines which AZs are used for a particular cluster. The members of a cluster are distributed evenly across AZs.</p>
+<p class="note warning"><strong> WARNING!</strong> After you've selected AZs for your service network, you cannot add additional AZs; doing so causes existing service instances to lose data on update. </p>
+
+<p>The remaining fields control the VM type and persistent disk type for servers and locators. The total size of the cache is directly related to the number of servers and the amount of memory of the selected server VM type. We recommend the following configuration:</p>
+<ul>
+<li>For the <strong>VM type for the Locator VMs</strong> field, select a VM that has at least 2 CPUs, 1&nbsp;GB of RAM and 4&nbsp;GB of disk space.</li>
+<li>For the <strong>Persistent disk type for the Locator VMs</strong> field, select 10&nbsp;GB or higher.</li>
+<li>For the <strong>VM type for the Server VMs</strong> field, select a VM that has at least 2 CPUs, 4&nbsp;GB of RAM and 8&nbsp;GB of disk space.</li>
+<li>For the <strong>Persistent disk type for the server VMs</strong> field, select 10 GB or higher.</li>
+</ul>
+<p>When you finish configuring the plan, click <strong>Save</strong> to save your configuration options.</p>
+<h4 id="configure-a-dev-plan"><a id='dev-plan'></a> Configure a Dev Plan<a class="headerlink" href="#configure-a-dev-plan" title="Permanent link">&para;</a></h4>
+<p>A Dev Plan is a type of service plan.
+Use a Dev Plan for development and testing.
+The plan provides a single locator and server,
+which are colocated within a single VM. </p>
+<p>The page for configuring a Dev Plan is similar to the page for configuring 
+other service plans.
+To configure the Dev Plan, input information in the fields and make selections from the options on the <strong>Plan for test development</strong> page. </p>
+<p><img alt="Dev Plan Configuration Sections" src="../dev-plan.png" /></p>
+<p>If you have enabled post-deploy scripts in your BOSH Director,
+a region is automatically created.
+To confirm that post-deploy scripts are enabled, navigate to the <strong>Director Config</strong> pane of Ops Manger Director and
+verify that <strong>Enable Post Deploy Scripts</strong> is selected.</p>
+<p><img alt="Enable post deploy scripts" src="../ops-man-post-deploy.png" /></p>
+<h4 id="errands"><a name='errands'></a> Errands<a class="headerlink" href="#errands" title="Permanent link">&para;</a></h4>
+<p>By default, post-deploy and pre-delete errands always run. 
+Pivotal recommends keeping these defaults.
+However, if necessary, you can change these defaults as follows.</p>
+<p>For general information about errands in PCF, see <a href="https://docs.pivotal.io/pivotalcf/customizing/managing_errands.html">Managing Errands in Ops Manager</a></p>
+<ol>
+<li>
+<p>Click <strong>Errands</strong>.</p>
+</li>
+<li>
+<p>Change the setting for the errands.</p>
+</li>
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+<h4 id="stemcell"><a name='stemcell'></a> Stemcell<a class="headerlink" href="#stemcell" title="Permanent link">&para;</a></h4>
+<p>Ensure you import the correct type of stemcell indicated on this tab.</p>
+<p>You can download the latest available stemcells from the <a href="https://network.pivotal.io/products/stemcells/">Pivotal Network</a>.</p>
+<p>PCC 1.4 can use either v2.1.x or v2.0.x of 
+Pivotal Application Service (PAS)
+and PCF Operations Manager (Ops Manager).
+As of v2.1.0, manage stemcells in the Ops Manager dashboard.
+Stemcells do not appear in this tile configuration.</p>
+<h2 id="setting-service-instance-quotas"><a id="set_quotas"></a> Setting Service Instance Quotas<a class="headerlink" href="#setting-service-instance-quotas" title="Permanent link">&para;</a></h2>
+<%= partial '../../p-cloud-cache/odb/set_quotas' %>
+
+<h2 id="monitoring-pivotal-cloud-cache-service-instances"><a id="monitoring"></a> Monitoring Pivotal Cloud Cache Service Instances<a class="headerlink" href="#monitoring-pivotal-cloud-cache-service-instances" title="Permanent link">&para;</a></h2>
+<p>PCC clusters and brokers emit service metrics. 
+You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.</p>
+<p>In the descriptions of the metrics,
+KPI stands for Key Performance Indicator.</p>
+<h3 id="service-instance-metrics"><a id="service-instance-metrics"></a> Service Instance Metrics<a class="headerlink" href="#service-instance-metrics" title="Permanent link">&para;</a></h3>
+<h4 id="member-count"><a id="service-instance-MemberCount"></a> Member Count<a class="headerlink" href="#member-count" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.MemberCount</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the number of members in the distributed system.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>less than the manifest member count</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>This depends on the expected member count, which is available in the BOSH manifest. If the number expected is different from the number emitted, this is a critical situation that may lead to data loss, and the reasons for node failure should be investigated by examining the service logs.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>Member loss due to any reason can potentially cause data loss.</td>
+   </tr>
+</table>
+
+<h4 id="total-available-heap-size"><a id="service-instance-TotalHeapSize"></a> Total Available Heap Size<a class="headerlink" href="#total-available-heap-size" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.TotalHeapSize</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the total available heap, in megabytes, across all instance members.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+   </tr>
+</table>
+
+<h4 id="total-used-heap-size"><a id="service-instance-UsedHeapSize"></a> Total Used Heap Size<a class="headerlink" href="#total-used-heap-size" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.UsedHeapSize</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the total heap used across all instance members, in megabytes.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+   </tr>
+</table>
+
+<h4 id="total-available-heap-size-as-a-percentage"><a id="service-instance-UnusedHeapSizePercentage"></a> Total Available Heap Size as a Percentage<a class="headerlink" href="#total-available-heap-size-as-a-percentage" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>serviceinstance.UnusedHeapSizePercentage</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>Returns the proportion of total available heap across all instance members, expressed as a percentage.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>percent</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>compount metric</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>40%</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>10%</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is a spike due to eviction catching up with insert frequency, then customers need to keep a close watch that it should not hit the RED marker. If there is no eviction, then horizontal scaling is suggested.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the total heap size and used heap size are too close, the system might see thrashing due to GC activity. This increases latency.</td>
+   </tr>
+</table>
+
+<h3 id="per-member-metrics"><a id="per-member-metrics"></a> Per Member Metrics<a class="headerlink" href="#per-member-metrics" title="Permanent link">&para;</a></h3>
+<h4 id="memory-used-as-a-percentage"><a id="member-UsedMemoryPercentage"></a> Memory Used as a Percentage<a class="headerlink" href="#memory-used-as-a-percentage" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.UsedMemoryPercentage</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>RAM being consumed.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>percent</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>75%</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>85%</td>
+   </tr>
+</table>
+
+<h4 id="count-of-java-garbage-collections"><a id="member-GC-count"></a> Count of Java Garbage Collections<a class="headerlink" href="#count-of-java-garbage-collections" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.GarbageCollectionCount</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The number of times that garbage has been collected.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Sum over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>Check the number of queries run against the system, which increases the deserialization of objects and increases garbage.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the frequency of garbage collection is high, the system might see high CPU usage, which causes delays in the cluster.</td>
+   </tr>
+</table>
+
+<h4 id="cpu-utilization-percentage"><a id="member-cpuusage"></a> CPU Utilization Percentage<a class="headerlink" href="#cpu-utilization-percentage" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.HostCpuUsage</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>This member's process CPU utilization, expressed as a percentage.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>percent</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>85%</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>95%</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is not happening with high GC activity, the system is reaching its limits. Horizontal scaling might help.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>High CPU usage causes delayed responses and can also make the member non-responsive. This can cause the member to be kicked out of the cluster, potentially leading to data loss.</td>
+   </tr>
+</table>
+
+<h4 id="average-latency-of-get-operations"><a id="member-get-avg-latency"></a> Average Latency of Get Operations<a class="headerlink" href="#average-latency-of-get-operations" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.GetsAvgLatency</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The average latency of cache get operations, in nanoseconds.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>It is a good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+   </tr>
+</table>
+
+<h4 id="average-latency-of-put-operations"><a id="member-put-avg-latency"></a> Average Latency of Put Operations<a class="headerlink" href="#average-latency-of-put-operations" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.PutsAvgLatency</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The average latency of cache put operations, in nanoseconds.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Average over last 10 minutes</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>average</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>If this is not happening with high GC activity, the system is reaching its limit. Horizontal scaling might help.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>It is a good indicator of the overall responsiveness of the system. If this number is high, the service administrator should diagnose the root cause.</td>
+   </tr>
+</table>
+
+<h4 id="jvm-pauses"><a id="member-jvm-pauses"></a> JVM pauses<a class="headerlink" href="#jvm-pauses" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.JVMPauses</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The quantity of JVM pauses.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Sum over 2 seconds</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>Dependent on the IaaS and app use case.</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>Check the cached object size; if it is greater than 1 MB, you may be hitting the limitation on JVM to garbage collect this object. Otherwise, you may be hitting the utilization limit on the cluster, and will need to scale up to add more memory to the cluster.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>Due to a JVM pause, the member stops responding to "are-you-alive" messages, which may cause this member to be kicked out of the cluster.</td>
+   </tr>
+</table>
+
+<h4 id="file-descriptor-limit"><a id="member-file-descriptor-limit"></a> File Descriptor Limit<a class="headerlink" href="#file-descriptor-limit" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.FileDescriptorLimit</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The maximum number of open file descriptors allowed for the member’s host operating system.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the number of open file descriptors exceeds number available, it causes the member to stop responding and crash.</td>
+   </tr>
+</table>
+
+<h4 id="open-file-descriptors"><a id="member-total-file-descriptor-open"></a> Open File Descriptors<a class="headerlink" href="#open-file-descriptors" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.TotalFileDescriptorOpen</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The current number of open file descriptors.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>pulse</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the number of open file descriptors exceeds number available, it causes the member to stop responding and crash.</td>
+   </tr>
+</table>
+
+<h4 id="quantity-of-remaining-file-descriptors"><a id="member-file-descriptor-remaining"></a> Quantity of Remaining File Descriptors<a class="headerlink" href="#quantity-of-remaining-file-descriptors" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><br> <code>member.FileDescriptorRemaining</code><br><br></th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The number of available file descriptors.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Suggested measurement</th>
+      <td>Every second</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>compound metric</td>
+   </tr>
+   <tr>
+      <th>Warning Threshold</th>
+      <td>1000</td>
+   </tr>
+   <tr>
+      <th>Critical Threshold</th>
+      <td>100</td>
+   </tr>
+   <tr>
+      <th>Suggested Actions</th>
+      <td>Scale horizontally to increase capacity.</td>
+   </tr>
+   <tr>
+      <th>Why a KPI?</th>
+      <td>If the number of open file descriptors exceeds number available, it causes the member to stop responding and crash.</td>
+   </tr>
+</table>
+
+<h3 id="gateway-sender-and-gateway-receiver-metrics"><a id="gateway-sender-metrics"></a> Gateway Sender and Gateway Receiver Metrics<a class="headerlink" href="#gateway-sender-and-gateway-receiver-metrics" title="Permanent link">&para;</a></h3>
+<p>These are metrics emitted through the CF Nozzle for gateway senders and gateway receivers.</p>
+<h4 id="queue-size-for-the-gateway-sender"><a id="gs-event-queue-size"></a> Queue Size for the Gateway Sender<a class="headerlink" href="#queue-size-for-the-gateway-sender" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewaySender.&lt;sender-id&gt;.EventQueueSize</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The current size of the gateway sender queue. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+<h4 id="events-received-at-the-gateway-sender"><a id="gs-event-received-rate"></a> Events Received at the Gateway Sender<a class="headerlink" href="#events-received-at-the-gateway-sender" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewaySender.&lt;sender-id&gt;.EventsReceivedRate</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>A count of the events coming from the region to which the gateway sender is attached. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+<h4 id="events-queued-by-the-gateway-sender"><a id="gs-events-queued-rate"></a> Events Queued by the Gateway Sender<a class="headerlink" href="#events-queued-by-the-gateway-sender" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewaySender.&lt;sender-id&gt;.EventsQueuedRate</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>A count of the events queued on the gateway sender from the region. This quantity of events might be lower than the quantity of events received, as not all received events are queued. It is a count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway sender was created.</td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+<h4 id="events-received-by-the-gateway-receiver"><a id="gr-event-received-rate"></a> Events Received by the Gateway Receiver<a class="headerlink" href="#events-received-by-the-gateway-receiver" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>gatewayReceiver.EventsReceivedRate</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>A count of the events received from the gateway sender which will be applied to the region on the gateway receiver's site. It is the count since the last time the metric was checked. The first time it is checked, the count is of the number of events since the gateway receiver was created. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+<h3 id="disk-metrics"><a id="disk-metrics"></a> Disk Metrics<a class="headerlink" href="#disk-metrics" title="Permanent link">&para;</a></h3>
+<p>These are metrics emitted through the CF Nozzle for disks.</p>
+<h4 id="average-latency-of-disk-writes"><a id="disk-writes-avg-latency"></a> Average Latency of Disk Writes<a class="headerlink" href="#average-latency-of-disk-writes" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>diskstore.DiskWritesAvgLatency</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The average latency of disk writes in nanoseconds. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>time in nanoseconds</td>
+   </tr>
+</table>
+
+<h4 id="quantity-of-bytes-on-disk"><a id="total-disk-space"></a> Quantity of Bytes on Disk<a class="headerlink" href="#quantity-of-bytes-on-disk" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>diskstore.TotalSpace</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The total number of bytes on the attached disk. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+<h4 id="quantity-of-available-bytes-on-disk"><a id="total-available-disk-space"></a> Quantity of Available Bytes on Disk<a class="headerlink" href="#quantity-of-available-bytes-on-disk" title="Permanent link">&para;</a></h4>
+<table>
+   <tr><th colspan="2" style="text-align: center;"><code>diskstore.UseableSpace</code> </th></tr>
+   <tr>
+      <th width="25%">Description</th>
+      <td>The total number of bytes of available space on the attached disk. </td>
+   </tr>
+   <tr>
+      <th>Metric Type</th>
+      <td>number</td>
+   </tr>
+   <tr>
+      <th>Measurement Type</th>
+      <td>count</td>
+   </tr>
+</table>
+
+<h3 id="total-memory-consumption"><a id="bosh-errand-report"></a> Total Memory Consumption<a class="headerlink" href="#total-memory-consumption" title="Permanent link">&para;</a></h3>
+<p>The BOSH <code class="codehilite">mem-check</code> errand calculates and outputs
+the quantity of memory used across all PCC service instances.
+This errand helps PCF operators monitor resource costs,
+which are based on memory usage.</p>
+<p>From the director, run a bosh command of the form:</p>
+<div class="codehilite"><pre><span></span>bosh -d &lt;service broker name&gt; run-errand mem-check
+</pre></div>
+
+<p>With this command:</p>
+<div class="codehilite"><pre><span></span>bosh -d cloudcache-service-broker run-errand mem-check
+</pre></div>
+
+<p>Here is an anonymized portion of example output from the <code class="codehilite">mem-check</code> errand
+for a two cluster deployment:</p>
+<div class="codehilite"><pre><span></span>           Analyzing deployment xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx1...
+           JVM heap usage for service instance xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx1
+           Used Total = 1204 MB
+           Max Total = 3201 MB
+
+           Analyzing deployment xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx2...
+           JVM heap usage for service instance xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx2
+           Used Total = 986 MB
+           Max Total = 3201 MB
+
+           JVM heap usage for all clusters everywhere:
+           Used Global Total = 2390 MB
+           Max Global Total = 6402 MB
+</pre></div>
+
+<h3 id="monitoring-pcc-service-instances-with-prometheus"><a id="monitoring-prometheus"></a> Monitoring PCC Service Instances with Prometheus<a class="headerlink" href="#monitoring-pcc-service-instances-with-prometheus" title="Permanent link">&para;</a></h3>
+<p>Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
+You can use the <a href="https://github.com/cloudfoundry-community/firehose_exporter">Firehose exporter</a> to export all the metrics from the Firehose,
+which you can then graph with <a href="https://github.com/grafana/grafana">Grafana</a> to monitor your PCC cluster.</p>
+<p>Follow the instructions <a href="https://github.com/pivotal-cf/prometheus-on-PCF">here</a> to deploy Prometheus alongside your PCF cluster.</p>
+<p>Prometheus can be deployed on any IaaS.
+You need to verify that the Firehose exporter job can talk to your UAA VM.
+This might involve opening up firewall rules or enabling your VM to allow outgoing traffic.</p>
+<p><img alt="Grafana Example" src="../grafana.png" /></p>
+<p>You can run queries on, and build a custom dashboard of, specific metrics that are important to you.</p>
+<h2 id="upgrading-pivotal-cloud-cache"><a id="upgrade"></a> Upgrading Pivotal Cloud Cache<a class="headerlink" href="#upgrading-pivotal-cloud-cache" title="Permanent link">&para;</a></h2>
+<p>Follow the steps below to upgrade PCC:</p>
+<ol>
+<li>Download the new version of the tile from the Pivotal Network.</li>
+<li>Upload the product to Ops Manager.</li>
+<li>Click <strong>Add</strong> next to the uploaded product.</li>
+<li>Click on the Cloud Cache tile and review your configuration options.</li>
+<li>Click <strong>Apply Changes</strong>.</li>
+</ol>
+<h2 id="updating-pivotal-cloud-cache-plans"><a id="update-plans"></a> Updating Pivotal Cloud Cache Plans<a class="headerlink" href="#updating-pivotal-cloud-cache-plans" title="Permanent link">&para;</a></h2>
+<p>Follow the steps below to update plans in Ops Manager.</p>
+<ol>
+<li>Click on the Cloud Cache tile.</li>
+<li>Click on the plan you want to update under the <strong>Information</strong> section.</li>
+<li>Edit the fields with the changes you want to make to the plan.</li>
+<li>Click <strong>Save</strong> button on the bottom of the page.</li>
+<li>Click on the <strong>PCF Ops Manager</strong> to navigate to the <strong>Installation Dashboard</strong>.</li>
+<li>Click <strong>Apply Changes</strong>.</li>
+</ol>
+<p>Plan changes are not applied to existing services instances until you run the <code class="codehilite">upgrade-all-service-instances</code> BOSH errand. You must use the BOSH CLI to run this errand. Until you run this errand, developers cannot update service instances.</p>
+<p>Changes to fields that can be overridden by optional parameters, for example  <code class="codehilite">num_servers</code> or <code class="codehilite">new_size_percentage</code>, change the default value of these instance properties, but do not affect existing service instances. </p>
+<p>If you change the allowed limits of an optional parameter, for example the maximum number of servers per cluster, existing service instances in violation of the new limits are not modified.</p>
+<p>When existing instances are upgraded, all plan changes are applied to them.</p>
+<h2 id="uninstalling-pivotal-cloud-cache"><a id="uninstall"></a> Uninstalling Pivotal Cloud Cache<a class="headerlink" href="#uninstalling-pivotal-cloud-cache" title="Permanent link">&para;</a></h2>
+<p>To uninstall PCC, follow the steps from below from the <strong>Installation Dashboard</strong>:</p>
+<ol>
+<li>Click the trash can icon in the bottom-right-hand corner of the tile.</li>
+<li>Click <strong>Apply Changes</strong>.</li>
+</ol>
+<h2 id="troubleshooting"><a id="troubleshooting"></a> Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="view-statistics-files"><a id='view-statistics'></a> View Statistics Files<a class="headerlink" href="#view-statistics-files" title="Permanent link">&para;</a></h3>
+<p>You can visualize the performance of your cluster by downloading the statistics files from your servers.
+These files are located in the persistent store on each VM.
+To copy these files to your workstation, run the following command:</p>
+<div class="codehilite"><pre><span></span>`bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp`
+</pre></div>
+
+
+<p>See the Pivotal GemFire <a href="http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html">Installing and Running VSD</a> topic for information about loading the statistics files into Pivotal GemFire VSD.</p>
+<h3 id="smoke-test-failures"><a id='smoke-test-failures'></a> Smoke Test Failures<a class="headerlink" href="#smoke-test-failures" title="Permanent link">&para;</a></h3>
+<h4 id="error-creating-p-cloudcache-service-name-failed">Error: "Creating p-cloudcache SERVICE-NAME failed"<a class="headerlink" href="#error-creating-p-cloudcache-service-name-failed" title="Permanent link">&para;</a></h4>
+<p>The smoke tests could not create an instance of GemFire. To troubleshoot
+why the deployment failed, use the cf CLI to create a new service instance using the same plan and download the logs of the service deployment from BOSH.</p>
+<h4 id="error-deleting-service-name-failed">Error: "Deleting SERVICE-NAME failed"<a class="headerlink" href="#error-deleting-service-name-failed" title="Permanent link">&para;</a></h4>
+<p>The smoke test attempted to clean up a service instance it created and failed to delete the service using the <code class="codehilite">cf delete-service</code> command. To troubleshoot this issue, run BOSH <code class="codehilite">logs</code> to view the logs on the broker or the service instance to see why the deletion may have failed.</p>
+<h4 id="error-cannot-connect-to-the-cluster-service-name">Error: Cannot connect to the cluster SERVICE-NAME<a class="headerlink" href="#error-cannot-connect-to-the-cluster-service-name" title="Permanent link">&para;</a></h4>
+<p>The smoke test was unable to connect to the cluster.</p>
+<p>To troubleshoot the issue, review the logs of your load balancer, and
+review the logs of your CF Router to ensure the route to your PCC
+cluster is properly registered.</p>
+<p>You also can create a service instance and try to connect to it using the
+gfsh CLI. This requires creating a service key.</p>
+<h4 id="error-could-not-perform-createput-on-cloud-cache-cluster">Error: "Could not perform create/put on Cloud Cache cluster"<a class="headerlink" href="#error-could-not-perform-createput-on-cloud-cache-cluster" title="Permanent link">&para;</a></h4>
+<p>The smoke test was unable to write data to the cluster. The user may not have
+permissions to create a region or write data.</p>
+<h4 id="error-could-not-retrieve-value-from-cloud-cache-cluster">Error: "Could not retrieve value from Cloud Cache cluster"<a class="headerlink" href="#error-could-not-retrieve-value-from-cloud-cache-cluster" title="Permanent link">&para;</a></h4>
+<p>The smoke test was unable to read back the data it wrote. Data loss can happen
+if a cluster member improperly stops and starts again or if the member machine
+crashes and is resurrected by BOSH. Run BOSH <code class="codehilite">logs</code> to view the logs on the
+broker to see if there were any interruptions to the cluster by a service
+update.</p>
+<h3 id="general-connectivity"><a id='general-connectivity'></a> General Connectivity<a class="headerlink" href="#general-connectivity" title="Permanent link">&para;</a></h3>
+<h4 id="client-to-server-communication">Client-to-Server Communication<a class="headerlink" href="#client-to-server-communication" title="Permanent link">&para;</a></h4>
+<p>PCC Clients communicate to PCC servers on port 40404 and with
+locators on port 55221.
+Both of these ports must be reachable from the PAS (or Elastic Runtime) network to service the network.</p>
+<h4 id="membership-port-range">Membership Port Range<a class="headerlink" href="#membership-port-range" title="Permanent link">&para;</a></h4>
+<p>PCC servers and locators communicate with each other using UDP and TCP. The current port range for this communication is <code class="codehilite">49152-65535</code>.</p>
+<p>If you have a firewall between VMs, ensure this port range is open.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../developer/" title="Developer" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Developer
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../release-notes/" title="Release Notes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Release Notes
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 Pivotal Software Inc.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.a59e2a89.js"></script>
+      
+      <script>app.initialize({version:"0.17.5",url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

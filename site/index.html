@@ -1,0 +1,784 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Pivotal Cloud Cache">
+      
+      
+      
+        <meta name="author" content="Pulkit Chandra">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="./assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.9.2">
+    
+    
+      
+        <title>Pivotal Cloud Cache</title>
+      
+    
+    
+      <link rel="stylesheet" href="./assets/stylesheets/application.ba0fd1a6.css">
+      
+        <link rel="stylesheet" href="./assets/stylesheets/application-palette.6079476c.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="./assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="./assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="orange">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#limitations" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="." title="p-cloudcache" class="md-header-nav__button md-logo">
+          
+            <img src="./images/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                p-cloudcache
+              </span>
+              <span class="md-header-nav__topic">
+                Introduction
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <span class="md-nav__button md-logo">
+      
+        <img src="./images/logo.png" width="48" height="48">
+      
+    </span>
+    p-cloudcache
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Introduction
+      </label>
+    
+    <a href="." title="Introduction" class="md-nav__link md-nav__link--active">
+      Introduction
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" title="Limitations" class="md-nav__link">
+    Limitations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication" title="Authentication" class="md-nav__link">
+    Authentication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" title="Authorization" class="md-nav__link">
+    Authorization
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="app-development/" title="Application Development" class="md-nav__link">
+      Application Development
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="developer/" title="Developer" class="md-nav__link">
+      Developer
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="operator/" title="Operator" class="md-nav__link">
+      Operator
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" title="Limitations" class="md-nav__link">
+    Limitations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication" title="Authentication" class="md-nav__link">
+    Authentication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" title="Authorization" class="md-nav__link">
+    Authorization
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Introduction</h1>
+                
+                <h2 id="overview"><a id='overview'></a>Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF). 
+PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data access requests.</p>
+<p>PCC provides a service broker to create in-memory data clusters on demand. 
+These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan. 
+Service operators can create multiple plans to support different use cases.</p>
+<p>PCC uses Pivotal GemFire. The <a href="http://gemfire-apis.docs.pivotal.io/">Pivotal GemFire API Documentation</a> details the API for client access to data objects within Pivotal GemFire.</p>
+<p>This documentation performs the following functions:</p>
+<ul>
+<li>Describes the features and architecture of PCC</li>
+<li>Provides the PCF operator with instructions for installing, configuring, and maintaining PCC</li>
+<li>Provides app developers instructions for choosing a service plan, creating, and deleting PCC service instances</li>
+<li>Provides app developers instructions for binding apps</li>
+</ul>
+<h2 id="product-snapshot"><a id='snapshot'></a>Product Snapshot<a class="headerlink" href="#product-snapshot" title="Permanent link">&para;</a></h2>
+<p>The following table provides version and version-support information about PCC:</p>
+<table class="nice">
+    <th>Element</th>
+    <th>Details</th>
+    <tr>
+        <td>Version</td>
+        <td>v1.4.0</td>
+    </tr>
+    <tr>
+        <td>Release date</td>
+        <td>May 14, 2018</td>
+    </tr>
+    <tr>
+        <td>Software component version</td>
+        <td>GemFire v9.3.0</td>
+    </tr>
+    <tr>
+        <td>Compatible Ops Manager version(s)</td>
+        <td>v2.1.x and v2.0.x</td>
+    </tr>
+    <tr>
+        <td>Compatible Pivotal Application Service (PAS)* version(s)</td>
+        <td>v2.1.x and v2.0.x</td>
+    </tr>
+    <tr>
+        <td>IaaS support</td>
+        <td>AWS, Azure, GCP, OpenStack, and vSphere</td>
+    </tr>
+    <tr>
+        <td>IPsec support</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td>Required BOSH stemcell version</td>
+        <td>3541</td>
+    </tr>
+    <tr>
+        <td>Minimum Java buildpack version required for apps</td>
+        <td>v3.13</td>
+    </tr>
+</table>
+
+<p>* As of PCF v2.0, <em>Elastic Runtime</em> is renamed <em>Pivotal Application Service (PAS)</em>.</p>
+<h2 id="pcc-and-other-pcf-services"><a id='other-services'></a> PCC and Other PCF Services<a class="headerlink" href="#pcc-and-other-pcf-services" title="Permanent link">&para;</a></h2>
+<%= partial '../../p-cloud-cache/odb/on-demand-service-table' %>
+
+<h2 id="pcc-architecture"><a id='architecture'></a>PCC Architecture<a class="headerlink" href="#pcc-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="gemfire-basics"><a id='GFBasics'></a>GemFire Basics<a class="headerlink" href="#gemfire-basics" title="Permanent link">&para;</a></h3>
+<p>Pivotal GemFire is the data store within Pivotal Cloud Cache (PCC). A small amount of administrative GemFire setup is required for a PCC service instance, and any app will use a limited portion of the GemFire API.</p>
+<p>The PCC architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of GemFire servers maintained by a PCC service instance. The GemFire servers provide a low-latency, consistent, fault-tolerant data store within PCC.</p>
+<p><img alt="Client Server Model" src="./client-server.png" /></p>
+<p>GemFire holds data in key/value pairs. Each pair is called an <strong>entry</strong>. Entries are logically grouped into sets called regions. A region is a map (or dictionary) data structure.</p>
+<p>The app (client) uses PCC as a cache. A cache lookup (read) is a get operation on a GemFire region. The cache operation of a cache write is a put operation on a GemFire region.
+The GemFire command-line interface, called <code class="codehilite">gfsh</code>, facilitates region administration. Use <code class="codehilite">gfsh</code> to create and destroy regions within the PCC service instance.</p>
+<h3 id="the-pcc-cluster"><a id='pcc-cluster-architecture'></a>The PCC Cluster<a class="headerlink" href="#the-pcc-cluster" title="Permanent link">&para;</a></h3>
+<p>PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.</p>
+<p>When you first spin up a cluster, you have three locators and at least four servers.</p>
+<% mermaid_diagram do %>
+  graph TD;
+  Client
+  subgraph P-CloudCache Cluster
+  subgraph locators
+  Locator1
+  Locator2
+  Locator3
+  end
+  subgraph servers
+  Server1
+  Server2
+  Server3
+  Server4
+  end
+  end
+  Client==>Locator1
+  Client-->Server1
+  Client-->Server2
+  Client-->Server3
+  Client-->Server4
+<% end %>
+
+<p>When you scale the cluster up, you have more servers, increasing the capacity of the cache. There are always three locators.</p>
+<% mermaid_diagram do %>
+  graph TD;
+  Client
+  subgraph P-CloudCache Cluster
+  subgraph locators
+  Locator1
+  Locator2
+  Locator3
+  end
+  subgraph servers
+  Server1
+  Server2
+  Server3
+  Server4
+  Server5
+  Server6
+  Server7
+  end
+  end
+  Client==>Locator1
+  Client-->Server1
+  Client-->Server2
+  Client-->Server3
+  Client-->Server4
+  Client-->Server5
+  Client-->Server6
+  Client-->Server7
+<% end %>
+
+<h3 id="member-communication"><a id='MemberCommunication'></a>Member Communication<a class="headerlink" href="#member-communication" title="Permanent link">&para;</a></h3>
+<p>When a client connects to the cluster, it first connects to a locator. The locator replies with the IP address of a server for it to talk to. The client then connects to that server.</p>
+<% mermaid_diagram do %>
+  sequenceDiagram
+    participant Client
+    participant Locator
+    participant Server1
+    Client->>+Locator: What servers can I talk to?
+    Locator->>-Client: Server1
+    Client->>Server1: Hello!
+<% end %>
+
+<p>When the client wants to read or write data, it sends a request directly to the server.</p>
+<% mermaid_diagram do %>
+  sequenceDiagram
+    participant Client
+    participant Server1
+    Client->>+Server1: What's the value for KEY?
+    Server1->>-Client: VALUE
+<% end %>
+
+<p>If the server doesn't have the data locally, it fetches it from another server.</p>
+<% mermaid_diagram do %>
+  sequenceDiagram
+    participant Client
+    participant Server1
+    participant Server2
+    Client->>+Server1: What's the value for KEY?
+    Server1->>+Server2: What's the value for KEY?
+    Server2->>-Server1: VALUE
+    Server1->>-Client: VALUE
+<% end %>
+
+<h2 id="workflow-to-set-up-a-pcc-service"><a id='workflow'></a>Workflow to Set Up a PCC Service<a class="headerlink" href="#workflow-to-set-up-a-pcc-service" title="Permanent link">&para;</a></h2>
+<p>The workflow for the PCF admin setting up a PCC service plan:</p>
+<% mermaid_diagram do %>
+  graph TD;
+  subgraph PCF Admin Actions
+  s1
+  s2
+  end
+
+<p>subgraph Developer Actions
+  s4
+  end</p>
+<p>s1[1. Upload P-CloudCache.pivotal to Ops Manager]
+  s2[2. Configure CloudCache Service Plans, i.e. caching-small]
+  s1&rarr;s2
+  s3[3. Ops Manager deploys CloudCache Service Broker]
+  s2&rarr;s3
+  s4[4. Developer calls <code class="codehilite">cf create-service p-cloudcache caching-small test</code>]
+  s3&rarr;s4
+  s5[5. Ops Manager creates a CloudCache cluster following the caching-small specifications]
+  s4&rarr;s5
+&lt;% end %&gt;</p>
+<h2 id="networking-for-on-demand-services"><a id="service-network"></a>Networking for On-Demand Services<a class="headerlink" href="#networking-for-on-demand-services" title="Permanent link">&para;</a></h2>
+<p>This section describes networking considerations for Pivotal Cloud Cache.</p>
+<h3 id="bosh-20-and-the-service-network"><a id="bosh2"></a>BOSH 2.0 and the Service Network<a class="headerlink" href="#bosh-20-and-the-service-network" title="Permanent link">&para;</a></h3>
+<%= partial '../../p-cloud-cache/odb/service_networks' %>
+
+<h3 id="default-network-and-service-network"><a id ="architecture_networks"></a>Default Network and Service Network<a class="headerlink" href="#default-network-and-service-network" title="Permanent link">&para;</a></h3>
+<p>Like other on-demand PCF services, PCC relies on the BOSH 2.0 ability to dynamically deploy VMs in a dedicated network. The on-demand service broker uses this capability to create single-tenant service instances in a dedicated service network.</p>
+<%= partial '../../p-cloud-cache/odb/on_demand_architecture' %>
+
+<p>The diagram below shows worker VMs in an on-demand service instance, such as RabbitMQ for PCF, running on a separate services network, while other components run on the default network.</p>
+<p><img alt="Architecture Diagram" src="./ODB-architecture.png" /></p>
+<h3 id="required-networking-rules-for-on-demand-services"><a id="network-rules"></a>Required Networking Rules for On-Demand Services<a class="headerlink" href="#required-networking-rules-for-on-demand-services" title="Permanent link">&para;</a></h3>
+<%= partial '../../p-cloud-cache/odb/service_networks_table' %>
+
+<p><br>
+Regardless of the specific network layout, the operator must ensure network 
+rules are set up so that connections are open as described in the table below. </p>
+<table class="nice">
+  <th>This component...</th>
+  <th>Must communicate with...</th>
+  <th>Default TCP Port</th>
+  <th>Communication direction(s)</th>
+  <th>Notes</th>
+  <tr>
+    <td><strong>ODB</strong></td>
+    <td>
+        <ul>
+            <li><strong>BOSH Director</strong></li>
+          <li><strong>BOSH UAA</strong></li>
+        </ul>
+    </td>
+    <td>
+      <ul>
+        <li>25555</li>
+        <li>8443</li>
+      </ul>
+    </td>
+    <td>One-way</td>
+    <td>The default ports are not configurable.</td>
+  </tr>
+  <tr>
+    <td><strong>ODB</strong></td>
+    <td><strong>Deployed service instances</strong>
+    </td>
+    <td>Specific to the service (such as RabbitMQ for PCF). 
+      May be one or more ports.</td>
+    <td>One-way</td>
+    <td>This connection is for administrative tasks. 
+      Avoid opening general use, app-specific ports for this connection.</td>
+  </tr>
+  <tr>
+    <td><strong>ODB</strong></td>
+    <td><strong>PAS (or Elastic Runtime) </strong>
+    </td>
+    <td>8443</td>
+    <td>One-way</td>
+    <td>The default port is not configurable.</td>
+  </tr>
+  <tr>
+    <td><strong>Errand VMs</strong></td>
+    <td>
+      <ul>
+        <li><strong>PAS (or Elastic Runtime) </strong></li>
+        <li><strong>ODB</strong></li>
+        <li><strong>Deployed Service Instances</strong></li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li>8443</li>
+        <li>8080</li>
+        <li>Specific to the service. May be one or more ports.</li>
+      </ul>
+    </td>
+    <td>One-way</td>
+    <td>The default port is not configurable.</td>
+  </tr>
+  <tr>
+    <td><strong>BOSH Agent</strong></td>
+    <td><strong>BOSH Director</strong>
+    </td>
+    <td>4222</td>
+    <td>Two-way</td>
+    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM. 
+      The BOSH Agent initiates the connection with the BOSH Director.<br>
+      The default port is not configurable.  </td>
+  </tr>
+  <tr>
+    <td><strong>Deployed apps on PAS (or Elastic Runtime) </strong></td>
+    <td><strong>Deployed service instances</strong>
+    </td>
+    <td>Specific to the service. May be one or more ports.</td>
+    <td>One-way</td>
+    <td>This connection is for general use, app-specific tasks. 
+      Avoid opening administrative ports for this connection.</td>
+  </tr>
+  <tr>
+    <td><strong>PAS (or Elastic Runtime) </strong></td>
+    <td><strong>ODB</strong>
+    </td>
+    <td>8080</td>
+    <td>One-way</td>
+    <td>This port may be different for individual services. 
+      This port may also be configurable by the operator if allowed by the 
+      tile developer.</td>
+  </tr>
+</table>
+
+<h3 id="pcc-instances-across-wan"><a id ="WAN_details"></a>PCC Instances Across WAN<a class="headerlink" href="#pcc-instances-across-wan" title="Permanent link">&para;</a></h3>
+<p>PCC service instances running within distinct PCF foundations
+may communicate with each other across a WAN.
+In a topology such as this,
+the members within one service instance use their own private address space,
+as defined in <a href="https://tools.ietf.org/html/rfc1918">RFC1918</a>.</p>
+<p>A VPN may be used to connect the private network spaces that lay
+across the WAN.
+The steps required to enable the connectivity by VPN are dependent
+on the IaaS provider(s).</p>
+<p>The private address space for each service instance's network
+must be configured with non-overlapping CIDR blocks.
+Configure the network prior to creating service instances.
+Locate directions for creating a network on the appropriate IAAS provider
+within the section titled
+<a href="https://docs.pivotal.io/pivotalcf/installing/index.html">Architecture and Installation Overview</a>.</p>
+<h2 id="recommended-usage-and-limitations"><a id='recommended-usage'></a>Recommended Usage and Limitations<a class="headerlink" href="#recommended-usage-and-limitations" title="Permanent link">&para;</a></h2>
+<ul>
+<li>PCC supports the <a href="./app-development.html#lookaside-cache">look-aside cache pattern</a>.</li>
+<li>PCC stores objects in key/value format, where value can be any object.</li>
+<li>Any gfsh command not explained in the PCC documentation is <strong>not supported</strong>.</li>
+<li>PCC supports basic OQL queries, with no support for joins.</li>
+</ul>
+<h3 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Scale down of the cluster is not supported.</li>
+<li>Plan migrations, for example, <code class="codehilite">-p</code> flag with the <code class="codehilite">cf update-service</code> command, are not supported.</li>
+</ul>
+<h2 id="security"><a id='security'></a>Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h2>
+<p>Pivotal recommends that you do the following:</p>
+<ul>
+<li>Run PCC in its own network</li>
+<li>Use a load balancer to block direct, outside access to the Gorouter</li>
+</ul>
+<p>To allow PCC network access from apps, you must create application security groups that allow access on the following ports:</p>
+<ul>
+<li>1099</li>
+<li>8080</li>
+<li>40404</li>
+<li>55221</li>
+</ul>
+<p>For more information, see the PCF <a href="https://docs.pivotal.io/pivotalcf/adminguide/app-sec-groups.html#creating-groups">Application Security Groups</a> topic.</p>
+<p>PCC works with the IPsec Add-on for PCF.
+For information about the IPsec Add-on for PCF,
+see <a href="https://docs.pivotal.io/addon-ipsec/index.html">Securing Data in Transit with the IPsec Add-on</a>.</p>
+<h3 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h3>
+<p>PCC service instances are created with three default GemFire user roles for
+interacting with clusters:</p>
+<ul>
+<li>A cluster operator manages the GemFire cluster and can access
+region data.</li>
+<li>A developer can access region data.</li>
+<li>A gateway sender propagates region data to another PCC service instance.</li>
+</ul>
+<p>All client apps, gfsh, and JMX clients must authenticate as
+one of these user roles to access the cluster.</p>
+<p>The identifiers assigned for these roles are detailed in
+<a href="./accessing-instance.html#create-service-key">Create Service Keys</a>.</p>
+<h3 id="authorization">Authorization<a class="headerlink" href="#authorization" title="Permanent link">&para;</a></h3>
+<p>Each user role is given predefined permissions for cluster operations.
+To accomplish a cluster operation,
+the user authenticates using one of the roles.
+Prior to initiating the requested operation,
+there is a verification that the
+authenticated user role has the permission authorized to do the operation.
+Here are the permissions that each user role has:</p>
+<ul>
+<li>The  cluster operator role has 
+<code class="codehilite"><span class="n">CLUSTER</span><span class="o">:</span><span class="n">MANAGE</span></code>,
+<code class="codehilite"><span class="n">CLUSTER</span><span class="o">:</span><span class="n">WRITE</span></code>,
+<code class="codehilite"><span class="n">CLUSTER</span><span class="o">:</span><span class="n">READ</span></code>,
+<code class="codehilite"><span class="n">DATA</span><span class="o">:</span><span class="n">MANAGE</span></code>,
+<code class="codehilite"><span class="n">DATA</span><span class="o">:</span><span class="n">WRITE</span></code>,
+ and <code class="codehilite"><span class="n">DATA</span><span class="o">:</span><span class="n">READ</span></code> permissions.</li>
+<li>The developer role has
+<code class="codehilite"><span class="n">CLUSTER</span><span class="o">:</span><span class="n">READ</span></code>,
+<code class="codehilite"><span class="n">DATA</span><span class="o">:</span><span class="n">WRITE</span></code>,
+and <code class="codehilite"><span class="n">DATA</span><span class="o">:</span><span class="n">READ</span></code> permissions.</li>
+<li>The gateway sender role has <code class="codehilite"><span class="n">DATA</span><span class="o">:</span><span class="n">WRITE</span></code> permission.</li>
+</ul>
+<p>More details about these permissions are in the Pivotal GemFire manual under <a href="http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html">Implementing Authorization</a>.</p>
+<h2 id="feedback"><a id='feedback'></a> Feedback<a class="headerlink" href="#feedback" title="Permanent link">&para;</a></h2>
+<p>Please provide any bugs, feature requests, or questions to the <a href="mailto:pivotal-cf-feedback@pivotal.io">Pivotal Cloud Foundry Feedback list</a>.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+        
+          <a href="app-development/" title="Application Development" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Application Development
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 Pivotal Software Inc.
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="./assets/javascripts/application.a59e2a89.js"></script>
+      
+      <script>app.initialize({version:"0.17.5",url:{base:"."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
