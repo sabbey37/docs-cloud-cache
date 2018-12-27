@@ -39,6 +39,62 @@ the current data consumption by PCC service instances and total JVM sizes.
 
 ## <a id='v14-known-issues'></a>Known Issues
 
+
+- The HTTP session module creates its region that
+holds metadata on only one server within a cluster.
+The region needs to be hosted on all the servers.
+To correct the issue on a running cluster, 
+alter the region holding the metadata twice,
+restarting the cluster between the two gfsh `alter region` commands.
+
+1. Connect to the cluster with the gfsh `connect` command using the
+cluster operator credentials.
+
+2.  The first alteration temporarily sets an unused attibute to the value 1,
+and the alteration command will fail on all servers but the single server
+that hosted the metadata region.
+However, 
+the correct metadata region configuration will be propagated to all servers. 
+The command has the form:
+
+    ```
+    alter region --name=REGION-NAME --eviction-max=1
+    ```
+
+    If the metadata region's name has not been changed from its default,
+    use this gfsh command:
+
+    ```
+    gfsh>alter region --name=gemfire_modules_sessions --eviction-max=1
+    ```
+    For installations that have changed the metadata region's name,
+    substitute the changed value for `REGION-NAME` in the command.
+    
+3. With CF operator credentials,
+restart the cluster following instructions in
+[Restarting a Cluster](update-instance.html#cluster-restart).
+
+4.  The second alteration resets the unused attribute to its original
+value of 1.
+The command has the form:
+
+    ```
+    alter region --name=REGION-NAME --eviction-max=0
+    ```
+    If the metadata region's name has not been changed from its default,
+    use this gfsh command:
+
+    ```
+    gfsh>alter region --name=gemfire_modules_sessions --eviction-max=0
+    ```
+
+5. You can verify that the region is hosted on all servers with a
+gfsh command of the form:
+
+    ```
+    describe region --name=REGION-NAME
+    ```
+
 - If you upgrade to PCC v1.3 as part of the process of upgrading to this
 1.4 release, and you created service keys on PCC before you installed v1.3:
 delete and recreate the service keys so that users are properly
