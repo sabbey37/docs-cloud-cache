@@ -17,6 +17,42 @@ is available for use in production.
 
 ## <a id='v16-known-issues'></a>Known Issues
 
+- Installations using HTTP session state replication have a known issue
+issue and workaround to correct the issue.
+The HTTP session module creates its region that holds metadata on only
+one server within a cluster.
+The region needs to be hosted on all the servers.
+
+    To correct the issue on a running cluster, connect to the cluster
+    using the GemFire cluster operator credentials,
+    and run a single `gfsh` command
+    to create the metadata region on all servers.
+    The command has the form:
+
+    ```
+    create region --name=REGION-NAME --type=REGION-SHORTCUT \
+     --enable-statistics \
+     --entry-idle-time-custom-expiry=org.apache.geode.modules.util.SessionCustomExpiry
+    ```
+    If the metadata region's name or type have not been changed from their
+    default, use this `gfsh` command:
+
+    ```
+    gfsh>create region --name=gemfire_modules_sessions --type=PARTITION_REDUNDANT \
+     --enable-statistics \
+     --entry-idle-time-custom-expiry=org.apache.geode.modules.util.SessionCustomExpiry
+    ```
+
+    For installations that have changed the metadata region's name or type,
+    substitute the changed values for `REGION-NAME` and `REGION-SHORTCUT`
+    in the command.
+
+    You can verify that the region is hosted on all servers with the
+    `gfsh` command:
+    
+    ```
+    gfsh>describe region --name=gemfire_modules_sessions
+    ```
 - Current versions of the Cloud Foundry Command Line Interface (CLI) tool
 have a known bug that omits the documentation URL when
 using the `cf service` command.
