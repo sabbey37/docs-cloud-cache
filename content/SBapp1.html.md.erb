@@ -3,18 +3,45 @@ title: A Spring Boot App
 ---
 <a id="sample-SB1"></a>
 
-Example spring boot app.
-Uses PCC as data store.
-
-On GitHub:
-[PCC-Sample-App-PizzaStore](https://github.com/pivotal-cf/PCC-Sample-App-PizzaStore). On _master_ branch.
+The example Spring boot app at
+[PCC-Sample-App-PizzaStore](https://github.com/pivotal-cf/PCC-Sample-App-PizzaStore)
+uses PCC as System of Record.
 Directions for running the app are in the `README.md` file.
 
 What it does.
 
-This app demonstrates two distinct features of PCC:
+In addition, the app demonstrates two distinct features of PCC:
 
 - Running an app on a TLS-enabled cluster within PCC.
 - GemFire continuous queries as used by a Spring Boot app.
 
+## Repositories
 
+Extending CrudRepository.  Each addition (GemFire `put`) accomplised
+with `CrudRepository.save()`.
+
+## Controller
+
+Not sure what needs to go in this section.
+
+## TLS-enabled
+
+GemFire properties set by. . . 
+
+Uses Spring profiles.  Do I need to say more about what they are and
+how they work?
+the app's manifest file sets the profile to `tls`,
+which enables that.
+
+`application-tls.properties` file has the properties stuff.
+
+How does the `config/GemFireConfiguration.java` class get used/invoked?
+There's some magic involved that I don't understand.
+
+## Continuous Queries
+
+Pointer to prose introducing CQs in Gemfire/PCC.
+
+What this app does WRT continuous queries.
+
+Registering a CQ within the app.
