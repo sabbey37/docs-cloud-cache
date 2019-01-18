@@ -1,0 +1,29 @@
+---
+title:  Handling Events
+---
+<a id="events"></a>
+
+The GemFire cluster within a PCC service instance can handle events.
+An app registers interest in a particular event,
+and when the server detects the event,
+an app-defined callback (also called a handler or a listener)
+is invoked to handle the event.  
+
+There are three aspects to configuring and implementing an event:
+
+- the app defines or specifies the event
+- the app registers the event with or identifies the event to
+the system component that will detect the event
+- the app defines the callback, which handles the event
+
+## <a id="continuous-queries"></a> Continuous Queries
+
+Continuous queries use a GemFire OQL query on region data to define an event.
+A change in query results is the event.
+The app registers both the query and the callback
+to set up a continuous query.
+Each region operation invokes the query, leading to the naming
+of this type of event handling as continuous.
+
+See [Querying with OQL](http://gemfire.docs.pivotal.io/geode/developing/querying_basics/query_basics.html) for details on the Object Query Language (OQL)
+and generating queries.

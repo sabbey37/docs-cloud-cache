@@ -1,0 +1,154 @@
+---
+title: A Spring Boot App
+---
+<a id="sample-SB1"></a>
+
+The example Spring Boot Data GemFire app at
+[PCC-Sample-App-PizzaStore](https://github.com/pivotal-cf/PCC-Sample-App-PizzaStore)
+uses the GemFire cluster within a PCC service instance as a System of Record.
+Directions for running the app are in the GitHub repository's `README.md` file.
+
+The app uses Spring Boot Data GemFire. The documentation for this opinionated extension of Spring Data GemFire is at [Spring Boot for Apache Geode & Pivotal GemFire Reference Guide](https://docs.spring.io/autorepo/docs/spring-boot-data-geode-build/1.0.0.BUILD-SNAPSHOT/reference/htmlsingle/).
+
+The app saves pizza orders within the GemFire servers of a PCC service
+instance.
+The app takes orders for pizza toppings and sauces with a REST interface.
+
+In addition, the app demonstrates two distinct features of PCC:
+
+- Running an app on a TLS-enabled cluster within PCC.
+- GemFire continuous queries as used by a Spring Boot app.
+
+## Top Down Explanation
+
+In this opinionated version of Spring Boot Data GemFire,
+at the topmost level of the app,
+the `@SpringBootApplication` annotation causes
+the app to have a `ClientCache` instance.
+Within the example app's `CloudcachePizzaStoreApplication` class,
+the annotation belongs on the class header:
+
+```
+@SpringBootApplication
+public class CloudcachePizzaStoreApplication
+```
+This app is the client within a standard client/server architecture.
+The PCC cluster contains the servers.
+The client cache is a driver for interactions with the servers,
+allowing eventual region creation within the client cache.
+
+Annotate the configuration with `@EnableEntityDefinedRegions` to enable
+a runtime scan of classes that define the GemFire regions. 
+Within `GemFireConfiguration.java` in this example:
+
+```
+@EnableEntityDefinedRegions(basePackageClasses = Pizza.class)
+public class GemFireConfiguration
+```
+The Spring repository construct is the correct choice to use
+for the data storage, which will be a GemFire region.
+To implement it,
+annotate this example's `PizzaRepository` implementation
+with `@Repository`:
+
+```
+@Repository
+public interface PizzaRepository extends CrudRepository<Pizza, String>
+```
+
+A GemFire region underlies the Spring repository,
+storing the ordered pizzas.
+Annotate the `Pizza` class model with `@Region`:
+
+```
+@Region("Pizza")
+public class Pizza {
+```
+
+Within the `Pizza` class, identify the key of the GemFire region entries with
+the `@Id` annotation.
+It is the `name` field in this example:
+
+```
+@Getter @Id @NonNull
+private final String name;
+```
+
+The `@SpringBootApplication` annotation 
+results in a chain of opinionated defaults,
+all of which are appropriate for this app.
+It identifies the app as a client.
+The client receives a GemFire client cache.
+Any regions will default to type `PROXY`.
+A proxy type of region forwards all region operations to the
+Gemfire servers; no data is stored within the app's client cache.
+
+See [Configuring Regions](https://docs.spring.io/spring-data-gemfire/docs/current/reference/html/#bootstrap-annotation-config-regions) for Spring details.
+See [Region Design](region-design.html) for PCC details on regions.
+
+## The App Contoller
+
+The `AppController` class implements the REST interface,
+by annotating the class with `@RestController`:
+
+```
+@RestController
+public class AppController
+```
+As pizzas are ordered,
+a `CrudRepository.save()` operation causes a
+GemFire `put` operation that updates the region on the GemFire server.
+
+## TLS-Enabled Cluster Demonstration
+
+The app operates in one of two ways:
+
+1. Communication with and within the GemFire cluster uses
+TLS encryption.
+1. Communication with and within the GemFire cluster _does not_ use
+TLS encryption.
+
+The operation of the running app is unchanged
+whether TLS encryption is enabled within the Gemfire cluster or not.
+
+Setting up this app with TLS encryption enabled
+demonstrates one way to set the needed GemFire properties
+detailed in [Developing an App Under TLS](tls-enabled-app.html).
+It uses Spring profiles.
+The manifest that sets the `tls` profile incorporates the GemFire
+properties from file `/resources/application-tls.properties`.
+
+## Continuous Queries in the App
+
+The app defines two continuous queries (CQ).
+See [Handling Events](events.html) for a brief introduction to
+continuous queries.
+
+The first CQ queries for any (and every) pizza order.
+Its callback logs the order.
+
+The second CQ queries for pizzas with a `PESTO` sauce.
+When a pesto-sauced pizza is ordered,
+the callback adds that pizza to a second region called `Name`.
+
+Within a Spring Boot Data GemFire app,
+to specify a continuous query:
+
+- annotate the class that defines the queries with `@Component`:
+
+    ```
+    @Component
+    public class PizzaQueries
+    ```
+- annotate the callback method with `@ContinuousQuery` and define
+the query, as in the app's pesto pizza order example:
+
+    ```
+    @ContinuousQuery(name = "PestoPizzaOrdersQuery", durable = true,
+        query = "SELECT * FROM /Pizza p WHERE p.sauce.name = 'PESTO'")
+    public void handlePestoPizzaOrder(CqEvent event)
+    ```
+    The annotation causes an implementation of all three needed items
+    for this type of event handling. It defines the query,
+    registers the query as a continuous query event,
+    and it identifies the callback method to invoke when the event occurs.
