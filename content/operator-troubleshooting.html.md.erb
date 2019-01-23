@@ -2,15 +2,25 @@
 title: Troubleshooting for Operators
 ---
 
-##<a id='view-statistics'></a> View Statistics Files
+##<a id='view-statistics'></a> View Statistics Files and Logs
 
 You can visualize the performance of your cluster by downloading the statistics files from your servers.
 These files are located in the persistent store on each VM.
-To copy these files to your workstation, run the following command:
+To copy these files to your workstation, run the command:
 
-    `bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp`
+```
+bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
+```
+
+Alternatively, use `bosh ssh` to access PCC service instance GemFire server VMs
+and directly obtain the GemFire logs that reside within the directory
+`/var/vcap/sys/log/gemfire-server`.
 
 See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
+
+GemFire statistics and log files may instead be obtained by using the
+`gfsh export logs` command. 
+See [Export gfsh Logs](using-pcc.html#exporting_logs) for details.
 
 ##<a id='smoke-test-failures'></a> Smoke Test Failures
 
