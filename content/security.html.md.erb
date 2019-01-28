@@ -2,12 +2,50 @@
 title: Security
 ---
 
-Pivotal recommends that you do the following:
+The security measures implemented for a PCF foundation and
+for PCC service instances within that foundation attempt to
+reduce harm from agents with foundation access.
+TLS encryption prevents easy access to communication between
+components,
+and role-based authentication and authorization limits access
+to data.
 
-- Run PCC in its own network
-- Use a load balancer to block direct, outside access to the Gorouter
+### TLS Encryption for the PCC Service Instance
 
-To allow PCC network access from apps, you must create application security groups that allow access on the following ports:
+Without TLS encryption with and within the PCC service instance,
+the diagram identifies plaintext communication that could be
+listened to by a bad agent with PCF foundation access.
+The unencrypted communications are shown with green dotted and dashed
+line segments.
+![PCF foundation without TLS encryption](Security-Overview-No-TLS.png)
+
+Each of these unencrypted communication paths may be TLS-encrypted.
+The encrypted communications are shown with red dashed line segments
+in the diagram.
+To encrypt these communications,
+follow the directions given in [Migrating to a TLS-Enabled Cluster](migrate-to-TLS.html),
+and ensure that apps also use TLS as described in
+[Developing an App Under TLS](tls-enabled-app.html).
+Enabling TLS encryption implements a 1-way authentication of
+apps verifying the identity of GemFire cluster members.
+![PCF foundation with TLS encryption](Security-Overview-With-TLS.png)
+
+Gfsh communication must also be secured.
+Follow directions within
+[Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https).
+
+### Restricting Access to the PAS ??
+
+Running PCC service instances on a dedicated services network
+will BENEFIT OF DOING SO HERE.
+
+Using a load balancer will block direct, outside access to the Gorouter.
+DESCRIPTION OF WHAT THE DIAGRAM SHOWS US.
+![Load Balancer Restricts Cluster Access](Security-Overview-With-LB.png).
+
+Create application security groups 
+to allow app access to the PCC network.
+Allow access on the following ports:
 
 * 1099
 * 8080
@@ -20,7 +58,11 @@ PCC works with the IPsec Add-on for PCF.
 For information about the IPsec Add-on for PCF,
 see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html).
 
-### Authentication
+### Security within the GemFire Cluster 
+
+The GemFire cluster within a PCC service instances implements
+role-based authentication
+and authorizes cluster operations based upon the roles. 
 
 PCC service instances are created with three default GemFire user roles for
 interacting with clusters:
@@ -30,16 +72,15 @@ region data.
 - A developer can access region data.
 - A gateway sender propagates region data to another PCC service instance.
 
-All client apps, gfsh, and JMX clients must authenticate as
+All apps, gfsh, and JMX clients must authenticate as
 one of these user roles to access the cluster.
 
 The identifiers assigned for these roles are detailed in
 [Create Service Keys](accessing-instance.html#create-service-key).
 
 
-### Authorization
-
-Each user role is given predefined permissions for cluster operations.
+To authorize operations,
+each user role is given predefined permissions for cluster operations.
 To accomplish a cluster operation,
 the user authenticates using one of the roles.
 Prior to initiating the requested operation,
@@ -60,4 +101,5 @@ Here are the permissions that each user role has:
 and `DATA:READ` permissions.
 - The gateway sender role has `DATA:WRITE` permission.
 
-More details about these permissions are in the Pivotal GemFire manual under [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
+More details about these permissions are in the Pivotal GemFire manual
+under [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
