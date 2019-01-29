@@ -5,6 +5,8 @@ title: Security
 The security measures implemented for a PCF foundation and
 for PCC service instances within that foundation attempt to
 reduce harm from agents with foundation access.
+See [Understanding Cloud Foundry Security](https://docs.pivotal.io/pivotalcf/concepts/security.html)
+for a general presentation on PCF security.
 TLS encryption prevents easy access to communication between
 components,
 and role-based authentication and authorization limits access
@@ -17,7 +19,8 @@ the diagram identifies plaintext communication that could be
 listened to by a bad agent with PCF foundation access.
 The unencrypted communications are shown with green dotted and dashed
 line segments.
-![PCF foundation without TLS encryption](Security-Overview-No-TLS.png)
+![PCF foundation without TLS encryption](Security-Overview-Without-TLS.png)
+
 
 Each of these unencrypted communication paths may be TLS-encrypted.
 The encrypted communications are shown with red dashed line segments
@@ -28,20 +31,13 @@ and ensure that apps also use TLS as described in
 [Developing an App Under TLS](tls-enabled-app.html).
 Enabling TLS encryption implements a 1-way authentication of
 apps verifying the identity of GemFire cluster members.
-![PCF foundation with TLS encryption](Security-Overview-With-TLS.png)
+![PCF foundation with TLS encryption](Security-Overview-With-LB.png).
 
 Gfsh communication must also be secured.
 Follow directions within
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https).
 
-### Restricting Access to the PAS ??
-
-Running PCC service instances on a dedicated services network
-will BENEFIT OF DOING SO HERE.
-
-Using a load balancer will block direct, outside access to the Gorouter.
-DESCRIPTION OF WHAT THE DIAGRAM SHOWS US.
-![Load Balancer Restricts Cluster Access](Security-Overview-With-LB.png).
+### Networking
 
 Create application security groups 
 to allow app access to the PCC network.
