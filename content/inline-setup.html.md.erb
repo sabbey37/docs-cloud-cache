@@ -1,0 +1,187 @@
+---
+title: Setting Up Servers for an Inline Cache
+---
+
+See [The Inline Cache](design-patterns.html#inline-cache)
+for an introductory description of an inline cache.
+The implementation of an inline cache
+requires custom code deployed on the GemFire servers
+to interact with the backend data store for read misses
+and for writes.
+
+The custom code always implements a cache loader for read misses.
+The custom code and configuration setup differs for writes.
+A write behind implementation uses an asynchronous event queue (AEQ)
+and a cache listener.
+A write through implementation uses a cache writer.
+
+## <a id="inline-cache-loader"></a> Implement a Cache Loader for Read Misses
+
+An app's get operation is a cache read.
+If the desired entry is in the region, it is a cache hit,
+and the value is returned to the app.
+If the desired entry is not in the region, it is a cache miss.
+When an implementation of the `CacheLoader` interface is
+deployed on the servers,
+a miss invokes the `CacheLoader.load` method.
+The `CacheLoader.load` method must acquire and return the value
+for the specified key.
+For an inline cache, the assumption is that the value will be
+acquired from the backend data store.
+
+The value returned from the `CacheLoader.load` method
+will be put into the region and then returned to the app,
+completing the app's get operation.
+
+It will be the common case that the `CacheLoader.load` method
+queries the backend datastore for the desired entry.
+That communication between the server process and the backend
+data store requires a connection,
+and establishing a connection is likely to use a set of
+credentials.
+Implement the `CacheLoader.initialize` method to establish the
+connection.
+
+Specify the credentials in the gfsh `create region` command
+during configuration.
+Add the JSON description to the `--cache-loader` option.
+The credentials will be passed as parameters to the
+`CacheLoader.initialize` method during `CacheLoader` instance
+construction.
+
+
+## <a id="inline-cache-AEQ"></a> Implement an Asynchronous Event Queue and Cache Listener for Write Behind
+
+An app's put operation is a cache write.
+For a write behind implementation,
+the value is placed into the region,
+and it will also be asynchronously written to the backend data store,
+allowing the app's write operation to complete without waiting
+for the backend data store write to complete.
+
+An AEQ to queue the writes together with 
+an implementation of the `AsyncEventListener.processEvents` method
+provides the desired behavior.
+
+![inline cache server interactions](server-inline.png)
+
+When an AEQ is configured for the servers,
+all entry put operations first create or update the entry
+in the region and then add the entry to the AEQ.
+The `AsyncEventListener.processEvents` method is invoked
+when the first of two triggering events occurs.
+One trigger is that a specified quantity of entries have
+been queued; this is the batch size.
+The other trigger is the quantity of time that has elapsed
+since the earliest entry entered the AEQ. 
+
+The `AsyncEventListener.processEvents` method is expected
+to write each newly created or updated entry in the AEQ
+to the backend data store.
+
+That communication between the server process and the backend
+data store to do the writes requires a connection,
+and establishing a connection is likely to use a set of
+credentials.
+Implement the `AsyncEventListener.initialize` method to establish the
+connection.
+
+Specify the credentials in the gfsh `create async-event-queue` command
+during configuration with the `--listener-param` option.
+The credentials will be passed as parameters to the
+`AsyncEventListener.initialize` method during `AsyncEventListener`
+instance construction.
+
+Make it the AEQ persistent to not lose backend data store writes
+across server restarts.
+
+## <a id="inline-cache-writer"></a> Implement a Cache Writer for Write Through
+
+An app's put operation is a cache write.
+For a write through implementation,
+the value will be written to the backend data store
+prior to being placed into the region.
+After both writes, the app's put operation completes.
+
+A `CacheWriter` interface implementation provides the correct behavior
+for write through.
+Implement the `CacheWriter.beforeCreate` method to
+handle backend data store writes for put operations that add
+a new entry to the region.
+Implement the `CacheWriter.beforeUpdate` method to
+handle backend data store writes for put operations that modify
+an existing entry in the region.
+An implementation of `CacheWriter.beforeDestroy` may be appropriate
+to handle an update of the backend data store for a region
+operation that removes an entry.
+
+![inline cache server interactions](server-inline-WT.png)
+
+Communication between the server process and the backend
+data store to do the writes requires a connection,
+and establishing a connection is likely to use a set of
+credentials.
+Implement the `CacheWriter.initialize` method to establish the
+connection.
+
+Specify the credentials in the gfsh `create region` command
+during configuration.
+Add the JSON description to the `--cache-writer` option.
+The credentials will be passed as parameters to the
+`CacheWriter.initialize` method during `CacheWriter` instance
+construction.
+
+## <a id="inline-configure-WB"></a> Configure Using gfsh for Write Behind
+
+1. Follow the directions in [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https) to connect to the cluster
+with the cluster operator credentials from the service key.
+
+1. Instill the cache loader and the cache listener
+code on the servers within the PCC service instance:
+
+    ```
+    gfsh>deploy --jars=/path/to/MyLoader.jar,/path/to/MyListener.jar
+    ```
+
+1. Create the AEQ, assigning a name for the AEQ
+(called `WB-AEQ` in this example), specifying the cache listener,
+and specifying the cache listener's parameters:
+
+    ```
+    gfsh>create async-event-queue --id=WB-AEQ \
+      --parallel=true --persistent \
+      --listener=com.myCompany.MyListener \
+      --listener-param=url#jdbc:db2:SAMPLE,username#admin,password#gobbledeegook
+    ```
+    The persistence of the AEQ uses the default disk store,
+    since no disk store is specified in this command.
+
+1. Create the region, specifying the cache loader, the cache
+listener, and the assigned AEQ name.
+
+    ```
+    gfsh>create region --name=myRegion --type=PARTITION_REDUNDANT \
+      --cache-loader=com.myCompany.MyLoader{'url':'jdbc:db2:SAMPLE','username':'admin',password:'gobbledeegook'}
+      --cache-listener=com.myCompany.MyListener
+      --async-event-queue-id=WB-AEQ
+
+## <a id="inline-configure-WT"></a> Configure Using gfsh for Write Through
+
+1. Follow the directions in [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https) to connect to the cluster
+with the cluster operator credentials from the service key.
+
+1. Instill the cache loader and the cache writer
+code on the servers within the PCC service instance:
+
+    ```
+    gfsh>deploy --jars=/path/to/MyLoader.jar,/path/to/MyWriter.jar
+    ```
+
+1. Create the region, specifying the cache loader and the cache
+writer:
+
+    ```
+    gfsh>create region --name=myRegion --type=PARTITION_REDUNDANT \
+      --cache-loader=com.myCompany.MyLoader{'url':'jdbc:db2:SAMPLE','username':'admin',password:'gobbledeegook'}
+      --cache-writer=com.myCompany.MyWriter{'url':'jdbc:db2:SAMPLE','username':'admin',password:'gobbledeegook'}
+
