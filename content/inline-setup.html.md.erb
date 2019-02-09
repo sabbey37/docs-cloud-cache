@@ -30,8 +30,11 @@ For an inline cache, the assumption is that the value will be
 acquired from the backend data store.
 
 The value returned from the `CacheLoader.load` method
-will be put into the region and then returned to the app,
+will be put into the region and then returned to the waiting app,
 completing the app's get operation.
+Since the app blocks while waiting for the result of the get operation,
+design the `CacheLoader.load` method to acquire the value
+as quickly as possible.
 
 It will be the common case that the `CacheLoader.load` method
 queries the backend datastore for the desired entry.
