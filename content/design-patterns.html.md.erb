@@ -40,8 +40,6 @@ the cache complete.
 and the value to be written to the backend data store gets queued. 
 Control then returns to the app, which continues independent of the
 write to the backend data store.
-When either enough values are queued or enough time has passed,
-the queued values get written to the backend data store.
 
 Developers design the server code to implement this inline-caching pattern.
 See [Setting Up Servers for an Inline Cache](inline-setup.html)
