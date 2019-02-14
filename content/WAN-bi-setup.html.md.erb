@@ -329,3 +329,63 @@ will be lost.
         gfsh>create region --name=regionX --gateway-sender-id=send_to_1 --type=PARTITION_REDUNDANT
         </pre>
 
+## Verify Bidirectional WAN Setup
+
+This verification uses gfsh to put a region entry into each of cluster A
+and cluster B, in order to observe that the entry appears in the
+other cluster.
+
+1. Run gfsh and connect with gfsh to the cluster A service instance using the 
+cluster A GemFire cluster operator credentials.
+
+1. Verify that cluster A has a complete set of gateway senders and
+gateway receivers:
+
+    <pre class='terminal'>
+    gfsh>list gateways
+    </pre>
+    
+    Also verify that there are no queued events in the gateway senders.
+    
+1. In a separate terminal window,
+run gfsh and connect with gfsh to the cluster B
+service instance using the cluster B GemFire cluster operator credentials.
+
+1. Verify that cluster B has a complete set of gateway senders and
+gateway receivers:
+
+    <pre class='terminal'>
+    gfsh>list gateways
+    </pre>
+
+    Also verify that there are no queued events in the gateway senders.
+    
+1. Use gfsh to do a put operation from the cluster A gfsh connection.
+Note that the options will be specific to the region created upon
+WAN setup.
+The gfsh `help put` command shows options. 
+Here is an example:
+
+    <pre class='terminal'>
+    gfsh>put --region=CustNames --key=1000 --value=Lee
+    </pre>
+
+1. Wait approximately 30 seconds before using the cluster B gfsh
+connection to do a get of the same key that was put into the region
+on cluster A.
+
+    <pre class='terminal'>
+    gfsh>get --region=CustNames --key=1000
+    </pre>
+
+    You should see that cluster B has the value.
+
+1. Repeat steps 5 and 6 to do a put operation operation on cluster B
+and verify that the entry is sent to cluster A.
+
+1. Remove all the test entries from both clusters with this single gfsh
+command, issuing it to one of the clusters:
+
+    <pre class='terminal'>
+    gfsh>remove --region=CustNames --all
+    </pre>
