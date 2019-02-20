@@ -161,10 +161,10 @@ Use either the `cluster_operator_XXX` or `developer_XXX` credentials to authenti
 To access service metrics, you must have **Enable Plan** selected under **Service Plan Access** on the page where you configure your tile properties. (For details, see the [Configure Service Plans](install-configure.html#plan-config) page.)
 
 PCC service instances output metrics to the Loggregator Firehose. You can use the
-[Firehose plugin](https://docs.cloudfoundry.org/loggregator/cli-plugin.html) to
-view metrics output on the cf CLI directly or connect the output to any other
-[Firehose nozzle](https://docs.cloudfoundry.org/loggregator/architecture.html#nozzles);
-for example, the nozzle for [Datadog](https://github.com/cloudfoundry-attic/datadog-firehose-nozzle).
+Firehose plugin  to
+view metrics output on the cf CLI directly. For more information about using the Firehose plugin, see [Installing the Loggregator Firehose Plugin for CLI](https://docs.cloudfoundry.org/loggregator/cli-plugin.html). 
+
+You can also connect the output to a Firehose nozzle. Nozzles are programs that consume data from the Loggregator Firehose. For example, to connect the output to the nozzle for Datadog, see [Datadog Firehose Nozzle](https://github.com/cloudfoundry-attic/datadog-firehose-nozzle) on GitHub.
 
 PCC v1.3.x supports metrics for the whole cluster and metrics for each member.
 Each server and locator in the cluster outputs metrics.
@@ -189,7 +189,7 @@ Each server and locator in the cluster outputs metrics.
 
 ## <a id="nozzle-service-metrics"></a> Access Service Broker Metrics
 
-Service broker metrics are on by default and can be accessed through the [Firehose nozzle plugin](https://docs.cloudfoundry.org/loggregator/cli-plugin.html). For more information on broker metrics, see [On Demand Broker Metrics](https://docs.pivotal.io/svc-sdk/odb/0-16/operating.html#metrics).
+Service broker metrics are on by default and can be accessed through the Loggregator Firehose CLI plugin. For more information, see [Installing the Loggregator Firehose Plugin for CLI](https://docs.cloudfoundry.org/loggregator/cli-plugin.html). For more information about broker metrics, see [On Demand Broker Metrics](https://docs.pivotal.io/svc-sdk/odb/0-16/operating.html#metrics).
 
 ## <a id="exporting_logs"></a> Export gfsh Logs
 
