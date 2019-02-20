@@ -361,13 +361,18 @@ gateway receivers:
     Also verify that there are no queued events in the gateway senders.
     
 1. Use gfsh to do a put operation from the cluster A gfsh connection.
-Note that the options will be specific to the region created upon
-WAN setup.
-The gfsh `help put` command shows options. 
+This example assumes that both the key and the value for the entry
+are strings.
+The gfsh `help put` command shows the put command's options. 
 Here is an example:
 
     <pre class='terminal'>
-    gfsh>put --region=CustNames --key=1000 --value=Lee
+    gfsh>put --region=regionX --key=mykey1 --value=stringvalue1
+    Result      : true
+    Key Class   : java.lang.String
+    Key         : mykey1
+    Value Class : java.lang.String
+    Old Value   : null
     </pre>
 
 1. Wait approximately 30 seconds before using the cluster B gfsh
@@ -375,7 +380,12 @@ connection to do a get of the same key that was put into the region
 on cluster A.
 
     <pre class='terminal'>
-    gfsh>get --region=CustNames --key=1000
+    gfsh>get --region=regionX --key=mykey1
+    Result      : true
+    Key Class   : java.lang.String
+    Key         : mykey1
+    Value Class : java.lang.String
+    Value       : "stringvalue1"
     </pre>
 
     You should see that cluster B has the value.
@@ -383,9 +393,19 @@ on cluster A.
 1. Repeat steps 5 and 6 to do a put operation operation on cluster B
 and verify that the entry is sent to cluster A.
 
-1. Remove all the test entries from both clusters with this single gfsh
-command, issuing it to one of the clusters:
+1. Remove both test entries from both clusters with two gfsh
+commands, issuing the commands on one of the clusters.
+The WAN replication will cause the removal of the test entries
+on the other cluster.
 
     <pre class='terminal'>
-    gfsh>remove --region=CustNames --all
+    gfsh>remove --region=regionX --key=mykey1
+    Result    : true
+    Key Class : java.lang.String
+    Key       : mykey1
+
+    gfsh>remove --region=regionX --key=mykey2
+    Result    : true
+    Key Class : java.lang.String
+    Key       : mykey2
     </pre>
