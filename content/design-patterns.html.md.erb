@@ -30,13 +30,21 @@ The implementation for a cache write typically creates or updates
 the entry within the cache.
 It also creates or updates the data store in one of the following ways:
 
-- Synchronously, in a write-through manner
-- Asynchronously, in a write-behind manner
+- Synchronously, in a write-through manner. Each write operation from the
+app is sent on to be written to the backend data store.
+After the backend data store write finishes,
+the value is also written to the cache.
+The app blocks until the writes to both the backend data store and
+the cache complete.
+- Asynchronously, in a write-behind manner. The cache gets updated,
+and the value to be written to the backend data store gets queued. 
+Control then returns to the app, which continues independent of the
+write to the backend data store.
 
 Developers design the server code to implement this inline-caching pattern.
-Developers implement the `CacheLoader` interface to handle cache misses.
-Deploy its JAR file to the servers by following the directions in 
-[Deploy an App JAR File to the Servers](./using-pcc.html#deploy-app-jars).
+See [Setting Up Servers for an Inline Cache](inline-setup.html)
+for details about the custom server code and how to configure
+an inline cache.
 
 ## <a id="lookaside-cache"></a> The Look-Aside Cache
 
