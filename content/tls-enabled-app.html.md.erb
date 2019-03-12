@@ -13,7 +13,9 @@ For the app,
 setting the GemFire property `ssl-require-authentication` to `false`
 causes one-way authentication of the GemFire component to the app.
 
-For a Spring Data GemFire app,
+For a Spring Data GemFire app
+with a Spring Data GemFire library dependency of
+2.2.0.BUILD-SNAPSHOT or a more recent version,
 attach the `@EnableSsl` annotation to your configuration class
 to enable the TLS encryption for all GemFire components.
 Also set these GemFire properties:
