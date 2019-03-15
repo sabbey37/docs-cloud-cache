@@ -13,6 +13,10 @@ Features included in this release:
 TLS encryption for using gfsh and Pulse.
 Follow the steps within [Preparing for TLS](prepare-TLS.html)
 prior to installing the PCC tile.</p>
+- If a ClamAV or File Integrity Monitor is detected,
+available memory for GemFire servers is reduced to allow enough memory
+for these PCF add-ons.
+This prevents a failure during PCC service instance creation.
 - PCC uses Pivotal GemFire 9.6.1.
 
 ## <a id='v161'></a>v1.6.1
