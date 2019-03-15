@@ -12,6 +12,10 @@ Features included in this release:
 - PCC requires TLS encryption for using gfsh and Pulse.
 Follow the instructions in [Preparing for TLS](prepare-TLS.html) to
 set up TLS encryption.
+- If a ClamAV or File Integrity Monitor is detected,
+available memory for GemFire servers is reduced to allow enough memory
+for these PCF add-ons.
+This prevents a failure during PCC service instance creation.
 - PCC now ships with JDK 1.8_191.
 - PCC now runs Pivotal GemFire 9.?.
 - PCC now supports Pivotal Application Service (PAS) 2.?.
