@@ -1,0 +1,96 @@
+---
+title: Configuring UAA Roles
+---
+
+Extra configuration is required when defining users that have specific
+security roles with an
+authentication and enterprise single sign-on (SSO) such as LDAP.
+
+##<a id='UAA Roles'></a> The Roles
+
+A PCC service instance internally defines four security roles.
+Each role is given predefined permissions for cluster operations.
+Each user is assigned security roles.
+As that user invokes a PCC cluster operation using gfsh,
+the PCC service's security manager verifies that the permission
+required for the cluster operation is one that the user's security
+role has.
+
+The permissions assigned for each of the security roles:
+
+- **ADMIN** has all permissions needed to manage the cluster and
+can access region data.
+This role has the GemFire permissions
+`CLUSTER:MANAGE`,
+`CLUSTER:WRITE`,
+`CLUSTER:READ`,
+`DATA:MANAGE`,
+`DATA:WRITE`,
+and `DATA:READ`.
+- **OPERATOR** has all permissions needed to manage the cluster.
+This role may not handle or see region data.
+This role has the GemFire permissions
+`CLUSTER:MANAGE`,
+`CLUSTER:WRITE`,
+and `CLUSTER:READ`.
+- **DATA-ACCESS** has all permissions needed to handle and see region data.
+This role has the GemFire permissions
+`CLUSTER:READ`,
+`DATA:WRITE`,
+and `DATA:READ`.
+- **READ-ONLY** has the single GemFire permission `DATA:READ`
+to see region data.
+
+##<a id='UAA-Config-Roles'></a> Configuring the Roles
+
+Configure the UAA server and your Enterprise SSO system
+(such as LDAP) with the space-specific roles.
+
+1. Acquire the Globally Unique Identifier (GUID) for the CF space
+that will host your PCC service instance:
+
+    ```
+    $ cf login -a REST-OF-ARGS-HERE
+    $ cf target -o NAME-OF-ORG
+    $ cf space --guid NAME-OF-SPACE
+    ```
+
+    The form of the output GUID will be similar to the example:
+
+    ````
+    03badc2a-4243-4251-84b5-c9bfba276f04
+    ````
+
+2. Create space-specific groups for each role within
+your Enterprise SSO system.
+The group name will take the form `ROLE_GUID`. 
+For example, in the following group name:
+
+    ````
+    ADMIN_03badc2a-4243-4251-84b5-c9bfba276f04
+    ````
+    `ADMIN` is the role, and `03badc2a-4243-4251-84b5-c9bfba276f04` is
+    the GUID.
+
+3. Place users into the created space-specific groups you created
+within your Enterprise SSO system.
+
+4. Use the UAA Command Line Interface (UUAC) to log in as `admin client`
+to your UAA server.
+
+5.  Use the UUAC to add each group name with:
+
+    ```
+    $ uaac group add ROLE_GUID
+    ```
+
+5.  Use the UUAC to map each group name with `uuac group map`
+commands. The commands are described in 
+[Grant Admin Permissions to an External Group (SAML or LDAP)](https://docs.pivotal.io/pivotalcf/uaa/uaa-user-management.html#external-group).
+For LDAP:
+
+    ```
+    $ uaac group map --name ROLE_GUID "GROUP-DISTINGUISHED-NAME"
+    ```
+    where `GROUP-DISTINGUISHED-NAME` is the distinguished name of
+    each space-specific group created in step 2.

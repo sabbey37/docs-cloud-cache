@@ -269,24 +269,43 @@ Click **Save** after changing values.
 
 ###<a name='security-section'></a> Security
 
-The environment may be configured to more securely store service keys
+There are three configuration aspects to the Security settings.
+Each of the three must be considered and appropriately handled
+within these settings.
+Once the Security properties settings have been set,
+click **Save**.
+The Security properties Settings page appears as:
+
+![Security section](security-settings.png)
+
+The three items in this page to handle are:
+
+1.  The environment may be configured to more securely store service keys
 within CredHub,
 instead of within the cloud controller's data store.
-To enable this functionality:
-
-1. Click **Security**.
-
-2. Click on the box labeled **Enable Secure Service Instance Credentials**
+To enable this functionality,
+click on the box labeled **Enable Secure Service Instance Credentials**
 to enable use of CredHub.
 
-3. An 'X' is required in the text box to promote the understanding that
+2. An 'X' is required in the text box to promote the understanding that
 a TLS-enabled service instance cannot be created if the PCF environment
-is not set up to handle TLS. See [Preparing for TLS](#preparing-for-TLS) for how to prepare the PCF environment.
+is not set up to handle TLS. A TLS-enabled environment is 
+required independent of whether a TLS-enabled cluster will be
+created; see [Preparing for TLS](Prepare-TLS.html) for how to
+prepare the PCF environment.
 
-3. Click **Save**.
+3. If User Authentication and Authorization (UAA) of PCC users will go
+through an external system,
+enable that with the radio button labeled **UAA Auth enabled**.
+With UAA enabled, follow the instructions in
+[Configuring UAA Roles](UAA-config.html) to complete the
+configuration by setting up the user roles.
+Also, with UAA enabled, two text boxes will appear.
+Fill the boxes with the UAA CLI (UAAC) client name and that
+client's password (called a secret in UAAC).
 
-![Security section](security-configuration-section.png)
-
+Do not change the pre-checked radio button for the **Custom UAA URL**.
+Leave it with its default of **Use default PAS url for UAA**.
 ###<a name='errands'></a> Errands
 
 By default, post-deploy and pre-delete errands always run. 
