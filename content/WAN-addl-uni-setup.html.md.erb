@@ -59,6 +59,27 @@ and the cluster A `sender_credentials`:
     $ cf create-service-key wan3 k3
     </pre>
 
+    The contents of the service key will differ based upon the cluster
+    configuration,
+    and if an authentication and enterprise single sign-on (SSO) system
+    such as LDAP has been configured.
+    With the enterprise SSO,
+    there will *not* be cluster operator and developer users in the
+    service key.
+    Without the enterprise SSO, the service key appears as in this example.
+    Within the service key,
+    each `username` is generated with a unique string
+    appended so there will be unique user names for the different roles.
+    The user names in this example have been modified
+    to be easy to understand,
+    and they are not representative of the user names that
+    will be generated upon service key creation.
+    Passwords generated for the service key are output in clear text.
+    The passwords shown in this example have been
+    modified to be easy to understand,
+    and they are not representative of the passwords that
+    will be generated upon service key creation.
+
     Note that the cluster C service key will contain unneeded
     (for the unidirectional setup)
     but automatically created `sender_credentials`.
@@ -160,6 +181,9 @@ in these commands:
     $ cf create-service-key wan1 k1
     </pre>
 
+    This example service key is shown assuming that an authentication and
+    enterprise single sign-on (SSO) system such as LDAP has
+    *not* been configured.
     The cluster A service key will now appear as:
 
     <pre class='terminal'>
@@ -218,12 +242,9 @@ in these commands:
 
 1. Use gfsh to create the cluster A gateway sender and alter the
 existing region.
-    - Connect using gfsh and the cluster A `cluster_operator` credentials,
-    which are needed to be authorized for the gateway sender
-    creation operation:
-        <pre class='terminal'>
-        gfsh>connect --url=htt<span>ps</span>://cloudcache-1.example.com/gemfire/v1 --use-http --user=cluster\_operator\_ABC --password=cl-op-ABC-password
-        </pre>
+    - Connect using gfsh following the instructions in
+    [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
+    with a role that is able to manage both the cluster and the data.
     - Create the cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 3 for this example:
 
@@ -240,11 +261,9 @@ existing region.
         </pre>
 
 1. Use gfsh to create the cluster C region.
-    - Connect using gfsh and the cluster C `cluster_operator` credentials,
-    which are needed to be authorized for the create operation:
-        <pre class='terminal'>
-        gfsh>connect --url=htt<span>ps</span>://cloudcache-3.example.com/gemfire/v1 --use-http --user=cluster\_operator\_STU --password=cl-op-STU-password
-        </pre>
+    - Connect using gfsh following the instructions in
+    [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
+    with a role that is able to manage both the cluster and the data.
     - Create the cluster B region:
 
         <pre class='terminal'>
