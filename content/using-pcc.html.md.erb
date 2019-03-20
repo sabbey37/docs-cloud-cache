@@ -4,7 +4,8 @@ title: Using Pivotal Cloud Cache
 
 ## <a id="create-regions"></a> Create Regions with gfsh
 
-After connecting with gfsh as a `cluster_operator_XXX`, you can define a new cache region.
+After connecting with gfsh with a role that is able to manage a cluster's data,
+you can define a new cache region.
 
 The following command creates a partitioned region with a single redundant copy:
 
@@ -55,8 +56,9 @@ type of region:
 
 1. Use the directions in 
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-to connect to the PCC service instance using the
-cluster operator credentials.
+to connect to the PCC service instance with
+a role that is able to manage a cluster's data.
+
 
 2. Create the disk store with a gfsh command of the form:
 
@@ -76,8 +78,8 @@ To destroy a disk store:
 
 1. Use the directions in 
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-to connect to the PCC service instance using the
-cluster operator credentials.
+to connect to the PCC service instance with
+a role that is able to manage a cluster's data.
 
 2. Destroy the disk store with a gfsh command of the form:
 
@@ -109,52 +111,11 @@ $ cf bind-service my-app my-cloudcache
 Binding an app to the service instance provides connection information through the `VCAP_SERVICES` environment variable.
 Your app can use this information to configure components, such as the GemFire client cache, to use the service instance.
 
-The following is a sample `VCAP_SERVICES` environment variable:
-
-```
-{
-  "p-cloudcache": [
-    {
-      "credentials": {
-	"locators": [
-	  "10.244.0.4[55221]",
-	  "10.244.1.2[55221]",
-	  "10.244.0.130[55221]"
-	],
-	"urls": {
-	  "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
-	  "pulse": "https://cloudcache-1.example.com/pulse"
-	},
-	"users": [
-	  {
-	    "password": "some_developer_password",
-	    "username": "developer_XXX"
-	  },
-	  {
-	    "password": "some_password",
-	    "username": "cluster_operator_XXX"
-	  }
-	]
-      },
-      "label": "p-cloudcache",
-      "name": "test-service",
-      "plan": "caching-small",
-      "provider": null,
-      "syslog_drain_url": null,
-      "tags": [],
-      "volume_mounts": []
-    }
-  ]
-}
-```
-
 ## <a id="pulse"></a> Use the Pulse Dashboard
 
 You can access the Pulse dashboard for a service instance in a web browser
 using the Pulse URL specified in the service key you created following the
 directions in [Create Service Keys](accessing-instance.html#create-service-key).
-
-Use either the `cluster_operator_XXX` or `developer_XXX` credentials to authenticate.
 
 ## <a id="nozzle"></a> Access Service Instance Metrics
 
@@ -195,7 +156,9 @@ Service broker metrics are on by default and can be accessed through the Loggreg
 
 You can get logs and `.gfs` stats files from your PCC service instances using the `export logs` command in gfsh.
 
-1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to connect to the service instance for which you want to see logs.
+1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to
+connect to the service instance for which you want to see logs.
+Use a role that can read cluster information.
 1. Run `export logs`.
 1. Find the ZIP file in the directory where you started gfsh. 
    This file contains a folder for each member of the cluster.
@@ -209,7 +172,7 @@ see the [gfsh export documentation](https://gemfire.docs.pivotal.io/geode/tools_
 You can deploy or redeploy an app JAR file to the servers in the cluster.
 
 To do an initial deploy of an app JAR file after connecting within gfsh
-using the cluster operator credentials,
+using credentials that can manage the cluster,
 run this gfsh command:
 
 <code>deploy --jar=PATH-TO-JAR/FILENAME.jar</code>
@@ -219,7 +182,7 @@ For example,
 <pre class='terminal'> gfsh>deploy --jar=working-directory/myJar.jar </pre>
 
 To redeploy an app JAR file after connecting within gfsh
-using the cluster operator role,
+using credentials that can manage the cluster,
 do the following: 		
 
 1. Run this gfsh command to deploy the updated JAR file:
@@ -248,5 +211,5 @@ See the
 [GemFire-Greenplum Connector](http://ggc.docs.pivotal.io)
 documentation for details.
 
-Connect in `gfsh` with the cluster operator role to have the necessary
-permissions to use the connector.
+Connect in `gfsh` with a role that can both manage the cluster and
+read and write cluster data.
