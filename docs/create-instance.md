@@ -1,6 +1,6 @@
----
-title: Creating a Pivotal Cloud Cache Service Instance
----
+
+# Creating a Pivotal Cloud Cache Service Instance
+
 
 Run `cf create-service p-cloudcache PLAN-NAME SERVICE-INSTANCE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-INSTANCE-NAME` with a name of your choice. Use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
 
@@ -21,7 +21,7 @@ my-cloudcache   p-cloudcache   small                create in progress
 
 When completed, the status changes from `create in progress` to `create succeeded`.
 
-## <a id="params"></a> Provide Optional Parameters
+## Provide Optional Parameters
 
 You can create a customized service instance by passing optional parameters to `cf create-service` using the `-c` flag. The `-c` flag accepts a valid JSON object containing service-specific configuration parameters, provided either in-line or in a file.
 
@@ -55,7 +55,7 @@ To enable session state caching, do _one_ of the following items:
 - Option 3: When creating the service, name the service instance name by appending it with the string `-session-replication`,
 for example `my-service-instance-session-replication`.
 
-## <a id="ssc-spring-session"></a> Enable Session State Caching Using Spring Session
+## Enable Session State Caching Using Spring Session
 
 To use
 [Spring Session](http://projects.spring.io/spring-session/)
@@ -73,7 +73,7 @@ for session state caching for apps with PCC, follow the steps below:
   create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
   ```
 
-## <a id="service-instance-dev-plan"></a> Dev Plans
+## Dev Plans
 
 The Dev Plan is a type of service plan
 that is useful for development and testing.
@@ -97,4 +97,3 @@ as described in [Partitioned Region Types for Creating Regions on the Server](re
 If `example_partition_region` has **not** been created,
 it is probably because post-deploy scripts are not enabled for Ops Manager,
 as described in [Configure a Dev Plan](./operator.html#dev-plan).
-

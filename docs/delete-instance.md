@@ -1,6 +1,6 @@
----
-title: Deleting a Service Instance
----
+
+# Deleting a Service Instance
+
 
 You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
 
@@ -15,4 +15,3 @@ $ cf delete-service my-cloudcache
 </pre>
 
 Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
-

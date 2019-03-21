@@ -98,7 +98,7 @@ with one of the two PCC service instances, cluster A and cluster B.
 Any change made in cluster A is sent to cluster B,
 and any change made in cluster B is sent to cluster A.
 
-![Bidirectional WAN replication pattern](WAN-bidirectional.png)
+![Bidirectional WAN replication pattern](images/WAN-bidirectional.png)
 
 ## Blue-Green Disaster Recovery
 
@@ -117,12 +117,12 @@ which takes over as the primary.
 In this diagram, cluster A is primary, and it replicates all data
 across a WAN to cluster B.
 
-![WAN replication pattern](WAN1.png)
+![WAN replication pattern](images/WAN1.png)
 
 If cluster A fails,
 cluster B takes over.
 
-![WAN replicate becomes primary](WAN2.png)
+![WAN replicate becomes primary](images/WAN2.png)
 
 ## CQRS Pattern Across a WAN
 
@@ -143,7 +143,7 @@ Changes are propagated across the WAN to cluster B.
 The app bound to cluster B may only query the region data;
 it will not create entries or update the region.
 
-![CQRS WAN replication pattern](WAN-CQRS.png)
+![CQRS WAN replication pattern](images/WAN-CQRS.png)
 
 ## Hub-and-Spoke Topology with WAN Replication
 
@@ -152,7 +152,7 @@ form a single hub and a set of spokes.
 This diagram shows PCC service instance A is the hub,
 and PCC service instances B, C, and D are spokes.
 
-![Hub-and-Spoke pattern](hub-spoke.png)
+![Hub-and-Spoke pattern](images/hub-spoke.png)
 
 A common implementation that uses this topology directs all app operations
 that write or update region contents to the hub.
@@ -182,9 +182,9 @@ as it has the token, represented in this diagram as a star.
 PCC service instances B, C, and D are spokes.
 Write and update operations are directed to the hub.
 
-![Follow-the-Sun pattern, A is the hub](follow-the-sun-1.png)
+![Follow-the-Sun pattern, A is the hub](images/follow-the-sun-1.png)
 
 This diagram shows that the token has passed from A to B,
 and B has become the hub.
 
-![Follow-the-Sun pattern, B is the hub](follow-the-sun-2.png)
+![Follow-the-Sun pattern, B is the hub](images/follow-the-sun-2.png)

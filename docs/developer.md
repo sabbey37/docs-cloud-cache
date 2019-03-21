@@ -1,7 +1,6 @@
----
-title: Pivotal Cloud Cache Developer Guide
-owner: Cloud Cache Engineers
----
+
+# Pivotal Cloud Cache Developer Guide
+
 
 
 This document describes how a Pivotal Cloud Foundry (PCF) app developer can choose a service plan, create and delete Pivotal Cloud Cache (PCC) service instances, and bind an app.
