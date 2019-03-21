@@ -41,7 +41,10 @@ markdown_extensions:
 # Page tree
 pages:
   - Introduction: index.md
-  - Application Development: app-development.md
+  - Application Development:
+    - 'Design Patterns': design-patterns.md
+    - 'Region Design': 'region-design.md'
+    - 'Use Sample App': use-sample-app.md
   - Developer: developer.md
   - Operator: operator.md
   - Release Notes: release-notes.md

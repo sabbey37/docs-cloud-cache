@@ -1,28 +1,26 @@
----
-title:  Region Design
----
-<a id="region-design"></a>
+
+# Region Design
 
 Cached data are held in GemFire regions.
 Each entry within a region is a key/value pair.
 The choice of key and region type affect
 the performance of the design.
 There are two basic types of regions: partitioned and replicated.
-The distinction between the two types is based on how 
+The distinction between the two types is based on how
 entries are distributed among servers
 that host the region.
 
-## <a id="keys"></a> Keys
+## Keys
 
 Each region entry must have a unique key.
 Use a wrapped primitive type of `String`, `Integer`, or `Long`.
 Experienced designers have
-a slight preference of `String` over `Integer` or `Long`. 
+a slight preference of `String` over `Integer` or `Long`.
 Using a `String` key enhances the development and debugging
 environment by permitting the use of a REST API (Swagger UI),
 as it only works with `String` types.
 
-## <a id="partitioned-regions"></a> Partitioned Regions
+## Partitioned Regions
 
 A partitioned region distributes region entries across servers
 by using hashing.
@@ -33,14 +31,14 @@ that host the region.
 Here is a diagram that shows a single partitioned region (highlighted)
 with very few entries to illustrate partitioning.
 
-![Partitioned Region](partitioned-region.png)
+![Partitioned Region](images/partitioned-region.png)
 
 A partitioned region is the proper type of region to use when
 one or both of these situations exist:
 
 - The region holds vast quantities of data.
 There may be so much data that you need to add more servers to scale the system up.
-PCC can be scaled up without downtime; to learn more, see [Updating a Pivotal Cloud Cache Service Instance](./update-instance.html).
+PCC can be scaled up without downtime; to learn more, see [Updating a Pivotal Cloud Cache Service Instance](update-instance.md).
 
 - Operations on the region are write-heavy, meaning that there are a lot of entry updates.
 
@@ -50,11 +48,11 @@ but with the addition of a single redundant copy of each each entry.
 The buckets drawn with dashed lines are redundant copies.
 Within the diagram, the partitioned region is highlighted.
 
-![Partitioned Region with Redundancy](partitioned-redundant-region.png)
+![Partitioned Region with Redundancy](images/partitioned-redundant-region.png)
 
 With one redundant copy,
 the GemFire cluster can tolerate a single server failure
-or a service upgrade 
+or a service upgrade
 without losing any region data.
 With one less server,
 GemFire revises which server holds the primary copy of an entry.
@@ -62,7 +60,7 @@ GemFire revises which server holds the primary copy of an entry.
 A partitioned region without redundancy permanently loses data during a service upgrade or if a server goes down.
 All entries hosted in the buckets on the failed server are lost.
 
-### <a id="partitioned-types"></a> Partitioned Region Types for Creating Regions on the Server
+### Partitioned Region Types for Creating Regions on the Server
 
 Region types associate a name with a particular region configuration.
 The type is used when creating a region.
@@ -115,14 +113,14 @@ As a server (JVM) reaches a heap usage of 65% of available heap,
 the server overflows entries to disk when it needs to make space
 for updates.
 
-## <a id="replicated-regions"></a> Replicated Regions
+## Replicated Regions
 
 Here is a replicated region with very few entries (four)
 to illustrate the distribution of entries across servers.
 For a replicated region,
 all servers that host the region have a copy of every entry.
 
-![Replicated Region](replicated-region.png)
+![Replicated Region](images/replicated-region.png)
 
 GemFire maintains copies of all region entries on all servers.
 GemFire takes care of distribution and keeps the entries
@@ -145,7 +143,7 @@ The entries in the replicated region are always available
 on the server that receives the access request,
 leading to better performance.
 
-### <a id="replicated-types"></a> Replicated Region Types for Creating Regions on the Server
+### Replicated Region Types for Creating Regions on the Server
 
 Region types associate a name a particular region configuration.
 These replicated region types are supported:
@@ -165,7 +163,7 @@ As a server (JVM) reaches a heap usage of 65% of available heap,
 the server overflows entries to disk as it need to make space
 for updates.
 
-## <a id="persistent-regions"></a> Persistence
+## Persistence
 
 Persistence adds a level of fault tolerance to a PCC service
 instance by writing all region updates to local disk.
@@ -183,7 +181,7 @@ with these default properties:
 - Synchronous writes. All updates to the region generate
 operating system disk writes to update the disk store.
 - The disk size is part of the instance configuration.
-See [Configure Service Plans](operator.html#plan-config)
+See [Configure Service Plans](operator.md#plan-config)
 for details on setting the persistent disk types for the server.
 Choose a size that is at least twice as large as
 the expected maximum quantity of region data, with an absolute
@@ -192,12 +190,12 @@ Region data includes both the keys and their values.
 - Warning messages are issued when a 90% disk usage threshold
 is crossed.
 
-## <a id="app-regions"></a> Regions as Used by the App
+## Regions as Used by the App
 
 The client accesses regions hosted on the servers by creating a cache
 and the regions.
 The type of the client region determines if
-data is only on the servers or 
+data is only on the servers or
 if it is also cached locally by the client in addition to being on
 the servers.
 Locally cached data can introduce consistency issues,
@@ -209,7 +207,7 @@ client region configuration.
 
 - `PROXY` forwards all region operations to the servers.
 No entries are locally cached.
-Use this client region type unless there is a compelling reason to use 
+Use this client region type unless there is a compelling reason to use
 one of the other types.
 Use this type for all Twelve-Factor apps
 in order to assure stateless processes are implemented.
@@ -223,7 +221,7 @@ Locally cached entries are destroyed when the app’s
 usage of cache space causes its JVM to hit
 the threshold of being low on memory.
 
-## <a id="region-design-example"></a> An Example to Demonstrate Region Design
+## An Example to Demonstrate Region Design
 
 Assume that on servers, a region holds entries representing customer data.
 Each entry represents a single customer.
@@ -250,7 +248,6 @@ the PCC instance hosts all of these regions
 such that the app can access all of these regions.
 Operations on customer orders, shipments,
 and payments all require product information.
-The product region benefits from access to all its entries 
+The product region benefits from access to all its entries
 available on all the cluster's servers,
 again pointing to a region type choice of a replicated region.
-

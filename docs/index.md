@@ -318,7 +318,7 @@ within the section titled
 
 ## Recommended Usage and Limitations
 
-- PCC supports the [look-aside cache pattern](./app-development.html#lookaside-cache).
+- PCC supports the [look-aside cache pattern](design-patterns.md).
 - PCC stores objects in key/value format, where value can be any object.
 - Any gfsh command not explained in the PCC documentation is **not supported**.
 - PCC supports basic OQL queries, with no support for joins.

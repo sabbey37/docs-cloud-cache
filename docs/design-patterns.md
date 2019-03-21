@@ -1,14 +1,10 @@
----
-title: Design Patterns
----
-<a id="design-patterns"></a>
 
-## <a id="inline-cache"></a> The Inline Cache
+## The Inline Cache
 
 An inline cache places the caching layer between the app
 and the backend data store.
 
-![inline caching pattern](inline.png)
+![inline caching pattern](images/inline.png)
 
 The app will want to accomplish CRUD
 (CREATE, READ, UPDATE, DELETE) operations on its data.
@@ -35,19 +31,19 @@ It also creates or updates the data store in one of the following ways:
 
 Developers design the server code to implement this inline-caching pattern.
 Developers implement the `CacheLoader` interface to handle cache misses.
-Deploy its JAR file to the servers by following the directions in 
+Deploy its JAR file to the servers by following the directions in
 [Deploy an App JAR File to the Servers](./using-pcc.html#deploy-app-jars).
 
-## <a id="lookaside-cache"></a> The Look-Aside Cache
+## The Look-Aside Cache
 
 The look-aside pattern of caching places the app in charge
 of communication with both the cache and the backend data store.
 
-![look-aside caching pattern](look-aside.png)
+![look-aside caching pattern](images/look-aside.png)
 
 The app will want to accomplish CRUD
 (CREATE, READ, UPDATE, DELETE) operations on its data.
-That data may be 
+That data may be
 
 - in both the data store and the cache
 - in the data store, but not in the cache
@@ -75,11 +71,11 @@ and the entry is updated within or written to the cache.
 - The entry is either updated or created within the backend data store,
 and the copy currently within the cache is invalidated.
 
-<p class='note'><strong>Note:</strong> SDG (Spring Data GemFire) 
+<p class='note'><strong>Note:</strong> SDG (Spring Data GemFire)
 supports the look-aside pattern, as detailed at
 <a href="https://docs.spring.io/spring-data/gemfire/docs/current/reference/html/#bootstrap-annotation-config-caching">Configuring Spring’s Cache Abstraction</a>.</p>
 
-## <a id="active-active-WAN-pattern"></a> Bidirectional Replication Across a WAN
+## Bidirectional Replication Across a WAN
 
 Two PCC service instances may be connected across a WAN to form
 a single distributed system with asynchronous communication.
@@ -92,8 +88,8 @@ that also handles write conflicts which occur when a single
 region entry is modified in both PCC service instances at the same
 time.
 
-In this active-active system, an external entity implements load-balancing 
-by directing app connections to one of the two service instances. 
+In this active-active system, an external entity implements load-balancing
+by directing app connections to one of the two service instances.
 If one of the PCC service instances fails,
 apps may be redirected to the remaining service instance.
 
@@ -104,7 +100,7 @@ and any change made in cluster B is sent to cluster A.
 
 ![Bidirectional WAN replication pattern](WAN-bidirectional.png)
 
-## <a id="WAN-pattern"></a> Blue-Green Disaster Recovery
+## Blue-Green Disaster Recovery
 
 Two PCC service instances may be connected across a WAN to form
 a single distributed system with asynchronous communication.
@@ -114,7 +110,7 @@ The replicate increases the fault tolerance of the system by
 acting as a hot spare.
 In the scenario of the failure of an entire data center or an
 availability zone,
-apps connected to the failed site can be redirected 
+apps connected to the failed site can be redirected
 by an external load-balancing entity to the replicate,
 which takes over as the primary.
 
@@ -128,7 +124,7 @@ cluster B takes over.
 
 ![WAN replicate becomes primary](WAN2.png)
 
-## <a id="CQRS-WAN-pattern"></a> CQRS Pattern Across a WAN
+## CQRS Pattern Across a WAN
 
 Two PCC service instances may be connected across a WAN to form
 a single distributed system that implements
@@ -143,13 +139,13 @@ and that other cluster provides only query access to the region data.
 
 This diagram shows an app that may update the region
 within the PCC service instance of cluster A.
-Changes are propagated across the WAN to cluster B. 
+Changes are propagated across the WAN to cluster B.
 The app bound to cluster B may only query the region data;
 it will not create entries or update the region.
 
 ![CQRS WAN replication pattern](WAN-CQRS.png)
 
-## <a id="hub-spoke-pattern"></a> Hub-and-Spoke Topology with WAN Replication
+## Hub-and-Spoke Topology with WAN Replication
 
 Multiple PCC service instances connected across a WAN
 form a single hub and a set of spokes.
@@ -163,7 +159,7 @@ that write or update region contents to the hub.
 Writes and updates are then propagated asynchronously across the WAN
 from the hub to the spokes.
 
-## <a id="follow-the-sun-pattern"></a> Follow-the-Sun Pattern
+## Follow-the-Sun Pattern
 
 Performance improves when operation requests originate
 in close proximity to the service instance that handles
@@ -178,7 +174,7 @@ to the most active location.
 Form a ring that contains each PCC service instance that will
 act as the hub.
 Define a token to identify the hub.
-Over time, pass the token from one PCC service instance to the 
+Over time, pass the token from one PCC service instance to the
 next, around the ring.
 
 This diagram shows PCC service instance A is the hub,
