@@ -294,15 +294,15 @@ required independent of whether a TLS-enabled cluster will be
 created; see [Preparing for TLS](prepare-TLS.html) for how to
 prepare the PCF environment.
 
-3. If User Authentication and Authorization (UAA) of PCC users will go
+3. If User Account and Authentication (UAA) of PCC users will go
 through an external system,
 enable that with the radio button labeled **UAA Auth enabled**.
 With UAA enabled, follow the instructions in
-[Configuring UAA Roles](UAA-config.html) to complete the
+[Configuring UAA Roles](UAA-config.html) to create a client and to complete the
 configuration by setting up the user roles.
 Also, with UAA enabled, two text boxes will appear.
-Fill the boxes with the UAA CLI (UAAC) client name and that
-client's password (called a secret in UAAC).
+Fill the boxes with the UAA client name and that
+client's secret, which were set when the client was created.
 
 Do not change the pre-checked radio button for the **Custom UAA URL**.
 Leave it with its default of **Use default PAS url for UAA**.

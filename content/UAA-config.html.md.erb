@@ -6,6 +6,28 @@ Extra configuration is required when defining users that have specific
 security roles with an
 authentication and enterprise single sign-on (SSO) such as LDAP.
 
+Before PCC installation, create a UAA client.
+
+Complete the remainder of configuration in conjunction with choosing the
+**UAA Auth enabled** radio button on the Security poperties page
+when installing the PCC tile,
+as detailed in [Security](install-configure.html#security-section).
+
+##<a id='UAA-Client'></a> Create a UAA Client
+
+Authenticating using an authentication and enterprise SSO system
+such as LDAP uses the User Account and Authentication (UAA) server.
+Access the UAA server through its command-line interface, UAAC.
+
+Create a client for use with PCC with the command:
+
+```
+uaac client add cloudcache_gfsh --scope="PCC_*" --secret="THE-SECRET"
+   --authorized_grant_types=password
+```
+Replace `THE-SECRET` with your chosen password (secret) for this client.
+The remainder of the command is exactly as shown.
+
 ##<a id='UAA Roles'></a> The Roles
 
 A PCC service instance internally defines four security roles.
@@ -18,7 +40,7 @@ role has.
 
 The permissions assigned for each of the security roles:
 
-- **ADMIN** has all permissions needed to manage the cluster and
+- **PCC_ADMIN** has all permissions needed to manage the cluster and
 can access region data.
 This role has the GemFire permissions
 `CLUSTER:MANAGE`,
@@ -27,18 +49,18 @@ This role has the GemFire permissions
 `DATA:MANAGE`,
 `DATA:WRITE`,
 and `DATA:READ`.
-- **OPERATOR** has all permissions needed to manage the cluster.
+- **PCC_OPERATOR** has all permissions needed to manage the cluster.
 This role may not handle or see region data.
 This role has the GemFire permissions
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 and `CLUSTER:READ`.
-- **DATA-ACCESS** has all permissions needed to handle and see region data.
+- **PCC_DATA-ACCESS** has all permissions needed to handle and see region data.
 This role has the GemFire permissions
 `CLUSTER:READ`,
 `DATA:WRITE`,
 and `DATA:READ`.
-- **READ-ONLY** has the single GemFire permission `DATA:READ`
+- **PCC_READ-ONLY** has the single GemFire permission `DATA:READ`
 to see region data.
 
 ##<a id='UAA-Config-Roles'></a> Configuring the Roles
@@ -50,9 +72,9 @@ Configure the UAA server and your Enterprise SSO system
 that will host your PCC service instance:
 
     ```
-    $ cf login -a REST-OF-ARGS-HERE
-    $ cf target -o NAME-OF-ORG
-    $ cf space --guid NAME-OF-SPACE
+    cf login -a REST-OF-ARGS-HERE
+    cf target -o NAME-OF-ORG
+    cf space --guid NAME-OF-SPACE
     ```
 
     The form of the output GUID will be similar to the example:
@@ -67,9 +89,9 @@ The group name will take the form `ROLE_GUID`.
 For example, in the following group name:
 
     ````
-    ADMIN_03badc2a-4243-4251-84b5-c9bfba276f04
+    PCC_ADMIN_03badc2a-4243-4251-84b5-c9bfba276f04
     ````
-    `ADMIN` is the role, and `03badc2a-4243-4251-84b5-c9bfba276f04` is
+    `PCC_ADMIN` is the role, and `03badc2a-4243-4251-84b5-c9bfba276f04` is
     the GUID.
 
 3. Place users into the created space-specific groups you created
@@ -84,6 +106,16 @@ to your UAA server.
     $ uaac group add ROLE_GUID
     ```
 
+    Using the example GUID, the commands to add the four group names
+    will be similar to:
+
+    <pre class="terminal">
+    $ uaac group add PCC_ADMIN_03badc2a-4243-4251-84b5-c9bfba276f04
+    $ uaac group add PCC_OPERATOR_03badc2a-4243-4251-84b5-c9bfba276f04
+    $ uaac group add PCC_DATA-ACCESS_03badc2a-4243-4251-84b5-c9bfba276f04
+    $ uaac group add PCC_READ-ONLY_03badc2a-4243-4251-84b5-c9bfba276f04
+    </pre>
+
 5.  Use the UUAC to map each group name with `uuac group map`
 commands. The commands are described in 
 [Grant Admin Permissions to an External Group (SAML or LDAP)](https://docs.pivotal.io/pivotalcf/uaa/uaa-user-management.html#external-group).
@@ -92,5 +124,5 @@ For LDAP:
     ```
     $ uaac group map --name ROLE_GUID "GROUP-DISTINGUISHED-NAME"
     ```
-    where `GROUP-DISTINGUISHED-NAME` is the distinguished name of
+    where `GROUP-DISTINGUISHED-NAME` is the LDAP distinguished name of
     each space-specific group created in step 2.
