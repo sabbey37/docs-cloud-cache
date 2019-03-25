@@ -1,0 +1,22 @@
+---
+title: Create a UAA Client
+---
+
+Extra configuration is required when defining users that have specific
+security roles with an
+authentication and enterprise single sign-on (SSO) such as LDAP.
+
+
+Authenticating using an authentication and enterprise SSO system
+such as LDAP uses the User Account and Authentication (UAA) server.
+Access the UAA server through its command-line interface, UAAC.
+
+Create a client for use with PCC with the command:
+
+```
+uaac client add cloudcache_gfsh --scope="PCC_*" --secret="THE-SECRET"
+   --authorized_grant_types=password
+```
+Replace `THE-SECRET` with your chosen password (secret) for this client.
+The remainder of the command is exactly as shown.
+
