@@ -83,10 +83,10 @@ For example, in the following group name:
 3. Place users into the created space-specific groups you created
 within your Enterprise SSO system.
 
-4. Use the UAA Command Line Interface (UUAC) to log in as `admin client`
+4. Use the UAA Command Line Interface (UAAC) to log in as `admin client`
 to your UAA server.
 
-5.  Use the UUAC to add each group name with:
+5.  Use the UAAC to add each group name with:
 
     ```
     $ uaac group add ROLE_GUID
@@ -102,7 +102,7 @@ to your UAA server.
     $ uaac group add PCC_READ-ONLY_03badc2a-4243-4251-84b5-c9bfba276f04
     </pre>
 
-5.  Use the UUAC to map each group name with `uuac group map`
+5.  Use the UAAC to map each group name with `uaac group map`
 commands. The commands are described in 
 [Grant Admin Permissions to an External Group (SAML or LDAP)](https://docs.pivotal.io/pivotalcf/uaa/uaa-user-management.html#external-group).
 For LDAP:
