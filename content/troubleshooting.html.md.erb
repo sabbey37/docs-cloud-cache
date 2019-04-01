@@ -4,6 +4,174 @@ title:  Troubleshooting
 
 Here are problems and fixes related to using PCC.
 
+##<a id='acquire-artifacts'></a> Acquire Artifacts for Troubleshooting
+
+###<a id='gemfire-logs'></a> Gather GemFire Logs
+
+GemFire statistics and log files may be obtained by using the
+`gfsh export logs` command.
+See [Export gfsh Logs](using-pcc.html#exporting_logs) for details.
+
+###<a id='view-statistics'></a> View Statistics Files and Logs
+
+You can visualize the performance of your cluster by downloading
+the statistics files from your servers.
+These files are located in the persistent store on each VM.
+To copy these files to your workstation, run the command:
+
+```
+bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
+```
+
+Alternatively, use `bosh ssh` to access PCC service instance GemFire server VMs
+and directly obtain the GemFire logs that reside within the directory
+`/var/vcap/sys/log/gemfire-server`.
+
+See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
+
+###<a id='thread-dumps'></a> Acquire Thread Dumps
+
+1. To list your VMs, run:
+
+    ```
+    bosh -e ENV vms
+    ```
+
+1. Use the VM in a `bosh ssh` command to gain access to the
+PCC VM where you want to produce the thread dumps.
+PCC VMs can be referenced using 0-based index, for example server/0,
+or locator/2:
+
+    ```
+    bosh -e ENV -d DEPLOYMENT ssh server/0
+    ```
+
+1. Get into the Bosh Process Manager (bpm) shell by running 
+
+    ```
+    sudo /var/vcap/packages/bpm/bin/bpm shell JOB-NAME
+    ```
+    where JOB-NAME is either `gemfire-server` or `gemfire-locator`,
+    depending on which PCC VM you are on.
+
+1. Find the process ID (PID) that is running the GemFire Java process
+by running 
+
+    ```
+    ps -aux | grep java
+    ```
+    Typically, the PID is 1.
+
+1. As you take multiple thread dumps,
+redirect the output of each to a uniquely named file.
+This example uses the file name `threaddump1.txt`:
+
+    ```
+    /var/vcap/packages/jdk8/bin/jcmd 1 Thread.print > /tmp/threaddump1.txt
+    ```
+    Files in `/tmp` on the container will be located within the
+    `/var/vcap/data/gemfire-server/tmp` or `/var/vcap/data/gemfire-locator/tmp`
+    directory.
+
+1. Move the files to the `/tmp` directory on the VM by running 
+
+    ```
+    mv /var/vcap/data/gemfire-server/tmp/threaddump1.txt /tmp/
+    ```
+
+1. Files can be copied to your local machine using `bosh scp` command.
+From your local machine run:
+
+    ```
+    bosh -d DEPLOYMENT scp VM:/tmp/threaddump1.txt .
+    ```
+
+    For example:
+
+    <pre class='terminal'>
+    $ bosh -d service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6 scp server/0:/tmp/threaddump1.txt .
+    </pre>
+
+##<a id='operator-troubleshooting'></a> Troubleshooting for Operators
+
+###<a id='smoke-test-failures'></a> Smoke Test Failures
+
+- **Error message:** "Creating p-cloudcache SERVICE-NAME failed"
+    
+    **Cause of the Problem:** The smoke tests could not create an instance
+    of GemFire.
+
+    **Action:** To troubleshoot why the deployment failed, 
+    use the CF CLI to create a new service instance using the same plan 
+    and download the logs of the service deployment from BOSH.
+
+- **Error message:** "Deleting SERVICE-NAME failed"
+
+    **Cause of the Problem:** The smoke test attempted to clean up a service instance it created 
+    and failed to delete the service using the `cf delete-service` command.
+
+    **Action:** Run BOSH `logs` to view the logs on the broker or the
+    service instance to see why the deletion may have failed.
+
+- **Error message:** "Cannot connect to the cluster SERVICE-NAME"
+
+    **Cause of the Problem:** The smoke test was unable to connect
+    to the cluster.
+
+    **Action:** Review the logs of your load balancer,
+    and review the logs of your CF Router to ensure the route to your PCC
+    cluster is properly registered.
+
+    You also can create a service instance and try to connect to it using the
+    gfsh CLI. This requires creating a service key.
+
+- **Error message:** "Could not perform create/put on Cloud Cache cluster"
+
+    **Cause of the Problem:** The smoke test was unable to write data
+    to the cluster.
+    The user may not have permissions to create a region or write data.
+
+- **Error message:** "Could not retrieve value from Cloud Cache cluster"
+
+    **Cause of the Problem:** The smoke test was unable to read back the data
+    it wrote.
+    Data loss can happen if a cluster member improperly stops and starts
+    again or if the member machine crashes and is resurrected by BOSH.
+
+    **Action:**  Run BOSH `logs` to view the logs on the broker to see if
+    there were any interruptions to the cluster by a service update.
+
+###<a id='general-connectivity'></a> General Connectivity
+
+- **Problem:**  Client-to-server communication
+
+    **Cause of the Problem:** PCC Clients communicate to PCC servers
+    on port 40404 and with locators on port 55221.
+    Both of these ports must be reachable from the PAS network to service
+    the network.
+
+- **Problem:**  Membership port range
+
+    **Cause of the Problem:** PCC servers and locators communicate with
+    each other using UDP and TCP.
+    The current port range for this communication is `49152-65535`.
+
+    **Solution:** If you have a firewall between VMs,
+    ensure this port range is open.
+
+- **Problem:**  Port range usage across a WAN
+
+    **Cause of the Problem:** Gateway receivers and gateway senders
+    communicate across WAN-separated service instances.
+    Each PCC service instance uses GemFire defaults for the
+    gateway receiver ports.
+    The default is the inclusive range of port numbers 5000 to 5499.
+
+    **Solution:** Ensure this port range is open when WAN-separated
+    service instances will communicate.
+
+##<a id='developer-troubleshooting'></a> Troubleshooting for Developers
+
 - **Problem:**  An error occurs when creating a service instance or
 when running a smoke test.
 The service creation issues an error message that starts with

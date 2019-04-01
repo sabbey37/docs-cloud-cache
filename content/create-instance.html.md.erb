@@ -75,7 +75,8 @@ for session state caching for apps with PCC, follow the steps below:
 
     For more information, see the [spring-session-data-gemfire-example](https://github.com/jxblum/spring-session-data-gemfire-example) repository.
 
-2. Create a region named `ClusteredSpringSessions` in gfsh using the `cluster_operator_XXX` credentials:
+2. Create a region named `ClusteredSpringSessions` in gfsh when connected
+with a security role that can manage cluster data:
   ```
   create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
   ```
