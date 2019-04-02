@@ -31,13 +31,20 @@ See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal
 
 ###<a id='thread-dumps'></a> Acquire Thread Dumps
 
+Thread dumps maybe useful for debugging.
+Take at least three thread dumps on each VM, separating them by about
+one second.
+
 1. To list your VMs, run:
 
     ```
-    bosh -e ENV vms
+    bosh -e ENV -d DEPLOYMENT vms
     ```
 
-1. Use the VM in a `bosh ssh` command to gain access to the
+    [Acquire the Deployment Name](#get-deployment-name) instructs how to
+    acquire the string to substitute for `DEPLOYMENT`.
+
+1. Use the VM in a `bosh ssh` command to ssh in to the
 PCC VM where you want to produce the thread dumps.
 PCC VMs can be referenced using a 0-based index, for example server/0,
 or locator/2:
@@ -45,9 +52,6 @@ or locator/2:
     ```
     bosh -e ENV -d DEPLOYMENT ssh server/0
     ```
-
-    [Acquire the Deployment Name](#get-deployment-name) instructs how to
-    acquire the string to substitute for `DEPLOYMENT`.
 
 1. Get into the Bosh Process Manager (bpm) shell by running 
 
@@ -72,14 +76,20 @@ This example uses the file name `threaddump1.txt`:
     ```
     /var/vcap/packages/jdk8/bin/jcmd 1 Thread.print > /tmp/threaddump1.txt
     ```
-    Files in `/tmp` on the container will be located within the
-    `/var/vcap/data/gemfire-server/tmp` or `/var/vcap/data/gemfire-locator/tmp`
-    directory.
+    Files in `/tmp` will be accessible on the VM in
+    directory 
+    `/var/vcap/data/gemfire-server/tmp` or `/var/vcap/data/gemfire-locator/tmp`.
 
 1. Move the files to the `/tmp` directory on the VM by running 
 
     ```
     mv /var/vcap/data/gemfire-server/tmp/threaddump1.txt /tmp/
+    ```
+
+    or
+
+    ```
+    mv /var/vcap/data/gemfire-locator/tmp/threaddump1.txt /tmp/
     ```
 
 1. Files can be copied to your local machine using `bosh scp` command.
