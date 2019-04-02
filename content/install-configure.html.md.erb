@@ -269,8 +269,8 @@ Click **Save** after changing values.
 
 ###<a name='security-section'></a> Security
 
-There are three configuration aspects to the Security settings.
-Each of the three must be considered and appropriately handled
+There are four configuration aspects to the Security settings.
+Each of the four must be considered and appropriately handled
 within these settings.
 Once the Security properties settings have been set,
 click **Save**.
@@ -278,7 +278,7 @@ The Security properties Settings page appears as:
 
 ![Security section](security-settings.png)
 
-The three items in this page to handle are:
+The four items in this page to handle are:
 
 1.  The environment may be configured to more securely store service keys
 within CredHub,
@@ -287,25 +287,32 @@ To enable this functionality,
 click on the box labeled **Enable Secure Service Instance Credentials**
 to enable use of CredHub.
 
-2. An 'X' is required in the text box to promote the understanding that
+2. To permit the creation of a PCC service instance that will
+TLS-encrypt communications within the cluster,
+check the box labeled **TLS Supported**.
+Checking the box does not cause new service instances to encrypt
+communications; follow the directions in [Provide Optional Parameters](create-instance.html#params) to create a new service instance with
+TLS encryption.
+
+3. An 'X' is required in the text box to promote the understanding that
 a TLS-enabled service instance cannot be created if the PCF environment
 is not set up to handle TLS. A TLS-enabled environment is 
 required independent of whether a TLS-enabled cluster will be
 created; see [Preparing for TLS](prepare-TLS.html) for how to
 prepare the PCF environment.
 
-3. If User Account and Authentication (UAA) of PCC users will go
+4. If User Account and Authentication (UAA) of PCC users will go
 through an external system,
 enable that with the radio button labeled **UAA Auth enabled**.
-With UAA enabled, follow the instructions in
-[Configuring UAA Roles](UAA-config.html) to create a client and to complete the
+With UAA enabled, create a UAA client before doing this tile installation
+as explained in [Create a UAA Client](create-UAA-client.html).
+Also follow the instructions in
+[Configuring UAA Roles](UAA-config.html) to complete the
 configuration by setting up the user roles.
-Also, with UAA enabled, two text boxes will appear.
+With UAA enabled, two text boxes will appear.
 Fill the boxes with the UAA client name and that
 client's secret, which were set when the client was created.
 
-Do not change the pre-checked radio button for the **Custom UAA URL**.
-Leave it with its default of **Use default PAS url for UAA**.
 ###<a name='errands'></a> Errands
 
 By default, post-deploy and pre-delete errands always run. 
