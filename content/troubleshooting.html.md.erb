@@ -39,12 +39,15 @@ See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal
 
 1. Use the VM in a `bosh ssh` command to gain access to the
 PCC VM where you want to produce the thread dumps.
-PCC VMs can be referenced using 0-based index, for example server/0,
+PCC VMs can be referenced using a 0-based index, for example server/0,
 or locator/2:
 
     ```
     bosh -e ENV -d DEPLOYMENT ssh server/0
     ```
+
+    [Acquire the Deployment Name](#get-deployment-name) instructs how to
+    acquire the string to substitute for `DEPLOYMENT`.
 
 1. Get into the Bosh Process Manager (bpm) shell by running 
 
@@ -91,6 +94,32 @@ From your local machine run:
     <pre class='terminal'>
     $ bosh -d service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6 scp server/0:/tmp/threaddump1.txt .
     </pre>
+
+###<a id='get-deployment-name'></a> Acquire the Deployment Name
+
+The `DEPLOYMENT` name is needed in several troubleshooting procedures.
+To acquire the `DEPLOYMENT` name:
+
+1. Use the Pivotal Cloud Foundry CLI. Target the space where the
+service instance runs.
+
+1. Discover the Globally Unique Identifier (GUID) for the service instance:
+
+    ```
+    cf service INSTANCE-NAME --guid
+    ```
+
+    The output is the GUID. For example:
+
+    <pre class='terminal'>
+    $ cf service dev-instance --guid
+    1fd2850e-b754-4c5e-aa5c-ddb54ee301e6
+    </pre>
+
+1. Prefix the GUID with the string `service-instance_` to obtain
+the `DEPLOYMENT` name.
+For the example GUID, the `DEPLOYMENT` name is
+`service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6`.
 
 ##<a id='operator-troubleshooting'></a> Troubleshooting for Operators
 
