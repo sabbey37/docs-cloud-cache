@@ -112,3 +112,8 @@ For LDAP:
     ```
     where `GROUP-DISTINGUISHED-NAME` is the LDAP distinguished name of
     each space-specific group created in step 2.
+    For example:
+
+    <pre class="terminal">
+    $ uaac group map --name PCC_DATA-ACCESS_03badc2a-4243-4251-84b5-c9bfba276f04 "CN=PCC_DATA-ACCESS_03badc2a-4243-4251-84b5-c9bfba276f04,OU=Groups,DC=pivotal,DC=io"
+    </pre>
