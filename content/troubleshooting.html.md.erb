@@ -31,15 +31,22 @@ See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal
 
 ###<a id='thread-dumps'></a> Acquire Thread Dumps
 
+Thread dumps may be useful for debugging.
+Take at least three thread dumps on each VM, separating them by about
+one second.
+
 1. To list your VMs, run:
 
     ```
-    bosh -e ENV vms
+    bosh -e ENV -d DEPLOYMENT vms
     ```
 
-1. Use the VM in a `bosh ssh` command to gain access to the
+    [Acquire the Deployment Name](#get-deployment-name) instructs how to
+    acquire the string to substitute for `DEPLOYMENT`.
+
+1. Use the VM in a `bosh ssh` command to ssh in to the
 PCC VM where you want to produce the thread dumps.
-PCC VMs can be referenced using 0-based index, for example server/0,
+PCC VMs can be referenced using a 0-based index, for example server/0,
 or locator/2:
 
     ```
@@ -69,9 +76,9 @@ This example uses the file name `threaddump1.txt`:
     ```
     /var/vcap/packages/jdk8/bin/jcmd 1 Thread.print > /tmp/threaddump1.txt
     ```
-    Files in `/tmp` on the container will be located within the
-    `/var/vcap/data/gemfire-server/tmp` or `/var/vcap/data/gemfire-locator/tmp`
-    directory.
+    Files in `/tmp` will be accessible on the VM in
+    directory 
+    `/var/vcap/data/gemfire-server/tmp` or `/var/vcap/data/gemfire-locator/tmp`.
 
 1. Move the files to the `/tmp` directory on the VM by running 
 
@@ -79,8 +86,14 @@ This example uses the file name `threaddump1.txt`:
     mv /var/vcap/data/gemfire-server/tmp/threaddump1.txt /tmp/
     ```
 
+    or
+
+    ```
+    mv /var/vcap/data/gemfire-locator/tmp/threaddump1.txt /tmp/
+    ```
+
 1. Files can be copied to your local machine using `bosh scp` command.
-From your local machine run:
+From your local machine, run:
 
     ```
     bosh -d DEPLOYMENT scp VM:/tmp/threaddump1.txt .
@@ -91,6 +104,32 @@ From your local machine run:
     <pre class='terminal'>
     $ bosh -d service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6 scp server/0:/tmp/threaddump1.txt .
     </pre>
+
+###<a id='get-deployment-name'></a> Acquire the Deployment Name
+
+The `DEPLOYMENT` name is needed in several troubleshooting procedures.
+To acquire the `DEPLOYMENT` name:
+
+1. Use the Pivotal Cloud Foundry CLI. Target the space where the
+service instance runs.
+
+1. Discover the globally unique identifier (GUID) for the service instance:
+
+    ```
+    cf service INSTANCE-NAME --guid
+    ```
+
+    The output is the GUID. For example:
+
+    <pre class='terminal'>
+    $ cf service dev-instance --guid
+    1fd2850e-b754-4c5e-aa5c-ddb54ee301e6
+    </pre>
+
+1. Prefix the GUID with the string `service-instance_` to obtain
+the `DEPLOYMENT` name.
+For the example GUID, the `DEPLOYMENT` name is
+`service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6`.
 
 ##<a id='operator-troubleshooting'></a> Troubleshooting for Operators
 
