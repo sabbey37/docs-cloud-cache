@@ -1,6 +1,8 @@
 ---
-title: Creating a Pivotal Cloud Cache Service Instance
+title: Create or Delete a Service Instance
 ---
+
+## <a id="create-SI"></a> Create a Service Instance
 
 Run `cf create-service p-cloudcache PLAN-NAME SERVICE-INSTANCE-NAME` to create a service instance. Replace `PLAN-NAME` with the name from the list of available plans. Replace `SERVICE-INSTANCE-NAME` with a name of your choice. Use this name to refer to your service instance with other commands. Service instance names can include alpha-numeric characters, hyphens, and underscores.
 
@@ -21,7 +23,7 @@ my-cloudcache   p-cloudcache   small                create in progress
 
 When completed, the status changes from `create in progress` to `create succeeded`.
 
-## <a id="params"></a> Provide Optional Parameters
+### <a id="params"></a> Provide Optional Parameters
 
 You can create a customized service instance by passing optional parameters to `cf create-service` using the `-c` flag. The `-c` flag accepts a valid JSON object containing service-specific configuration parameters, provided either in-line or in a file.
 
@@ -43,7 +45,7 @@ This example creates the service with five service instances in the cluster:
 $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
 </pre>
 
-## <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
+### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
 
 When the `session-replication` tag is specified, the Java buildpack downloads all the required resources for session state caching. This feature is available in Java buildpack version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
 
@@ -62,7 +64,7 @@ To enable session state caching, do _one_ of the following items:
 - Option 3: When creating the service, name the service instance name by appending it with the string `-session-replication`,
 for example `my-service-instance-session-replication`.
 
-## <a id="ssc-spring-session"></a> Enable Session State Caching Using Spring Session
+### <a id="ssc-spring-session"></a> Enable Session State Caching Using Spring Session
 
 To use
 [Spring Session](http://projects.spring.io/spring-session/)
@@ -81,7 +83,7 @@ with a security role that can manage cluster data:
   create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
   ```
 
-## <a id="service-instance-dev-plan"></a> Dev Plans
+### <a id="service-instance-dev-plan"></a> Dev Plans
 
 The Dev Plan is a type of service plan
 that is useful for development and testing.
@@ -105,4 +107,20 @@ as described in [Partitioned Region Types for Creating Regions on the Server](re
 If `example_partition_region` has **not** been created,
 it is probably because post-deploy scripts are not enabled for Ops Manager,
 as described in [Configure a Dev Plan](./install-configure.html#dev-plan).
+
+## <a id="delete-SI"></a> Delete a Service Instance
+
+You can delete service instances using the cf CLI. Before doing so, you must remove any existing service keys and app bindings.
+
+1. Run `cf delete-service-key SERVICE-INSTANCE-NAME KEY-NAME` to delete the service key.
+1. Run `cf unbind-service APP-NAME SERVICE-INSTANCE-NAME` to unbind your app from the service instance.
+1. Run `cf delete-service SERVICE-INSTANCE-NAME` to delete the service instance.
+
+<pre class='terminal'>
+$ cf delete-service-key my-cloudcache my-service-key
+$ cf unbind-service my-app my-cloudcache
+$ cf delete-service my-cloudcache
+</pre>
+
+Deletions are asynchronous. Run `cf services` to view the current status of the service instance deletion.
 
