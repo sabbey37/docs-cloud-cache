@@ -620,6 +620,60 @@ These are metrics emitted through the CF Nozzle for disks.
    </tr>
 </table>
 
+## <a id="experimental-metrics"></a> Experimental Metrics
+
+These metrics are experimental.
+Any of these metrics may be removed without advance notice,
+and the current name of any of these metrics may change.
+Expect changes to these metrics.
+
+These experimental metrics are specific to a region (`REGION-NAME`):
+
+- `region.REGION-NAME.BucketCount`
+- `region.REGION-NAME.CreatesRate`
+- `region.REGION-NAME.DestroyRate`
+- `region.REGION-NAME.EntrySize`
+- `region.REGION-NAME.FullPath`
+- `region.REGION-NAME.GetsRate`
+- `region.REGION-NAME.NumRunningFunctions`
+- `region.REGION-NAME.PrimaryBucketCount`
+- `region.REGION-NAME.PutAllRate`
+- `region.REGION-NAME.PutLocalRate`
+- `region.REGION-NAME.PutRemoteRate`
+- `region.REGION-NAME.PutsRate`
+- `region.REGION-NAME.RegionType`
+- `region.REGION-NAME.SystemRegionEntryCount`
+- `region.REGION-NAME.TotalBucketSize`
+- `region.REGION-NAME.TotalRegionCount`
+- `region.REGION-NAME.TotalRegionEntryCount`
+
+These experimental metrics are specific to a member:
+
+- `member.AverageReads`
+- `member.AverageWrites`
+- `member.BytesReceivedRate`
+- `member.BytesSentRate`
+- `member.CacheServer`
+- `member.ClientConnectionCount`
+- `member.CreatesRate`
+- `member.CurrentHeapSize`
+- `member.DeserializationRate`
+- `member.DestroysRate`
+- `member.FunctionExecutionRate`
+- `member.GetRequestRate`
+- `member.GetsRate`
+- `member.MaxMemory`
+- `member.MemberUpTime`
+- `member.NumThreads`
+- `member.PDXDeserializationRate`
+- `member.PutAllRate`
+- `member.PutRequestRate`
+- `member.PutsRate`
+- `member.TotalBucketCount`
+- `member.TotalHitCount`
+- `member.TotalMissCount`
+- `member.TotalPrimaryBucketCount`
+
 ## <a id="bosh-errand-report"></a> Total Memory Consumption
 
 The BOSH `mem-check` errand calculates and outputs
