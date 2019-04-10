@@ -44,8 +44,8 @@ This upgrade procedure applies to upgrades to PCC v1.6.2
 for plans that colocate system components on a single VM.
 Those plans are the dev plan and the small footprint plan.
 This special upgrade procedure exists to work around a race condition
-that exists in the timing of bringing down and starting back up
-components that communicate with each other and are both located
+that exists in the timing of bringing down and restarting
+the two components that communicate with each other and are both located
 within a single VM.
 
 Use this procedure for upgrades from 1.5.x, 1.6.0, or 1.6.1 to 1.6.2.
