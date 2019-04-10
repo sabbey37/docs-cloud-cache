@@ -80,35 +80,12 @@ Sequentially run this errand until it succeeds:
     bosh -e ENV -d DEPLOYMENT run-errand upgrade-all-service-instances
     ```
 
-    [Acquire the Deployment Name](upgrade.html#get-deployment-name) describes how to acquire the `DEPLOYMENT`.
-
-    For example:
-    <pre class="terminal">
-    $ bosh -e my-pcf -d service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6 run-errand upgrade-all-service-instances
-    </pre>
-
-###<a id='get-deployment-name'></a> Acquire the Deployment Name
-
-The `DEPLOYMENT` name is needed in several troubleshooting procedures.
-To acquire the `DEPLOYMENT` name:
-
-1. Use the Pivotal Cloud Foundry CLI. Target the space where the
-service instance runs.
-
-1. Discover the globally unique identifier (GUID) for the service instance:
-
-    ```
-    cf service INSTANCE-NAME --guid
-    ```
-
-    The output is the GUID. For example:
-
+    Acquire the broker's `DEPLOYMENT` name:
     <pre class='terminal'>
-    $ cf service dev-instance --guid
-    1fd2850e-b754-4c5e-aa5c-ddb54ee301e6
+    $ bosh deployments | grep p-cloudcache
     </pre>
 
-1. Prefix the GUID with the string `service-instance_` to obtain
-the `DEPLOYMENT` name.
-For the example GUID, the `DEPLOYMENT` name is
-`service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6`.
+    This is an example of running the errand:
+    <pre class="terminal">
+    $ bosh -e my-pcf -d p-cloudcache_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6 run-errand upgrade-all-service-instances
+    </pre>
