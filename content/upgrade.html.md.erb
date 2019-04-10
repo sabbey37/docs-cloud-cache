@@ -14,6 +14,15 @@ as required to maintain compatibility,
 as described in
 [Upgrading Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/customizing/upgrading-pcf.html).
 
+<p class="note warning"><strong>WARNING</strong>:
+To work around a race condition, follow a different procedure as detailed in
+<a href="./upgrade.html#special-upgrade">Special Upgrade Procedure for Dev and Small Footprint Plans</a>
+to upgrade to PCC v1.6.2 for plans that colocate system components
+on a single VM.
+</p>
+
+##<a id='standard-upgrade'></a> Upgrade Procedure
+
 Follow the steps below to upgrade PCC:
 
 1. Download the new version of the tile from the Pivotal Network.
@@ -28,3 +37,78 @@ Follow the steps below to upgrade PCC:
 
 1.  Click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
 1.  Click **Apply Changes**.
+
+##<a id='special-upgrade'></a> Special Upgrade Procedure for Dev and Small Footprint Plans
+
+This upgrade procedure applies to upgrades to PCC v1.6.2
+for plans that colocate system components on a single VM.
+Those plans are the dev plan and the small footprint plan.
+This special upgrade procedure exists to work around a race condition
+that exists in the timing of bringing down and starting back up
+components that communicate with each other and are both located
+within a single VM.
+
+Use this procedure for upgrades from 1.5.x, 1.6.0, or 1.6.1 to 1.6.2.
+
+Follow the steps below to upgrade PCC:
+
+1. Download the new version of the tile from the Pivotal Network.
+1. Upload the product to Ops Manager.
+1. Click **Add** next to the uploaded product.
+1. Click on the Cloud Cache tile and configure the upgrade options.
+    - To try the upgrade on a small number of service instances first, set the quantity of canary service instances as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades). 
+    - Set the number of instances that are to be upgraded in parallel as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades).
+    **Save** the change.
+
+1.  Click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
+1. At the bottom of the **Review Pending Changes** page within
+the **Pivotal CloudCache** specification,
+uncheck the box labeled **Upgrade All Service Instances**, as in this view:
+![Special Upgrade Review](special-upgrade.png)
+
+1. Click **Apply Changes**.
+1. Once the upgrade is applied (without the upgrade of all service instances),
+the BOSH `upgrade-all-service-instances` errand must be successfully completed
+to finish the upgrade.
+This is the errand that is subject to the race condition.
+Therefore, the errand must be run an indeterminate number of times,
+as there is no way to predict whether or not the errand will hit the
+race condition.
+Sequentially run this errand until it succeeds:
+
+    ```
+    bosh -e ENV -d DEPLOYMENT run-errand upgrade-all-service-instances
+    ```
+
+    [Acquire the Deployment Name](upgrade.html#get-deployment-name) describes how to acquire the `DEPLOYMENT`.
+
+    For example:
+    <pre class="terminal">
+    $ bosh -e my-pcf -d service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6 run-errand upgrade-all-service-instances
+    </pre>
+
+###<a id='get-deployment-name'></a> Acquire the Deployment Name
+
+The `DEPLOYMENT` name is needed in several troubleshooting procedures.
+To acquire the `DEPLOYMENT` name:
+
+1. Use the Pivotal Cloud Foundry CLI. Target the space where the
+service instance runs.
+
+1. Discover the globally unique identifier (GUID) for the service instance:
+
+    ```
+    cf service INSTANCE-NAME --guid
+    ```
+
+    The output is the GUID. For example:
+
+    <pre class='terminal'>
+    $ cf service dev-instance --guid
+    1fd2850e-b754-4c5e-aa5c-ddb54ee301e6
+    </pre>
+
+1. Prefix the GUID with the string `service-instance_` to obtain
+the `DEPLOYMENT` name.
+For the example GUID, the `DEPLOYMENT` name is
+`service-instance_1fd2850e-b754-4c5e-aa5c-ddb54ee301e6`.
