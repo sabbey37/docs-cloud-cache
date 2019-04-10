@@ -14,6 +14,11 @@ enterprise single sign-on system, such as LDAP.
 - PCC requires TLS encryption for using gfsh and Pulse.
 Follow the instructions in [Preparing for TLS](prepare-TLS.html) to
 set up TLS encryption.
+- <p class="note warning"><strong>WARNING</strong>:
+Follow the procedure detailed in [Special Upgrade Procedure for Dev and Small Footprint Plans](upgrade.html#special-upgrade)
+when upgrading from PCC v1.6.x for plans that colocate system components
+on a single VM. This applies to the dev plan and to the small footprint plan.
+</p>
 - The new `ReplyWaitsInProgress` metric allows operators to 
 identify unhealthy cluster members or network connectivity issues.
 - If a ClamAV or File Integrity Monitor is detected,
