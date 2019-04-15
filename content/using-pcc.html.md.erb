@@ -183,27 +183,6 @@ a role that is able to manage a cluster's data.
     For more details on further options, see the Pivotal GemFire
     [destroy disk-store Command Reference Page](http://gemfire.docs.pivotal.io/95/geode/tools_modules/gfsh/command-pages/destroy.html#topic_yfr_l2z_ck).
 
-## <a id="java-build-pack-requirement"></a> Java Build Pack Requirements
-
-To ensure that your app can use all the features from PCC,
-use the latest buildpack.
-The buildpack is available on GitHub at [cloudfoundry/java-buildpack](https://github.com/cloudfoundry/java-buildpack).
-
-
-## <a id="bind-service"></a> Bind an App to a Service Instance
-
-Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region.
-Run `cf bind-service APP-NAME SERVICE-INSTANCE-NAME` to bind an app to your service instance.
-Replace `APP-NAME` with the name of the app.
-Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance.
-
-<pre class='terminal'>
-$ cf bind-service my-app my-cloudcache
-</pre>
-
-Binding an app to the service instance provides connection information through the `VCAP_SERVICES` environment variable.
-Your app can use this information to configure components, such as the GemFire client cache, to use the service instance.
-
 ## <a id="pulse"></a> Use the Pulse Dashboard
 
 You can access the Pulse dashboard for a service instance in a web browser
