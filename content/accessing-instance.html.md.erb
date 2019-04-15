@@ -103,10 +103,9 @@ To create a truststore, use the same certificate you used to configure TLS termi
 See [Determine Your TLS Termination](#tls-termination).
 1. Using your certificate, run the `keytool` command:
 
-    `keytool -import -alias ENV -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH -storetype JKS`
+    `keytool -import -file CERTIFICATE.CER -keystore TRUSTSTORE-FILE-PATH -storetype JKS`
 
     where
-    + `ENV` is your system environment
     + `CERTIFICATE.CER` is your certificate file
     + `TRUSTSTORE-FILE-PATH` is the path to the location where you want to create the truststore file, including the name you want to give the file
 
@@ -116,7 +115,7 @@ See [Determine Your TLS Termination](#tls-termination).
 The following example shows how to run `keytool` and what the output looks like:
 
 <pre class='terminal'>
-$ keytool -import -alias prod-ssl -file /tmp/loadbalancer.cer -keystore /tmp/truststore/prod.myTrustStore -storetype JKS
+$ keytool -import -file /tmp/loadbalancer.cer -keystore /tmp/truststore/prod.myTrustStore -storetype JKS
 Enter keystore password:
 Re-enter new password:
 Owner: CN=*.url.example.com, OU=Cloud Foundry, O=Pivotal, L=New York, ST=New York, C=US
