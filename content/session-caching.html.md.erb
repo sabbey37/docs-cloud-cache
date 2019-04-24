@@ -2,7 +2,7 @@
 title: HTTP Session State Caching
 ---
 
-## <a id="disable-nearcaching"></a> Disable Caching within the App
+## <a id="disable-nearcaching"></a> Disable Near Caching Within the App
 
 Near caching is when an app locally caches data.
 Near caching uses an embedded cache within the app.
@@ -11,10 +11,11 @@ have near caching by default.
 To keep an app stateless, you will want to disable near caching.
 
 There are two methods for disabling near caching.
-Choose and implement one of these methods.
+Choose and implement one of these methods:
 
-1. Set up and keep configuration (that disables near caching) in
-an external repository. Modify the app setup to acquire the configuration
+1. Create and use a custom buildpack (that disables near caching) that
+resides in an external repository.
+Modify the app setup to acquire the configuration
 from the external repository. This method facilitates having a single
 configuration that may be used by a variety of apps.
 
@@ -30,7 +31,7 @@ have access.
 The second part changes the app configuration such that it uses
 the custom buildpack.
 
-The procedure to to build the repository:
+The procedure to build the repository:
 
 1. Make a directory to hold the configuration:
 
@@ -53,7 +54,7 @@ The procedure to to build the repository:
     ```
 
 4. Create `tomcat-1.0.0/conf/context.xml`, and edit the file such that it
-contains that following content:
+contains the following content:
 
     ```
     <?xml version='1.0' encoding='UTF-8'?>
@@ -85,8 +86,8 @@ into the `public` directory:
     cp tomcat-1.0.0.tar.gz public/
     ```
 
-6. Use `cf push` a first time to place the configuration into
-Pivotal Cloud Foundry space that will host this configuration:
+6. Use `cf push` to place the configuration into
+the Pivotal Cloud Foundry space that will host this configuration:
 
     ```
     cf push tomcat-config
@@ -161,7 +162,7 @@ a more recent version:
 3. To verify that local caching is disabled for the app,
 use `cf ssh` to access the app and visually verify that
 `enableLocalCache='false'` appears within the `context.xml` file.
-The sequence of commands may be similar to:
+Use this sequence of commands:
 
     ```
     cf ssh APP-NAME
@@ -195,25 +196,25 @@ caching within the app.
 The file to edit is `lib/java_buildpack/container/tomcat/tomcat_geode_store.rb`.
 The single change is the string `true` to instead be `false`.
 Before the change, here is the portion of the file to be changed,
-with the string to change highlighted in red:
+with the string to change highlighted:
 
     <pre>
     def add_manager(context)
       context.add_element 'Manager',
                           'className' => SESSION_MANAGER_CLASS_NAME,
-                          'enableLocalCache' => '<font color=red>true</font>',
+                          'enableLocalCache' => '<b>true</b>',
                           'regionAttributesId' => REGION_ATTRIBUTES_ID
     end
     </pre>
 
     After changing the highlighted string from `true` to `false`,
-    here is the portion of the file with the change highlighted in red:
+    here is the portion of the file with the change highlighted:
 
     <pre>
     def add_manager(context)
       context.add_element 'Manager',
                           'className' => SESSION_MANAGER_CLASS_NAME,
-                          'enableLocalCache' => '<font color=red>false</font>',
+                          'enableLocalCache' => '<b>false</b>',
                           'regionAttributesId' => REGION_ATTRIBUTES_ID
     end
     </pre>
