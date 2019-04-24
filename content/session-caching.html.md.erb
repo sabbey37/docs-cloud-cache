@@ -1,0 +1,244 @@
+---
+title: HTTP Session State Caching
+---
+
+## <a id="disable-nearcaching"></a> Disable Caching within the App
+
+Near caching is when an app locally caches data.
+Near caching uses an embedded cache within the app.
+Web apps that deploy Tomcat with GemFire session state caching
+have near caching by default.
+To keep an app stateless, you will want to disable near caching.
+
+There are two methods for disabling near caching.
+Choose and implement one of these methods.
+
+1. Set up and keep configuration (that disables near caching) in
+an external repository. Modify the app setup to acquire the configuration
+from the external repository. This method facilitates having a single
+configuration that may be used by a variety of apps.
+
+2. Create and use a custom buildpack (that disables near caching) for the app.
+
+### <a id="disable-with-repo"></a> Disable Caching Using an External Repository for Configuration
+
+There are two parts to this method for disabling near caching within the app.
+The first part builds a repository to hold the configuration
+and custom buildpack,
+and then pushes the repository to the space such that the app will
+have access.
+The second part changes the app configuration such that it uses
+the custom buildpack.
+
+The procedure to to build the repository:
+
+1. Make a directory to hold the configuration:
+
+    ```
+    mkdir tomcat-config
+    ```
+2. Make other needed files and directories within the newly created directory:
+
+    ```
+    cd tomcat-config
+    mkdir public
+    mkdir -p tomcat-1.0.0/conf
+    touch Staticfile
+    ```
+3. Edit `Staticfile` to contain:
+
+    ```
+    root: public
+    directory: visible
+    ```
+
+4. Create `tomcat-1.0.0/conf/context.xml`, and edit the file such that it
+contains that following content:
+
+    ```
+    <?xml version='1.0' encoding='UTF-8'?>
+    <!--
+    ~ Copyright 2013-2019 the original author or authors.
+    ~
+    ~ Licensed under the Apache License, Version 2.0 (the "License");
+    ~ you may not use this file except in compliance with the License.
+    ~ You may obtain a copy of the License at
+    ~
+    ~      http://www.apache.org/licenses/LICENSE-2.0
+    ~
+    ~ Unless required by applicable law or agreed to in writing, software
+    ~ distributed under the License is distributed on an "AS IS" BASIS,
+    ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ~ See the License for the specific language governing permissions and
+    ~ limitations under the License.
+    -->
+    <Context>
+        <Resources allowLinking='true'/>
+        <Manager className='org.apache.geode.modules.session.catalina.Tomcat8DeltaSessionManager' enableLocalCache='false' regionAttributesId='PARTITION_REDUNDANT_HEAP_LRU'/>
+    </Context>
+    ```
+5. Place a compressed TAR format version of the `tomcat-1.0.0` directory
+into the `public` directory:
+
+    ```
+    tar -czf tomcat-1.0.0.tar.gz tomcat-1.0.0/
+    cp tomcat-1.0.0.tar.gz public/
+    ```
+
+6. Use `cf push` a first time to place the configuration into
+Pivotal Cloud Foundry space that will host this configuration:
+
+    ```
+    cf push tomcat-config
+    ```
+
+7. Issue the command
+
+    ```
+    cf apps
+    ```
+
+    to acquire the URL of the `tomcat-config` app.  Prepend the listed URL
+    with `http://` to have the URL that will identify the location of the
+    configuration needed by the app.
+
+    For example, your complete URL will look something like
+    `http://tomcat-config.apps.yellow-green.cf-app.com`.
+
+8. Within the `tomcat-config` directory, edit `public/index.yml`
+to have URL-specific contents.
+Using the example URL as a guide, the contents of this `public/index.yml`
+file will contain:
+
+    ```
+    ---
+    1.0.0: http://tomcat-config.apps.yellow-green.cf-app.com/tomcat-1.0.0.tar.gz
+
+    ```
+
+9. Push the app a second time with its completed configuration:
+
+    ```
+    cf push tomcat-config
+    ```
+
+The second part of this procedure modifies the app such that it uses
+the custom buildpack:
+
+1. Edit the `manifest.yml` file by appending this URL-specific configuration
+to the `applications` section of the `manifest.yml` file:
+
+    ```
+      env:
+        JBP_CONFIG_TOMCAT: "{ tomcat: { external_configuration_enabled: true }, external_configuration: { repository_root: \"http://tomcat-config.apps.yellow-green.cf-app.com\" } }"
+    ```
+
+    Substitute your complete URL for the URL in this example.
+
+    A complete `manifest.yml` file will appear similar to:
+
+    ```
+    ---
+    applications:
+    - name: http-session-caching
+      path: build/libs/http-session-caching-0.0.1.war
+      buildpack: java_buildpack_offline
+      env:
+        JBP_CONFIG_TOMCAT: "{ tomcat: { external_configuration_enabled: true }, external_configuration: { repository_root: \"http://tomcat-config.apps.yellow-green.cf-app.com\" } }"
+    ```
+
+2. Push, bind, and start your app with a buildpack of version 4.18 or
+a more recent version:
+
+    ```
+    cf push -f ./manifest.yml --no-start -b https://github.com/cloudfoundry/java-buildpack.git#v4.18
+    
+    cf bind-service APP-NAME SERVICE-INSTANCE-NAME
+
+    cf start APP-NAME
+    ```
+
+3. To verify that local caching is disabled for the app,
+use `cf ssh` to access the app and visually verify that
+`enableLocalCache='false'` appears within the `context.xml` file.
+The sequence of commands may be similar to:
+
+    ```
+    cf ssh APP-NAME
+
+    find ./ -name *.xml
+
+    cat ./app/.java-buildpack/tomcat/conf/context.xml
+    ```
+   
+
+### <a id="disable-with-buildpack"></a> Disable Caching Using a Custom Java Buildpack
+
+This procedure creates and uses a custom java buildpack that
+disables near caching in the app.
+Once created, the `cf push` specifies the custom Java buildpack.
+
+1. Clone the git buildpack repository:
+
+    ```
+    git clone git@github.com:cloudfoundry/java-buildpack.git
+    ```
+
+2. Change directories to the newly created repository:
+
+    ```
+    cd java-buildpack
+    ```
+
+3. Edit the Geode ruby configuration file such that it disables
+caching within the app.
+The file to edit is `lib/java_buildpack/container/tomcat/tomcat_geode_store.rb`.
+The single change is the string `true` to instead be `false`.
+Before the change, here is the portion of the file to be changed,
+with the string to change highlighted in red:
+
+    <pre>
+    def add_manager(context)
+      context.add_element 'Manager',
+                          'className' => SESSION_MANAGER_CLASS_NAME,
+                          'enableLocalCache' => '<font color=red>true</font>',
+                          'regionAttributesId' => REGION_ATTRIBUTES_ID
+    end
+    </pre>
+
+    After changing the highlighted string from `true` to `false`,
+    here is the portion of the file with the change highlighted in red:
+
+    <pre>
+    def add_manager(context)
+      context.add_element 'Manager',
+                          'className' => SESSION_MANAGER_CLASS_NAME,
+                          'enableLocalCache' => '<font color=red>false</font>',
+                          'regionAttributesId' => REGION_ATTRIBUTES_ID
+    end
+    </pre>
+
+4. Create your custom Java buildpack on the platform with a command
+of the form:
+
+    ```
+    cf create-buildpack BUILDPACK PATH POSITION --enable
+    ```
+
+    where `BUILDPACK` is the name you choose for your buildpack.
+
+5. After building your application, push it such that it uses your
+buildpack:
+
+    ```
+    cf push -f ./manifest.yml -b BUILDPACK
+    ```
+
+6. Bind your app as described in 
+[Bind an App to a Service Instance](using-pcc.html#bind-service).
+
+7. Restage the app to ensure proper configuration: 
+
+    ```
+    cf restage APP-NAME
+    ```
