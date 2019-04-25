@@ -1,8 +1,101 @@
 ---
-title: Using Pivotal Cloud Cache
+title: Using gfsh
 ---
 
-## <a id="create-regions"></a> Create Regions with gfsh
+## <a id="gfsh-restrictions"></a> gfsh Command Restrictions
+
+Developers may invoke all `gfsh` commands.
+Given credentials with sufficient permissions,
+those `gfsh` command will be executed.
+However, not all `gfsh` commands are supported.
+An invocation of an unsupported command may lead to
+incorrect results.
+Those results range from ineffective results to
+inconsistent region entries.
+**Do not use these listed `gfsh` commands;
+each has an explanation why it must not be used.**
+
+These `gfsh start` commands will bring up members contrary to
+the configured plan.
+Their configuration will be wrong, and their existence is
+likely to contribute to data loss.
+Since they are not part of the configured plan,
+any upgrade will not include them,
+and if they were to stop or crash,
+the BOSH Director will not restart them.
+
+- gfsh start locator
+- gfsh start server
+
+These cluster stop commands will temporarily stop the member
+or cluster.
+However, the BOSH Director will notice that members are not
+running and restart them. So, these commands will be ineffective:
+
+- gfsh stop locator
+- gfsh stop server
+- gfsh shutdown
+
+These Lucene-related commands are not supported:
+
+- gfsh create lucene index
+- gfsh describe lucene index
+- gfsh destroy lucene index
+- gfsh list lucene indexes
+- gfsh search lucene
+
+These JNDI binding-related commands are not supported:
+
+- gfsh create jndi-binding
+- gfsh describe jndi-binding
+- gfsh destroy jndi-binding
+- gfsh list jndi-binding
+
+This configure command will instill configuration contrary to
+the already-configured plan.
+Since it is not part of the configured plan,
+any upgrade will not include it.
+Therefore, do not use:
+
+- gfsh configure pdx
+
+The create of a gateway receiver will never be
+appropriate for any situation.
+The PCC cluster will already have gateway receivers,
+and there is no situation in which the cluster can benefit
+from creating more.
+Therefore, do not use:
+
+- gfsh create gateway receiver
+
+### Do Not Export from a GemFire Cluster to a PCC Cluster
+
+While the expectation is that configuration and data can be
+exported from a GemFire cluster and then imported into a
+PCC cluster,
+this does **not** work.
+Using export and import commands will not have the desired
+effect of migration from one cluster to another.
+The import of cluster configuration requires a state that
+cannot be provided by a PCC cluster.
+The PCC cluster will already have its configuration,
+and upon restart or upgrade, that same configuration will be used.
+Given that the configuration cannot be imported,
+data import is problematic.
+Therefore, do not use:
+
+- gfsh import cluster-configuration
+- gfsh import data
+
+<p class="note"><strong>Note</strong>: The restriction here on the use of
+the <code>gfsh import data</code> does not apply to the procedure
+for migrating from an
+existing PCC cluster that does not use TLS for encryption to a PCC cluster
+that does use TLS for encryption.
+See <a href="./migrate-to-TLS.html">Migrating to a TLS-Enabled Cluster</a>
+for that procedure.  </p>
+
+## <a id="create-regions"></a> Create Regions
 
 After connecting with gfsh with a role that is able to manage a cluster's data,
 you can define a new cache region.
@@ -89,27 +182,6 @@ a role that is able to manage a cluster's data.
 
     For more details on further options, see the Pivotal GemFire
     [destroy disk-store Command Reference Page](http://gemfire.docs.pivotal.io/95/geode/tools_modules/gfsh/command-pages/destroy.html#topic_yfr_l2z_ck).
-
-## <a id="java-build-pack-requirement"></a> Java Build Pack Requirements
-
-To ensure that your app can use all the features from PCC,
-use the latest buildpack.
-The buildpack is available on GitHub at [cloudfoundry/java-buildpack](https://github.com/cloudfoundry/java-buildpack).
-
-
-## <a id="bind-service"></a> Bind an App to a Service Instance
-
-Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region.
-Run `cf bind-service APP-NAME SERVICE-INSTANCE-NAME` to bind an app to your service instance.
-Replace `APP-NAME` with the name of the app.
-Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance.
-
-<pre class='terminal'>
-$ cf bind-service my-app my-cloudcache
-</pre>
-
-Binding an app to the service instance provides connection information through the `VCAP_SERVICES` environment variable.
-Your app can use this information to configure components, such as the GemFire client cache, to use the service instance.
 
 ## <a id="pulse"></a> Use the Pulse Dashboard
 
@@ -213,3 +285,66 @@ documentation for details.
 
 Connect in `gfsh` with a role that can both manage the cluster and
 read and write cluster data.
+
+## <a id="scripting"></a> Scripting Common Operations
+
+Gfsh commands may be placed into files,
+providing a way to script common maintenance operations.
+Scripting operations reduces errors that might occur when
+manually entering commands,
+and can be especially useful for running test cases and in
+deployment automation.
+
+### <a id="run-script"></a> Running a gfsh Script
+
+The `gfsh run` command invokes the gfsh commands that are
+in a file.
+Start up the gfsh command line interface first,
+and then invoke the command with:
+
+```
+gfsh>run --file=thecommands.gfsh
+```
+To see the `gfsh run` options, invoke:
+
+```
+gfsh>help run
+```
+
+File specification can be a relative or absolute path and file name.
+Scripted commands are not interactive; any command that would have 
+prompted for input will instead use default values.
+
+In order to eliminate placing cleartext passwords within a script,
+run gfsh and connect to the cluster prior to running a script with
+the gfsh `run` command.
+The password will appear on the command line,
+but it will not appear in the file that logs and captures gfsh commands. 
+
+### <a id="example-gfsh-scripts"></a> Example Scripts
+
+Tightly focussed scripts will ease cluster maintenance.
+Most of these scripts will do cluster management operations,
+so connect to the cluster with a role that is able to manage both the cluster
+and the data.
+
+A common operation will be creating the regions hosted on the servers.
+This example gfsh script contents creates two regions:
+
+```
+create region --name=sessions --type=PARTITION_REDUNDANT
+create region --name=customers --type=REPLICATE
+```
+
+This example gfsh script contents deploys a app JAR file to the cluster servers:
+
+```
+deploy --jar=/path/to/app-classes.jar
+```
+
+This example gfsh script contents creates the disk store needed for persistent
+regions:
+
+```
+create disk-store --name=all-regions-disk --dir=regions
+```
