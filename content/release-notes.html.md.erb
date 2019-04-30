@@ -3,6 +3,14 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
+## <a id='v153'></a>v1.5.4
+
+**Release Date:**  April 30, 2019
+
+Features included in this release:
+
+- PCC 1.5.4 uses [Pivotal GemFire 9.6.2](http://gemfire.docs.pivotal.io/96/gemfire/release_notes.html#ResolvedIssuesGF962).
+
 ## <a id='v153'></a>v1.5.3
 
 **Release Date:**  April 10, 2019
@@ -17,7 +25,7 @@ prior to installing the PCC tile.</p>
 available memory for GemFire servers is reduced to allow enough memory
 for these PCF add-ons.
 This prevents a failure during PCC service instance creation.
-- PCC uses Pivotal GemFire 9.6.1.
+- PCC 1.5.3 uses Pivotal GemFire 9.6.1.
 
 ## <a id='v152'></a>v1.5.2
 
@@ -26,7 +34,7 @@ This prevents a failure during PCC service instance creation.
 Features included in this release:
 
 - PCC now ships with OpenJDK 1.8_192 instead of the equivalent Oracle JDK.
-- PCC uses Pivotal GemFire 9.6.
+- PCC 1.5.2 uses Pivotal GemFire 9.6.
 
 ## <a id='v151'></a>v1.5.1
 
@@ -44,7 +52,7 @@ which addressed the following security vulnerabilities:
     - [CVE-2018-3180](https://nvd.nist.gov/vuln/detail/CVE-2018-3180)
     - [CVE-2018-3183](https://nvd.nist.gov/vuln/detail/CVE-2018-3183)
     - [CVE-2018-3214](https://nvd.nist.gov/vuln/detail/CVE-2018-3214)
-- PCC is now running Pivotal GemFire 9.6.0.
+- PCC 1.5.1 uses Pivotal GemFire 9.6.0.
 - PCC now runs with a Xenial stemcell, version 170.9 or a more recent version.
 
 ## <a id='v150'></a>v1.5.0
@@ -62,7 +70,7 @@ when sharing the credentials with applications.
 after trying the upgrade on a set of canary instances first.
 - BOSH errands are colocated with the Broker VM, which decreases the installation time for the tile.
 - The dev plan may be selected for use in smoke tests.
-- PCC is now running Pivotal GemFire 9.6.0.
+- PCC 1.5.0 uses Pivotal GemFire 9.6.0.
 Using `gfsh` with this GemFire version requires a JDK or JRE
 with Java 8 release 121 or a more recent version 8 update.
 - The GemFire-Greenplum Connector v3.3.0 makes it possible to import and
@@ -72,7 +80,7 @@ See [Use the GemFire-Greenplum Connector](using-pcc.html#use-GGC).
 - Users upgrading from the PCC limited availability v1.3.2 release will
 automatically upgrade to this PCC v1.5.0 release without upgrading to v1.4.
 Make sure to upgrade to PAS/Ops Manager v2.2 prior to doing
-the upgrade from PCC limited availability v1.3.2 to PCC v1.5.0. 
+the upgrade from PCC limited availability v1.3.2 to PCC v1.5.0.
 
 ## <a id='v15-known-issues'></a>Known Issues
 
@@ -108,7 +116,7 @@ The region needs to be hosted on all the servers.
 
     You can verify that the region is hosted on all servers with the
     `gfsh` command:
-    
+
     ```
     gfsh>describe region --name=gemfire_modules_sessions
     ```

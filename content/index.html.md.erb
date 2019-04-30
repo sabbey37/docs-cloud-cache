@@ -5,11 +5,11 @@ owner: Cloud Cache Engineers
 
 ## <a id='overview'></a>Overview
 
-Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF). 
+Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF).
 PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data access requests.
 
-PCC provides a service broker to create in-memory data clusters on demand. 
-These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan. 
+PCC provides a service broker to create in-memory data clusters on demand.
+These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan.
 Service operators can create multiple plans to support different use cases.
 
 PCC uses Pivotal GemFire. The [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) details the API for client access to data objects within Pivotal GemFire.
@@ -30,15 +30,15 @@ The following table provides version and version-support information about PCC:
     <th>Details</th>
     <tr>
         <td>Version</td>
-        <td>v1.5.3</td>
+        <td>v1.5.4</td>
     </tr>
     <tr>
         <td>Release date</td>
-        <td>April 10, 2019</td>
+        <td>April 30, 2019</td>
     </tr>
     <tr>
         <td>Software component version</td>
-        <td>GemFire v9.6.1</td>
+        <td>GemFire v9.6.2</td>
     </tr>
     <tr>
         <td>Compatible Ops Manager version(s)</td>
@@ -228,8 +228,8 @@ This section describes networking considerations for Pivotal Cloud Cache.
 <%= partial '../../p-cloud-cache/odb/service_networks_table' %>
 
 <br>
-Regardless of the specific network layout, the operator must ensure network 
-rules are set up so that connections are open as described in the table below. 
+Regardless of the specific network layout, the operator must ensure network
+rules are set up so that connections are open as described in the table below.
 
 <table class="nice">
   <th>This component...</th>
@@ -258,10 +258,10 @@ rules are set up so that connections are open as described in the table below.
     <td><strong>ODB</strong></td>
     <td><strong>Deployed service instances</strong>
     </td>
-    <td>Specific to the service (such as RabbitMQ for PCF). 
+    <td>Specific to the service (such as RabbitMQ for PCF).
       May be one or more ports.</td>
     <td>One-way</td>
-    <td>This connection is for administrative tasks. 
+    <td>This connection is for administrative tasks.
       Avoid opening general use, app-specific ports for this connection.</td>
   </tr>
   <tr>
@@ -297,7 +297,7 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>4222</td>
     <td>Two-way</td>
-    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM. 
+    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM.
       The BOSH Agent initiates the connection with the BOSH Director.<br>
       The default port is not configurable.  </td>
   </tr>
@@ -307,7 +307,7 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>Specific to the service. May be one or more ports.</td>
     <td>One-way</td>
-    <td>This connection is for general use, app-specific tasks. 
+    <td>This connection is for general use, app-specific tasks.
       Avoid opening administrative ports for this connection.</td>
   </tr>
   <tr>
@@ -316,8 +316,8 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>8080</td>
     <td>One-way</td>
-    <td>This port may be different for individual services. 
-      This port may also be configurable by the operator if allowed by the 
+    <td>This port may be different for individual services.
+      This port may also be configurable by the operator if allowed by the
       tile developer.</td>
   </tr>
 </table>
@@ -401,7 +401,7 @@ there is a verification that the
 authenticated user role has the permission authorized to do the operation.
 Here are the permissions that each user role has:
 
-- The  cluster operator role has 
+- The  cluster operator role has
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 `CLUSTER:READ`,
