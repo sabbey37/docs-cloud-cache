@@ -18,7 +18,7 @@ cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
 cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
 </pre>
 
-See [Region Design](../app-development.html#region-design)
+See [Region Design](region-design.html)
 for guidelines on choosing a region type.
 
 You can test the newly created region by writing and reading values with gfsh:
@@ -53,7 +53,7 @@ Use `gfsh` to create or destroy a disk store.
 To create a disk store for use with a persistent or overflow
 type of region:
 
-1. Use the directions in 
+1. Use the directions in
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
 to connect to the PCC service instance using the
 cluster operator credentials.
@@ -74,7 +74,7 @@ cluster operator credentials.
 
 To destroy a disk store:
 
-1. Use the directions in 
+1. Use the directions in
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
 to connect to the PCC service instance using the
 cluster operator credentials.
@@ -195,7 +195,7 @@ You can get logs and `.gfs` stats files from your PCC service instances using th
 
 1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to connect to the service instance for which you want to see logs.
 1. Run `export logs`.
-1. Find the ZIP file in the directory where you started gfsh. 
+1. Find the ZIP file in the directory where you started gfsh.
    This file contains a folder for each member of the cluster.
    The member folder contains the associated log files and stats files for that member.
 
@@ -218,7 +218,7 @@ For example,
 
 To redeploy an app JAR file after connecting within gfsh
 using the cluster operator role,
-do the following: 		
+do the following:
 
 1. Run this gfsh command to deploy the updated JAR file:
 
