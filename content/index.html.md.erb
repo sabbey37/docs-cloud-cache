@@ -3,13 +3,15 @@ title: Pivotal Cloud Cache
 owner: Cloud Cache Engineers
 ---
 
+<p class="note"><strong>Note: The support period for Pivotal Cloud Cache (PCC) v1.3.5 has expired, and this version no longer is supported.</strong> To stay up to date with the latest software and security updates, upgrade to a supported version.</p>
+
 ## <a id='overview'></a>Overview
 
-Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF). 
+Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF).
 PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data access requests.
 
-PCC provides a service broker to create in-memory data clusters on demand. 
-These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan. 
+PCC provides a service broker to create in-memory data clusters on demand.
+These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan.
 Service operators can create multiple plans to support different use cases.
 
 PCC uses Pivotal GemFire. The [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) details the API for client access to data objects within Pivotal GemFire.
@@ -240,8 +242,8 @@ This section describes networking considerations for Pivotal Cloud Cache.
 <%= partial '../../p-cloud-cache/odb/service_networks_table' %>
 
 <br>
-Regardless of the specific network layout, the operator must ensure network 
-rules are set up so that connections are open as described in the table below. 
+Regardless of the specific network layout, the operator must ensure network
+rules are set up so that connections are open as described in the table below.
 
 <table class="nice">
   <th>This component...</th>
@@ -270,10 +272,10 @@ rules are set up so that connections are open as described in the table below.
     <td><strong>ODB</strong></td>
     <td><strong>Deployed service instances</strong>
     </td>
-    <td>Specific to the service (such as RabbitMQ for PCF). 
+    <td>Specific to the service (such as RabbitMQ for PCF).
       May be one or more ports.</td>
     <td>One-way</td>
-    <td>This connection is for administrative tasks. 
+    <td>This connection is for administrative tasks.
       Avoid opening general use, app-specific ports for this connection.</td>
   </tr>
   <tr>
@@ -309,7 +311,7 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>4222</td>
     <td>Two-way</td>
-    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM. 
+    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM.
       The BOSH Agent initiates the connection with the BOSH Director.<br>
       The default port is not configurable.  </td>
   </tr>
@@ -319,7 +321,7 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>Specific to the service. May be one or more ports.</td>
     <td>One-way</td>
-    <td>This connection is for general use, app-specific tasks. 
+    <td>This connection is for general use, app-specific tasks.
       Avoid opening administrative ports for this connection.</td>
   </tr>
   <tr>
@@ -328,8 +330,8 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>8080</td>
     <td>One-way</td>
-    <td>This port may be different for individual services. 
-      This port may also be configurable by the operator if allowed by the 
+    <td>This port may be different for individual services.
+      This port may also be configurable by the operator if allowed by the
       tile developer.</td>
   </tr>
 </table>
@@ -414,7 +416,7 @@ there is a verification that the
 authenticated user role has the permission authorized to do the operation.
 Here are the permissions that each user role has:
 
-- The  cluster operator role has 
+- The  cluster operator role has
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 `CLUSTER:READ`,
@@ -434,7 +436,7 @@ More details about these permissions are in the Pivotal GemFire manual under [Im
 ## <a id='bugs'></a>Known Issues
 
 ### Pulse Issue
-The topology diagram might not be accurate and might show more members than are actually in the cluster. 
+The topology diagram might not be accurate and might show more members than are actually in the cluster.
 However, the numerical value displayed on the top bar is accurate.
 
 ## <a id='feedback'></a> Feedback
