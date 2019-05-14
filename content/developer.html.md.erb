@@ -126,7 +126,7 @@ as described in [Configure a Dev Plan](./operator.html#dev-plan).
 ## <a id="WAN-create-setup"></a> Set Up WAN-Separated Service Instances
 
 Two service instances may form a single distributed system across a WAN.
-The interaction of the two service instances may follow one of 
+The interaction of the two service instances may follow one of
 the patterns described within the section on
 [Design Patterns](app-development.html#design-patterns).
 
@@ -137,7 +137,7 @@ This example assigns `distributed_system_id = 1` to Cluster A
 and `distributed_system_id = 2` to Cluster B.
 GemFire gateway senders provide the communication path and construct that
 propagates region operations from one cluster to another.
-On the receiving end are GemFire gateway receivers. 
+On the receiving end are GemFire gateway receivers.
 Creating a service instance also creates gateway receivers.
 
 ### <a id="WAN-bidirectional-setup"></a> Set Up a Bidirectional System
@@ -233,7 +233,7 @@ will use in the creation of the cluster B service instance:
     </pre>
 
 1. Communicate the cluster A locators IP and port addresses and
-`sender_credentials` to the cluster B Cloud Foundry administrator. 
+`sender_credentials` to the cluster B Cloud Foundry administrator.
 
 1.  Create the cluster B service instance
 using cluster B Cloud Foundry credentials.
@@ -329,7 +329,7 @@ and the cluster A `sender_credentials`:
     </pre>
 
 1. Communicate the cluster B locators IP and port addresses and
-`sender_credentials` to the cluster A Cloud Foundry administrator. 
+`sender_credentials` to the cluster A Cloud Foundry administrator.
 
 1. Update the cluster A service instance using the cluster A
 Cloud Foundry credentials to include the cluster B locators
@@ -565,7 +565,7 @@ will use in the creation of the cluster B service instance:
     </pre>
 
 1. Communicate the cluster A locators IP and port addresses and
-`sender_credentials` to the cluster B Cloud Foundry administrator. 
+`sender_credentials` to the cluster B Cloud Foundry administrator.
 
 1.  Create the cluster B service instance
 using cluster B Cloud Foundry credentials.
@@ -663,8 +663,8 @@ and the cluster A `sender_credentials`:
     }
     </pre>
 
-1. Communicate the cluster B locators IP and port addresses 
-to the cluster A Cloud Foundry administrator. 
+1. Communicate the cluster B locators IP and port addresses
+to the cluster A Cloud Foundry administrator.
 
 1. Update the cluster A service instance using the cluster A
 Cloud Foundry credentials to include the cluster B locators:
@@ -830,7 +830,7 @@ Then the resulting service instance has `5` servers and `new_size_percentage` of
 When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC automatically rebalances data in the cache to distribute data across the cluster.
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored.
- In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator. 
+ In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while authenticated as a cluster operator.
 <p class="note"><strong>Note</strong>: You must first [connect with gfsh](#gfsh-connect) before you can use the `rebalance` command.</p>
 
 ## <a id="plan-updates"></a> About Changes to the Service Plan
@@ -935,13 +935,13 @@ Use the developer credentials to authenticate.
 
 When connecting over HTTPS, you must use the same certificate you use to secure traffic into Pivotal Application Service (PAS)
 or Elastic Runtime; that is, the certificate you use where your TLS termination occurs.
-Before you can connect, you must create a truststore. 
+Before you can connect, you must create a truststore.
 
-#### <a id="truststore"></a> Create a Truststore 
+#### <a id="truststore"></a> Create a Truststore
 
-To create a truststore, use the same certificate you used to configure TLS termination. We suggest using the `keytool` command line utility to create a truststore file. 
+To create a truststore, use the same certificate you used to configure TLS termination. We suggest using the `keytool` command line utility to create a truststore file.
 
-1. Locate the certificate you use to configure TLS termination. 
+1. Locate the certificate you use to configure TLS termination.
 1. Using your certificate, run the `keytool` command.
 
     For example:
@@ -959,7 +959,7 @@ To create a truststore, use the same certificate you used to configure TLS termi
 The following example shows how to run `keytool` and what the output looks like:
 
 <pre class='terminal'>
-$ keytool -import -alias prod-ssl -file /tmp/loadbalancer.cer -keystore /tmp/truststore/prod.myTrustStore 
+$ keytool -import -alias prod-ssl -file /tmp/loadbalancer.cer -keystore /tmp/truststore/prod.myTrustStore
 Enter keystore password:
 Re-enter new password:
 Owner: CN=*.url.example.com, OU=Cloud Foundry, O=Pivotal, L=New York, ST=New York, C=US
@@ -995,7 +995,7 @@ Trust this certificate? [no]:  yes
 Certificate was added to keystore
 </pre>
 
-#### <a id="establish-https"></a> Establish the Connection with HTTPS 
+#### <a id="establish-https"></a> Establish the Connection with HTTPS
 
 After you have created the truststore,
 you can use the Pivotal GemFire command line interface, `gfsh`,
@@ -1016,28 +1016,28 @@ Use `gfsh` with Unix or `gfsh.bat` with Windows.
 
     `export JAVA_ARGS="-Djavax.net.ssl.trustStore=TRUSTSTORE-FILE-PATH"`
 
-    Where: 
+    Where:
     `TRUSTSTORE-FILE-PATH` is the path to the TrustStore file you created in [Create a Truststore](#truststore).
-   
+
     <br>
 
     For example:
     <pre class='terminal'>
     $ export JAVA_ARGS="-Djavax.net.ssl.trustStore=/tmp/truststore/prod.myTrustStore"
     </pre>
-5. Run `gfsh`, 
+5. Run `gfsh`,
 and then issue a `connect` command that specifies an HTTPS URL of the form:
 
     ```
-    connect --use-http=true --url=<HTTPS-gfsh-URL> 
-     --user=<cluster_operator_XXX> 
+    connect --use-http=true --url=<HTTPS-gfsh-URL>
+     --user=<cluster_operator_XXX>
      --password=<cluster_operator-password>
     ```
     The cluster operator user name and password are in the service key.
     See [Create Service Keys](developer.html#create-service-key)
     for instructions on how to view the service key.
 
-#### <a id="dev-establish-https"></a> Establish the Connection with HTTPS in a Development Environment 
+#### <a id="dev-establish-https"></a> Establish the Connection with HTTPS in a Development Environment
 
 When working in a non-production, development environment,
 a developer may choose to work in a less secure manner
@@ -1056,7 +1056,7 @@ as specified in the release notes.
 1. Unzip the Pivotal GemFire ZIP archive.
 `gfsh` is within the `bin` directory in the expanded Pivotal GemFire.
 Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Run `gfsh`, 
+1. Run `gfsh`,
 and then issue a `connect` command that specifies an HTTPS URL of the form:
 
     ```
@@ -1086,7 +1086,7 @@ cacheserver-z1-0 | Region "/my-cache-region" created on "cacheserver-z1-0"
 cacheserver-z1-3 | Region "/my-cache-region" created on "cacheserver-z1-3"
 </pre>
 
-See [Region Design](../app-development.html#region-design)
+See [Region Design](app-development.html#region-design)
 for guidelines on choosing a region type.
 
 You can test the newly created region by writing and reading values with gfsh:
@@ -1217,7 +1217,7 @@ You can get logs and `.gfs` stats files from your PCC service instances using th
 
 1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to connect to the service instance for which you want to see logs.
 1. Run `export logs`.
-1. Find the ZIP file in the directory where you started gfsh. 
+1. Find the ZIP file in the directory where you started gfsh.
    This file contains a folder for each member of the cluster.
    The member folder contains the associated log files and stats files for that member.
 
@@ -1242,7 +1242,7 @@ do the following:
 
 1. Run this command to restart the cluster and load the updated JAR file:
 
-    <code> cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}' </code>		
+    <code> cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}' </code>
 
     For example,
 
@@ -1250,7 +1250,7 @@ do the following:
 
 To redeploy an app JAR file after connecting within gfsh
 using the cluster operator role,
-do the following: 		
+do the following:
 
 1. Run this gfsh command to remove the existing JAR file:
 
@@ -1278,7 +1278,7 @@ do the following:
 
 ## <a id="spring-boot-ssc"></a> Connecting a Spring Boot App to Pivotal Cloud Cache with Session State Caching
 
-This section describes the two ways in which you can connect a Spring Boot app to PCC: 
+This section describes the two ways in which you can connect a Spring Boot app to PCC:
 
 + Using a Tomcat app with a WAR file. This is the default method for Tomcat apps.
 + Using the spring-session-data-gemfire library. This method requires that you use the correct version of these libraries.
@@ -1366,7 +1366,7 @@ This avoids breaking the app in this upgrade process.
 
 1. Upgrade PCC. See [Upgrading Pivotal Cloud Cache](operator.html#upgrade) for details.
 
-1. Rebuild your app using a `build.gradle` file that depends on 
+1. Rebuild your app using a `build.gradle` file that depends on
 the correct version of Spring Session Data GemFire.
 Here is an example `build.gradle` file:
 
@@ -1433,7 +1433,7 @@ To create continuous queries, do the following  items:
 
 - Specify attributes `subscriptionEnabled` and `readyForEvents` for
 the `ClientCacheApplication` annotation.
-Apply this annotation to the Spring Boot client application class: 
+Apply this annotation to the Spring Boot client application class:
 
     ```java
     @ClientCacheApplication(name = "GemFireSpringApplication", readyForEvents = true,
@@ -1465,7 +1465,6 @@ as is done in the example:
     }
     ```
     The class that contains the method with the @ContinuousQuery annotation must have the @Component annotation, such that the continuous query is wired up correctly for the server.
-    
+
 
 For more information, see the [Spring Data GemFire documentation](https://docs.spring.io/spring-data/gemfire/docs/current/reference/html/).
-
