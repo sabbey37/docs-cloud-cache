@@ -204,7 +204,10 @@ Perform the following steps to log in to CredHub, provide or generate a CA certi
 1. Record the output of the `bosh2 interpolate` command from step 5.
 1. Navigate to the Ops Manager **Installation Dashboard** and select the Ops Manager Director tile.
 Click **Security**.
-1. Paste the contents of the CA certificate into **Trusted Certificates** and click **Save**.
+1. Paste the contents of the CA certificate into **Trusted Certificates**.
+Append to existing **Trusted Certificates**,
+if there are already certificates listed.
+Click **Save**.
 1. The CA certificate must also be added for the Gorouter.
 Navigate to the PAS **Settings** tab.
 Click on **Networking**.
