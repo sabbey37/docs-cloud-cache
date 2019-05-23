@@ -160,6 +160,13 @@ You can get logs and `.gfs` stats files from your PCC service instances using th
 connect to the service instance for which you want to see logs.
 Use a role that can read cluster information.
 1. Run `export logs`.
+If you see a message of the form
+<pre class='terminal'>Estimated exported logs expanded file size = 289927115, file-size-limit = 104857600. To disable exported logs file size check use option "--file-size-limit=0".</pre>
+your logs exceed an expanded size of 100 megabytes,
+and they were not exported.
+To export in this case, use the gfsh command:
+
+    <code>export logs --file-size-limit=0</code>
 1. Find the ZIP file in the directory where you started gfsh. 
    This file contains a folder for each member of the cluster.
    The member folder contains the associated log files and stats files for that member.
