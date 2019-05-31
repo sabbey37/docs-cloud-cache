@@ -1,0 +1,110 @@
+---
+title: Backing Up and Restoring Service Instances
+---
+
+<a id="BandR"></a>
+
+What B and R provides.
+A backup of data persisted from regions.
+
+# Before You Begin
+
+<p class="note warning"><strong>WARNING</strong>: Do it right. Or else.</p>
+
+- The backup consists of cluster data from regions that have
+been persisted to disk.
+- Size of disk on jumpbox.
+- Quiescent GemFire cluster for backup.
+- Fresh cluster that is for restore must have same quantity of 
+locators and servers (as when the backup was taken).
+Fresh cluster must have sufficient resources (to hold the data 
+that is in the backup).
+- Fresh cluster must not have any additional configuration (regions,
+disks) after creation.  It must be empty.
+- Service keys are not part of the backup. Service keys will need to be
+created anew on a restored service instance.
+
+# Backing Up a PCC Service Instance
+
+1. Optional: Back up the Pivotal Cloud Foundry environment.
+For instructions, see [Backing Up Pivotal Cloud Foundry with BBR](https://docs.pivotal.io/pivotalcf/customizing/backup-restore/backup-pcf-bbr.html).
+
+2. Optional: Compact the disk stores of the cluster to be backed up.
+Use the gfsh `compact disk-store` command after connecting to the cluster
+with a role that is authorized with the `CLUSTER:MANAGE` operation permission.
+See the documentation for gfsh
+[`compact disk-store`](http://gemfire.docs.pivotal.io/<%=vars.gemfire_minor_nodot%>/geode/tools_modules/gfsh/command-pages/compact.html#topic_F113C95C076F424E9AA8AC4F1F6324CC).
+
+3. Ssh to the jumpbox.
+Assuming the jumpbox and Ops Manager are on the same VM, follow directions at
+[Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
+
+4. Determine all needed credentials and parameters for the 
+command that makes the backup: 
+    - `BOSH-DIRECTOR-IP`: Obtain the BOSH Director IP address by following the instructions at [Step 4:Retrieve BOSH Director Address](https://docs.pivotal.io/pivotalcf/customizing/backup-restore/backup-pcf-bbr.html#retrieve-address).
+    -  `SERVICE-INSTANCE-DEPLOYMENT-NAME`: Obtain the deployment name by following the instructions at [Acquire the Deployment Name](https://docs.pivotal.io/p-cloud-cache/1-7/troubleshooting.html#get-deployment-name).
+    -  `BOSH-CLIENT`, `BOSH-CLIENT-PASSWORD`, and `PATH-TO-BOSH-SERVER-CERTIFICATE`: To learn all three of these values, open the Credentials tab of the BOSH Director tile in Ops Manager. Find and open `Bosh Commandline Credentials`.
+The path is the path to the root Certificate Authority (CA) certificate,
+and its value will be `/var/tempest/workspaces/default/root_ca_certificate` if Ops Manager and the jumpbox are on the same VM.
+
+5. Make the backup. From the jumpbox, issue this command,
+substituting values acquired in the previous step:
+
+    ```
+    BOSH_CLIENT_SECRET=BOSH-CLIENT-PASSWORD \
+    bbr deployment \
+    --target BOSH-DIRECTOR-IP \
+    --username BOSH-CLIENT \
+    --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
+    --deployment SERVICE-INSTANCE-DEPLOYMENT-NAME \
+    backup
+    ```
+
+    `BOSH_CLIENT_SECRET` is an environment variable that is set only
+    for the duration of the command.
+
+    The backup will be within a directory on the jumpbox named by
+    the depoyment name and a timestamp.
+
+5. Copy the backup to a permanent home for archiving.
+Pivotal recommends compressing and encrypting the files.
+Disaster recovery plans often recommend archiving multiple copies
+of each backup.
+
+# Restoring a PCC Service Instance
+
+1. Ssh to the jumpbox.
+Assuming the jumpbox and Ops Manager are on the same VM, follow directions at
+[Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
+ 
+2. Transfer the archived backup to the jumpbox.
+Expand if compressed, and decrypt if encrypted.
+
+3. Make a new, but empty service instance. 
+
+4. Determine all needed credentials and parameters for the 
+command that does the restore by following step 4 instructions
+from making the backup. 
+
+5. Do the restore. From the jumpbox, issue this command,
+substituting values acquired in the previous step:
+
+    ```
+    $ BOSH_CLIENT_SECRET=BOSH-CLIENT-PASSWORD \
+    bbr deployment \
+    --target BOSH-DIRECTOR-IP \
+    --username BOSH-CLIENT \
+    --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
+    --deployment SERVICE-INSTANCE-DEPLOYMENT-NAME \
+    restore --artifact-path PATH-TO-SERVICE-INSTANCE-ARTIFACT
+
+    `PATH-TO-SERVICE-INSTANCE-ARTIFACT` is the path to the artifact for the instance that you are currently restoring.
+
+5. Create new service key
+
+6. If WAN was used, configure WAN (from scratch) to match 
+
+7. Validate the restored cluster?  ** HOW??? **
+
+8. Rebind or restage apps
+
