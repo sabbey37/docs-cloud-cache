@@ -4,23 +4,46 @@ title: Backing Up and Restoring Service Instances
 
 <a id="BandR"></a>
 
-What B and R provides.
-A backup of data persisted from regions.
+Both disaster recovery and system validation depend upon
+backups.
+A PCC service instance backup consists of the configuration for a 
+PCC service instance together with all region data that has been
+persisted to disk.
+A PCC service instance backup may be used to restore the service
+on a new, but unconfigured PCC service instance.
 
 # Before You Begin
 
-<p class="note warning"><strong>WARNING</strong>: Do it right. Or else.</p>
+<p class="note warning"><strong>WARNING</strong>: Consider each of these 
+important items when preparing to backup and restore a PCC service instance.
+Since recovery depends on a correct implemention, 
+address each item during planning.</p>
 
-- The backup consists of cluster data from regions that have
+- The backup consists of data from regions that have
 been persisted to disk.
-- Size of disk on jumpbox.
-- Quiescent GemFire cluster for backup.
-- Fresh cluster that is for restore must have same quantity of 
-locators and servers (as when the backup was taken).
-Fresh cluster must have sufficient resources (to hold the data 
-that is in the backup).
-- Fresh cluster must not have any additional configuration (regions,
-disks) after creation.  It must be empty.
+All non-persistent region data will be lost. 
+A persistent region is one that writes its region entries to disk.
+- The disk size on the jumpbox VM must be large enough to hold the
+backup artifacts. The quantity of disk space needs to exceed
+the sum total of all disk space used within the PCC service instance to be
+backed up.
+An approximation of that quantity of disk space may be calculated
+by looking at the fully populated PCC service instance.
+Sum the disk space (in `/var/vcap/store`) used by each locator and server.
+- The PCC service instance needs to be quiescent when the backup is
+taken. An active cluster could have disk writes in progress,
+leading to a backup for which region data may or may not have been
+written to disk. 
+- The fresh PCC service instance that is to be used for a restore
+must have same quantity of locators and servers as the
+PCC service instance had when its backup was taken.
+The fresh PCC service instance must have sufficient resources
+to hold the data that is in the backup.
+- Do not configure the fresh PCC service instance
+that is to be used for a restore after creation.
+It must be empty. Do not create any regions or start any gateway senders.
+The restore will create all regions, both persistent and not persistent.
+The non-persistent regions will be empty.
 - Service keys are not part of the backup. Service keys will need to be
 created anew on a restored service instance.
 
@@ -35,11 +58,28 @@ with a role that is authorized with the `CLUSTER:MANAGE` operation permission.
 See the documentation for gfsh
 [`compact disk-store`](http://gemfire.docs.pivotal.io/<%=vars.gemfire_minor_nodot%>/geode/tools_modules/gfsh/command-pages/compact.html#topic_F113C95C076F424E9AA8AC4F1F6324CC).
 
-3. Ssh to the jumpbox.
-Assuming the jumpbox and Ops Manager are on the same VM, follow directions at
+3. Optional: Acquire a region statistic that may be used for a minimal
+validation upon using this backup for subsequent restoration.
+Use the gfsh `describe region` command on each persistent region,
+after connecting to the cluster
+with a role that is authorized with the `CLUSTER:READ` operation permission.
+    
+    ```
+    describe region --name=REGION-NAME
+    ```
+    For each persistent region (the `data-policy` will contain the string
+    `PERSISTENT`), record the `size` of region. This size is the quantity
+    of entries in the region. Assuming that activity on
+    the region is quiescent, when this backup is used in a restoration,
+    the quantity of region entries in the restored region forms a 
+    minimal validation of the region. 
+
+4. Ssh to the jumpbox.
+Assuming that the Ops Manager VM is being used as the jumpbox,
+follow directions at
 [Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
 
-4. Determine all needed credentials and parameters for the 
+5. Determine all needed credentials and parameters for the 
 command that makes the backup: 
     - `BOSH-DIRECTOR-IP`: Obtain the BOSH Director IP address by following the instructions at [Step 4:Retrieve BOSH Director Address](https://docs.pivotal.io/pivotalcf/customizing/backup-restore/backup-pcf-bbr.html#retrieve-address).
     -  `SERVICE-INSTANCE-DEPLOYMENT-NAME`: Obtain the deployment name by following the instructions at [Acquire the Deployment Name](https://docs.pivotal.io/p-cloud-cache/1-7/troubleshooting.html#get-deployment-name).
@@ -47,7 +87,7 @@ command that makes the backup:
 The path is the path to the root Certificate Authority (CA) certificate,
 and its value will be `/var/tempest/workspaces/default/root_ca_certificate` if Ops Manager and the jumpbox are on the same VM.
 
-5. Make the backup. From the jumpbox, issue this command,
+6. Make the backup. From the jumpbox, issue this command,
 substituting values acquired in the previous step:
 
     ```
@@ -66,7 +106,7 @@ substituting values acquired in the previous step:
     The backup will be within a directory on the jumpbox named by
     the depoyment name and a timestamp.
 
-5. Copy the backup to a permanent home for archiving.
+7. Copy the backup to a permanent home for archiving.
 Pivotal recommends compressing and encrypting the files.
 Disaster recovery plans often recommend archiving multiple copies
 of each backup.
@@ -74,16 +114,18 @@ of each backup.
 # Restoring a PCC Service Instance
 
 1. Ssh to the jumpbox.
-Assuming the jumpbox and Ops Manager are on the same VM, follow directions at
+Assuming that the Ops Manager VM is being used as the jumpbox,
+follow directions at
 [Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
  
 2. Transfer the archived backup to the jumpbox.
 Expand if compressed, and decrypt if encrypted.
 
-3. Make a new, but empty service instance. 
+3. Make a new, but empty service instance.
+See directions in [Creating a Pivotal Cloud Cache Service Instance](https://docs.pivotal.io/p-cloud-cache/1-7/create-instance.html).
 
 4. Determine all needed credentials and parameters for the 
-command that does the restore by following step 4 instructions
+command that does the restore by following step 5 instructions
 from making the backup. 
 
 5. Do the restore. From the jumpbox, issue this command,
@@ -97,14 +139,32 @@ substituting values acquired in the previous step:
     --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
     --deployment SERVICE-INSTANCE-DEPLOYMENT-NAME \
     restore --artifact-path PATH-TO-SERVICE-INSTANCE-ARTIFACT
+    ```
 
     `PATH-TO-SERVICE-INSTANCE-ARTIFACT` is the path to the artifact for the instance that you are currently restoring.
 
-5. Create new service key
+6. Create a new service key, as the service key was not an artifact 
+that the backup created. 
+Follow the directions at [Create a Service Key](https://docs.pivotal.io/p-cloud-cache/accessing-instance.html#create-service-key).
 
-6. If WAN was used, configure WAN (from scratch) to match 
+7. If the backed up cluster used WAN replication,
+configure the restored cluster's WAN replication, from scratch,
+to match the configuration of the original cluster.
+Instructions for configuration are at
+[Set Up WAN-Separated Service Instances](https://docs.pivotal.io/p-cloud-cache/WAN-setup.html).
 
-7. Validate the restored cluster?  ** HOW??? **
+8. If the region statistic was captured prior to making the
+backup, in order to do a minimal validation
+of the restored cluster,
+use the gfsh `describe region` command on each persistent region,
+after connecting to the cluster
+with a role that is authorized with the `CLUSTER:READ` operation permission.
+    
+    ```
+    describe region --name=REGION-NAME
+    ```
+    For each persistent region, the `size` of the restored region should be
+    the same as the value captured when the backup was made.
 
-8. Rebind or restage apps
+9. Rebind or restage all apps.
 
