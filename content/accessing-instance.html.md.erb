@@ -44,6 +44,7 @@ then the `cf service-key` returns output in the following format:
 <pre class='terminal'>
 {
  "distributed_system_id": "0",
+ "gfsh_login_string": "connect --url=https://cloudcache-1.example.com/gemfire/v1 --user=cluster_operator_XXX --password=cluster_operator-password --skip-ssl-validation",
  "locators": [
   "10.244.0.66[55221]",
   "10.244.0.4[55221]",
@@ -71,6 +72,7 @@ then the `cf service-key` returns output in the following format:
 <pre class='terminal'>
 {
  "distributed_system_id": "0",
+ "gfsh_login_string": "connect --url=https://cloudcache-1.example.com/gemfire/v1 --user=cluster_operator_XXX --password=cluster_operator-password --skip-ssl-validation",
  "locators": [
   "10.244.0.66[55221]",
   "10.244.0.4[55221]",
@@ -251,30 +253,25 @@ A link to the PCC release notes is on Pivotal Network in the Release Details
 for your PCC version.
 Note that a JDK or JRE will also be required,
 as specified in the release notes.
+
 1. Unzip the Pivotal GemFire ZIP archive. 
 `gfsh` is within the `bin` directory in the expanded Pivotal GemFire.
 Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Run `gfsh`,
-and then issue a `connect` command that specifies an HTTPS URL of the form:
 
-    ```
-    connect --use-http=true --use-ssl --skip-ssl-validation=true
-     --url=HTTPS-gfsh-URL --user=USER-NAME --password=USER-PASSWORD
-    ```
+1. Acquire the `connect` command (the `gfsh_login_string`) from the service key. This command will connect as the cluster_operator role.
+This `connect` command assumes that the installation is configured *without* an authentication and enterprise 
+single sign-on (SSO) system such as LDAP.
+1. Run `gfsh`, and then issue the acquired `connect` command:
 
-    The `HTTPS-gfsh-URL` is the gfsh URL from the service key.
-    See [Create Service Keys](accessing-instance.html#create-service-key)
-    for instructions on how to view the service key.
+<pre class='terminal'>
+gfsh>connect --url=https://cloudcache-1.example.com/gemfire/v1 
+  --user=cluster_operator_XXX --password=cluster_operator-password
+  --skip-ssl-validation
+</pre>
 
-    For an installation configured *without* an
-    authentication and enterprise single sign-on (SSO) system such as LDAP,
-    the `USER-NAME` and `USER-PASSWORD` are taken from the service key,
-    and they will either be for the developer role or for the cluster operator
-    role, depending on the gfsh operations to be performed.
-
-    At each of the nine `gfsh` prompts that ask for keystore, truststore,
-    and SSL details, hit `Enter` to step through the prompts
-    and connect.
+At each of the nine `gfsh` prompts that ask for keystore, truststore,
+and SSL details, hit `Enter` to step through the prompts
+and connect.
 
 ## <a id="tls-termination"></a> Determine Your TLS Termination
 
