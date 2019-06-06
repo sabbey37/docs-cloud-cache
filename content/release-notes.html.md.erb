@@ -5,13 +5,22 @@ owner: Cloud Cache Engineers
 
 ## <a id='v180'></a>v1.8.0
 
-**Release Date:**  MONTH DATE, 2019
+**Release Date:**  June 7, 2019
 
 Features included in this release:
 
-- PCC now ships with JDK 1.8_192.
+- Service instances have increased resiliency with the ability
+to make a backup and then use the backup to restore a service instance. 
+- Allocate a more appropriate heap size for locators.
+- The service key provides a string that developers can use to
+when connecting to the service instance using gfsh.
+- Improved performance by tuning the VM network configuration.
+- Fixed a bug that caused erroneous log entries for service instances
+with TLS encryption enabled.
+- The placement of dev plan service instances are now randomized within AZs. 
 - PCC now runs Pivotal GemFire 9.8.1.
 - PCC now supports Pivotal Application Service (PAS) 2.6.
+- PCC now ships with JDK 1.8_192.
 
 ## <a id='v18-known-issues'></a>Known Issues
 
