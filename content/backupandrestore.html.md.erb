@@ -23,6 +23,11 @@ address each item during planning.</p>
 been persisted to disk.
 All non-persistent region data will be lost. 
 A persistent region is one that writes its region entries to disk.
+- The backup and restoration process does not restore WAN replication
+configuration. A PCC service instance that replicates data via WAN
+may be backed up. A restore of that PCC service instance will
+contain all the persistent data. That PCC service instance will not
+be able to communicate with other WAN-connected service instances.
 - The disk size on the jumpbox VM must be large enough to hold the
 backup artifacts. The quantity of disk space needs to exceed
 the sum total of all disk space used within the PCC service instance to be
