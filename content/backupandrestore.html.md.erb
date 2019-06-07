@@ -152,13 +152,7 @@ substituting values acquired in the previous step:
 that the backup created. 
 Follow the directions at [Create a Service Key](https://docs.pivotal.io/p-cloud-cache/accessing-instance.html#create-service-key).
 
-7. If the backed up cluster used WAN replication,
-configure the restored cluster's WAN replication, from scratch,
-to match the configuration of the original cluster.
-Instructions for configuration are at
-[Set Up WAN-Separated Service Instances](https://docs.pivotal.io/p-cloud-cache/WAN-setup.html).
-
-8. If the region statistic was captured prior to making the
+7. If the region statistic was captured prior to making the
 backup, in order to do a minimal validation
 of the restored cluster,
 use the gfsh `describe region` command on each persistent region,
@@ -171,5 +165,5 @@ with a role that is authorized with the `CLUSTER:READ` operation permission.
     For each persistent region, the `size` of the restored region should be
     the same as the value captured when the backup was made.
 
-9. Rebind or restage all apps.
+8. Rebind or restage all apps.
 
