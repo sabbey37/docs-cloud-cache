@@ -1,5 +1,5 @@
 ---
-title: Migrating to a TLS-Enabled Cluster
+title: Migrating to a Cluster with Transport Layer Security (TLS) Enabled
 ---
 
 An existing PCC service instance that does not use TLS encryption
@@ -216,7 +216,7 @@ features:
 </pre>
 Add lines to the BOSH manifest,
 using the lines as shown in red in the following modified version of the
-manifest. 
+manifest.
 Substitute your digits that uniquely identify your service instance
 for <code>XXX-XXX</code> within the <i>added</i> lines.
 <pre>
@@ -361,7 +361,7 @@ $ bosh start -d SERVICE-INSTANCE-NAME  --max-in-flight=1 </pre>
 
     and type "y" when prompted.
 </li>
-<li> Run <code>gfsh</code> and follow the directions in 
+<li> Run <code>gfsh</code> and follow the directions in
 <a href="./accessing-instance.html#gfsh-connect-https">Connect with gfsh over HTTPS</a>
 to connect to the TLS-enabled cluster.
 </li>
