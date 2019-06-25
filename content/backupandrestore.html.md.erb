@@ -26,8 +26,8 @@ A persistent region is one that writes its region entries to disk.
 - The backup and restoration process does not restore WAN replication
 configuration. A PCC service instance that replicates data via WAN
 may be backed up. A restore of that PCC service instance will
-contain all the persistent data. That PCC service instance will not
-be able to communicate with other WAN-connected service instances.
+contain all the persistent data. That PCC service instance will 
+be able to communicate with other WAN-connected service instances after further configuration.
 - The disk size on the jumpbox VM must be large enough to hold the
 backup artifacts. The quantity of disk space needs to exceed
 the sum total of all disk space used within the PCC service instance to be
@@ -87,7 +87,7 @@ follow directions at
 5. Determine all needed credentials and parameters for the 
 command that makes the backup: 
     - `BOSH-DIRECTOR-IP`: Obtain the BOSH Director IP address by following the instructions at [Step 4:Retrieve BOSH Director Address](https://docs.pivotal.io/pivotalcf/customizing/backup-restore/backup-pcf-bbr.html#retrieve-address).
-    -  `SERVICE-INSTANCE-DEPLOYMENT-NAME`: Obtain the deployment name by following the instructions at [Acquire the Deployment Name](https://docs.pivotal.io/p-cloud-cache/1-7/troubleshooting.html#get-deployment-name).
+    -  `SERVICE-INSTANCE-DEPLOYMENT-NAME`: Obtain the deployment name by following the instructions at [Acquire the Deployment Name](troubleshooting.html#get-deployment-name).
     -  `BOSH-CLIENT`, `BOSH-CLIENT-PASSWORD`, and `PATH-TO-BOSH-SERVER-CERTIFICATE`: To learn all three of these values, open the Credentials tab of the BOSH Director tile in Ops Manager. Find and open `Bosh Commandline Credentials`.
 The path is the path to the root Certificate Authority (CA) certificate,
 and its value will be `/var/tempest/workspaces/default/root_ca_certificate` if Ops Manager and the jumpbox are on the same VM.
@@ -118,7 +118,7 @@ of each backup.
 
 # Restoring a PCC Service Instance
 
-1. Ssh to the jumpbox.
+1. Use SSH to connect to the jumpbox.
 Assuming that the Ops Manager VM is being used as the jumpbox,
 follow directions at
 [Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/customizing/trouble-advanced.html#ssh).
@@ -127,7 +127,9 @@ follow directions at
 Expand if compressed, and decrypt if encrypted.
 
 3. Make a new, but empty service instance.
-See directions in [Creating a Pivotal Cloud Cache Service Instance](https://docs.pivotal.io/p-cloud-cache/1-7/create-instance.html).
+See directions in [Creating a Pivotal Cloud Cache Service Instance](create-instance.html).
+If the service instance to be restored was connected to a WAN, be sure to create the new instance with the same `distributed_system_id` as
+the old one.
 
 4. Determine all needed credentials and parameters for the 
 command that does the restore by following step 5 instructions
@@ -150,9 +152,10 @@ substituting values acquired in the previous step:
 
 6. Create a new service key, as the service key was not an artifact 
 that the backup created. 
-Follow the directions at [Create a Service Key](https://docs.pivotal.io/p-cloud-cache/accessing-instance.html#create-service-key).
+For a stand-alone service instance (one that is not part of a WAN), follow the directions at [Create a Service Key](accessing-instance.html#create-service-key).
+For a WAN-connected service instance, see [Restoring a WAN Connection](WAN-bi-reconnect.html).
 
-7. If the region statistic was captured prior to making the
+7. If the region size was captured prior to making the
 backup, in order to do a minimal validation
 of the restored cluster,
 use the gfsh `describe region` command on each persistent region,
