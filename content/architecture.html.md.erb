@@ -1,19 +1,19 @@
 ---
-title: PCC Architecture
+title: Pivotal Cloud Cache Architecture
 ---
 
-## <a id='GFBasics'></a>GemFire Basics
+## <a id='GFBasics'></a>Pivotal GemFire&reg; Basics
 
-Pivotal GemFire is the data store within Pivotal Cloud Cache (PCC). A small amount of administrative GemFire setup is required for a PCC service instance, and any app will use a limited portion of the GemFire API.
+Pivotal GemFire is the data store within Pivotal Cloud Cache (PCC). A PCC service instance requires a small amount of administrative GemFire setup, and any app will use a limited portion of the GemFire API.
 
 The PCC architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of GemFire servers maintained by a PCC service instance. The GemFire servers provide a low-latency, consistent, fault-tolerant data store within PCC.
 
 ![Client Server Model](client-server.png)
 
-GemFire holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called regions. A region is a map (or dictionary) data structure.
+GemFire holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called **regions**. A region is a map (or dictionary) data structure.
 
 The app (client) uses PCC as a cache. A cache lookup (read) is a get operation on a GemFire region. The cache operation of a cache write is a put operation on a GemFire region.
-The GemFire command-line interface, called `gfsh`, facilitates region administration. Use `gfsh` to create and destroy regions within the PCC service instance.
+The GemFire command-line interface, called gfsh, facilitates region administration. Use gfsh to create and destroy regions within the PCC service instance.
 
 ## <a id='pcc-cluster-architecture'></a>The PCC Cluster
 
@@ -44,7 +44,7 @@ When you first spin up a cluster, you have three locators and at least four serv
   Client-->Server4
 <% end %>
 
-When you scale the cluster up, you have more servers, increasing the capacity of the cache. There are always three locators.
+When you scale up the cluster, you have more servers, increasing the capacity of the cache. There are always three locators.
 
 <% mermaid_diagram do %>
   graph TD;

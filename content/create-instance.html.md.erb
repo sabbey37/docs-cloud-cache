@@ -32,6 +32,7 @@ The PCC service broker supports the following parameters:
 - `tls`: A boolean, that when true, enables TLS for all communication within the cluster.
 - `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by the operator.
 - `new_size_percentage`: An integer that specifies the percentage of the heap to allocate to young generation. This value must be between `5` and `83`. By default, the new size is 2&nbsp;GB or 10% of heap, whichever is smaller.
+- `distributed_system_id`: An integer that provides a unique identifier for a cluster that participates in a WAN.
 
 This example enables TLS within the cluster:
 
@@ -43,6 +44,12 @@ This example creates the service with five service instances in the cluster:
 
 <pre class='terminal'>
 $ cf create-service p-cloudcache small my-cloudcache -c '{"num_servers": 5}'
+</pre>
+
+This example assigns the service a specific distributed system ID, which is important when restoring a WAN participant from backups:
+
+<pre class='terminal'>
+$ cf create-service p-cloudcache small my-cloudcache -c '{"distributed_system_id": 2}'
 </pre>
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack

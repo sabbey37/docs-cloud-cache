@@ -2,12 +2,12 @@
 title: Security
 ---
 
-The security measures implemented for a PCF foundation and
-for PCC service instances within that foundation attempt to
+The security measures implemented for a Pivotal Cloud Foundry (PCF) foundation and
+for Pivotal Cloud Cache (PCC) service instances within that foundation attempt to
 reduce harm from agents with foundation access.
 See [Cloud Foundry Security](https://docs.pivotal.io/pivotalcf/concepts/security.html)
 for a general presentation on PCF security.
-TLS encryption prevents easy access to communication between
+Transport-Layer Security (TLS) encryption prevents easy access to communication between
 components,
 and role-based authentication and authorization limits access
 to data.
@@ -15,32 +15,26 @@ to data.
 ### TLS Encryption for the PCC Service Instance
 
 Without TLS encryption with and within the PCC service instance,
-the diagram identifies plaintext communication that could be
-listened to by a bad agent with PCF foundation access.
-The unencrypted communications are shown with green dotted and dashed
-line segments.
+The diagram below identifies via green dotted-and-dashed lines the unencrypted, plaintext communication that a bad agent with PCF foundation access could listen to without TLS encryption.
+
 ![PCF foundation without TLS encryption](Security-Overview-Without-TLS.png)
 
 
 Each of these unencrypted communication paths may be TLS-encrypted.
-The encrypted communications are shown with red dashed line segments
-in the diagram.
 To encrypt these communications,
-follow the directions given in [Migrating to a TLS-Enabled Cluster](migrate-to-TLS.html),
+follow the directions in [Migrating to a TLS-Enabled Cluster](migrate-to-TLS.html)
 and ensure that apps also use TLS as described in
 [Developing an App Under TLS](tls-enabled-app.html).
-Enabling TLS encryption implements a 1-way authentication of
-apps verifying the identity of GemFire cluster members.
-![PCF foundation with TLS encryption](Security-Overview-With-LB.png).
+Enabling TLS encryption implements a one-way authentication of
+apps, verifying the identity of GemFire cluster members.
 
-Gfsh communication must also be secured.
-Follow directions within
+
+You must also secure gfsh communication. Follow directions in
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https).
 
 ### Networking
 
-Create application security groups 
-to allow app access to the PCC network.
+To allow app access to the PCC network, create application security groups.
 Allow access on the following ports:
 
 * 1099
@@ -48,19 +42,37 @@ Allow access on the following ports:
 * 40404
 * 55221
 
-For more information, see the PCF [Application Security Groups](https://docs.pivotal.io/pivotalcf/adminguide/app-sec-groups.html#creating-groups) topic.
+For more information, see [PCF: Application Security Groups](https://docs.pivotal.io/pivotalcf/adminguide/app-sec-groups.html#creating-groups).
 
-PCC works with the IPsec Add-on for PCF.
-For information about the IPsec Add-on for PCF,
-see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html).
+PCC works with the IPsec Add-on for PCF (see [Securing Data in Transit with the IPsec Add-on](https://docs.pivotal.io/addon-ipsec/index.html)).
 
-### Security within the GemFire Cluster 
+### Security within the GemFire Cluster
 
 The GemFire cluster within a PCC service instance implements
 role-based authentication
-and authorizes cluster operations based upon the roles. 
+and authorizes cluster operations based upon the roles.
 
-There are two sets of roles.
+There are two sets of roles:
+
+- One set has four roles for users that integrate
+an authentication and enterprise single-sign-on (SSO)
+system, such as LDAP.
+See [Configuring UAA Roles](UAA-config.html) for a description of
+the roles and the configuration that completes the integration.
+
+- The other set of roles defaults when there is no
+authentication and enterprise SSO system
+integrated during the PCC tile installation.
+The identifiers assigned for these roles are detailed in
+[Create Service Keys](accessing-instance.html#create-service-key).
+PCC service instances are created with three default GemFire user roles for
+interacting with clusters:
+
+    - **Cluster operator:** manages the GemFire cluster and can access
+    region data. Has the permissions `CLUSTER:MANAGE`, `CLUSTER:WRITE`, `CLUSTER:READ`, `DATA:MANAGE`, `DATA:WRITE`, and `DATA:READ`.
+    - **Developer:** can access region data. Has the permissions `CLUSTER:READ`, `DATA:WRITE`, and `DATA:READ`.
+    - **Gateway sender:** propagates region data to another PCC service instance. Has the permission `DATA:WRITE`.
+
 Which set is used for a PCC service instance depends on the
 options chosen during PCC tile installation.
 
@@ -72,35 +84,5 @@ To accomplish a cluster operation,
 the user authenticates using one of the roles.
 Prior to initiating the requested operation,
 there is a verification that the
-authenticated user role has the permission authorized to do the operation.
-More details about these permissions are in the Pivotal GemFire documentation
-under [Implementing Authorization](http://gemfire.docs.pivotal.io/geode/managing/security/implementing_authorization.html).
-
-- One set has four roles for users that integrate 
-an authentication and enterprise single sign-on (SSO)
-system such as LDAP.
-See [Configuring UAA Roles](UAA-config.html) for a description of
-the roles and the configuration that completes the integration.
-
-- The other set of roles defaults when there is no 
-authentication and enterprise single sign-on (SSO) system such as LDAP
-integrated during the PCC tile installation.
-The identifiers assigned for these roles are detailed in
-[Create Service Keys](accessing-instance.html#create-service-key).
-PCC service instances are created with three default GemFire user roles for
-interacting with clusters:
-
-    - A cluster operator manages the GemFire cluster and can access
-    region data. The  cluster operator role has 
-    `CLUSTER:MANAGE`,
-    `CLUSTER:WRITE`,
-    `CLUSTER:READ`,
-    `DATA:MANAGE`,
-    `DATA:WRITE`,
-     and `DATA:READ` permissions.
-    - A developer can access region data. The developer role has
-    `CLUSTER:READ`,
-    `DATA:WRITE`,
-    and `DATA:READ` permissions.
-    - A gateway sender propagates region data to another PCC service instance.
-    The gateway sender role has `DATA:WRITE` permission.
+authenticated user role has permission to do the operation.
+Read more about these permissions in [GemFire: Implementing Authorization](http://gemfire.docs.pivotal.io/latest/geode/managing/security/implementing_authorization.html).
