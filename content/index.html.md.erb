@@ -3,6 +3,10 @@ title: About Pivotal Cloud Cache
 owner: Cloud Cache Engineers
 ---
 
+<p class="note warning"><strong> WARNING</strong> Pivotal Cloud Cache 1.8 currently is not available for use due to an SSL communication issue that causes slow performance and unstable intracluster connections when SSL is configured and conserve-sockets is set to false. This issue does not affect client/server SSL communication. <br><br>
+
+Pivotal recommends that customers use Pivotal Cloud Cache version 1.7.</p>
+
 In this topic:
 
 - [Product Snapshot](product-snapshot.html)
@@ -13,7 +17,6 @@ In this topic:
     - [Member Communications](architecture.html#MemberCommunication)
 - [Recommended Usage and Limitations](usage.html)
 - [Security](security.html)
-
 
 Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF).
 PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data-access requests.
