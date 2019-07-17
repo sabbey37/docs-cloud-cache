@@ -3,6 +3,9 @@ title: Design Patterns
 ---
 <a id="design-patterns"></a>
 
+The design patterns in this section are intended as overviews of common and useful configurations.
+Effective implementations will require planning&mdash;consult with a system architect to fill in the design details for your app.
+
 ## <a id="inline-cache"></a> The Inline Cache
 
 An inline cache places the caching layer between the app
@@ -117,21 +120,21 @@ and any change made in cluster B is sent to cluster A.
 Two PCC service instances may be connected across a WAN to form
 a single distributed system with asynchronous communication.
 An expected use case propagates all changes to a region's data
-from the cluster within one service instance (the primary) to the other.
+from the cluster within one service instance (the primary) to the other,
+where both service instances reside in the same foundation.
 The replicate increases the fault tolerance of the system by
 acting as a hot spare.
 In the scenario of the failure of an entire data center or an
 availability zone,
-apps connected to the failed site can be redirected 
-by an external load-balancing entity to the replicate,
-which takes over as the primary.
+you can rebind apps to the replicate and restage them.
+The replicate then takes over as the primary.
 
 In this diagram, cluster A is primary, and it replicates all data
 across a WAN to cluster B.
 
 ![WAN replication pattern](WAN1.png)
 
-If cluster A fails,
+If cluster A fails, you can manually rebind and restage the apps so that
 cluster B takes over.
 
 ![WAN replicate becomes primary](WAN2.png)
