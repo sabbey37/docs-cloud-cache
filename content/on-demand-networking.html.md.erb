@@ -29,6 +29,21 @@ rules are set up so that connections are open as described in the table below.
   <th>Communication direction(s)</th>
   <th>Notes</th>
   <tr>
+    <td><strong>PCC cluster members</strong></td>
+    <td><strong>PCC cluster members</strong></td>
+    <td>49152-65535</td>
+    <td>Two-way</td>
+    <td>Inclusive range. PCC servers and locators communicate with each other using UDP and TCP.</td>
+  </tr>
+  <tr>
+    <td><strong>PCC Service Instance 1</strong></td>
+    <td><strong>PCC Service Instance 2</strong></td>
+    <td>5000-5499</td>
+    <td>Two-way</td>
+    <td>Inclusive range. Gateway receivers and gateway senders communicate across WAN-separated service instances.  Each PCC
+service instance uses GemFire defaults for the gateway receiver ports.</td>
+  </tr>
+  <tr>
     <td><strong>ODB</strong></td>
     <td>
         <ul>
