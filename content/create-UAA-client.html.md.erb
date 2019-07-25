@@ -6,17 +6,23 @@ Extra configuration is required when defining users that have specific
 security roles with an
 authentication and enterprise single sign-on (SSO) such as LDAP.
 
-
 Authenticating using an authentication and enterprise SSO system
 such as LDAP uses the User Account and Authentication (UAA) server.
 Access the UAA server through its command-line interface, UAAC.
 
-Create a client for use with PCC with the command:
+When enabling the use of an authentication and enterprise
+single sign-on (SSO) such as LDAP during PCC tile configuration,
+you will specify a UAA client,
+as described in [Security](install-configure.html#security-section).
+This procedure creates that UAA client.
+
+Create a UAA client for use in tile configuration with the command:
 
 ```
 uaac client add cloudcache_gfsh --scope="PCC_*" --secret="THE-SECRET"
    --authorized_grant_types=password
 ```
-Replace `THE-SECRET` with your chosen password (secret) for this client.
+Replace `THE-SECRET` with your chosen password (secret) for this UAA client.
 The remainder of the command is exactly as shown.
+The UAA client name is `cloudcache_gfsh`.
 
