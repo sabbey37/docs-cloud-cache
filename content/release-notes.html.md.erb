@@ -3,9 +3,13 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
-<p class="note warning"><strong> WARNING</strong> Pivotal Cloud Cache 1.8 currently is not available for use due to an SSL communication issue that causes slow performance and unstable intracluster connections when SSL is configured and conserve-sockets is set to false. This issue does not affect client/server SSL communication. <br><br>
+## <a id='v180'></a>v1.8.1
 
-Pivotal recommends that customers use Pivotal Cloud Cache version 1.7.</p>
+**Release Date:**  August 8, 2019
+
+Features included in this release:
+
+- PCC now runs Pivotal GemFire 9.8.3.
 
 ## <a id='v180'></a>v1.8.0
 
@@ -25,6 +29,11 @@ with TLS encryption enabled.
 - PCC now ships with JDK 1.8_192.
 
 ## <a id='v18-known-issues'></a>Known Issues
+
+- Pivotal Cloud Cache 1.8.0, which was based on Pivotal GemFire 9.8.2, was withdrawn due to an SSL
+communication issue that caused slow performance and unstable intracluster connections when SSL was
+configured and conserve-sockets was set to false. Upgrading to Pivotal Cloud Cache 1.8.1 eliminates
+this issue.
 
 - Current versions of the Cloud Foundry Command Line Interface (CLI) tool
 have a known bug that omits the documentation URL when

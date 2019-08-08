@@ -11,9 +11,11 @@ section describes networking requirements for PCC.
 Follow the instructions in [Preparing for TLS](prepare-TLS.html) to
 set up TLS encryption.
 
-- For systems that implement an authentication and enterprise SSO system
-such as LDAP, follow the instructions within
-[Create a UAA Client](create-UAA-client.html).
+- [Optional] For systems that implement an authentication and enterprise SSO system
+such as LDAP, follow the instructions within [Create a UAA Client](create-UAA-client.html).
 There are also additional configuration steps to set up the SSO system,
 as given within [Configuring UAA Roles](UAA-config.html).
 
+- If you choose UAA as a security option, ensure that you have integrated the UAA
+with one or more LDAP servers and have configured PAS with your LDAP endpoint information as
+described in [Configure LDAP as an Identity provider for PAS](https://docs.pivotal.io/pivotalcf/2-6/opsguide/auth-sso.html#configure-ldap).
