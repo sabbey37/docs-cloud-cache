@@ -218,10 +218,10 @@ To apply these changes, do the following:
 ### <a id='rebind'></a> Rebind Your Apps
 
 If your apps do not use the trusted store to validate server certificates, you
-must re-bind apps to the service instance to receive the updated CA certificate.
+must rebind apps to the service instance to receive the updated CA certificate.
 Apps must be written in Spring to use the trusted store.
 
-To re-bind your app:
+To rebind your app:
 
 1. Stop your app by running the following command:
 
@@ -239,7 +239,7 @@ To re-bind your app:
 	+ `YOUR-APP` is the name of your app.
 	+ `YOUR-SERVICE-INSTANCE` is the name of your service instance.
 
-1. Re-bind your app to the service instance by running the following command:
+1. Rebind your app to the service instance by running the following command:
 
 	```
 	cf bind-service YOUR-APP YOUR-SERVICE-INSTANCE
