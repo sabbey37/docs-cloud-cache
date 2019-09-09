@@ -729,10 +729,20 @@ For example:
 PCC clusters and brokers emit service metrics.
 You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.
 
-In the descriptions of the metrics,
-KPI stands for Key Performance Indicator.
+As an app developer, when you opt to use a data service, you should be prepared to:
+
+- monitor the state of that service
+- triage issues that occur with that service
+- be notified of any concerns
+
+If you believe an issue relates to the underlying infrastructure (network, CPU, memory, or disk),
+you will need to capture evidence and notify your platform team. The metrics described in this
+section can help in characterizing the performance and resource consumption of your service
+instance.
 
 ### <a id="service-instance-metrics"></a> Service Instance Metrics
+
+In the descriptions of the metrics, KPI stands for Key Performance Indicator.
 
 #### <a id="service-instance-MemberCount"></a> Member Count
 
