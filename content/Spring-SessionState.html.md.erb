@@ -10,7 +10,7 @@ This section describes the two ways in which you can connect a Spring Boot app t
 
 ##<a id="tomcat"></a> Use the Tomcat App
 
-In PCC v1.1 and later, to get a Spring Boot app running with session state caching (SSC) on PCC,
+To get a Spring Boot app running with session state caching (SSC) on PCC,
 you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead of the `spring-boot-maven` plugin to create a JAR file.
 
 For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
@@ -26,7 +26,7 @@ To build your WAR file, add this dependency to your `pom.xml`:
 </dependency>
 ```
 
-For a full example of running a Spring Boot app that connects with SSC, [run this app](https://github.com/cf-gemfire-org/http-session-caching) and use this following for your `pom.xml`:
+For a full example of running a Spring Boot app that connects with SSC, [run this app](https://github.com/cf-gemfire-org/http-session-caching) and use the following for your `pom.xml`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -45,7 +45,7 @@ For a full example of running a Spring Boot app that connects with SSC, [run thi
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.3.RELEASE</version>
+    <version>2.1.8.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -81,8 +81,8 @@ For a full example of running a Spring Boot app that connects with SSC, [run thi
 
 You can connect your Spring app to PCC to do session state caching.
 Use the correct version of the `spring-session-data-gemfire` library;
-apps built for PCC v1.3.0 and later versions are compatible with
-Spring Session Data GemFire v2.0.0.M2 and later versions.
+apps built for PCC v1.6.0 and later versions are compatible with
+Spring Session Data GemFire v2.1.5.RELEASE and later versions.
 
 ###<a id=spring_session_data_gemfire></a> Upgrade PCC and Spring Session Data GemFire
 
@@ -100,7 +100,7 @@ Here is an example `build.gradle` file:
 
     buildscript {
       ext {
-        springBootVersion = '2.0.0.M3'
+        springBootVersion = '2.1.8.RELEASE'
       }
       repositories {
         mavenCentral()
@@ -137,10 +137,9 @@ Here is an example `build.gradle` file:
 
 
     dependencies {
-      compile("org.springframework.boot:spring-boot-starter-web:2.0.0.M3")
-      compile("org.springframework.session:spring-session-data-gemfire:2.0.0.M2")
-      compile("io.pivotal.spring.cloud:spring-cloud-gemfire-spring-connector:1.0.0.RELEASE")
-      compile("io.pivotal.spring.cloud:spring-cloud-gemfire-cloudfoundry-connector:1.0.0.RELEASE")
+      compile("org.springframework.boot:spring-boot-starter-web:2.1.8.RELEASE")
+      compile("org.springframework.session:spring-session-data-gemfire:2.1.5.RELEASE")
+      compile("org.springframework.geode:spring-gemfire-starter:1.1.0.RELEASE")
     }
     ```
 
