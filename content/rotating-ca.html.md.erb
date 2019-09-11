@@ -144,7 +144,7 @@ To check certificate expiration dates:
 ##<a id='tls'></a> Rotate CA Certificates Manually
 
 <p class="note warning"><strong>Warning</strong>: This procedure assumes that you use only one foundation and do not have a WAN setup. 
-For WAN setup, all of the `apply changes` steps will need to be applied to your entire WAN. Also, all certificates must
+For WAN setup, all of the <code>apply changes</code> steps will need to be applied to your entire WAN. Also, all certificates must
 include SAN and CN entries.</p>
 
 To manually rotate the CA certificate:
@@ -158,7 +158,7 @@ To manually rotate the CA certificate:
 1. [Apply Changes](#applychanges2)
 1. [Rebind Your Apps](#rebind2)
 
-### <a id="obtainorgenerate"></a> Obtain or Generate a New CA Certificate
+### <a id="obtainorgenerate" class="no-quick-link"></a> Obtain or Generate a New CA Certificate
 
 **If you have a TLS cluster,** obtain the CA (certificate authority) that signs its
 certificate. You will add this to the Ops Manager settings in the next step.
@@ -188,7 +188,7 @@ $ credhub generate \
     --ca=/path-to-root-ca
 </pre>
 
-### <a id="addnewandold"></a> Add New Certificates to Ops Manager
+### <a id="addnewandold" class="no-quick-link"></a> Add New Certificates to Ops Manager
 
 To add new and old CA certificates to Ops Manager:
 
@@ -199,7 +199,7 @@ To add new and old CA certificates to Ops Manager:
 1. Click **Save**.
 
 
-### <a id="applychanges"></a> Apply Changes
+### <a id="applychanges" class="no-quick-link"></a> Apply Changes
 
 <p class="note warning"><strong>Warning</strong>: This procedure involves restarting
 all of the VMs in your PCF deployment to apply a CA certificate. The
@@ -214,7 +214,7 @@ To apply these changes, do the following:
 ![Upgrade All Service Instances](upgrade-all-service-instances.png)
 1. Click **Apply Changes**.
 
-### <a id='rebind'></a> Rebind Your Apps
+### <a id='rebind' class="no-quick-link"></a> Rebind Your Apps
 
 If your apps do not use the trusted store to validate server certificates, you
 must rebind apps to the service instance to receive the updated CA certificate.
@@ -255,7 +255,7 @@ To rebind your app:
 	Where `YOUR-APP` is the name of your app.
 
 
-### <a id="setnew"></a> Set New CA Certification to /services/tls_ca
+### <a id="setnew" class="no-quick-link"></a> Set New CA Certification to /services/tls_ca
 
 To have all instances use the new CA Certificate, do the following:
 
@@ -289,7 +289,7 @@ $ credhub set -n /services/tls_ca \
     --private=new_ca.private_key
 </pre>
 
-### <a id="remove"></a> Remove the Old CA Certificate
+### <a id="remove" class="no-quick-link"></a> Remove the Old CA Certificate
 
 After your apps have reconnected to service instances with certificates generated
 by the new CA, remove the old CA certificate:
@@ -303,7 +303,7 @@ Director** tile.
 
 1. Click **Save**.
 
-### <a id="applychanges2"></a> Apply Changes
+### <a id="applychanges2" class="no-quick-link"></a> Apply Changes
 
 <p class="note warning"><strong>Warning: </strong> This procedure involves restarting
 	all of the VMs in your PCF deployment to apply a CA certificate. The
@@ -318,7 +318,7 @@ To apply these changes, do the following:
 ![Upgrade All Service Instances](upgrade-all-service-instances.png)
 1. Click **Apply Changes**.
 
-### <a id='rebind2'></a> Rebind Your Apps
+### <a id='rebind2' class="no-quick-link"></a> Rebind Your Apps
 
 Again, if your apps do not use the trusted store to validate server certificates, you must rebind
 your apps to incorporate this last round of changes. See [Rebind Your Apps](#rebind) above.
