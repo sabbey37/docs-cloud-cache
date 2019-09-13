@@ -117,11 +117,24 @@ will use in the creation of the Cluster B service instance:
       "id2.locator.subnet.service-instance-id.bosh[55221]",
       "id3.locator.subnet.service-instance-id.bosh[55221]"
      ],
-     "recursors": {
-      "services-subnet.service-instance-id.bosh": [
-       "10.0.8.6:1053",
-       "10.0.8.5:1053",
-       "10.0.8.7:1053"
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet.service-instance-id.bosh": [
+        "10.0.8.6:1053",
+        "10.0.8.7:1053",
+        "10.0.8.5:1053"
+       ]
+      },
+      "remote_locators": [
+      "id1.locator.subnet.service-instance-id.bosh[55221]",
+      "id2.locator.subnet.service-instance-id.bosh[55221]",
+      "id3.locator.subnet.service-instance-id.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
+       }
       ]
      },
      "urls": {
@@ -144,23 +157,16 @@ will use in the creation of the Cluster B service instance:
        "username": "developer_DEF"
       }
      ],
-     "wan": {
-      "sender_credentials": {
-       "active": {
-        "password": "gws-GHI-password",
-        "username": "gateway_sender_GHI"
-       }
-      }
-     }
+     "wan": {}
     }
     </pre>
 
-1. Communicate the Cluster A locators array, recursors array, and
-`sender_credentials` to the Cluster B Cloud Foundry administrator. 
+1. Communicate the Cluster A `remote_cluster_info`, which includes the recursors array, remote locators array, and
+trusted sender credentials, to the Cluster B Cloud Foundry administrator. 
 
 1.  Create the Cluster B service instance using the Foundation B Cloud Foundry information (locators, recursors, sender credentials).
 You must ensure that the distributed system id of Cluster B is different than that of Cluster A. 
-Use a `-c` option to enable TLWS and to specify the distributed system id, the Cluster A service instance’s locators, and the Cluster A information:
+Use a `-c` option to enable TLS and to specify the distributed system id, the Cluster A service instance’s remote locators array, trusted sender credentials, and recursors.
 
     <pre class='terminal'>
     $ cf create-service p-cloudcache wan-cluster wan2 -c '
@@ -227,11 +233,16 @@ Use a `-c` option to enable TLWS and to specify the distributed system id, the C
       "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
       "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
      ],
-     "recursors": {
-      "services-subnet2.service-instance-id2.bosh[55221]": [
-       "10.1.16.6:1053",
-       "10.1.16.8:1053",
-       "10.1.16.7:1053"
+     "remote_locators": [
+      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-PQR-password",
+        "username": "gateway_sender_PQR"
+       }
       ]
      },
      "urls": {
@@ -266,19 +277,13 @@ Use a `-c` option to enable TLWS and to specify the distributed system id, the C
          "gateway_sender_GHI"
         ]
        }
-      ],
-      "sender_credentials": {
-       "active": {
-        "password": "gws-PQR-password",
-        "username": "gateway_sender_PQR"
-       }
-      }
+      ]
      }
     }
     </pre>
 
-1. Communicate the Cluster B locators array, recursors array, and
-`sender_credentials` to the Cluster A Cloud Foundry administrator. 
+1. Communicate the Cluster B  `remote_cluster_info`, which includes the recursors array, remote locators array, and
+trusted sender credentials, to the Cluster A Cloud Foundry administrator. 
 
 1. Update the Cluster A service instance using the Cluster A
 Cloud Foundry credentials to include the Cluster B locators
@@ -343,12 +348,25 @@ in these commands:
       "id2.locator.subnet.service-instance-id.bosh[55221]",
       "id3.locator.subnet.service-instance-id.bosh[55221]"
      ],
-     "recursors": {
-      "subnet.service-instance-id.bosh": [
-       "10.0.8.6:1053",
-       "10.0.8.5:1053",
-       "10.0.8.7:1053"
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet.service-instance-id.bosh": [
+        "10.0.8.6:1053",
+        "10.0.8.7:1053",
+        "10.0.8.5:1053"
+       ]
+      },
+      "remote_locators": [
+      "id1.locator.subnet.service-instance-id.bosh[55221]",
+      "id2.locator.subnet.service-instance-id.bosh[55221]",
+      "id3.locator.subnet.service-instance-id.bosh[55221]"
       ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
+       }
+      ]
      },
      "urls": {
       "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
@@ -382,13 +400,7 @@ in these commands:
          "gateway_sender_PQR"
         ]
        }
-      ],
-      "sender_credentials": {
-       "active": {
-        "password": "gws-GHI-password",
-        "username": "gateway_sender_GHI"
-       }
-      }
+      ]
      }
     }
     </pre>
@@ -396,7 +408,7 @@ in these commands:
 
 1. Use gfsh to create the Cluster A gateway sender and the region.
 Any region operations that occur after the region is created on
-Cluster A, but before the region is created on Cluster B
+Cluster A, but before the region is created on Cluster B,
 will be lost.
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
