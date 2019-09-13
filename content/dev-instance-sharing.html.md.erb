@@ -1,20 +1,20 @@
 ---
-title: Service Instance Sharing
+title: Service-Instance Sharing
 ---
 
-Service instance sharing for Cloud Cache permits read-only access 
+Service-instance sharing for Cloud Cache permits read-only access 
 to a Cloud Cache service instance by an app within a different space.
 
 Setting up sharing has three steps:
 
 1. A Cloud Foundry operator enables instance sharing as detailed in
-[Enable Service Instance Sharing](op-instance-sharing.html)
+[Enable Service-Instance Sharing](op-instance-sharing.html)
 2. A developer shares a service instance
 3. A developer binds the app to the shared service instance
 
-These instructions require identification of the org and the space of 
+These instructions require identification of the org and the space of
 both the service instance and the app.
-This diagram names the components for use in the configuration
+The following diagram names the components for use in the configuration
 instructions.
 Service instance X resides within space C, which is part of org A.
 App Y resides within space D, which is part of org B.
@@ -50,9 +50,8 @@ To bind the app to the shared service instance:
 1. An org B developer does a `cf login` with a space developer role.
 Target the org and space that contains the app: org B, space D.
 
-2. Verify that the Cloud Cache service instance is available and 
-has been set up as shared across the spaces in the output of the
-command:
+2. Verify that the Cloud Cache service instance is available and
+shared across the spaces in the output of the command:
 
     <pre class='terminal'>
     $ cf services
