@@ -129,7 +129,7 @@ The **CF Service Access** drop-down menu gives you the option to display or not 
 **Disable Service Access** makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time. 
 **Leave Service Access Unchanged** makes the plan unavailable in the Marketplace by default, but allows you to make it available at a later time.
 
-The **Service Instance Quota** sets the maximum number of PCC clusters that can exist simultaneously.
+The **Maximum service instances** field sets the maximum number of PCC clusters that can exist simultaneously.
 
 When developers create or update a service instance, they can specify the number of servers in the cluster. The **Maximum servers per cluster** field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, a new cluster has the number of servers specified in the **Default Number of Servers** field.
 
@@ -143,6 +143,8 @@ The remaining fields control the VM type and persistent disk type for servers an
 * For the **Persistent disk type for the Locator VMs** field, select 10&nbsp;GB or higher.
 * For the **VM type for the Server VMs** field, select a VM that has at least 2 CPUs, 4&nbsp;GB of RAM and 8&nbsp;GB of disk space.
 * For the **Persistent disk type for the server VMs** field, select 10 GB or higher.
+
+For more information on how VM memory is allocated, see [VM Memory Allocation](memory-allocation.html).
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
