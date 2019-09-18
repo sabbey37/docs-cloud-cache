@@ -33,7 +33,7 @@ Each section name must show this green check mark before you can complete your i
 * [Security](#security-section)
 * [Errands](#errands)
 
-###<a name='azs'></a> Assign Availability Zones and Networks
+###<a id='azs'></a> Assign Availability Zones and Networks
 
 To select AZs and networks for VMs used by PCC, do the following:
 
@@ -55,9 +55,9 @@ To select AZs and networks for VMs used by PCC, do the following:
 
 1. Click **Save**.
 
-###<a name='settings'></a> Settings
+###<a id='settings'></a> Settings
 
-###<a name='smoke-test-settings'></a> Smoke Test Settings
+####<a id='smoke-test-settings' class="no-quick-link"></a> Settings: Smoke Test Plan
 
 The smoke-tests errand that runs after tile installation.
 The errand verifies that your installation was successful.
@@ -77,7 +77,7 @@ Pivotal recommends that you use the smallest four-server plan for smoke tests.
 Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
 ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
-### Settings: Allow Outbound Internet Access Settings
+#### Settings: Allow Outbound Internet Access Settings
 
 By default, outbound internet access is not allowed from service instances. 
 
@@ -93,7 +93,7 @@ Select **Allow outbound internet access from service instances (IaaS-dependent)*
 <p class="note"><strong>Note</strong>: Outbound network traffic rules also depend on your IaaS settings. 
 Consult your network or IaaS administrator to ensure that your IaaS allows outbound traffic to the external networks you need.</p>
 
-### Default Distributed System ID Setting
+#### Settings: Default Distributed System ID
 
 Every service instance has an integer identifier called a distributed system ID.
 The ID defaults to the value 0.
@@ -108,8 +108,8 @@ less than or equal to 255.
 
 ![Default Distributed System ID setting](dist-sys-ID-default.png)
 
-<a name="plan-config"></a>
-### Configure Service Plans
+
+###<a id="plan-config"></a> Configure Service Plans
 
 You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
 
@@ -148,7 +148,7 @@ For more information on how VM memory is allocated, see [VM Memory Allocation](m
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
-###<a id='small-footprint-plan'></a> Configure a Small Footprint Plan
+####<a id='small-footprint-plan'></a> Configure a Small Footprint Plan
 
 The Small Footprint Plan uses three VMs to implement a default
 plan with three locators and three servers.
@@ -193,7 +193,7 @@ enable the plan with the Small Footprint Plan tab.
 
 ![Configuring a Small Footprint Plan](configure-sf-plan.png)
 
-###<a id='dev-plan'></a> Configure a Dev Plan
+####<a id='dev-plan'></a> Configure a Dev Plan
 
 A Dev Plan is a type of service plan.
 Use a Dev Plan for development and testing.
@@ -213,7 +213,7 @@ verify that **Enable Post Deploy Scripts** is selected.
 
 ![Enable post deploy scripts](ops-man-post-deploy.png)
 
-###<a name='syslog'></a> Syslog
+###<a id='syslog'></a> Syslog
 
 By default, syslog forwarding is not enabled in PCC.
 However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
@@ -250,7 +250,7 @@ To enable remote syslog for the service broker, do the following:
 
 3. Click **Save**.
 
-###<a name='parallel-upgrades'></a>Service Instance Upgrades
+###<a id='parallel-upgrades'></a>Service Instance Upgrades
 
 A configurable number of service instances may be upgraded 
 concurrently by entering a new
@@ -269,7 +269,7 @@ Click **Save** after changing values.
 
 ![Instance Upgrades section](instance-upgrades-section.png)
 
-###<a name='security-section'></a> Security
+###<a id='security-section'></a> Security
 
 There are four configuration aspects to the Security settings.
 Each of the four must be considered and appropriately handled
@@ -315,7 +315,7 @@ With UAA enabled, two text boxes will appear.
 Fill the boxes with the UAA client name and that
 client's secret, which were set when the client was created.
 
-###<a name='errands'></a> Errands
+###<a id='errands'></a> Errands
 
 By default, post-deploy and pre-delete errands always run. 
 Pivotal recommends keeping these defaults.

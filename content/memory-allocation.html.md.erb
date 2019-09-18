@@ -2,7 +2,7 @@
 title: VM Memory Allocation
 ---
 
-The plan you choose determines how memory is allocated to the GemFire processes.
+The service plans you choose determines how memory is allocated to the GemFire processes.
 One consideration is how much memory is available in each VM.
 
 Memory allocation depends on whether a plan is *colocated* or *non-colocated*:
@@ -17,8 +17,8 @@ The following sections describe how PCC allocates memory based on the total memo
 
 ## Memory Allocation for Colocated Plans
 
-- If total VM memory is 5GB or less, 512 MB is allocated for the locator Java heap, and 90% of the remainder is allocated to the GemFire server's Java heap.
-- If total VM memory is greater than 5GB, 10% of total memory is allocated for the locator Java heap, and 90% of the remainder is allocated to the GemFire server's Java heap.
+- If total VM memory is 5GB or less, 512 MB is allocated for the locator Java heap; 90% of the remaining memory is allocated to the GemFire server's Java heap, and the remainder is allocated to the OS.
+- If total VM memory is greater than 5GB, 10% of total memory is allocated for the locator Java heap; 90% of the remaining memory is allocated to the GemFire server's Java heap, and the remainder is allocated to the OS.
 
 Server heap is reduced to accommodate the **Pivotal Anti-Virus** and **File Integrity Monitoring (FIM)** PCF add-ons, if they are present.
 
