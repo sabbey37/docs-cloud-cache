@@ -70,7 +70,8 @@ shared across the spaces in the output of the command:
 
 Apps that interact with a shared Cloud Cache service instance
 which resides in a different space
-must acquire and use a set of credentials for authentication.
+will be given a set of read-only credentials.
+The app must acquire and use this set of credentials for authentication.
 Apps built with Spring Boot Data GemFire version 1.1.1 or a more
 recent version will automatically pick up the credentials,
 so these apps do not need to acquire the credentials.
