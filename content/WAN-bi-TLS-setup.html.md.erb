@@ -12,9 +12,9 @@ A bidirectional connection like this is needed if you wish to implement an activ
 - You have two PCF foundations, A and B, with a network connection between them.
 - You wish to establish a TLS-encrypted WAN connection between a service instance on Foundation A and a service instance on Foundation B.
 - The [Preparing for TLS](prepare-TLS.html) procedure has been followed for each foundation, establishing a CredHub “/services/tls_ca” certificate for each.
-- The [Establishting Mutually Trusted TLS Credentials](WAN-mutual-credentials.html) procedure has been followed, establishing mutually trusted TLS credentials between Foundations A and B.
+- The [Establishing Mutually Trusted TLS Credentials](WAN-mutual-credentials.html) procedure has been followed, establishing mutually trusted TLS credentials between Foundations A and B.
 
-## <a id="wan-bi-tls-establish-bidirectional-connection"></a>Establish a Bi-Directional TLS Connection
+## <a id="wan-create-clusters"></a>Create Clusters
 
 1. Create a service instance, Cluster A, using the Foundation A Cloud Foundry credentials.
 Enable TLS by specifying the `-c` option with the argument `"tls" : true`. 
@@ -31,9 +31,26 @@ This example also uses the `-c` option to set the `distributed_system_id` of Fou
     Output from the `cf services` command will show the `last operation` as
     `create succeeded` when service creation is completed.
 
+1. Create a service instance, Cluster B, using the Foundation B Cloud Foundry credentials.
+Enable TLS by specifying the `-c` option with the argument `"tls" : true`. 
+This example also uses the `-c` option to set the `distributed_system_id` of Foundation B:
+
+    <pre class='terminal'>
+    $ cf create-service p-cloudcache wan-cluster wan2 -c '{
+    "tls" : true,
+    "distributed_system_id" : 2 }'
+    </pre>
+
+    Verify the completion of service creation prior to continuing
+    to the next step.
+    Output from the `cf services` command will show the `last operation` as
+    `create succeeded` when service creation is completed.
+
+## <a id="wan-create-keys"></a>Create Service Keys
+
 1. Create a service key for Cluster A.
-The service key will contain generated credentials that this example
-will use in the creation of the Cluster B service instance:
+The service key will contain generated credentials, in a JSON element called `remote_cluster_info`, that this example
+will use in establishing communication with Cluster B:
 
     <pre class='terminal'>
     $ cf create-service-key wan1 k1
@@ -117,64 +134,17 @@ will use in the creation of the Cluster B service instance:
     }
     </pre>
 
-1. Communicate the Cluster A `remote_cluster_info`, which includes the recursors array, remote locators array, and
-trusted sender credentials, to the Cluster B Cloud Foundry administrator. 
-
-1.  Create the Cluster B service instance using the Foundation B Cloud Foundry information (locators, recursors, sender credentials).
-You must ensure that the distributed system id of Cluster B is different than that of Cluster A. 
-Use a `-c` option to enable TLS and to specify the distributed system id, the Cluster A service instance’s remote locators array, trusted sender credentials, and recursors.
-
-    <pre class='terminal'>
-    $ cf create-service p-cloudcache wan-cluster wan2 -c '
-    {
-      "tls":true,
-      "distributed_system_id":2,
-      "remote_clusters":[
-        {
-          "remote_locators":[
-            "id1.locator.subnet.service-instance-id.bosh[55221]",
-            "id2.locator.subnet.service-instance-id.bosh[55221]",
-            "id3.locator.subnet.service-instance-id.bosh[55221]"
-          ],
-          "trusted_sender_credentials":[
-            {
-              "username": "gateway_sender_GHI",
-              "password":"gws-GHI-password"
-            }
-          ],
-          "recursors": {
-            "services-subnet.service-instance-id.bosh": [
-              "10.0.8.5:1053",
-              "10.0.8.7:1053",
-              "10.0.8.6:1053"
-            ]
-          }
-        }
-      ]
-    }'
-    </pre>
-
-    Verify the completion of service creation prior to continuing to the next step.
-    Output from the `cf services` command will show the `last operation` as
-    `create succeeded` when service creation is completed.
-
 1. Create the service key of Cluster B:
 
     <pre class='terminal'>
     $ cf create-service-key wan2 k2
     </pre>
 
-    The contents of the service key will differ based upon the cluster
-    configuration,
-    and whether an authentication and enterprise single sign-on (SSO) system
-    such as LDAP has been configured.
-    With enterprise SSO, the service key will *not* contain cluster operator and developer users.
-
-    Without the enterprise SSO, the service key appears as in this example.
-
     Here is sample output from `cf service-key wan2 k2`,
-    which outputs details of the Cluster B service key 
-    (as above, user names and passwords have been simplified for readability):
+    which outputs details of the Cluster B service key.
+    As above, the service key will contain generated credentials, in a JSON element called `remote_cluster_info`, that this example
+    will use in establishing communication with Cluster A.
+    Again, user names and passwords have been simplified for readability.
 
     <pre class='terminal'>
     Getting key k2 for service instance destination as admin...
@@ -229,29 +199,18 @@ Use a `-c` option to enable TLS and to specify the distributed system id, the Cl
        "username": "developer_MNO"
       }
      ],
-     "wan": {
-      "remote_clusters": [
-      {
-        "remote_locators": [
-         "id1.locator.subnet.service-instance-id.bosh[55221]",
-         "id2.locator.subnet.service-instance-id.bosh[55221]",
-         "id3.locator.subnet.service-instance-id.bosh[55221]"
-        ],
-        "trusted_sender_credentials": [
-         "gateway_sender_GHI"
-        ]
-       }
-      ]
-     }
+     "wan": {}
     }
     </pre>
 
-1. Communicate the Cluster B  `remote_cluster_info`, which includes the recursors array, remote locators array, and
-trusted sender credentials, to the Cluster A Cloud Foundry administrator. 
+## <a id="wan-bi-tls-establish-bidirectional-connection"></a>Establish a Bi-Directional Connection
 
-1. Update the Cluster A service instance using the Cluster A
-Cloud Foundry credentials to include the Cluster B locators
-and the Cluster B information:
+To establish bidirectional communication between Clusters A and B, each must be updated with some of
+the other's `remote_cluster_info`: the remote locators array, trusted sender credentials, and recursors array.
+
+1. Update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
+   trusted sender credentials, and recursors array:
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
@@ -279,12 +238,42 @@ and the Cluster B information:
     Updating service instance wan1 as admin
     </pre>
 
-1. To verify that the Cluster A service instance has been correctly updated,
-delete and recreate the Cluster A service key.
-As designed, the recreated service key will have the same user identifiers
-and passwords; new unique strings and passwords are not generated.
-Use the Cluster A Cloud Foundry credentials
-in these commands:
+1. Update the Cluster B service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster A service key `remote_cluster_info` element, including the remote locators array,
+   trusted sender credentials, and recursors array:
+
+    <pre class='terminal'>
+    $ cf update-service wan1 -c '
+    {
+      "remote_clusters":[
+      {
+        "remote_locators":[
+          "id1.locator.subnet.service-instance-id.bosh[55221]",
+          "id2.locator.subnet.service-instance-id.bosh[55221]",
+          "id3.locator.subnet.service-instance-id.bosh[55221]"
+        "trusted_sender_credentials":[
+        {
+          "username": "gateway_sender_GHI",
+          "password":"gws-GHI-password"
+        }]
+        "recursors": {
+          "services-subnet.service-instance-id.bosh": [
+            "10.0.8.5:1053",
+            "10.0.8.7:1053",
+            "10.0.8.6:1053"
+          ]
+        }
+      }]
+    }'
+    Updating service instance wan2 as admin
+    </pre>
+
+1. To verify that a service instance has been correctly updated,
+   delete and recreate the cluster service key.
+   As designed, the recreated service key will have the same user identifiers
+   and passwords; new unique strings and passwords are not generated.
+   The `wan{}` element at the end of the key should be populated with the other cluster's remote connection information.
+   For example, to verify that the Cluster A service key was updated correctly, log in as Cluster A administrator and issue these commands:
 
     <pre class='terminal'>
     $ cf delete-service-key wan1 k1
@@ -370,10 +359,14 @@ in these commands:
     </pre>
 
 
-1. Use gfsh to create the Cluster A gateway sender and the region.
-Any region operations that occur after the region is created on
-Cluster A, but before the region is created on Cluster B,
+## <a id="wan-bi-tls-create-regions"></a>Create Regions and Gateway Senders
+
+On each cluster, create a gateway sender that sends to the other cluster, the create regions on each cluster that have the same name and type.
+Note: GemFire requires that the gateway sender must be created before the region that uses it, so there is a window in which region operations
+that occur after the region is created on Cluster A, but before the region is created on Cluster B,
 will be lost.
+
+1. Use gfsh to create the Cluster A gateway sender and the region.
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.
