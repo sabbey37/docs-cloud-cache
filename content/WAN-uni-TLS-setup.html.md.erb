@@ -3,7 +3,7 @@ title: Set Up a Unidirectional System with TLS
 ---
 
 This section describes how to set up a unidirectional transfer, using TLS encryption,
-such that all operations in cluster A are replicated in cluster B.
+such that all operations in Cluster A are replicated in Cluster B.
 Two design patterns that use unidirectional replication are described in
 [Blue-Green Disaster Recovery](design-patterns.html#WAN-pattern)
 and [CQRS Pattern Across a WAN](design-patterns.html#CQRS-WAN-pattern).
@@ -12,22 +12,17 @@ and [CQRS Pattern Across a WAN](design-patterns.html#CQRS-WAN-pattern).
 
 - You have two PCF foundations, A and B, with a network connection between them.
 - You wish to establish a TLS-encrypted WAN connection between a service instance on Foundation A and a service instance on Foundation B.
+- The connection will be unidirectional, such that all operations in Cluster A are replicated in Cluster B, but Cluster B does not send operations to Cluster A.
 - The [Preparing for TLS](prepare-TLS.html) procedure has been followed for each foundation, establishing a CredHub “/services/tls_ca” certificate for each.
 - The [Establishting Mutually Trusted TLS Credentials](WAN-mutual-credentials.html) procedure has been followed, establishing mutually trusted TLS credentials between Foundations A and B.
 
-## <a id="wan-uni-tls-establish-unidirectional-connection"></a>Establish a Uni-Directional TLS Connection
+## <a id="wan-uni-create-clusters"></a>Create Clusters
 
-1. Create a service instance, cluster A, using the Foundation A Cloud Foundry credentials.
-Enable TLS by specifying the `-c` option with the argument `"tls":true`. 
-If you also use the `-c` option to set the `distributed_system_id` of Foundation A, the command takes the form:
+1. Log into Foundation A using Foundation A Cloud Foundry credentials.
 
-    ```
-    cf create-service p-cloudcache PLAN-NAME SERVICE-INSTANCE-NAME -c '{
-    "tls" : true,
-    "distributed_system_id" : ID-VALUE }'
-    ```
-
-    This example sets the PLAN-NAME to "wan-cluster", the SERVICE-INSTANCE-NAME to "wan1", and the ID-VALUE to "1":
+1. Use the `cf create-service` command to create a service instance, which we will call Cluster A in this example.
+In the `cf create-service` command, use the `-c` option with the argument `"tls" : true` to enable TLS.
+This example also uses the `-c` option to set the `distributed_system_id` of Cluster A to "1":
 
     <pre class='terminal'>
     $ cf create-service p-cloudcache wan-cluster wan1 -c '{
@@ -40,161 +35,41 @@ If you also use the `-c` option to set the `distributed_system_id` of Foundation
     Output from the `cf services` command will show the `last operation` as
     `create succeeded` when service creation is completed.
 
-1. Create a service key for cluster A.
-The service key will contain generated credentials that this example
-will use in the creation of the cluster B service instance:
+1. Log into Foundation B using Foundation B Cloud Foundry credentials.
+
+1. Use the `cf create-service` command to create a service instance, which we will call Cluster B.
+In the `cf create-service` command, use the `-c` option with the argument `"tls" : true` to enable TLS.
+This example also uses the `-c` option to set the `distributed_system_id` of Cluster B to "2":
 
     <pre class='terminal'>
-    $ cf create-service-key wan1 k1
+    $ cf create-service p-cloudcache wan-cluster wan2 -c '{
+    "tls" : true,
+    "distributed_system_id" : 2 }'
     </pre>
 
-    The contents of the service key will differ based upon the cluster
-    configuration,
-    and whether an authentication and enterprise single sign-on (SSO) system
-    such as LDAP has been configured.
-    With the enterprise SSO,
-    there will *not* be cluster operator and developer users in the
-    service key.
-    With enterprise SSO, the service key will *not* contain cluster operator and developer users.
-
-    Without the enterprise SSO, the service key appears as in this example.
-    Within the service key,
-    each `username` is generated with a unique string
-    appended so there will be unique user names for the different roles.
-    The user names in this example have been modified
-    to be easy to understand,
-    and they are not representative of the user names that
-    will be generated upon service key creation.
-    Passwords generated for the service key are output in clear text.
-    The passwords shown in this example have been
-    modified to be easy to understand,
-    and they are not representative of the passwords that
-    will be generated upon service key creation.
-    Here is sample output from `cf service-key wan1 k1`:
-
-    <pre class='terminal'>
-    Getting key k1 for service instance wan1 as admin...
-
-
-    {
-     "distributed_system_id": "1",
-     "gfsh_login_string": "connect
-     --url=https://cloudcache-url.com/gemfire/v1
-     --user=cluster_operator_user --password=pass --skip-ssl-validation",
-     "locators": [
-      "id1.locator.subnet.service-instance-id.bosh[55221]",
-      "id2.locator.subnet.service-instance-id.bosh[55221]",
-      "id3.locator.subnet.service-instance-id.bosh[55221]"
-     ],
-     "remote_cluster_info": {
-      "recursors": {
-       "services-subnet.service-instance-id.bosh": [
-        "10.0.8.6:1053",
-        "10.0.8.7:1053",
-        "10.0.8.5:1053"
-       ]
-      },
-      "remote_locators": [
-      "id1.locator.subnet.service-instance-id.bosh[55221]",
-      "id2.locator.subnet.service-instance-id.bosh[55221]",
-      "id3.locator.subnet.service-instance-id.bosh[55221]"
-      ],
-      "trusted_sender_credentials": [
-       {
-        "password": "gws-GHI-password",
-        "username": "gateway_sender_GHI"
-       }
-      ]
-     },
-     "urls": {
-      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
-      "pulse": "https://cloudcache-1.example.com/pulse"
-     },
-     "users": [
-      {
-       "password": "cl-op-ABC-password",
-       "roles": [
-        "cluster_operator"
-       ],
-       "username": "cluster_operator_ABC"
-      },
-      {
-       "password": "dev-DEF-password",
-       "roles": [
-        "developer"
-       ],
-       "username": "developer_DEF"
-      }
-     ],
-     "wan": {}
-    }
-    </pre>
-
-1. Communicate the Cluster A `remote_cluster_info`, which includes the recursors array, remote locators array, and
-trusted sender credentials, to the Cluster B Cloud Foundry administrator. 
-
-1.  Create the Cluster B service instance using the Foundation B Cloud Foundry information (locators, recursors, sender credentials).
-You must ensure that the distributed system id of Cluster B is different than that of Cluster A. 
-Use a `-c` option to enable TLS and to specify the distributed system id, the Cluster A service instance’s remote locators array, trusted sender credentials, and recursors.
-
-    <pre class='terminal'>
-    $ cf create-service p-cloudcache wan-cluster wan2 -c '
-    {
-      "tls":true,
-      "distributed_system_id":2,
-      "remote_clusters":[
-        {
-          "remote_locators":[
-            "id1.locator.subnet.service-instance-id.bosh[55221]",
-            "id2.locator.subnet.service-instance-id.bosh[55221]",
-            "id3.locator.subnet.service-instance-id.bosh[55221]"
-          ],
-          "trusted_sender_credentials":[
-            {
-              "username": "gateway_sender_GHI",
-              "password":"gws-GHI-password"
-            }
-          ],
-          "recursors": {
-            "services-subnet.service-instance-id.bosh": [
-              "10.0.8.5:1053",
-              "10.0.8.7:1053",
-              "10.0.8.6:1053"
-            ]
-          }
-        }
-      ]
-    }'
-    </pre>
-
-    Verify the completion of service creation prior to continuing to the next step.
+    Verify the completion of service creation prior to continuing
+    to the next step.
     Output from the `cf services` command will show the `last operation` as
     `create succeeded` when service creation is completed.
 
-1. Create the service key of cluster B:
+## <a id="wan-uni-create-keys"></a>Create a Service Key for the Passive Cluster
+
+1. Create a service key for Cluster B, the passive cluster in this example. The service key 
+contains generated credentials, in a JSON element called `remote_cluster_info`, that enable other
+clusters (Cluster A in this example) to send messages to Cluster B:
 
     <pre class='terminal'>
     $ cf create-service-key wan2 k2
     </pre>
 
-    The contents of the service key will differ based upon the cluster
-    configuration,
-    and if an authentication and enterprise single sign-on (SSO) system
-    such as LDAP has been configured.
-    With the enterprise SSO,
-    there will *not* be cluster operator and developer users in the
-    service key.
-    With enterprise SSO, the service key will *not* contain cluster operator and developer users.
-
-    Without the enterprise SSO, the service key appears as in this example.
-
-    Note that the cluster B service key will contain unneeded (for the unidirectional setup)
-    but automatically created `sender_credentials`.
-
     Here is sample output from `cf service-key wan2 k2`,
-    which outputs details of the cluster B service key
-    (as above, user names and passwords have been simplified for readability):
+    which outputs details of the Cluster B service key.
+    In this example, user names and passwords have been simplified for readability.
 
+    The contents of the service key will differ based upon the cluster configuration,
+    and whether an authentication and enterprise single sign-on (SSO) system such as LDAP has been configured.
+    With enterprise SSO, the service key will *not* contain cluster operator and developer users.
+    
     <pre class='terminal'>
     Getting key k2 for service instance destination as admin...
 
@@ -248,28 +123,15 @@ Use a `-c` option to enable TLS and to specify the distributed system id, the Cl
        "username": "developer_MNO"
       }
      ],
-     "wan": {
-      "remote_clusters": [
-      {
-        "remote_locators": [
-         "id1.locator.subnet.service-instance-id.bosh[55221]",
-         "id2.locator.subnet.service-instance-id.bosh[55221]",
-         "id3.locator.subnet.service-instance-id.bosh[55221]"
-        ],
-        "trusted_sender_credentials": [
-         "gateway_sender_GHI"
-        ]
-       }
-      ]
-     }
+     "wan": {}
     }
     </pre>
 
-1. Communicate the Cluster B  `remote_cluster_info`, which includes the recursors array, remote locators array, and
-trusted sender credentials, to the Cluster A Cloud Foundry administrator. 
+## <a id="wan-uni-tls-establish-unidirectional-connection"></a>Establish a Uni-Directional TLS Connection
 
-1. Update the Cluster A service instance using the Cluster A
-Cloud Foundry credentials to include the Cluster B locators:
+1. Update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
+   trusted sender credentials, and recursors array. This allows Cluster A to send messages to Cluster B.
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
@@ -280,17 +142,59 @@ Cloud Foundry credentials to include the Cluster B locators:
           "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
           "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
           "id1.locator-server.subnet2.service-instance-id2.bosh[55221]"],
+        "trusted_sender_credentials":[
+        {
+          "username":"gateway_sender_PQR",
+          "password":"gws-PQR-password"
+        }]
+        "recursors": {
+          "services-subnet.service-instance-id.bosh": [
+            "10.1.16.6:1053",
+            "10.1.16.8:1053",
+            "10.1.16.7:1053"
+          ]
+        }
       }]
     }'
     Updating service instance wan1 as admin
     </pre>
 
-1. To verify that the cluster A service instance has been correctly updated,
-delete and recreate the cluster A service key.
-As designed, the recreated service key will have the same user identifiers
-and passwords; new unique strings and passwords are not generated.
-Use the Cluster A Cloud Foundry credentials
-in these commands:
+1. While logged into Foundation A, update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
+   trusted sender credentials, and recursors array. This allows Cluster A to send messages to Cluster B.
+
+    <pre class='terminal'>
+    $ cf update-service wan1 -c '
+    {
+      "remote_clusters":[
+      {
+        "remote_locators":[
+          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+          "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+          "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"],
+        "trusted_sender_credentials":[
+        {
+          "username":"gateway_sender_PQR",
+          "password":"gws-PQR-password"
+        }]
+        "recursors": {
+          "services-subnet.service-instance-id.bosh": [
+            "10.1.16.6:1053",
+            "10.1.16.8:1053",
+            "10.1.16.7:1053"
+          ]
+        }
+      }]
+    }'
+    Updating service instance wan1 as admin
+    </pre>
+
+1. To verify that a service instance has been correctly updated,
+   delete and recreate the cluster service key.
+   By design, the recreated service key will have the same user identifiers
+   and passwords as its predecessor; new unique strings and passwords are not generated.
+   The `wan{}` element at the end of the key should be populated with the other cluster's remote connection information.
+   For example, to verify that the Cluster A service key was updated correctly, log in as Cluster A administrator and issue these commands:
 
     <pre class='terminal'>
     $ cf delete-service-key wan1 k1
@@ -303,7 +207,7 @@ in these commands:
     This example service key is shown assuming that an authentication and
     enterprise single sign-on (SSO) system such as LDAP has
     *not* been configured.
-    The cluster A service key will now appear as:
+    The Cluster A service key will now appear as:
 
     <pre class='terminal'>
     Getting key k1 for service instance wan1 as admin...
@@ -358,13 +262,23 @@ in these commands:
      "wan": {
       "remote_clusters": [
        {
+        "recursors": {
+         "services-subnet-2.service-instance-id-2.bosh": [
+          "10.1.16.7:1053",
+          "10.1.16.6:1053",
+          "10.1.16.8:1053"
+         ]
+        },
         "remote_locators": [
-         "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-         "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-         "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+        "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+        "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+        "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-         "gateway_sender_PQR"
+         {
+          "password": "gws-PQR-password",
+          "username": "gateway_sender_PQR"
+         }
         ]
        }
       ]
@@ -372,21 +286,24 @@ in these commands:
     }
     </pre>
 
+## <a id="wan-uni-tls-create-regions"></a>Create a Gateway Sender and Regions
 
-1. Use gfsh to create the cluster A gateway sender and the region.
-Any region operations that occur after the region is created on
-cluster A, but before the region is created on cluster B
-will be lost.
+Create a gateway sender on the active cluster that sends to the passive cluster, then create regions on each cluster that have the same name and type.
+Note: the gateway sender must be created before the region that uses it, so there is a window in which region operations
+that occur after the region is created on Cluster A, but before the corresponding region is created on Cluster B, will be lost.
+
+1. While logged in to Foundation A, use gfsh to create the Cluster A gateway sender and the region.
+
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-    with a role that is able to manage both the cluster and the data.
-    - Create the cluster A gateway sender.
+    with a role that is able to manage both the Cluster and the data.
+    - Create the Cluster A gateway sender.
     The required `remote-distributed-system-id` option identifies the `distributed-system-id` of the destination cluster. It is 2 for this example:
 
         <pre class='terminal'>
         gfsh>create gateway-sender --id=send_to_2 --remote-distributed-system-id=2 --enable-persistence=true
         </pre>
-    - Create the cluster A region.
+    - Create the Cluster A region.
     The `gateway-sender-id` associates region operations with a specific
     gateway sender.  The region must have an associated gateway sender in
     order to propagate region events across the WAN.
@@ -395,12 +312,83 @@ will be lost.
         gfsh>create region --name=regionX --gateway-sender-id=send_to_2 --type=PARTITION_REDUNDANT
         </pre>
 
-1. Use gfsh to create the cluster B region.
+1. While logged in to Foundation B, use gfsh to create the Cluster B gateway region. (Because Cluster B is the passive member in this
+   unidirectional connection, it does not need a gateway sender.)
+
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.
-    - Create the cluster B region:
+    - Create the Cluster B region:
 
         <pre class='terminal'>
         gfsh>create region --name=regionX --type=PARTITION_REDUNDANT
         </pre>
+
+## <a id=wan-bi-tls-verify class="no_quick_link"></a>Verify Unidirectional WAN Setup
+
+This verification uses gfsh to put a region entry into Cluster A, in order to observe that the entry appears in
+Cluster B.
+
+1. While logged in to Foundation A, run gfsh and connect following the instructions in
+[Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
+with a role that is able to manage both the cluster and the data.
+
+1. Verify that Cluster A has a complete set of gateway senders and
+gateway receivers:
+
+    <pre class='terminal'>
+    gfsh>list gateways
+    </pre>
+    
+    Also verify that there are no queued events in the gateway senders.
+    
+1. Log in to Foundation B in a separate terminal window, then
+run gfsh and connect following the instructions in
+[Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
+with a role that is able to manage both the cluster and the data.
+
+1. Verify that Cluster B has a complete set of gateway receivers (Cluster B should have no gateway senders):
+
+    <pre class='terminal'>
+    gfsh>list gateways
+    </pre>
+
+1. From the Cluster A gfsh connection, use gfsh to perform a `put` operation.
+This example assumes that both the key and the value for the entry
+are strings.
+The gfsh `help put` command shows the put command's options. 
+Here is an example:
+
+    <pre class='terminal'>
+    gfsh>put --region=regionX --key=mykey1 --value=stringvalue1
+    Result      : true
+    Key Class   : java.lang.String
+    Key         : mykey1
+    Value Class : java.lang.String
+    Old Value   : null
+    </pre>
+
+1. Wait approximately 30 seconds, then use the Cluster B gfsh
+connection to perform a `get` of the same key that was put into the region
+on Cluster A.
+
+    <pre class='terminal'>
+    gfsh>get --region=regionX --key=mykey1
+    Result      : true
+    Key Class   : java.lang.String
+    Key         : mykey1
+    Value Class : java.lang.String
+    Value       : "stringvalue1"
+    </pre>
+
+    You should see that Cluster B has the value.
+
+1. From the Cluster A gfsh connection, remove the test entry from Cluster A.
+WAN replication will cause the removal of the test entry from Cluster B.
+
+    <pre class='terminal'>
+    gfsh>remove --region=regionX --key=mykey1
+    Result    : true
+    Key Class : java.lang.String
+    Key       : mykey1
+    </pre>

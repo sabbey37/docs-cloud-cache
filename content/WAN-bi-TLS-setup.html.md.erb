@@ -11,14 +11,17 @@ A bidirectional connection like this is needed if you wish to implement an activ
 
 - You have two PCF foundations, A and B, with a network connection between them.
 - You wish to establish a TLS-encrypted WAN connection between a service instance on Foundation A and a service instance on Foundation B.
+- The connection will be bidirectional, such that operations in each cluster can be replicated in the other.
 - The [Preparing for TLS](prepare-TLS.html) procedure has been followed for each foundation, establishing a CredHub “/services/tls_ca” certificate for each.
 - The [Establishing Mutually Trusted TLS Credentials](WAN-mutual-credentials.html) procedure has been followed, establishing mutually trusted TLS credentials between Foundations A and B.
 
 ## <a id="wan-create-clusters"></a>Create Clusters
 
-1. Create a service instance, Cluster A, using the Foundation A Cloud Foundry credentials.
-Enable TLS by specifying the `-c` option with the argument `"tls" : true`. 
-This example also uses the `-c` option to set the `distributed_system_id` of Foundation A:
+1. Log into Foundation A using Foundation A Cloud Foundry credentials.
+
+1. Use the `cf create-service` command to create a service instance, which we will call Cluster A in this example.
+In the `cf create-service` command, use the `-c` option with the argument `"tls" : true` to enable TLS.
+This example also uses the `-c` option to set the `distributed_system_id` of Cluster A to "1":
 
     <pre class='terminal'>
     $ cf create-service p-cloudcache wan-cluster wan1 -c '{
@@ -31,9 +34,11 @@ This example also uses the `-c` option to set the `distributed_system_id` of Fou
     Output from the `cf services` command will show the `last operation` as
     `create succeeded` when service creation is completed.
 
-1. Create a service instance, Cluster B, using the Foundation B Cloud Foundry credentials.
-Enable TLS by specifying the `-c` option with the argument `"tls" : true`. 
-This example also uses the `-c` option to set the `distributed_system_id` of Foundation B:
+1. Log into Foundation B using Foundation B Cloud Foundry credentials.
+
+1. Use the `cf create-service` command to create a service instance, which we will call Cluster B.
+In the `cf create-service` command, use the `-c` option with the argument `"tls" : true` to enable TLS.
+This example also uses the `-c` option to set the `distributed_system_id` of Cluster B to "2":
 
     <pre class='terminal'>
     $ cf create-service p-cloudcache wan-cluster wan2 -c '{
@@ -49,8 +54,8 @@ This example also uses the `-c` option to set the `distributed_system_id` of Fou
 ## <a id="wan-create-keys"></a>Create Service Keys
 
 1. Create a service key for Cluster A.
-The service key will contain generated credentials, in a JSON element called `remote_cluster_info`, that this example
-will use in establishing communication with Cluster B:
+The service key contains generated credentials, in a JSON element called `remote_cluster_info`, that 
+enable other clusters (Cluster B in this example) to send messages to Cluster A:
 
     <pre class='terminal'>
     $ cf create-service-key wan1 k1
@@ -142,8 +147,8 @@ will use in establishing communication with Cluster B:
 
     Here is sample output from `cf service-key wan2 k2`,
     which outputs details of the Cluster B service key.
-    As above, the service key will contain generated credentials, in a JSON element called `remote_cluster_info`, that this example
-    will use in establishing communication with Cluster A.
+    As above, the service key will contain generated credentials, in a JSON element called `remote_cluster_info`, that
+    will enable other clusters (Cluster A in this example) to send messages to Cluster B.
     Again, user names and passwords have been simplified for readability.
 
     <pre class='terminal'>
@@ -208,9 +213,9 @@ will use in establishing communication with Cluster B:
 To establish bidirectional communication between Clusters A and B, each must be updated with the contents of
 the other's `remote_cluster_info`: the remote locators array, trusted sender credentials, and recursors array.
 
-1. Update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
+1. While logged in to Foundation A, update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
    includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
-   trusted sender credentials, and recursors array:
+   trusted sender credentials, and recursors array. This allows Cluster A to send messages to Cluster B.
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
@@ -219,8 +224,8 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
       {
         "remote_locators":[
           "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]"],
+          "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+          "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"],
         "trusted_sender_credentials":[
         {
           "username":"gateway_sender_PQR",
@@ -238,9 +243,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
     Updating service instance wan1 as admin
     </pre>
 
-1. Update the Cluster B service instance, using the `-c` option to specify a `remote_clusters` element that
+1. While logged in to Foundation B, update the Cluster B service instance, using the `-c` option to specify a `remote_clusters` element that
    includes the contents of the Cluster A service key `remote_cluster_info` element, including the remote locators array,
-   trusted sender credentials, and recursors array:
+   trusted sender credentials, and recursors array. This allows Cluster B to send messages to Cluster A.
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
@@ -270,8 +275,8 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
 
 1. To verify that a service instance has been correctly updated,
    delete and recreate the cluster service key.
-   As designed, the recreated service key will have the same user identifiers
-   and passwords; new unique strings and passwords are not generated.
+   By design, the recreated service key will have the same user identifiers
+   and passwords as its predecessor; new unique strings and passwords are not generated.
    The `wan{}` element at the end of the key should be populated with the other cluster's remote connection information.
    For example, to verify that the Cluster A service key was updated correctly, log in as Cluster A administrator and issue these commands:
 
@@ -286,7 +291,7 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
     This example service key is shown assuming that an authentication and
     enterprise single sign-on (SSO) system such as LDAP has
     *not* been configured.
-    The Cluster A service key will now appear as:
+    The Cluster A service key will now show a `wan{}` field that contains the remote contact information for Cluster B:
 
     <pre class='terminal'>
     Getting key k1 for service instance wan1 as admin...
@@ -344,13 +349,23 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
      "wan": {
       "remote_clusters": [
        {
+        "recursors": {
+         "services-subnet-2.service-instance-id-2.bosh": [
+          "10.1.16.7:1053",
+          "10.1.16.6:1053",
+          "10.1.16.8:1053"
+         ]
+        },
         "remote_locators": [
-         "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-         "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-         "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+        "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+        "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+        "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-         "gateway_sender_PQR"
+         {
+          "password": "gws-PQR-password",
+          "username": "gateway_sender_PQR"
+         }
         ]
        }
       ]
@@ -359,14 +374,14 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
     </pre>
 
 
-## <a id="wan-bi-tls-create-regions"></a>Create Regions and Gateway Senders
+## <a id="wan-bi-tls-create-regions"></a>Create Gateway Senders and Regions
 
-On each cluster, create a gateway sender that sends to the other cluster, the create regions on each cluster that have the same name and type.
-Note: GemFire requires that the gateway sender must be created before the region that uses it, so there is a window in which region operations
-that occur after the region is created on Cluster A, but before the region is created on Cluster B,
-will be lost.
+On each cluster, create a gateway sender that sends to the other cluster, then create regions on each cluster that have the same name and type.
+Note: the gateway sender must be created before the region that uses it, so there is a window in which region operations
+that occur after the region is created on Cluster A, but before the corresponding region is created on Cluster B, will be lost.
 
-1. Use gfsh to create the Cluster A gateway sender and the region.
+1. While logged in to Foundation A, use gfsh to create the Cluster A gateway sender and the region.
+
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.
@@ -385,7 +400,8 @@ will be lost.
         gfsh>create region --name=regionX --gateway-sender-id=send_to_2 --type=PARTITION_REDUNDANT
         </pre>
 
-1. Use gfsh to create the Cluster B gateway sender and region.
+1. While logged in to Foundation B, use gfsh to create the Cluster B gateway sender and region.
+
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.
@@ -406,7 +422,7 @@ This verification uses gfsh to put a region entry into each of Cluster A
 and Cluster B, in order to observe that the entry appears in the
 other cluster.
 
-1. Run gfsh and connect following the instructions in
+1. While logged in to Foundation A, run gfsh and connect following the instructions in
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
 with a role that is able to manage both the cluster and the data.
 
@@ -419,7 +435,7 @@ gateway receivers:
     
     Also verify that there are no queued events in the gateway senders.
     
-1. In a separate terminal window,
+1. Log in to Foundation B in a separate terminal window, then
 run gfsh and connect following the instructions in
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
 with a role that is able to manage both the cluster and the data.
@@ -433,7 +449,7 @@ gateway receivers:
 
     Also verify that there are no queued events in the gateway senders.
     
-1. Use gfsh to do a put operation from the Cluster A gfsh connection.
+1. From the Cluster A gfsh connection, use gfsh to perform a `put` operation.
 This example assumes that both the key and the value for the entry
 are strings.
 The gfsh `help put` command shows the put command's options. 
@@ -448,8 +464,8 @@ Here is an example:
     Old Value   : null
     </pre>
 
-1. Wait approximately 30 seconds before using the Cluster B gfsh
-connection to do a get of the same key that was put into the region
+1. Wait approximately 30 seconds, then use the Cluster B gfsh
+connection to perform a `get` of the same key that was put into the region
 on Cluster A.
 
     <pre class='terminal'>
@@ -463,12 +479,12 @@ on Cluster A.
 
     You should see that Cluster B has the value.
 
-1. Repeat steps 5 and 6 to do a put operation operation on Cluster B
+1. Repeat steps 5 and 6 to perform a `put` operation operation on Cluster B
 and verify that the entry is sent to Cluster A.
 
 1. Remove both test entries from both clusters with two gfsh
 commands, issuing the commands on one of the clusters.
-The WAN replication will cause the removal of the test entries
+WAN replication will cause the removal of the test entries
 on the other cluster.
 
     <pre class='terminal'>
