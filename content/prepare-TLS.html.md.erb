@@ -38,10 +38,11 @@ Account and Authentication (UAA) client for CredHub specifically to support TLS,
 Client exists with `credhub.write` and `credhub.read` permissions. The client used in this section is one that
 was created during the OpsManager installation process: the `ops_manager` client. 
 
-However, in cases where you would like to trace certificate access
-specifically to CredHub, you may choose to create another client just
-for TLS setup: follow the instructions in the PCF documentation, then resume this procedure
-using that client in place of the `ops_manager` client used here.
+However, in cases where you would like to trace certificate access specifically to CredHub, you may
+choose to create another client just for TLS setup: follow the instructions in [Creating UAA Clients
+for BOSH Director](https://docs.pivotal.io/pivotalcf/2-4/customizing/opsmanager-create-bosh-client.html) 
+in the PCF documentation. The client you create must have `credhub.read` and `credhub.write` permissions.
+Once that client is established, resume this procedure using that client in place of the `ops_manager` client used here.
 
 ###<a id='add-ca-cert'></a> Add the CA Certificate
 
