@@ -119,7 +119,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
     "tls" : true,
     "distributed_system_id" : 3 
       "remote_clusters":[
-      {
+       {
         "recursors": {
           "services-subnet.service-instance-id.bosh": [
             "10.0.8.5:1053",
@@ -207,7 +207,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
      ],
      "wan": {
       "remote_clusters": [
-      {
+       {
         "recursors": {
           "services-subnet.service-instance-id.bosh": [
             "10.0.8.5:1053",
@@ -244,7 +244,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
     $ cf update-service wan1 -c '
     {
       "remote_clusters":[
-      {
+       {
         "recursors": {
          "services-subnet-2.service-instance-id-2.bosh": [
           "10.1.16.7:1053",
