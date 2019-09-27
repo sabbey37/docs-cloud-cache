@@ -53,34 +53,16 @@ This example also uses the `-c` option to set the `distributed_system_id` of Clu
 
 ## <a id="wan-create-keys"></a>Create Service Keys
 
-1. Create a service key for Cluster A.
-The service key contains generated credentials, in a JSON element called `remote_cluster_info`, that 
-enable other clusters (Cluster B in this example) to send messages to Cluster A:
+1. While logged in to Foundation A, create a service key for Cluster A.
+   The contents of the service key differ based upon the cluster configuration, such as
+   whether an authentication and enterprise single sign-on (SSO) system such as LDAP has been configured.
 
     <pre class='terminal'>
     $ cf create-service-key wan1 k1
     </pre>
 
-    The contents of the service key will differ based upon the cluster
-    configuration,
-    and whether an authentication and enterprise single sign-on (SSO) system
-    such as LDAP has been configured.
-    With enterprise SSO, the service key will *not* contain cluster operator and developer users.
-    
-    Without enterprise SSO, the service key appears as in this example.
-    Within the service key,
-    each `username` is generated with a unique string
-    appended so there will be unique user names for the different roles.
-    The user names in this example have been modified
-    to be easy to understand,
-    and they are not representative of the user names that
-    will be generated upon service key creation.
-    Passwords generated for the service key are output in clear text.
-    The passwords shown in this example have been
-    modified to be easy to understand,
-    and they are not representative of the passwords that
-    will be generated upon service key creation.
-    Here is sample output from `cf service-key wan1 k1`:
+    The service key contains generated credentials, in a JSON element called `remote_cluster_info`, that 
+    enable other clusters (Cluster B in this example) to communicate with Cluster A:
 
     <pre class='terminal'>
     Getting key k1 for service instance wan1 as admin...
@@ -104,9 +86,9 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
        ]
       },
       "remote_locators": [
-      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
-      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
-      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+       "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id3.locator.services-subnet.service-instance-id.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -139,17 +121,14 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
     }
     </pre>
 
-1. Create the service key of Cluster B:
+1. While logged in to Foundation B, create a service key for Cluster B:
 
     <pre class='terminal'>
     $ cf create-service-key wan2 k2
     </pre>
 
-    Here is sample output from `cf service-key wan2 k2`,
-    which outputs details of the Cluster B service key.
     As above, the service key contains generated credentials, in a JSON element called `remote_cluster_info`, that
-    enable other clusters (Cluster A in this example) to send messages to Cluster B.
-    Again, user names and passwords have been simplified for readability.
+    enable other clusters (Cluster A in this example) to communicate with Cluster B:
 
     <pre class='terminal'>
     Getting key k2 for service instance destination as admin...
@@ -160,9 +139,9 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
      --url=https://cloudcache-url.com/gemfire/v1
      --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
      ],
      "remote_cluster_info": {
       "recursors": {
@@ -173,9 +152,9 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
        ]
       },
       "remote_locators": [
-      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+       "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -208,50 +187,68 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
     }
     </pre>
 
-## <a id="wan-bi-tls-establish-bidirectional-connection"></a>Establish a Bi-Directional Connection
+## <a id="wan-bi-tls-establish-bidirectional-connection"></a>Establish a Bidirectional Connection
 
-To establish bidirectional communication between Clusters A and B, each must be updated with the contents of
-the other's `remote_cluster_info`: the remote locators array, trusted sender credentials, and recursors array.
+To establish bidirectional communication between Clusters A and B, The `remote_clusters` element in
+each must be updated with the contents of the other's `remote_cluster_info`, which contains three
+elements:
+
+- The `recursors` array and the `remote_locators` array enable communication between clusters.
+- The `trusted_sender_credentials` element identifies a cluster from which data can be accepted for
+  replication. For example, when Cluster B has been updated with Cluster A's `trusted_sender_credentials`, then Cluster B can accept and store data sent from Cluster A.
+
+In order to implement a bidirectional WAN connection between two clusters, each must have the `trusted_sender_credentials` of the other.
 
 1. While logged in to Foundation A, update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
-   includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
-   trusted sender credentials, and recursors array. This allows Cluster A to send messages to Cluster B.
+   includes the contents of the Cluster B service key `remote_cluster_info` element, including the `recursors` array, `remote_locators` array,
+   and `trusted_sender_credentials`. This allows Cluster A to communicate with Cluster B, and to accept data from Cluster B:
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
     {
       "remote_clusters":[
       {
-        "remote_locators":[
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"],
-        "trusted_sender_credentials":[
-        {
-          "username":"gateway_sender_PQR",
-          "password":"gws-PQR-password"
-        }]
         "recursors": {
-          "services-subnet.service-instance-id.bosh": [
-            "10.1.16.6:1053",
-            "10.1.16.8:1053",
-            "10.1.16.7:1053"
-          ]
-        }
-      }]
+         "services-subnet-2.service-instance-id-2.bosh": [
+          "10.1.16.7:1053",
+          "10.1.16.6:1053",
+          "10.1.16.8:1053"
+         ]
+        },
+        "remote_locators": [
+         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+        ],
+        "trusted_sender_credentials": [
+         {
+          "password": "gws-PQR-password",
+          "username": "gateway_sender_PQR"
+         }
+        ]
+       }
+      }
+     ]
     }'
     Updating service instance wan1 as admin
     </pre>
 
 1. While logged in to Foundation B, update the Cluster B service instance, using the `-c` option to specify a `remote_clusters` element that
-   includes the contents of the Cluster A service key `remote_cluster_info` element, including the remote locators array,
-   trusted sender credentials, and recursors array. This allows Cluster B to send messages to Cluster A.
+   includes the contents of the Cluster A service key `remote_cluster_info` element, including the `recursors` array, `remote_locators` array,
+   and `trusted_sender_credentials`. This allows Cluster B to communicate with Cluster A, and to accept data from Cluster A:
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
     {
       "remote_clusters":[
       {
+        "recursors": {
+          "services-subnet.service-instance-id.bosh": [
+            "10.0.8.5:1053",
+            "10.0.8.7:1053",
+            "10.0.8.6:1053"
+          ]
+        }
         "remote_locators":[
           "id1.locator.services-subnet.service-instance-id.bosh[55221]",
           "id2.locator.services-subnet.service-instance-id.bosh[55221]",
@@ -261,37 +258,27 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
           "username": "gateway_sender_GHI",
           "password":"gws-GHI-password"
         }]
-        "recursors": {
-          "services-subnet.service-instance-id.bosh": [
-            "10.0.8.5:1053",
-            "10.0.8.7:1053",
-            "10.0.8.6:1053"
-          ]
-        }
       }]
     }'
     Updating service instance wan2 as admin
     </pre>
 
-1. To verify that a service instance has been correctly updated,
-   delete and recreate the cluster service key.
-   By design, the recreated service key will have the same user identifiers
-   and passwords as its predecessor; new unique strings and passwords are not generated.
-   The `wan{}` element at the end of the key should be populated with the other cluster's remote connection information.
-   For example, to verify that the Cluster A service key was updated correctly, log in as Cluster A administrator and issue these commands:
+1. To verify that a service instance has been correctly updated, delete and recreate the cluster service key.
+   The recreated service key will have the same user identifiers and passwords as its predecessor, and will reflect the changes you
+   specified in the recent `cf update-service` commands.
+   In particular, the `wan{}` element at the end of a cluster's service key should be populated with the other cluster's remote connection information.
+   For example, to verify that the Cluster A service key was updated correctly, log in as Cluster A administrator and issue these commands to delete and
+   recreate the Cluster A service key:
 
     <pre class='terminal'>
     $ cf delete-service-key wan1 k1
-    </pre>
-
-    <pre class='terminal'>
+      ...
     $ cf create-service-key wan1 k1
     </pre>
 
-    This example service key is shown assuming that an authentication and
-    enterprise single sign-on (SSO) system such as LDAP has
-    *not* been configured.
-    The Cluster A service key will now show a `wan{}` field that contains the remote contact information for Cluster B:
+    Verify that the `wan{}` field of the Cluster A service key contains a `remote_clusters`
+    element which specifies contact information for Cluster B, including Cluster B's `recursors` array,
+    `remote_locators` array, and `trusted_sender_credentials`:
 
     <pre class='terminal'>
     Getting key k1 for service instance wan1 as admin...
@@ -315,9 +302,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
        ]
       },
       "remote_locators": [
-      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
-      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
-      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+       "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id3.locator.services-subnet.service-instance-id.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -357,9 +344,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
          ]
         },
         "remote_locators": [
-        "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-        "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-        "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
         ],
         "trusted_sender_credentials": [
          {
@@ -373,17 +360,18 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
     }
     </pre>
 
-    Similarly, to verify that the Cluster B service key was updated correctly, log in as Cluster B administrator and issue these commands:
+    Similarly, to verify that the Cluster B service key was updated correctly, log in as Cluster B administrator and issue these commands to delete and
+    recreate the Cluster B service key:
 
     <pre class='terminal'>
     $ cf delete-service-key wan2 k2
-    </pre>
-
-    <pre class='terminal'>
+      ...
     $ cf create-service-key wan2 k2
     </pre>
 
-    The Cluster B service should show a `wan{}` field that contains the remote contact information for Cluster A:
+    Verify that the `wan{}` field of the Cluster B service key contains a `remote_clusters`
+    element which specifies contact information for Cluster A, including Cluster A's `recursors` array,
+    `remote_locators` array, and `trusted_sender_credentials`:
 
     <pre class='terminal'>
     Getting key k2 for service instance destination as admin...
@@ -394,9 +382,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
      --url=https://cloudcache-url.com/gemfire/v1
      --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
      ],
      "remote_cluster_info": {
       "recursors": {
@@ -407,9 +395,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
        ]
       },
       "remote_locators": [
-      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+       "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -449,9 +437,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
          ]
         },
         "remote_locators": [
-        "id1.locator.services-subnet.service-instance-id.bosh[55221]",
-        "id2.locator.services-subnet.service-instance-id.bosh[55221]",
-        "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+         "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+         "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+         "id3.locator.services-subnet.service-instance-id.bosh[55221]"
         ],
         "trusted_sender_credentials": [
          {
