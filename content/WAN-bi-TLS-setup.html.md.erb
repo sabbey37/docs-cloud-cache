@@ -91,9 +91,9 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
      --url=https://cloudcache-url.com/gemfire/v1
      --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "id1.locator.subnet.service-instance-id.bosh[55221]",
-      "id2.locator.subnet.service-instance-id.bosh[55221]",
-      "id3.locator.subnet.service-instance-id.bosh[55221]"
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
      ],
      "remote_cluster_info": {
       "recursors": {
@@ -104,9 +104,9 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
        ]
       },
       "remote_locators": [
-      "id1.locator.subnet.service-instance-id.bosh[55221]",
-      "id2.locator.subnet.service-instance-id.bosh[55221]",
-      "id3.locator.subnet.service-instance-id.bosh[55221]"
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -147,8 +147,8 @@ enable other clusters (Cluster B in this example) to send messages to Cluster A:
 
     Here is sample output from `cf service-key wan2 k2`,
     which outputs details of the Cluster B service key.
-    As above, the service key will contain generated credentials, in a JSON element called `remote_cluster_info`, that
-    will enable other clusters (Cluster A in this example) to send messages to Cluster B.
+    As above, the service key contains generated credentials, in a JSON element called `remote_cluster_info`, that
+    enable other clusters (Cluster A in this example) to send messages to Cluster B.
     Again, user names and passwords have been simplified for readability.
 
     <pre class='terminal'>
@@ -253,9 +253,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
       "remote_clusters":[
       {
         "remote_locators":[
-          "id1.locator.subnet.service-instance-id.bosh[55221]",
-          "id2.locator.subnet.service-instance-id.bosh[55221]",
-          "id3.locator.subnet.service-instance-id.bosh[55221]"
+          "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+          "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+          "id3.locator.services-subnet.service-instance-id.bosh[55221]"
         "trusted_sender_credentials":[
         {
           "username": "gateway_sender_GHI",
@@ -302,9 +302,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
      --url=https://cloudcache-url.com/gemfire/v1
      --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "id1.locator.subnet.service-instance-id.bosh[55221]",
-      "id2.locator.subnet.service-instance-id.bosh[55221]",
-      "id3.locator.subnet.service-instance-id.bosh[55221]"
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
      ],
      "remote_cluster_info": {
       "recursors": {
@@ -315,9 +315,9 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
        ]
       },
       "remote_locators": [
-      "id1.locator.subnet.service-instance-id.bosh[55221]",
-      "id2.locator.subnet.service-instance-id.bosh[55221]",
-      "id3.locator.subnet.service-instance-id.bosh[55221]"
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -373,6 +373,98 @@ the other's `remote_cluster_info`: the remote locators array, trusted sender cre
     }
     </pre>
 
+    Similarly, to verify that the Cluster B service key was updated correctly, log in as Cluster B administrator and issue these commands:
+
+    <pre class='terminal'>
+    $ cf delete-service-key wan2 k2
+    </pre>
+
+    <pre class='terminal'>
+    $ cf create-service-key wan2 k2
+    </pre>
+
+    The Cluster B service should show a `wan{}` field that contains the remote contact information for Cluster A:
+
+    <pre class='terminal'>
+    Getting key k2 for service instance destination as admin...
+
+    {
+     "distributed_system_id": "2",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
+     "locators": [
+      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+     ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet-2.service-instance-id-2.bosh": [
+        "10.1.16.7:1053",
+        "10.1.16.6:1053",
+        "10.1.16.8:1053"
+       ]
+      },
+      "remote_locators": [
+      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-PQR-password",
+        "username": "gateway_sender_PQR"
+       }
+      ]
+     },
+     "urls": {
+      "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-2.example.com/pulse"
+     },
+     "users": [
+      {
+       "password": "cl-op-JKL-password",
+       "roles": [
+        "cluster_operator"
+       ],
+       "username": "cluster_operator_JKL"
+      },
+      {
+       "password": "dev-MNO-password",
+       "roles": [
+        "developer"
+       ],
+       "username": "developer_MNO"
+      }
+     ],
+     "wan": {
+      "remote_clusters": [
+       {
+        "recursors": {
+         "services-subnet.service-instance-id.bosh": [
+          "10.0.8.6:1053",
+          "10.0.8.7:1053",
+          "10.0.8.5:1053"
+         ]
+        },
+        "remote_locators": [
+        "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+        "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+        "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+        ],
+        "trusted_sender_credentials": [
+         {
+          "password": "gws-GHI-password",
+          "username": "gateway_sender_GHI"
+         }
+        ]
+       }
+      ]
+     }
+    }
+    </pre>
+
 
 ## <a id="wan-bi-tls-create-regions"></a>Create Gateway Senders and Regions
 
@@ -381,7 +473,6 @@ Note: the gateway sender must be created before the region that uses it, so ther
 that occur after the region is created on Cluster A, but before the corresponding region is created on Cluster B, will be lost.
 
 1. While logged in to Foundation A, use gfsh to create the Cluster A gateway sender and the region.
-
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.
@@ -401,7 +492,6 @@ that occur after the region is created on Cluster A, but before the correspondin
         </pre>
 
 1. While logged in to Foundation B, use gfsh to create the Cluster B gateway sender and region.
-
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.

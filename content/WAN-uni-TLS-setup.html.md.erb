@@ -14,7 +14,7 @@ and [CQRS Pattern Across a WAN](design-patterns.html#CQRS-WAN-pattern).
 - You wish to establish a TLS-encrypted WAN connection between a service instance on Foundation A and a service instance on Foundation B.
 - The connection will be unidirectional, such that all operations in Cluster A are replicated in Cluster B, but Cluster B does not send operations to Cluster A.
 - The [Preparing for TLS](prepare-TLS.html) procedure has been followed for each foundation, establishing a CredHub “/services/tls_ca” certificate for each.
-- The [Establishting Mutually Trusted TLS Credentials](WAN-mutual-credentials.html) procedure has been followed, establishing mutually trusted TLS credentials between Foundations A and B.
+- The [Establishing Mutually Trusted TLS Credentials](WAN-mutual-credentials.html) procedure has been followed, establishing mutually trusted TLS credentials between Foundations A and B.
 
 ## <a id="wan-uni-create-clusters"></a>Create Clusters
 
@@ -52,11 +52,105 @@ This example also uses the `-c` option to set the `distributed_system_id` of Clu
     Output from the `cf services` command will show the `last operation` as
     `create succeeded` when service creation is completed.
 
-## <a id="wan-uni-create-keys"></a>Create a Service Key for the Passive Cluster
+## <a id="wan-uni-create-keys"></a>Create Service Keys
 
-1. Create a service key for Cluster B, the passive cluster in this example. The service key 
-contains generated credentials, in a JSON element called `remote_cluster_info`, that enable other
-clusters (Cluster A in this example) to send messages to Cluster B:
+1. Create a service key for Cluster A.
+The service key contains generated credentials, in a JSON element called `remote_cluster_info`, that 
+enable other clusters (Cluster B in this example) to send messages to Cluster A:
+
+    <pre class='terminal'>
+    $ cf create-service-key wan1 k1
+    </pre>
+
+    The contents of the service key will differ based upon the cluster
+    configuration,
+    and whether an authentication and enterprise single sign-on (SSO) system
+    such as LDAP has been configured.
+    With enterprise SSO, the service key will *not* contain cluster operator and developer users.
+    
+    Without enterprise SSO, the service key appears as in this example.
+    Within the service key,
+    each `username` is generated with a unique string
+    appended so there will be unique user names for the different roles.
+    The user names in this example have been modified
+    to be easy to understand,
+    and they are not representative of the user names that
+    will be generated upon service key creation.
+    Passwords generated for the service key are output in clear text.
+    The passwords shown in this example have been
+    modified to be easy to understand,
+    and they are not representative of the passwords that
+    will be generated upon service key creation.
+    Here is sample output from `cf service-key wan1 k1`:
+
+    <pre class='terminal'>
+    Getting key k1 for service instance wan1 as admin...
+
+    {
+     "distributed_system_id": "1",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
+     "locators": [
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+     ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet.service-instance-id.bosh": [
+        "10.0.8.6:1053",
+        "10.0.8.7:1053",
+        "10.0.8.5:1053"
+       ]
+      },
+      "remote_locators": [
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
+       }
+      ]
+     },
+     "urls": {
+      "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-1.example.com/pulse"
+     },
+     "users": [
+      {
+       "password": "cl-op-ABC-password",
+       "roles": [
+        "cluster_operator"
+       ],
+       "username": "cluster_operator_ABC"
+      },
+      {
+       "password": "dev-DEF-password",
+       "roles": [
+        "developer"
+       ],
+       "username": "developer_DEF"
+      }
+     ],
+     "wan": {}
+    }
+    </pre>
+
+1. Create the service key of Cluster B:
+
+    <pre class='terminal'>
+    $ cf create-service-key wan2 k2
+    </pre>
+
+    Here is sample output from `cf service-key wan2 k2`,
+    which outputs details of the Cluster B service key.
+    As above, the service key contains generated credentials, in a JSON element called `remote_cluster_info`, that
+    enable other clusters (Cluster A in this example) to send messages to Cluster B.
+    Again, user names and passwords have been simplified for readability.
 
     <pre class='terminal'>
     $ cf create-service-key wan2 k2
@@ -79,9 +173,9 @@ clusters (Cluster A in this example) to send messages to Cluster B:
      --url=https://cloudcache-url.com/gemfire/v1
      --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      "id1.locator.services-subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator.services-subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator.services-subnet2.service-instance-id2.bosh[55221]"
      ],
      "remote_cluster_info": {
       "recursors": {
@@ -92,9 +186,9 @@ clusters (Cluster A in this example) to send messages to Cluster B:
        ]
       },
       "remote_locators": [
-      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      "id1.locator.services-subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator.services-subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator.services-subnet2.service-instance-id2.bosh[55221]"
       ],
       "trusted_sender_credentials": [
        {
@@ -129,24 +223,15 @@ clusters (Cluster A in this example) to send messages to Cluster B:
 
 ## <a id="wan-uni-tls-establish-unidirectional-connection"></a>Establish a Uni-Directional TLS Connection
 
-1. Update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
-   includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
-   trusted sender credentials, and recursors array. This allows Cluster A to send messages to Cluster B.
+1. While logged into Foundation A, update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster B service key `remote_cluster_info` element, including the recursors array and the remote locators array,
+   but **NOT** the trusted sender credentials. This allows Cluster A to send messages to Cluster B, but blocks data flow from Cluster B to Cluster A.
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
     {
       "remote_clusters":[
       {
-        "remote_locators":[
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]"],
-        "trusted_sender_credentials":[
-        {
-          "username":"gateway_sender_PQR",
-          "password":"gws-PQR-password"
-        }]
         "recursors": {
           "services-subnet.service-instance-id.bosh": [
             "10.1.16.6:1053",
@@ -154,39 +239,43 @@ clusters (Cluster A in this example) to send messages to Cluster B:
             "10.1.16.7:1053"
           ]
         }
+        "remote_locators":[
+          "id1.locator.services-subnet2.service-instance-id2.bosh[55221]",
+          "id2.locator.services-subnet2.service-instance-id2.bosh[55221]",
+          "id3.locator.services-subnet2.service-instance-id2.bosh[55221]"],
       }]
     }'
     Updating service instance wan1 as admin
     </pre>
 
-1. While logged into Foundation A, update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
-   includes the contents of the Cluster B service key `remote_cluster_info` element, including the remote locators array,
-   trusted sender credentials, and recursors array. This allows Cluster A to send messages to Cluster B.
+1. While logged in to Foundation B, update the Cluster B service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster A service key `remote_cluster_info` element, including the recursors array, the remote locators array,
+   and the trusted sender credentials. This allows Cluster A to send messages to Cluster B.
 
     <pre class='terminal'>
     $ cf update-service wan1 -c '
     {
       "remote_clusters":[
       {
-        "remote_locators":[
-          "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-          "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"],
-        "trusted_sender_credentials":[
-        {
-          "username":"gateway_sender_PQR",
-          "password":"gws-PQR-password"
-        }]
         "recursors": {
           "services-subnet.service-instance-id.bosh": [
-            "10.1.16.6:1053",
-            "10.1.16.8:1053",
-            "10.1.16.7:1053"
+            "10.0.8.5:1053",
+            "10.0.8.7:1053",
+            "10.0.8.6:1053"
           ]
         }
+        "remote_locators":[
+          "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+          "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+          "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+        "trusted_sender_credentials":[
+        {
+          "username": "gateway_sender_GHI",
+          "password":"gws-GHI-password"
+        }]
       }]
     }'
-    Updating service instance wan1 as admin
+    Updating service instance wan2 as admin
     </pre>
 
 1. To verify that a service instance has been correctly updated,
@@ -204,6 +293,7 @@ clusters (Cluster A in this example) to send messages to Cluster B:
     $ cf create-service-key wan1 k1
     </pre>
 
+    For the active cluster in a unidirectional system, the `wan{}` element should **NOT** contain trusted sender credentials.
     This example service key is shown assuming that an authentication and
     enterprise single sign-on (SSO) system such as LDAP has
     *not* been configured.
@@ -270,14 +360,100 @@ clusters (Cluster A in this example) to send messages to Cluster B:
          ]
         },
         "remote_locators": [
-        "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
-        "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
-        "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+        "id1.locator.services-subnet2.service-instance-id2.bosh[55221]",
+        "id2.locator.services-subnet2.service-instance-id2.bosh[55221]",
+        "id3.locator.services-subnet2.service-instance-id2.bosh[55221]"
+        ],
+       }
+      ]
+     }
+    }
+    </pre>
+
+    Similarly, to verify that the Cluster B service key was updated correctly, log in as Cluster B administrator and issue these commands:
+
+    <pre class='terminal'>
+    $ cf delete-service-key wan2 k2
+    </pre>
+
+    <pre class='terminal'>
+    $ cf create-service-key wan2 k2
+    </pre>
+
+    The Cluster B service should show a `wan{}` field that contains the remote contact information for Cluster A, including the trusted sender credentials:
+
+    <pre class='terminal'>
+    Getting key k2 for service instance destination as admin...
+
+    {
+     "distributed_system_id": "2",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
+     "locators": [
+      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+     ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet-2.service-instance-id-2.bosh": [
+        "10.1.16.7:1053",
+        "10.1.16.6:1053",
+        "10.1.16.8:1053"
+       ]
+      },
+      "remote_locators": [
+      "id1.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id2.locator-server.subnet2.service-instance-id2.bosh[55221]",
+      "id3.locator-server.subnet2.service-instance-id2.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-PQR-password",
+        "username": "gateway_sender_PQR"
+       }
+      ]
+     },
+     "urls": {
+      "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
+      "pulse": "https://cloudcache-2.example.com/pulse"
+     },
+     "users": [
+      {
+       "password": "cl-op-JKL-password",
+       "roles": [
+        "cluster_operator"
+       ],
+       "username": "cluster_operator_JKL"
+      },
+      {
+       "password": "dev-MNO-password",
+       "roles": [
+        "developer"
+       ],
+       "username": "developer_MNO"
+      }
+     ],
+     "wan": {
+      "remote_clusters": [
+       {
+        "recursors": {
+         "services-subnet.service-instance-id.bosh": [
+          "10.0.8.6:1053",
+          "10.0.8.7:1053",
+          "10.0.8.5:1053"
+         ]
+        },
+        "remote_locators": [
+        "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+        "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+        "id3.locator.services-subnet.service-instance-id.bosh[55221]"
         ],
         "trusted_sender_credentials": [
          {
-          "password": "gws-PQR-password",
-          "username": "gateway_sender_PQR"
+          "password": "gws-GHI-password",
+          "username": "gateway_sender_GHI"
          }
         ]
        }
@@ -293,7 +469,6 @@ Note: the gateway sender must be created before the region that uses it, so ther
 that occur after the region is created on Cluster A, but before the corresponding region is created on Cluster B, will be lost.
 
 1. While logged in to Foundation A, use gfsh to create the Cluster A gateway sender and the region.
-
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the Cluster and the data.
@@ -314,7 +489,6 @@ that occur after the region is created on Cluster A, but before the correspondin
 
 1. While logged in to Foundation B, use gfsh to create the Cluster B gateway region. (Because Cluster B is the passive member in this
    unidirectional connection, it does not need a gateway sender.)
-
     - Connect using gfsh following the instructions in
     [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
     with a role that is able to manage both the cluster and the data.
