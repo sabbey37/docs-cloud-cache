@@ -1,0 +1,89 @@
+---
+title: Service-Instance Sharing
+---
+
+Service-instance sharing for Cloud Cache permits read-only access 
+to a Cloud Cache service instance by an app within a different space.
+
+Setting up sharing has three steps:
+
+1. A Cloud Foundry operator enables instance sharing as detailed in
+[Enable Service-Instance Sharing](op-instance-sharing.html)
+2. A developer shares a service instance
+3. A developer binds the app to the shared service instance
+
+These instructions require identification of the org and the space of
+both the service instance and the app.
+The following diagram names the components for use in the configuration
+instructions.
+Service instance X resides within space C, which is part of org A.
+App Y resides within space D, which is part of org B.
+
+![diagram of spaces within orgs](instance-sharing.png)
+
+## <a id="set-up-sharing"></a> Share a Service Instance
+
+The Cloud Cache service instance must be up and running prior to sharing.
+
+To share the service instance:
+
+1. An org A developer does a `cf login` with a space developer role.
+Target the space that contains the service to be shared: org A, space C.
+
+3. The org A developer shares the the space with a command of the form
+
+    ```
+    cf share-service SERVICE-X -s SPACE-D -o ORG-B
+    ```
+
+    Replace `SERVICE-X` with the Cloud Cache service instance name.
+    Replace `SPACE-D` with the space name where the app resides.
+    Replace `ORG-B` with the org name where the app resides.
+
+## <a id="binding-sharing"></a> Bind an App to a Shared Service Instance
+
+The app must be bound to the shared service instance prior to starting
+the app.
+
+To bind the app to the shared service instance:
+
+1. An org B developer does a `cf login` with a space developer role.
+Target the org and space that contains the app: org B, space D.
+
+2. Verify that the Cloud Cache service instance is available and
+shared across the spaces in the output of the command:
+
+    <pre class='terminal'>
+    $ cf services
+    </pre>
+
+3. The org B developer binds the app with a command of the form
+
+    ```
+    cf bind APP-Y SERVICE-X
+    ```
+
+    Replace `SERVICE-X` with the Cloud Cache service instance name.
+    Replace `APP-Y` with the name of the app.
+
+## <a id="app-sharing-details"></a> App Authentication
+
+Apps that interact with a shared Cloud Cache service instance
+which resides in a different space
+will be given a set of read-only credentials.
+The app must acquire and use this set of credentials for authentication.
+Apps built with Spring Boot Data GemFire version 1.1.1 or a more
+recent version will automatically pick up the credentials,
+so these apps do not need to acquire the credentials.
+
+The role of these credentials is authorized only for read
+access of region data.
+
+The set of credentials are in the VCAP_SERVICES environment variable,
+with a role of `readonly`.
+The app must parse the VCAP_SERVICES environment variable to
+extract the credentials.
+The app uses the credentials to set a GemFire property that then gets passed
+to the `ClientCacheFactory` for the purpose of authentication
+prior to creating the cache.
+
