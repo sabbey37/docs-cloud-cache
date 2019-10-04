@@ -22,9 +22,41 @@ Follow the steps below to upgrade PCC:
 1. Click on the Cloud Cache tile and configure the upgrade options.
     - To try the upgrade on a small number of service instances first, set the quantity of canary service instances as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades). 
     - Set the number of instances that are to be upgraded in parallel as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades).
-    - Make sure that under the **Errands** section, the **Upgrade All 
-    Service Instances Post-Deploy Errand** is Default (On). 
+    - Under the **Errands** section, choose the **Default (On)** value
+    for the **Upgrade All Service Instances** post-deploy errand. 
     **Save** the change.
 
 1.  Click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
 1.  Click **Apply Changes**.
+
+##<a id='enable-individual-upgrades'></a>Enable Individual Service Instance Upgrades
+
+The default upgrade path upgrades all service instances as a result of
+a tile upgrade.
+This operation can take a lengthy amount of time.
+If instead, developers should be allowed to upgrade their own service instances
+once the tile has been upgraded,
+the default behavior may be changed.
+
+An operator enables individual service instance upgrades during 
+tile installation.
+This feature requires PAS/Ops Manager 2.7 or a higher version
+and works for upgrading from Cloud Cache 1.9.0 to a higher version.
+
+To enable individual service instance upgrades,
+click on the Cloud Cache tile,
+then click on the **Errands** section.
+Before being enabled, the default **Upgrade All Service Instances** errand will
+appear in the default state of disabled:
+
+![Individual Service Instance Upgrades Disabled](indiv-upgrades-disabled.png)
+
+Change the state of this errand to enabled by choosing **Off**:
+
+![Individual Service Instance Upgrades Enabled](indiv-upgrades-enabled.png)
+
+Click **Save**.
+
+Once individual service instance upgrades are enabled,
+the developer upgrades an individual service instance following
+the instructions in [Upgrade a Single Service Instance](dev-upgrade.html).
