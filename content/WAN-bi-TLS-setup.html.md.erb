@@ -238,7 +238,7 @@ In order to implement a bidirectional WAN connection between two clusters, each 
    and `trusted_sender_credentials`. This allows Cluster B to communicate with Cluster A, and to accept data from Cluster A:
 
     <pre class='terminal'>
-    $ cf update-service wan1 -c '
+    $ cf update-service wan2 -c '
     {
       "remote_clusters":[
       {
