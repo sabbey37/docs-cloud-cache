@@ -4,8 +4,8 @@ title: Upgrading Pivotal Cloud Cache
 
 Upgrade minor release versions from your currently deployed version
 to the target version in sequential order.
-For example, PCC v1.2 must be upgraded to PCC v1.3 prior to
-upgrading to PCC v1.4.
+For example, Pivotal Cloud Cache (PCC) v1.2 must be upgraded to PCC v1.3
+prior to upgrading to PCC v1.4.
 Note that each PCC release is compatible with two
 Pivotal Application Service (PAS) and Ops Manager versions,
 as specified in the [Product Snapshot](product-snapshot.html).
@@ -19,7 +19,7 @@ Follow the steps below to upgrade PCC:
 1. Download the new version of the tile from the Pivotal Network.
 1. Upload the product to Ops Manager.
 1. Click **Add** next to the uploaded product.
-1. Click on the Cloud Cache tile and configure the upgrade options.
+1. Click on the PCC tile and configure the upgrade options.
     - To try the upgrade on a small number of service instances first, set the quantity of canary service instances as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades). 
     - Set the number of instances that are to be upgraded in parallel as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades).
     - Under the **Errands** section, choose the **Default (On)** value
@@ -34,16 +34,16 @@ Follow the steps below to upgrade PCC:
 The default upgrade path upgrades all service instances as a result of
 a tile upgrade.
 This operation can take a lengthy amount of time.
-If instead, developers should be allowed to upgrade their own service instances
-once the tile has been upgraded,
-the default behavior may be changed.
+To expedite upgrades,
+an operator can permit developers to upgrade their own service instances
+once the tile has been upgraded.
 
 An operator enables individual service instance upgrades during 
 tile installation.
 This feature requires PAS/Ops Manager 2.7 or a higher version
-and works for upgrading from Cloud Cache 1.9.0 to a higher version.
+and works for upgrading from PCC 1.9.0 to a higher version.
 
-Within the Cloud Cache tile,
+Within the PCC tile,
 in the **Errands** section,
 the default for the
 **Upgrade All Service Instances** errand,
