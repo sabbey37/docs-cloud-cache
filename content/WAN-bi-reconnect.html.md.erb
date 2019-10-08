@@ -20,41 +20,50 @@ pointers to remote locators and credentials, re-enabling their ability to connec
 without authentication errors.
 
 1. Obtain the service key for cluster A.
-The service key will contain generated credentials that this example
-will use in reconnecting the cluster B service instance:
+  The service key contains generated credentials, in a JSON element called `remote_cluster_info`, that 
+  enable other clusters (Cluster B in this example) to communicate with Cluster A:
 
     <pre class='terminal'>
     $ cf service-key A k1
     </pre>
 
-    The contents of the service key will differ based upon the cluster
-    configuration,
-    and if an authentication and enterprise single sign-on (SSO) system
-    such as LDAP has been configured.
-    With the enterprise SSO,
-    there will *not* be cluster operator and developer users in the
-    service key.
-    Without the enterprise SSO, the service key appears as in this example.
-    Within the service key,
-    each `username` is generated with a unique string
-    appended so there will be unique user names for the different roles.
-    The user names and passwords in this example have been modified
-    to be easy to understand,
-    and they are not representative of the user names and passwords that
-    will be displayed on your screen.
+    The contents of the service key differ based upon the cluster configuration, such as
+    whether an authentication and enterprise single sign-on (SSO) system such as LDAP has been configured.
     Here is sample output from `cf service-key A k1`:
 
     <pre class='terminal'>
     Getting key k1 for service instance A as admin...
 
-
     {
      "distributed_system_id": "1",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "10.0.16.21[55221]"
-      "10.0.16.22[55221]"
-      "10.0.16.23[55221]"
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
      ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet.service-instance-id.bosh": [
+        "10.0.8.6:1053",
+        "10.0.8.7:1053",
+        "10.0.8.5:1053"
+       ]
+      },
+      "remote_locators": [
+       "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
+       }
+      ]
+     },
      "urls": {
       "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
       "pulse": "https://cloudcache-1.example.com/pulse"
@@ -75,14 +84,7 @@ will use in reconnecting the cluster B service instance:
        "username": "developer_DEF"
       }
      ],
-     "wan": {
-      "sender_credentials": {
-       "active": {
-        "password": "gws-GHI-password",
-        "username": "gateway_sender_GHI"
-       }
-      }
-     }
+     "wan": {}
     }
     </pre>
 
@@ -92,28 +94,43 @@ will use in reconnecting the cluster B service instance:
     $ cf service-key B k2
     </pre>
 
-    The contents of the service key will differ based upon the cluster
-    configuration,
-    and if an authentication and enterprise single sign-on (SSO) system
-    such as LDAP has been configured.
-    With the enterprise SSO,
-    there will *not* be cluster operator and developer users in the
-    service key.
-    Without the enterprise SSO, the service key appears as in this example.
-
-    Here is sample output from `cf service-key B k2`,
-    which outputs details of the cluster B service key:
+    As above, the service key contains generated credentials, in a JSON element called `remote_cluster_info`, that
+    enable other clusters (Cluster A in this example) to communicate with Cluster B. Here is sample output
+    from `cf service-key B k2`:
 
     <pre class='terminal'>
     Getting key k2 for service instance destination as admin...
 
     {
      "distributed_system_id": "2",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "10.0.24.21[55221]"
-      "10.0.24.22[55221]"
-      "10.0.24.23[55221]"
+      "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
      ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet-2.service-instance-id-2.bosh": [
+        "10.1.16.7:1053",
+        "10.1.16.6:1053",
+        "10.1.16.8:1053"
+       ]
+      },
+      "remote_locators": [
+       "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-PQR-password",
+        "username": "gateway_sender_PQR"
+       }
+      ]
+     },
      "urls": {
       "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
       "pulse": "https://cloudcache-2.example.com/pulse"
@@ -134,82 +151,94 @@ will use in reconnecting the cluster B service instance:
        "username": "developer_MNO"
       }
      ],
-     "wan": {
-      "remote_clusters": [
-      {
-        "remote_locators": [
-          "10.0.16.21[55221]",
-          "10.0.16.21[55221]",
-          "10.0.16.21[55221]"
-        ],
-        "trusted_sender_credentials": [
-         "gateway_sender_GHI"
-        ]
-       }
-      ],
-      "sender_credentials": {
-       "active": {
-        "password": "gws-PQR-password",
-        "username": "gateway_sender_PQR"
-       }
-      }
-     }
+     "wan": {}
     }
     </pre>
 
-1. Update the cluster A service instance to include the cluster B locators
-and the cluster B `sender_credentials`:
+1. Update the Cluster A service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster B service key `remote_cluster_info` element, including the `recursors` array, `remote_locators` array,
+   and `trusted_sender_credentials`. This allows Cluster A to communicate with Cluster B, and to accept data from Cluster B:
 
     <pre class='terminal'>
     $ cf update-service A -c '
     {
       "remote_clusters":[
       {
-        "remote_locators":[
-          "10.0.24.21[55221]",
-          "10.0.24.22[55221]",
-          "10.0.24.23[55221]"],
-        "trusted_sender_credentials":[
-        {
-          "username":"gateway_sender_PQR",
-          "password":"gws-PQR-password"
-        }]
-      }]
+        "recursors": {
+         "services-subnet-2.service-instance-id-2.bosh": [
+          "10.1.16.7:1053",
+          "10.1.16.6:1053",
+          "10.1.16.8:1053"
+         ]
+        },
+        "remote_locators": [
+         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+        ],
+        "trusted_sender_credentials": [
+         {
+          "password": "gws-PQR-password",
+          "username": "gateway_sender_PQR"
+         }
+        ]
+       }
+      }
+     ]
     }'
     Updating service instance A as admin
     </pre>
 
-1. To observe and verify that the cluster A service instance has
-been correctly updated,
-it is necessary to delete and recreate the cluster A service key.
-As designed, the recreated service key will have the same user identifiers
-and passwords; new unique strings and passwords are not generated.
-Use the cluster A Cloud Foundry credentials
-in these commands:
+1. To verify that a service instance has been correctly updated, delete and recreate the cluster service key.
+   The recreated service key will have the same user identifiers and passwords as its predecessor, and will reflect the changes you
+   specified in the recent `cf update-service` commands.
+   In particular, the `wan{}` element at the end of a cluster's service key should be populated with the other cluster's remote connection information.
+   For example, to verify that the Cluster A service key was updated correctly, log in as Cluster A administrator and issue these commands to delete and
+   recreate the Cluster A service key:
 
     <pre class='terminal'>
     $ cf delete-service-key A k1
-    </pre>
-
-    <pre class='terminal'>
+      ...
     $ cf create-service-key A k1
     </pre>
 
-    This example service key is shown assuming that an authentication and
-    enterprise single sign-on (SSO) system such as LDAP has
-    *not* been configured.
-    The cluster A service key will now appear as:
+    Verify that the `wan{}` field of the Cluster A service key contains a `remote_clusters`
+    element which specifies contact information for Cluster B, including Cluster B's `recursors` array,
+    `remote_locators` array, and `trusted_sender_credentials`:
 
     <pre class='terminal'>
     Getting key k1 for service instance A as admin...
 
     {
      "distributed_system_id": "1",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "10.0.16.21[55221]",
-      "10.0.16.22[55221]",
-      "10.0.16.23[55221]"
+      "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+      "id3.locator.services-subnet.service-instance-id.bosh[55221]"
      ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet.service-instance-id.bosh": [
+        "10.0.8.6:1053",
+        "10.0.8.7:1053",
+        "10.0.8.5:1053"
+       ]
+      },
+      "remote_locators": [
+       "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+       "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-GHI-password",
+        "username": "gateway_sender_GHI"
+       }
+      ]
+     },
      "urls": {
       "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
       "pulse": "https://cloudcache-1.example.com/pulse"
@@ -233,41 +262,53 @@ in these commands:
      "wan": {
       "remote_clusters": [
        {
+        "recursors": {
+         "services-subnet-2.service-instance-id-2.bosh": [
+          "10.1.16.7:1053",
+          "10.1.16.6:1053",
+          "10.1.16.8:1053"
+         ]
+        },
         "remote_locators": [
-         "10.0.24.21[55221]",
-         "10.0.24.22[55221]",
-         "10.0.24.23[55221]"
+         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-         "gateway_sender_PQR"
+         {
+          "password": "gws-PQR-password",
+          "username": "gateway_sender_PQR"
+         }
         ]
        }
-      ],
-      "sender_credentials": {
-       "active": {
-        "password": "gws-GHI-password",
-        "username": "gateway_sender_GHI"
-       }
-      }
+      ]
      }
     }
     </pre>
 
-1. Update the cluster B service instance to include the cluster A locators
-and the cluster A `sender_credentials`:
+1. Update the Cluster B service instance, using the `-c` option to specify a `remote_clusters` element that
+   includes the contents of the Cluster A service key `remote_cluster_info` element, including the `recursors` array, `remote_locators` array,
+   and `trusted_sender_credentials`. This allows Cluster B to communicate with Cluster A, and to accept data from Cluster A:
 
     <pre class='terminal'>
     $ cf update-service B -c '
     {
       "remote_clusters":[
       {
+        "recursors": {
+          "services-subnet.service-instance-id.bosh": [
+            "10.0.8.5:1053",
+            "10.0.8.7:1053",
+            "10.0.8.6:1053"
+          ]
+        }
         "remote_locators":[
-          "10.0.16.21[55221]",
-          "10.0.16.22[55221]",
-          "10.0.16.23[55221]"],
+          "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+          "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+          "id3.locator.services-subnet.service-instance-id.bosh[55221]"
         "trusted_sender_credentials":[
         {
-          "username":"gateway_sender_GHI",
+          "username": "gateway_sender_GHI",
           "password":"gws-GHI-password"
         }]
       }]
@@ -275,37 +316,52 @@ and the cluster A `sender_credentials`:
     Updating service instance B as admin
     </pre>
 
-1. To observe and verify that the cluster B service instance has
-been correctly updated,
-it is necessary to delete and recreate the cluster B service key.
-As designed, the recreated service key will have the same user identifiers
-and passwords; new unique strings and passwords are not generated.
-Use the cluster B Cloud Foundry credentials
-in these commands:
+1.  To verify that the Cluster B service key was updated correctly, log in as Cluster B administrator and issue these commands to delete and
+    recreate the Cluster B service key:
 
     <pre class='terminal'>
-    $ cf delete-service-key B k1
+    $ cf delete-service-key B k2
+      ...
+    $ cf create-service-key B k2
     </pre>
 
-    <pre class='terminal'>
-    $ cf create-service-key B k1
-    </pre>
-
-    This example service key is shown assuming that an authentication and
-    enterprise single sign-on (SSO) system such as LDAP has
-    *not* been configured.
-    The cluster B service key will now appear as:
+    Verify that the `wan{}` field of the Cluster B service key contains a `remote_clusters`
+    element which specifies contact information for Cluster A, including Cluster A's `recursors` array,
+    `remote_locators` array, and `trusted_sender_credentials`:
 
     <pre class='terminal'>
     Getting key k1 for service instance B as admin...
 
     {
      "distributed_system_id": "2",
+     "gfsh_login_string": "connect
+     --url=https://cloudcache-url.com/gemfire/v1
+     --user=cluster_operator_user --password=pass --skip-ssl-validation",
      "locators": [
-      "10.0.24.21[55221]",
-      "10.0.24.22[55221]",
-      "10.0.24.23[55221]"
+      "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+      "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
      ],
+     "remote_cluster_info": {
+      "recursors": {
+       "services-subnet-2.service-instance-id-2.bosh": [
+        "10.1.16.7:1053",
+        "10.1.16.6:1053",
+        "10.1.16.8:1053"
+       ]
+      },
+      "remote_locators": [
+       "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+       "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+      ],
+      "trusted_sender_credentials": [
+       {
+        "password": "gws-PQR-password",
+        "username": "gateway_sender_PQR"
+       }
+      ]
+     },
      "urls": {
       "gfsh": "https://cloudcache-2.example.com/gemfire/v1",
       "pulse": "https://cloudcache-2.example.com/pulse"
@@ -329,25 +385,29 @@ in these commands:
      "wan": {
       "remote_clusters": [
        {
+        "recursors": {
+         "services-subnet.service-instance-id.bosh": [
+          "10.0.8.6:1053",
+          "10.0.8.7:1053",
+          "10.0.8.5:1053"
+         ]
+        },
         "remote_locators": [
-         "10.0.16.21[55221]",
-         "10.0.26.22[55221]",
-         "10.0.16.23[55221]"
+         "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+         "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+         "id3.locator.services-subnet.service-instance-id.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-         "gateway_sender_GHI"
+         {
+          "password": "gws-GHI-password",
+          "username": "gateway_sender_GHI"
+         }
         ]
        }
-      ],
-      "sender_credentials": {
-       "active": {
-        "password": "gws-PQR-password",
-        "username": "gateway_sender_PQR"
-       }
-      }
+      ]
      }
     }
     </pre>
 
-1. To verify that the connection has been successfully restored, see [Verify Bidirectional WAN Setup](WAN-bi-TLS-setup.html#wan-bi-verify).
+1. To verify that the connection has been successfully restored, see [Verify Bidirectional WAN Setup](WAN-bi-TLS-setup.html#wan-bi-tls-verify).
 

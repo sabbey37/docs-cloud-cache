@@ -5,10 +5,10 @@ title: Accessing a Service Instance
 After you have created a service instance, you can access it.
 The gfsh command line tool provides cluster maintenance and
 data access functionality. 
-Many gfsh commands require an authenticated connection that will be
+Many gfsh commands require an authenticated connection that can be
 set up with the `gfsh connect` command.
 
-Connecting will require these one-time, setup steps:
+Connecting requires these one-time, setup steps:
 
 1. Create a service key.
 2. Create a truststore.
@@ -29,55 +29,116 @@ Run `cf service-key SERVICE-INSTANCE-NAME KEY-NAME` to view the newly created se
 $ cf service-key my-cloudcache my-service-key
 </pre>
 
-The service key will differ based on whether an
-authentication and enterprise single sign-on (SSO) system such as LDAP
-has been configured for the PCC service instance.
-In both cases the service key will contain both
-a URL used to connect the gfsh client to the service instance,
-and a URL used to view the Pulse dashboard in a web browser,
-which allows monitoring of the service instance status.
+The service key reveals the configuration of your service instance.  It shows addresses and ports of
+its locators, and contains an element called `remote_cluster-info` that provides fields by which the
+service instance can be reached from other service instances. The service key specifies two URLs,
+one URL used to connect the gfsh client to the service instance, and another URL used to view the
+Pulse dashboard in a web browser, which allows monitoring of the service instance status.
 
 If an authentication and enterprise single sign-on (SSO) system such as LDAP
-has been configured,
-then the `cf service-key` returns output in the following format:
+has *not* been configured, the service key shows role-based login credentials as username/password pairs. 
+If an SSO system is in place, it handles user credentials, so they will not appear in the service key.
+
+If an authentication and enterprise SSO system has been configured,
+then the `cf service-key` returns output in the following format, without role-based login credentials:
 
 <pre class='terminal'>
 {
  "distributed_system_id": "0",
- "gfsh_login_string": "connect --url=https://cloudcache-1.example.com/gemfire/v1 --user=cluster_operator_XXX --password=cluster_operator-password --skip-ssl-validation",
+ "gfsh_login_string": "connect 
+  --url=https://cloudcache-1.example.com/gemfire/v1 
+  --user=cluster_operator_XXX --password=cluster_operator-password --skip-ssl-validation",
  "locators": [
-  "10.244.0.66[55221]",
-  "10.244.0.4[55221]",
-  "10.244.0.3[55221]"
+  "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+  "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+  "id3.locator.services-subnet.service-instance-id.bosh[55221]"
  ],
+ "remote_cluster_info": {
+  "recursors": {
+   "services-subnet.service-instance-id.bosh": [
+    "10.0.8.6:1053",
+    "10.0.8.7:1053",
+    "10.0.8.5:1053"
+   ]
+  },
+  "remote_locators": [
+   "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+   "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+   "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+  ],
+  "trusted_sender_credentials": [
+   {
+    "password": "gws-GHI-password",
+    "username": "gateway_sender_GHI"
+   }
+  ]
+ },
  "urls": {
   "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
   "pulse": "https://cloudcache-1.example.com/pulse"
  },
  "wan": {
-  "sender_credentials": {
-   "active": {
-    "password": "gws-XXX-password",
-    "username": "gateway_sender_XXX"
+  "remote_clusters": [
+   {
+    "recursors": {
+     "services-subnet-2.service-instance-id-2.bosh": [
+      "10.1.16.7:1053",
+      "10.1.16.6:1053",
+      "10.1.16.8:1053"
+     ]
+    },
+    "remote_locators": [
+     "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+     "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+     "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+    ],
+    "trusted_sender_credentials": [
+     {
+      "password": "gws-PQR-password",
+      "username": "gateway_sender_PQR"
+     }
+    ]
    }
-  }
+  ]
  }
 }
 </pre>
 
 If an authentication and enterprise single sign-on (SSO) system such as LDAP
-has *not* been configured,
-then the `cf service-key` returns output in the following format:
+has *not* been configured, then the `cf service-key` returns output in a format
+that includes role-based login credentials:
 
 <pre class='terminal'>
 {
  "distributed_system_id": "0",
- "gfsh_login_string": "connect --url=https://cloudcache-1.example.com/gemfire/v1 --user=cluster_operator_XXX --password=cluster_operator-password --skip-ssl-validation",
+ "gfsh_login_string": "connect 
+  --url=https://cloudcache-1.example.com/gemfire/v1 
+  --user=cluster_operator_XXX --password=cluster_operator-password --skip-ssl-validation",
  "locators": [
-  "10.244.0.66[55221]",
-  "10.244.0.4[55221]",
-  "10.244.0.3[55221]"
+  "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+  "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+  "id3.locator.services-subnet.service-instance-id.bosh[55221]"
  ],
+ "remote_cluster_info": {
+  "recursors": {
+   "services-subnet.service-instance-id.bosh": [
+    "10.0.8.6:1053",
+    "10.0.8.7:1053",
+    "10.0.8.5:1053"
+   ]
+  },
+  "remote_locators": [
+   "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+   "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+   "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+  ],
+  "trusted_sender_credentials": [
+   {
+    "password": "gws-GHI-password",
+    "username": "gateway_sender_GHI"
+   }
+  ]
+ },
  "urls": {
   "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
   "pulse": "https://cloudcache-1.example.com/pulse"
@@ -99,12 +160,28 @@ then the `cf service-key` returns output in the following format:
    }
  ],
  "wan": {
-  "sender_credentials": {
-   "active": {
-    "password": "gws-XXX-password",
-    "username": "gateway_sender_XXX"
+  "remote_clusters": [
+   {
+    "recursors": {
+     "services-subnet-2.service-instance-id-2.bosh": [
+      "10.1.16.7:1053",
+      "10.1.16.6:1053",
+      "10.1.16.8:1053"
+     ]
+    },
+    "remote_locators": [
+     "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+     "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+     "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+    ],
+    "trusted_sender_credentials": [
+     {
+      "password": "gws-PQR-password",
+      "username": "gateway_sender_PQR"
+     }
+    ]
    }
-  }
+  ]
  }
 }
 </pre>
