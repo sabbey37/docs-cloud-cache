@@ -1,6 +1,10 @@
 ---
-title: Managing Certificates
+title: Managing Certificates (pre-Maestro)
 ---
+
+This section describes procedures for versions 2.7 and earlier of PAS, which do not provide the [CredHub Maestro CLI](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/getting-started-with-maestro-cli.html). 
+
+For PAS versions 2.8 and later, certificate rotation is handled by the Maestro utility, as documented in [Managing Certificates Using Maestro](rotating-ca-maestro.html).
 
 This topic describes how to check expiration dates and rotate CA certificates used by PCC for TLS communication and managed by the operator.
 
@@ -13,7 +17,25 @@ When you installed PCC, you generated a CA certificate to BOSH CredHub
 by following the procedures in [Preparing for TLS](prepare-TLS.html).
 You must manually rotate this CA certificate before the certificate expires or if it is compromised.
 
-Certificate rotation is handled by the Maestro utility.
+You must be running a version of PCC that supports certificate rotation. 
+Find your PCC version in the table below. You must be running the minimum patch version or later to perform CA certificate rotation.
+
+| PCC version<br>(Major.Minor)  | Minimum patch version<br>that supports CA rotation |
+|--------------|---------------------------|
+| 1.9          | 1.9.0 |
+| 1.8          | 1.8.2 |
+| 1.7          | 1.7.2 |
+| 1.6          | 1.6.4 |
+
+To manually rotate certificates:
+
+1. [Access BOSH CredHub](#credhub)
+1. [Check Expiration Dates](#check)
+1. [Rotate Certificates Manually](#tls)
+
+<p class="note warning"><strong>Warning</strong>: Do not attempt to rotate a CA certificate on your own.
+Contact <a href="https://support.pivotal.io">Pivotal Support</a>
+and perform the following procedures with their help.</p>
 
 ### <a id="pcc-certs"></a> PCC Certificates
 
@@ -25,7 +47,8 @@ PCC uses the following certificates, shown here with CredHub paths:
 
 where `GUID` is the name of the service instance GUID. When rotating certificates for PCC, the
 operator needs to rotate only `/services/tls_ca` as described below. The errand
-`update-all-service-instances` regenerates all certificates for service instances.
+`upgrade-all-service-instances` regenerates all certificates for service instances, plus the
+certificates of the locator and server VMs of all the service instances.
 
 
 ## <a id="credhub"></a> Access BOSH CredHub
@@ -123,13 +146,80 @@ To check certificate expiration dates:
     The expiration date for the certificate is the value of `Not After`.<br><br>
 
 
-##<a id='tls'></a> Rotate CA Certificates Using Maestro
+##<a id='tls'></a> Rotate CA Certificates Manually
 
-The Maestro rotation procedure is documented in [Rotate the Services TLS CA and its Leaf Certificates](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
+<p class="note warning"><strong>Warning</strong>: This procedure assumes that you use only one foundation and do not have a WAN setup. 
+For WAN setup, all of the <code>apply changes</code> steps will need to be applied to your entire WAN. Also, all certificates must
+include SAN and CN entries.</p>
 
-The Maestro procedure contains multiple "rebind" operations. You may find the following Cloud Cache-specific details helpful when rebinding your apps.
+To manually rotate the CA certificate:
 
-## <a id='rebind'></a> Rebinding Cloud Cache Apps
+1. [Obtain or Generate a New CA Certificate](#obtainorgenerate)
+1. [Add New Certificates to Ops Manager](#addnewandold)
+1. [Apply Changes](#applychanges)
+1. [Rebind Your Apps](#rebind)
+1. [Set New CA Certificate to /services/tls_ca](#setnew)
+1. [Remove the Old CA Certificate](#remove)
+1. [Apply Changes](#applychanges2)
+1. [Rebind Your Apps](#rebind2)
+
+### <a id="obtainorgenerate" class="no-quick-link"></a> Obtain or Generate a New CA Certificate
+
+**If you have a TLS cluster,** obtain the CA (certificate authority) that signs its
+certificate. You will add this to the Ops Manager settings in the next step.
+
+**If you use self-signed certificates,** generate a new self-signed certificate with a separate name
+in CredHub. In this example we generate the new certificate with the name “/services/new_ca”:
+
+<pre class="terminal">
+$ credhub generate \
+    --name="/services/new_ca" \
+    --type="certificate" \
+    --no-overwrite \
+    --is-ca \
+    --common-name="servicesCA"
+</pre>
+
+**If you use an intermediate certificate signed by a root CA in credhub,**
+generate a new certificate signed by the CredHub root CA:
+
+<pre class="terminal">
+$ credhub generate \
+    --name="/services/new_ca" \
+    --type="certificate" \
+    --no-overwrite \
+    --is-ca \
+    --common-name="servicesCA" \
+    --ca=/path-to-root-ca
+</pre>
+
+### <a id="addnewandold" class="no-quick-link"></a> Add New Certificates to Ops Manager
+
+To add new and old CA certificates to Ops Manager:
+
+1. Log in to CredHub.
+1. Obtain the current CA with `credhub get --name=/services/tls_ca -k ca`.
+1. Obtain the new CA, either from a pre-existing file, or from your new CredHub location using `credhub get --name=/services/new_ca -k ca`.
+1. Make sure both ca values are pasted into **Ops Manager -> BOSH Director -> Security -> Trusted Certificates**.
+1. Click **Save**.
+
+
+### <a id="applychanges" class="no-quick-link"></a> Apply Changes
+
+<p class="note warning"><strong>Warning</strong>: This procedure involves restarting
+all of the VMs in your PCF deployment to apply a CA certificate. The
+operation can take a long time to complete.</p>
+
+To apply these changes, do the following:
+ 
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Click **ERRANDS on PCC**.
+1. Select **Upgrade All Service Instances**. 
+![Upgrade All Service Instances](upgrade-all-service-instances.png)
+1. Click **Apply Changes**.
+
+### <a id='rebind' class="no-quick-link"></a> Rebind Your Apps
 
 If your apps do not use the trusted store to validate server certificates, you
 must rebind apps to the service instance to receive the updated CA certificate.
@@ -170,4 +260,71 @@ To rebind your app:
 	Where `YOUR-APP` is the name of your app.
 
 
+### <a id="setnew" class="no-quick-link"></a> Set New CA Certification to /services/tls_ca
+
+To have all instances use the new CA Certificate, do the following:
+
+**If you have an existing certificate,** obtain the CA certificate and private key file corresponding
+to the CA that you applied in the previous step. Then, run the following command:
+
+<pre class="terminal">
+credhub set \
+    --name="/services/tls_ca" \
+    --type="certificate" \
+    --certificate=PEM-PATH/root.pem \
+    --private=CERT-KEY
+</pre>
+
+where:
+
+- PEM-PATH is the path to the `root.pem` file.
+- CERT-KEY is the private key for the certificate.
+
+**If you have created a new self-signed or intermediary certificate in /services/new_ca,**
+set `/services/tls_ca` to the new CredHub value `/services/new_ca` that you generated in the previous step:
+
+<pre class="terminal">
+$ credhub get -n /services/new_ca -k ca > new_ca.ca
+$ credhub get -n /services/new_ca -k certificate > new_ca.certificate
+$ credhub get -n /services/new_ca -k private_key > new_ca.private_key
+$ credhub set -n /services/tls_ca \
+    --type=certificate \
+    --root=new_ca.ca \
+    --certificate=new_ca.certificate \
+    --private=new_ca.private_key
+</pre>
+
+### <a id="remove" class="no-quick-link"></a> Remove the Old CA Certificate
+
+After your apps have reconnected to service instances with certificates generated
+by the new CA, remove the old CA certificate:
+
+1. Navigate to the **Installation Dashboard** in Ops Manager and click the **BOSH
+Director** tile.
+
+1. Click **Security**.
+
+1. Delete the old CA certificate in **Trusted Certificates**.
+
+1. Click **Save**.
+
+### <a id="applychanges2" class="no-quick-link"></a> Apply Changes
+
+<p class="note warning"><strong>Warning: </strong> This procedure involves restarting
+	all of the VMs in your PCF deployment to apply a CA certificate. The
+	operation can take a long time to complete.</p>
+
+To apply these changes, do the following:
+ 
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Click **ERRANDS on PCC**.
+1. Select **Upgrade All Service Instances**. 
+![Upgrade All Service Instances](upgrade-all-service-instances.png)
+1. Click **Apply Changes**.
+
+### <a id='rebind2' class="no-quick-link"></a> Rebind Your Apps
+
+Again, if your apps do not use the trusted store to validate server certificates, you must rebind
+your apps to incorporate this last round of changes. See [Rebind Your Apps](#rebind) above.
 
