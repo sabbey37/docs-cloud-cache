@@ -280,19 +280,6 @@ do the following:
 
      <pre class='terminal'>$ cf update-service my-service-instance -c '{"restart": true}'</code>
 
-## <a id="use-GGC"></a> Use the GemFire-Greenplum Connector
-
-The GemFire-Greenplum connector permits the transfer of a PCC region
-out to a Greenplum database table or the transfer of a Greenplum database table
-into a PCC region.
-`gfsh` commands set up the configuration and initiate transfers.
-See the
-[GemFire-Greenplum Connector](http://ggc.docs.pivotal.io)
-documentation for details.
-
-Connect in `gfsh` with a role that can both manage the cluster and
-read and write cluster data.
-
 ## <a id="scripting"></a> Scripting Common Operations
 
 Gfsh commands may be placed into files,
