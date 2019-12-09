@@ -199,6 +199,11 @@ A Dev Plan is a type of service plan.
 Use a Dev Plan for development and testing.
 The plan provides a single locator and server,
 which are colocated within a single VM. 
+The Dev Plan automatically creates a single region called
+`example_partition_region`.
+The region type is `PARTITION`, a partitioned region without
+redundancy or persistence of entries.
+You can create other regions as desired with a Dev Plan service instance.
 
 The page for configuring a Dev Plan is similar to the page for configuring 
 other service plans.
