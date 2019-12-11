@@ -9,6 +9,17 @@ owner: Cloud Cache Engineers
 
 Features included in this release:
 
+- Performance improves dramatically by upgrading to incorporate Pivotal GemFire <%=vars.product_version_gemfire%>.
+Read about the improvements in Helena Bales' blog post: [Benchmarking Apache Geode's Performance](http://engineering.pivotal.io/post/benchmarking-apache-geodes-performance).
+- An experimental REST API for cluster management permits the
+creation of regions in development environments.
+The `"management"` URL in your service key describes the API capabilities.
+- The maximum number of connections to servers has increased
+from 800 to 5000.
+- Fixed a bug in the mem-check errand such that it no longer limits
+the memory consumption computation to the first 50 service instances.
+- Output from the `cf marketplace` command has been improved to more
+clearly show the component versions.
 - PCC runs Pivotal GemFire <%=vars.product_version_gemfire%>.
 - PCC supports Pivotal Application Service (PAS) 2.8.
 - PCC ships with JDK 1.8_192.
