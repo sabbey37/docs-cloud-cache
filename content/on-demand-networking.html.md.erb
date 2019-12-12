@@ -8,19 +8,24 @@ This section describes networking considerations for Pivotal Cloud Cache.
 
 ## <a id="service-network"></a>Service Network Requirement
 
-<%= partial '../../p-cloud-cache/partials/services/service-networks-v3' %>
+<%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
+  :platform_name => "Pivotal Platform"} %>
 
 ### <a id ="architecture_networks"></a>Default Network and Service Network
 
-<%= partial '../../p-cloud-cache/partials/services/on_demand_architecture' %>
+<%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
+  :product_short => "Pivotal Cloud Cache"} %>
 
 ### <a id="network-rules"></a>Required Networking Rules for On-Demand Services
 
-<%= partial '../../p-cloud-cache/partials/services/service_networks_table' %>
+<%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
+  :platform_name =>"Pivotal Platform",
+  :app_runtime_full => "Pivotal Application Service",
+  :product_short => "Pivotal Cloud Cache"} %>
 
 <br>
-Regardless of the specific network layout, the operator must ensure network 
-rules are set up so that connections are open as described in the table below. 
+Regardless of the specific network layout, the operator must ensure network
+rules are set up so that connections are open as described in the table below.
 
 <table class="nice">
   <th>This component...</th>
@@ -77,7 +82,7 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>4222</td>
     <td>Two-way</td>
-    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM. 
+    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM.
       The BOSH Agent initiates the connection with the BOSH Director.<br>
       The default port is not configurable.  </td>
   </tr>
