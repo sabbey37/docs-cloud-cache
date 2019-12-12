@@ -8,19 +8,25 @@ This section describes networking considerations for Pivotal Cloud Cache.
 
 ## <a id="service-network"></a>Service Network Requirement
 
-<%= partial '../../p-cloud-cache/partials/services/service-networks-v3' %>
+<%= partial vars.path_to_partials + '/services/service-networks-v3', :locals => {
+  :platform_name => vars.platform_name} %>
 
 ### <a id ="architecture_networks"></a>Default Network and Service Network
 
-<%= partial '../../p-cloud-cache/partials/services/on_demand_architecture' %>
+<%= partial vars.path_to_partials + '/services/on_demand_architecture', :locals => {
+  :product_short => vars.product_short} %>
 
 ### <a id="network-rules"></a>Required Networking Rules for On-Demand Services
 
-<%= partial '../../p-cloud-cache/partials/services/service_networks_table' %>
+<%= partial vars.path_to_partials + '/services/service_networks_table', :locals => {
+  :platform_name => vars.platform_name,
+	:app_runtime_full => vars.app_runtime_full,
+	:product_short => vars.product_short} %>
+
 
 <br>
-Regardless of the specific network layout, the operator must ensure network 
-rules are set up so that connections are open as described in the table below. 
+Regardless of the specific network layout, the operator must ensure network
+rules are set up so that connections are open as described in the table below.
 
 <table class="nice">
   <th>This component...</th>
@@ -92,7 +98,7 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
     </td>
     <td>4222</td>
     <td>Two-way</td>
-    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM. 
+    <td>The BOSH Agent runs on every VM in the system, including the BOSH Director VM.
       The BOSH Agent initiates the connection with the BOSH Director.<br>
       The default port is not configurable.  </td>
   </tr>
