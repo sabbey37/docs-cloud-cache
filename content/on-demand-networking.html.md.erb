@@ -9,7 +9,7 @@ This section describes networking considerations for Pivotal Cloud Cache.
 ## <a id="service-network"></a>Service Network Requirement
 
 <%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
-  :platform_name => "Pivotal Platform"} %>
+  :platform_name => "PCF"} %>
 
 ### <a id ="architecture_networks"></a>Default Network and Service Network
 
@@ -19,7 +19,7 @@ This section describes networking considerations for Pivotal Cloud Cache.
 ### <a id="network-rules"></a>Required Networking Rules for On-Demand Services
 
 <%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
-  :platform_name =>"Pivotal Platform",
+  :platform_name =>"PCF",
   :app_runtime_full => "Pivotal Application Service",
   :product_short => "Pivotal Cloud Cache"} %>
 
@@ -55,10 +55,10 @@ rules are set up so that connections are open as described in the table below.
     <td><strong>ODB</strong></td>
     <td><strong>Deployed service instances</strong>
     </td>
-    <td>Specific to the service (such as RabbitMQ for PCF). 
+    <td>Specific to the service (such as RabbitMQ for PCF).
       May be one or more ports.</td>
     <td>One-way</td>
-    <td>This connection is for administrative tasks. 
+    <td>This connection is for administrative tasks.
       Avoid opening general use, app-specific ports for this connection.</td>
   </tr>
   <tr>
@@ -104,7 +104,7 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>Specific to the service. May be one or more ports.</td>
     <td>One-way</td>
-    <td>This connection is for general use, app-specific tasks. 
+    <td>This connection is for general use, app-specific tasks.
       Avoid opening administrative ports for this connection.</td>
   </tr>
   <tr>
@@ -113,8 +113,8 @@ rules are set up so that connections are open as described in the table below.
     </td>
     <td>8080</td>
     <td>One-way</td>
-    <td>This port may be different for individual services. 
-      This port may also be configurable by the operator if allowed by the 
+    <td>This port may be different for individual services.
+      This port may also be configurable by the operator if allowed by the
       tile developer.</td>
   </tr>
 </table>
