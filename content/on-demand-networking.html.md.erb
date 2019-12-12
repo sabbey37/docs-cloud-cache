@@ -8,20 +8,20 @@ This section describes networking considerations for Pivotal Cloud Cache.
 
 ## <a id="service-network"></a>Service Network Requirement
 
-<%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
-  :platform_name => "PCF"} %>
+<%= partial(:'../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
+  :platform_name => "PCF"}) %>
 
 ### <a id ="architecture_networks"></a>Default Network and Service Network
 
-<%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
-  :product_short => "Pivotal Cloud Cache"} %>
+<%= partial(:'../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
+  :product_short => "Pivotal Cloud Cache"}) %>
 
 ### <a id="network-rules"></a>Required Networking Rules for On-Demand Services
 
-<%= partial '../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
+<%= partial(:'../../p-cloud-cache/partials/services/service-networks-v3', :locals => {
   :platform_name =>"PCF",
   :app_runtime_full => "Pivotal Application Service",
-  :product_short => "Pivotal Cloud Cache"} %>
+  :product_short => "Pivotal Cloud Cache"}) %>
 
 <br>
 Regardless of the specific network layout, the operator must ensure network
