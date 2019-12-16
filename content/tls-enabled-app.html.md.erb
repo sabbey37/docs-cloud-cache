@@ -9,10 +9,6 @@ the Pivotal GemFire components within the PCC service instance.
 Ensure that the cluster-level prerequisite step of
 [Preparing for TLS](prepare-TLS.html) has been completed.
 
-For the app,
-setting the GemFire property `ssl-require-authentication` to `false`
-causes one-way authentication of the GemFire component to the app.
-
 For a Spring Data GemFire app
 with a Spring Data GemFire library dependency of
 2.2.0.BUILD-SNAPSHOT or a more recent version,
@@ -23,14 +19,12 @@ Also set these GemFire properties:
 ```
 ssl-use-default-context=true
 ssl-endpoint-identification-enabled=false
-spring.data.gemfire.security.ssl.require.authentication=false
 ```
 
 For other apps, the GemFire properties should be
 
 ```
 ssl-enabled-components=all
-ssl-require-authentication=false
 ssl-use-default-context=true
 ssl-endpoint-identification-enabled=false
 ```
