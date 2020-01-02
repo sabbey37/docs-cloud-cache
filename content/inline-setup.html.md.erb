@@ -180,13 +180,12 @@ and specifying the AEQ listener's parameters:
     The persistence of the AEQ uses the default disk store,
     since no disk store is specified in this command.
 
-1. Create the region, specifying the cache loader, the AEQ listener,
+1. Create the region, specifying the cache loader
 and the assigned AEQ name.
 
     ```
     gfsh>create region --name=myRegion --type=PARTITION_REDUNDANT \
       --cache-loader=com.myCompany.MyLoader{'url':'jdbc:db2:SAMPLE','username':'admin',password:'gobbledeegook'}
-      --cache-listener=com.myCompany.MyListener
       --async-event-queue-id=WB-AEQ
 
 ## <a id="inline-configure-WT"></a> Configure Using gfsh for Write Through
