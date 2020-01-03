@@ -61,24 +61,24 @@ Therefore, do not use:
 
 The create of a gateway receiver will never be
 appropriate for any situation.
-The PCC cluster will already have gateway receivers,
+The Cloud Cache cluster will already have gateway receivers,
 and there is no situation in which the cluster can benefit
 from creating more.
 Therefore, do not use:
 
 - gfsh create gateway receiver
 
-### Do Not Export from a GemFire Cluster to a PCC Cluster
+### Do Not Export from a GemFire Cluster to a Cloud Cache Cluster
 
 While the expectation is that configuration and data can be
 exported from a GemFire cluster and then imported into a
-PCC cluster,
+Cloud Cache cluster,
 this does **not** work.
 Using export and import commands will not have the desired
 effect of migration from one cluster to another.
 The import of cluster configuration requires a state that
-cannot be provided by a PCC cluster.
-The PCC cluster will already have its configuration,
+cannot be provided by a Cloud Cache cluster.
+The Cloud Cache cluster will already have its configuration,
 and upon restart or upgrade, that same configuration will be used.
 Given that the configuration cannot be imported,
 data import is problematic.
@@ -90,7 +90,7 @@ Therefore, do not use:
 <p class="note"><strong>Note</strong>: The restriction here on the use of
 the <code>gfsh import data</code> does not apply to the procedure
 for migrating from an
-existing PCC cluster that does not use TLS for encryption to a PCC cluster
+existing Cloud Cache cluster that does not use TLS for encryption to a Cloud Cache cluster
 that does use TLS for encryption.
 See <a href="./migrate-to-TLS.html">Migrating to a TLS-Enabled Cluster</a>
 for that procedure.  </p>
@@ -149,7 +149,7 @@ type of region:
 
 1. Use the directions in 
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-to connect to the PCC service instance with
+to connect to the Cloud Cache service instance with
 a role that is able to manage a cluster's data.
 
 
@@ -171,7 +171,7 @@ To destroy a disk store:
 
 1. Use the directions in 
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-to connect to the PCC service instance with
+to connect to the Cloud Cache service instance with
 a role that is able to manage a cluster's data.
 
 2. Destroy the disk store with a gfsh command of the form:
@@ -193,13 +193,13 @@ directions in [Create Service Keys](accessing-instance.html#create-service-key).
 
 To access service metrics, you must have **Enable Plan** selected under **Service Plan Access** on the page where you configure your tile properties. (For details, see the [Configure Service Plans](install-configure.html#plan-config) page.)
 
-PCC service instances output metrics to the Loggregator Firehose. You can use the
+Cloud Cache service instances output metrics to the Loggregator Firehose. You can use the
 Firehose plugin  to
 view metrics output on the cf CLI directly. For more information about using the Firehose plugin, see [Installing the Loggregator Firehose Plugin for CLI](https://docs.cloudfoundry.org/loggregator/cli-plugin.html). 
 
 You can also connect the output to a Firehose nozzle. Nozzles are programs that consume data from the Loggregator Firehose. For example, to connect the output to the nozzle for Datadog, see [Datadog Firehose Nozzle](https://github.com/cloudfoundry-attic/datadog-firehose-nozzle) on GitHub.
 
-PCC supports metrics for the whole cluster and metrics for each member.
+Cloud Cache supports metrics for the whole cluster and metrics for each member.
 Each server and locator in the cluster outputs metrics.
 
 ### Service Instance (Cluster-wide) Metrics
@@ -226,7 +226,7 @@ Service broker metrics are on by default and can be accessed through the Loggreg
 
 ## <a id="exporting_logs"></a> Export gfsh Logs
 
-You can get logs and `.gfs` stats files from your PCC service instances using the `export logs` command in gfsh.
+You can get logs and `.gfs` stats files from your Cloud Cache service instances using the `export logs` command in gfsh.
 
 1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to
 connect to the service instance for which you want to see logs.
