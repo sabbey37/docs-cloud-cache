@@ -201,6 +201,7 @@ To add new and old CA certificates to Ops Manager:
 1. Obtain the current CA with `credhub get --name=/services/tls_ca -k ca`.
 1. Obtain the new CA, either from a pre-existing file, or from your new CredHub location using `credhub get --name=/services/new_ca -k ca`.
 1. Make sure both ca values are pasted into **Ops Manager -> BOSH Director -> Security -> Trusted Certificates**.
+1. Make sure both ca values are pasted into **PAS tile -> Networking -> Certificate Authorities Trusted by Router and HAProxy**
 1. Click **Save**.
 
 ### <a id="applychanges" class="no-quick-link"></a> Apply Changes
@@ -304,6 +305,14 @@ Director** tile.
 1. Click **Security**.
 
 1. Delete the old CA certificate in **Trusted Certificates**.
+
+1. Click **Save**.
+
+1. Navigate to the **Installation Dashboard** in Ops Manager and click the **PAS** tile.
+
+1. Click **Networking**.
+
+1. Delete the old CA certificate in **Certificate Authorities Trusted by Router and HAProxy**
 
 1. Click **Save**.
 
