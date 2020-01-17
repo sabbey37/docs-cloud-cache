@@ -3,15 +3,25 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
+## <a id='v172'></a>v1.7.2
+
+**Release Date:**  January 20, 2020
+
+Features included in this release:
+
+- Cloud Cache supports CA certificate rotation.
+See [Managing Certificates](rotating-ca.html) for details.
+- Cloud Cache now runs Pivotal GemFire 9.7.5.
+
 ## <a id='v171'></a>v1.7.1
 
 **Release Date:**  July 24, 2019
 
 Features included in this release:
 
-- The PCC smoke test no longer fails when HTTP is disabled in
+- The Cloud Cache smoke test no longer fails when HTTP is disabled in
 the Pivotal Cloud Foundry (PCF) environment.
-- PCC now runs Pivotal GemFire 9.7.2.
+- Cloud Cache now runs Pivotal GemFire 9.7.2.
 - This version adds support for Pivotal Application Service (PAS) 2.6.
 
 ## <a id='v170'></a>v1.7.0
@@ -20,14 +30,14 @@ the Pivotal Cloud Foundry (PCF) environment.
 
 Features included in this release:
 
-- PCC permits authentication and authorization using your
+- Cloud Cache permits authentication and authorization using your
 enterprise single sign-on system, such as LDAP.
-- PCC requires TLS encryption for using gfsh and Pulse.
+- Cloud Cache requires TLS encryption for using gfsh and Pulse.
 Follow the instructions in [Preparing for TLS](prepare-TLS.html) to
 set up TLS encryption.
 - <p class="note warning"><strong>WARNING</strong>:
 Follow the procedure detailed in [Special Upgrade Procedure for Dev and Small Footprint Plans](upgrade.html#special-upgrade)
-when upgrading from PCC v1.6.x for plans that colocate system components
+when upgrading from Cloud Cache v1.6.x for plans that colocate system components
 on a single VM. This applies to the dev plan and to the small footprint plan.
 </p>
 - The new `ReplyWaitsInProgress` metric allows operators to 
@@ -35,16 +45,16 @@ identify unhealthy cluster members or network connectivity issues.
 - If a ClamAV or File Integrity Monitor is detected,
 available memory for GemFire servers is reduced to allow enough memory
 for these PCF add-ons.
-This prevents a failure during PCC service instance creation.
+This prevents a failure during Cloud Cache service instance creation.
 - The small footprint plan may be scaled up and down,
 and metrics are available.
 - Simplified TLS setup for Spring Boot applications,
 as detailed in [Developing an App Under TLS](tls-enabled-app.html).
-- Metrics can be generated for a single PCC service instance,
+- Metrics can be generated for a single Cloud Cache service instance,
 and are available with log-cache.
-- PCC now ships with JDK 1.8_192.
-- PCC now runs Pivotal GemFire 9.7.1.
-- PCC now supports Pivotal Application Service (PAS) 2.5.
+- Cloud Cache now ships with JDK 1.8_192.
+- Cloud Cache now runs Pivotal GemFire 9.7.1.
+- Cloud Cache now supports Pivotal Application Service (PAS) 2.5.
 
 ## <a id='v16-known-issues'></a>Known Issues
 
