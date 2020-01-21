@@ -19,7 +19,7 @@ See [Managing Certificates](rotating-ca.html) for details.
 
 Features included in this release:
 
-- PCC 1.6.3 uses [Pivotal GemFire 9.6.2](http://gemfire.docs.pivotal.io/96/gemfire/release_notes.html#ResolvedIssuesGF962).
+- Cloud Cache 1.6.3 uses [Pivotal GemFire 9.6.2](http://gemfire.docs.pivotal.io/96/gemfire/release_notes.html#ResolvedIssuesGF962).
 
 ## <a id='v162'></a>v1.6.2
 
@@ -30,20 +30,20 @@ Features included in this release:
 - <p class="note breaking"><strong>Breaking Change: </strong>This patch release increases system security by requiring
 TLS encryption for using gfsh and Pulse.
 Follow the steps within [Preparing for TLS](prepare-TLS.html)
-prior to installing the PCC tile.</p>
+prior to installing the Cloud Cache tile.</p>
 - <p class="note warning"><strong>WARNING</strong>:
 Follow the procedure detailed in [Special Upgrade Procedure for Dev and Small Footprint Plans](upgrade.html#special-upgrade)
-when upgrading to PCC v1.6.2 for plans that colocate system components
+when upgrading to Cloud Cache v1.6.2 for plans that colocate system components
 on a single VM. This applies to the dev plan and to the small footprint plan.
 </p>
 - If a ClamAV or File Integrity Monitor is detected,
 available memory for GemFire servers is reduced to allow enough memory
 for these PCF add-ons.
-This prevents a failure during PCC service instance creation.
-- Multiple PCC service instances are now spread across availability zones.
+This prevents a failure during Cloud Cache service instance creation.
+- Multiple Cloud Cache service instances are now spread across availability zones.
 - Increased the operating system limit for the number of files
 that can be open concurrently.
-- PCC uses Pivotal GemFire 9.6.1.
+- Cloud Cache uses Pivotal GemFire 9.6.1.
 
 ## <a id='v161'></a>v1.6.1
 
@@ -51,9 +51,9 @@ that can be open concurrently.
 
 Features included in this release:
 
-- PCC now ships with OpenJDK 1.8_192 instead of the equivalent Oracle JDK.
-- PCC uses Pivotal GemFire 9.6.
-- PCC supports Pivotal Application Service (PAS) 2.4.
+- Cloud Cache now ships with OpenJDK 1.8_192 instead of the equivalent Oracle JDK.
+- Cloud Cache uses Pivotal GemFire 9.6.
+- Cloud Cache supports Pivotal Application Service (PAS) 2.4.
 
 ## <a id='v160'></a>v1.6.0
 
@@ -63,9 +63,9 @@ Features included in this release:
 
 - The new Small Footprint Plan, which uses fewer VMs than other plans,
 is available for use in production.
-- PCC now ships with JDK 1.8_191.
-- PCC now runs Pivotal GemFire 9.6.
-- PCC now supports Pivotal Application Service (PAS) 2.4.
+- Cloud Cache now ships with JDK 1.8_191.
+- Cloud Cache now runs Pivotal GemFire 9.6.
+- Cloud Cache now supports Pivotal Application Service (PAS) 2.4.
 
 ## <a id='v16-known-issues'></a>Known Issues
 
