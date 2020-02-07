@@ -128,6 +128,14 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
     <td>PAS communicates with service instances because the Gorouter
       proxies gfsh requests to GemFire clusters. </td>
   </tr>
+  <tr>
+    <td><strong>PCC</strong></td>
+    <td> <strong>PCC</strong></td>
+    <td>1053</td>
+    <td>Two-way</td>
+    <td>Allows DNS resolution for clusters communicating 
+      across a WAN-connected system.</td>
+  </tr>
 </table>
 
 ## <a id ="WAN_details"></a>PCC Instances Across WAN
@@ -149,3 +157,5 @@ Configure the network prior to creating service instances.
 Locate directions for creating a network on the appropriate IAAS provider
 within the section titled
 [Architecture and Installation Overview](https://docs.pivotal.io/pivotalcf/installing/index.html).
+
+Open port 1053 to allow DNS resolution of other WAN-connected clusters.
