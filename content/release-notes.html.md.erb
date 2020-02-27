@@ -3,13 +3,24 @@ title: Pivotal Cloud Cache Release Notes
 owner: Cloud Cache Engineers
 ---
 
-## <a id='v1100'></a>v1.10.0
+## <a id='v1101'></a>v1.10.1
 
 **Release Date:**  <%=vars.release_date%>
 
 Features included in this release:
 
-- Performance improves dramatically by upgrading to incorporate Pivotal GemFire <%=vars.product_version_gemfire%>.
+- Fixed a bug which caused the smoke test errand to fail
+when a dev-plan name was changed.
+- Upgraded the underlying Go language version for various internal components.
+- Cloud Cache runs Pivotal GemFire 9.9.1.
+
+## <a id='v1100'></a>v1.10.0
+
+**Release Date:**   December 17, 2019
+
+Features included in this release:
+
+- Performance improves dramatically by upgrading to incorporate Pivotal GemFire 9.9.0.
 Read about the improvements in Helena Bales' blog post: [Benchmarking Apache Geode's Performance](http://engineering.pivotal.io/post/benchmarking-apache-geodes-performance).
 - An experimental REST API for cluster management permits the
 creation of regions in development environments.
@@ -20,9 +31,9 @@ from 800 to 5000.
 the memory consumption computation to the first 50 service instances.
 - Output from the `cf marketplace` command has been improved to more
 clearly show the component versions.
-- PCC runs Pivotal GemFire <%=vars.product_version_gemfire%>.
-- PCC supports Pivotal Application Service (PAS) 2.8.
-- PCC ships with JDK 1.8_222.
+- Cloud Cache runs Pivotal GemFire 9.9.0.
+- Cloud Cache supports Pivotal Application Service (PAS) 2.8.
+- Cloud Cache ships with JDK 1.8_222.
 
 ## Quick App Development
 
