@@ -1,30 +1,31 @@
 ---
-title: Pivotal Cloud Cache Architecture
+title: VMware Tanzu GemFire Architecture
 ---
 
-## <a id='GFBasics'></a>Pivotal GemFire&reg; Basics
+## <a id='GFBasics'></a>Tanzu GemFire Basics
 
-Pivotal GemFire is the data store within Pivotal Cloud Cache (PCC). A PCC service instance requires a small amount of administrative GemFire setup, and any app will use a limited portion of the GemFire API.
+<%=vars.component_product%> is the data store within <%=vars.product_full%>.
+A <%=vars.product_short%> service instance requires a small amount of administrative <%=vars.component_product%> setup, and any app will use a limited portion of the <%=vars.component_product%> API.
 
-The PCC architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of GemFire servers maintained by a PCC service instance. The GemFire servers provide a low-latency, consistent, fault-tolerant data store within PCC.
+The <%=vars.product_short%> architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of <%=vars.component_product%> servers maintained by a <%=vars.product_short%> service instance. The <%=vars.component_product%> servers provide a low-latency, consistent, fault-tolerant data store within <%=vars.product_short%>.
 
 ![Client Server Model](client-server.png)
 
-GemFire holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called **regions**. A region is a map (or dictionary) data structure.
+<%=vars.component_product%> holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called **regions**. A region is a map (or dictionary) data structure.
 
-The app (client) uses PCC as a cache. A cache lookup (read) is a get operation on a GemFire region. The cache operation of a cache write is a put operation on a GemFire region.
-The GemFire command-line interface, called gfsh, facilitates region administration. Use gfsh to create and destroy regions within the PCC service instance.
+The app (client) uses <%=vars.product_short%> as a cache. A cache lookup (read) is a get operation on a <%=vars.component_product%> region. The cache operation of a cache write is a put operation on a <%=vars.component_product%> region.
+The <%=vars.component_product%> command-line interface, called gfsh, facilitates region administration. Use gfsh to create and destroy regions within the <%=vars.product_short%> service instance.
 
-## <a id='pcc-cluster-architecture'></a>The PCC Cluster
+## <a id='pcc-cluster-architecture'></a>The <%=vars.product_short%> Cluster
 
-PCC deploys cache clusters that use Pivotal GemFire to provide high availability, replication guarantees, and eventual consistency.
+<%=vars.product_short%> deploys cache clusters that use <%=vars.component_product%> to provide high availability, replication guarantees, and eventual consistency.
 
 When you first spin up a cluster, you have three locators and at least four servers.
 
 <% mermaid_diagram do %>
   graph TD;
   Client
-  subgraph P-CloudCache Cluster
+  subgraph Cluster
   subgraph locators
   Locator1
   Locator2
@@ -49,7 +50,7 @@ When you scale up the cluster, you have more servers, increasing the capacity of
 <% mermaid_diagram do %>
   graph TD;
   Client
-  subgraph P-CloudCache Cluster
+  subgraph Cluster
   subgraph locators
   Locator1
   Locator2

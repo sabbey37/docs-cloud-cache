@@ -1,35 +1,35 @@
 ---
-title: About Pivotal Cloud Cache
+title: About VMware Tanzu GemFire
 owner: Cloud Cache Engineers
 ---
 
-Pivotal Cloud Cache (PCC) is a high-performance, high-availability caching layer for Pivotal Cloud Foundry (PCF).
-PCC offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data-access requests.
+<%=vars.product_full%> is a high-performance, high-availability caching layer for <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>).
+<%=vars.product_short%> offers an in-memory key-value store. It delivers low-latency responses to a large number of concurrent data-access requests.
 
-PCC provides a service broker to create in-memory data clusters on demand.
-These clusters are dedicated to the PCF space and tuned for specific use cases defined by your service plan.
+<%=vars.product_short%> provides a service broker to create in-memory data clusters on demand.
+These clusters are dedicated to the <%=vars.app_runtime_abbr%> space and tuned for specific use cases defined by your service plan.
 Service operators can create multiple plans to support different use cases.
 
-PCC uses Pivotal GemFire. The [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) details the API for client access to data objects within Pivotal GemFire.
-PCC supports writing JavaScript apps with the [Cloud Cache Node.js Client](https://gemfire-nodeclient.docs.pivotal.io).
+<%=vars.product_short%> uses <%=vars.component_product%>. The [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) details the API for client access to data objects within <%=vars.component_product%>.
+<%=vars.product_short%> supports writing JavaScript apps with the [VMware Tanzu GemFire Node.js® Client](https://gemfire-nodeclient.docs.pivotal.io).
 
 This documentation performs the following functions:
 
-* Describes the features and architecture of PCC
-* Provides the PCF operator with instructions for installing, configuring, and maintaining PCC
-* Provides app developers instructions for choosing a service plan and creating and deleting PCC service instances
+* Describes the features and architecture of <%=vars.product_short%>
+* Provides the PCF operator with instructions for installing, configuring, and maintaining <%=vars.product_short%> 
+* Provides app developers instructions for choosing a service plan and creating and deleting <%=vars.product_short%> service instances
 * Provides app developers instructions for binding apps
 
 ## Quick App Development
 
-A quick way to try out Cloud Cache is by using 
+A quick way to try out <%=vars.product_short%> is by using 
 [Pivotal Web Services](https://run.pivotal.io/) (PWS)
-to spin up a Cloud Cache service instance from the PWS marketplace.
-Cloud Cache on PWS is intended for use in proof of concept designs only.
+to spin up a <%=vars.product_short%> service instance from the PWS marketplace.
+<%=vars.product_short%> on PWS is intended for use in proof of concept designs only.
 It is not for production workloads.
 There are no high availability guarantees (or any other guarantees)
-provided for Cloud Cache service instances on PWS.
+provided for <%=vars.product_short%> service instances on PWS.
 
-The [Cloud Cache Developer Guide](https://docs.pivotal.io/cloud-cache-dev/)
+The [<%=vars.product_short%> Developer Guide](https://docs.pivotal.io/cloud-cache-dev/)
 features environment setup details and examples to help developers get 
-started with Cloud Cache.
+started with <%=vars.product_short%>.
