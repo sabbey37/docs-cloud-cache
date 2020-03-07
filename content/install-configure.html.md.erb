@@ -1,19 +1,20 @@
 ---
-title: Installing and Configuring Pivotal Cloud Cache
+title: Installing and Configuring VMware Tanzu GemFire
 ---
 
 With an Ops Manager role (detailed in [Understand Roles in Ops Manager](https://docs.pivotal.io/pivotalcf/opsguide/config-rbac.html#about))
 that has the proper permissions to install and configure,
-follow these steps to install PCC on PCF:
+follow these steps to install <%=vars.product_short%> on 
+<%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>):
 
-1. Download the tile from the [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
-1. Click **Import a Product** to import the tile into Ops Manager.
+1. Download the tile from [Pivotal Network](https://network.pivotal.io/products/cloud-cache).
+1. Click **Import a Product** to import the tile into <%=vars.ops_manager%>.
 1. Click the **+** symbol next to the uploaded product description.
-1. Click on the Cloud Cache tile.
+1. Click on the <%=vars.product_short%> tile.
 1. Complete all the configuration steps in the [Configure Tile Properties](#settings-config) section below.
-1. Return to the Ops Manager Installation Dashboard.
+1. Return to the <%=vars.ops_manager%> Installation Dashboard.
 Click **Review Pending Changes** (see [Reviewing Pending Product Changes](https://docs.pivotal.io/pivotalcf/customizing/review-pending-changes.html)).
-1.  Click **Apply Changes** to complete the installation of the PCC tile.  
+1. Click **Apply Changes** to complete the installation of the <%=vars.product_short%> tile.  
 
 ## <a id="settings-config"></a> Configure Tile Properties
 
@@ -35,7 +36,7 @@ Each section name must show this green check mark before you can complete your i
 
 ###<a id='azs'></a> Assign Availability Zones and Networks
 
-To select AZs and networks for VMs used by PCC, do the following:
+To select AZs and networks for VMs used by <%=vars.product_short%>, do the following:
 
 1. Click **Assign AZs and Networks**.
 
@@ -45,12 +46,12 @@ To select AZs and networks for VMs used by PCC, do the following:
     <tr><td><strong>Place singleton jobs in</strong></td>
         <td>Select the region that you want for singleton VMs.</td></tr>
     <tr><td><strong>Balance other jobs in</strong></td>
-        <td>Select the AZ(s) you want to use for distributing other GemFire VMs.
-            Pivotal recommends selecting all of them.</td></tr>
+        <td>Select the AZ(s) you want to use for distributing other <%=vars.component_product%> VMs.
+            VMware recommends selecting all of them.</td></tr>
     <tr><td><strong>Network</strong></td>
         <td>Select your PAS (or Elastic Runtime) network.</td>
     <tr><td><strong>Service Network</strong></td>
-        <td>Select the network to be used for GemFire VMs.</td> 
+        <td>Select the network to be used for <%=vars.component_product%> VMs.</td> 
   </table>
 
 1. Click **Save**.
@@ -73,7 +74,7 @@ Ensure the selected plan is enabled and configured.
 For information about configuring plans, see [Configure Service Plans](#plan-config) below.
 If the selected plan is not enabled, the `smoke-tests` errand fails.
 
-Pivotal recommends that you use the smallest four-server plan for smoke tests.
+VMware recommends that you use the smallest four-server plan for smoke tests.
 Because smoke tests create and later destroy this plan, using a very small plan reduces installation time.
 ![Configuring Smoke Tests Plan](select-smoke-test-plan.png)
 
@@ -129,7 +130,7 @@ The **CF Service Access** drop-down menu gives you the option to display or not 
 **Disable Service Access** makes the plan unavailable in the Marketplace. If you choose this option, you cannot make the plan available at a later time. 
 **Leave Service Access Unchanged** makes the plan unavailable in the Marketplace by default, but allows you to make it available at a later time.
 
-The **Maximum service instances** field sets the maximum number of PCC clusters that can exist simultaneously.
+The **Maximum service instances** field sets the maximum number of <%=vars.product_short%> clusters that can exist simultaneously.
 
 When developers create or update a service instance, they can specify the number of servers in the cluster. The **Maximum servers per cluster** field allows operators to set an upper bound on the number of servers developers can request. If developers do not explicitly specify the number of servers in a service instance, a new cluster has the number of servers specified in the **Default Number of Servers** field.
 
@@ -158,18 +159,18 @@ This plan is appropriate for production installations that can tolerate the
 diminished load-handling capacity and reduced resilience that would
 result from the loss of a VM.
 Installations needing resilience in the face of a VM loss
-should use a plan in which each PCC cluster member resides within
+should use a plan in which each <%=vars.product_short%> cluster member resides within
 its own VM.
 
-A PCC service instance using the Small Footprint Plan may be created
+A <%=vars.product_short%> service instance using the Small Footprint Plan may be created
 with more servers than the default three servers.
 Follow the instructions within
-[Creating a Pivotal Cloud Cache Service Instance](create-instance.html)
+[Creating a <%=vars.product_full%> Service Instance](create-instance.html)
 to increase the number of servers.
 
 Scale up an existing service instance by increasing the number of servers,
 as specified in 
-[Updating a Pivotal Cloud Cache Service Instance](update-instance.html).
+[Updating a <%=vars.product_full%> Service Instance](update-instance.html).
 
 Whether creating a new service instance or updating an existing service
 instance to have more servers,
@@ -179,7 +180,7 @@ Scaling down the quantity of servers within an existing service instance
 is accomplished one server at a time to ensure redundancy is 
 correctly maintained.
 To scale down, use the `cf update-service` command as described in
-[Updating a Pivotal Cloud Cache Service Instance](update-instance.html)
+[Updating a <%=vars.product_full%> Service Instance](update-instance.html)
 to specify one server fewer than the total quantity of servers currently
 running.
 
@@ -213,8 +214,8 @@ To configure the Dev Plan, input information in the fields and make selections f
 
 ###<a id='syslog'></a> Syslog
 
-By default, syslog forwarding is not enabled in PCC.
-However, PCC supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
+By default, syslog forwarding is not enabled in <%=vars.product_short%>.
+However, <%=vars.product_short%> supports forwarding syslog to an external log management service (for example, Papertrail, Splunk, or your custom enterprise log sink).
 The broker logs are useful for debugging problems creating, updating, and binding service instances.
 
 To enable remote syslog for the service broker, do the following:
@@ -287,7 +288,7 @@ To enable this functionality,
 click on the box labeled **Enable Secure Service Instance Credentials**
 to enable use of CredHub.
 
-2. To permit the creation of a PCC service instance that will
+2. To permit the creation of a <%=vars.product_short%> service instance that will
 TLS-encrypt communications within the cluster,
 check the box labeled **TLS Supported**.
 Checking the box does not cause new service instances to encrypt
@@ -299,9 +300,9 @@ a TLS-enabled service instance cannot be created if the PCF environment
 is not set up to handle TLS. A TLS-enabled environment is 
 required independent of whether a TLS-enabled cluster will be
 created; see [Preparing for TLS](prepare-TLS.html) for how to
-prepare the PCF environment.
+prepare the <%=vars.app_runtime_abbr%> environment.
 
-4. If User Account and Authentication (UAA) of PCC users will go
+4. If User Account and Authentication (UAA) of <%=vars.product_short%> users will go
 through an external system,
 enable that with the radio button labeled **UAA Auth enabled**.
 With UAA enabled, create a UAA client before doing this tile installation
@@ -316,10 +317,10 @@ client's secret, which were set when the client was created.
 ###<a id='errands'></a> Errands
 
 By default, post-deploy and pre-delete errands always run. 
-Pivotal recommends keeping these defaults.
+VMware recommends keeping these defaults.
 However, if necessary, you can change these defaults as follows.
 
-For general information about errands in PCF, see [Managing Errands in Ops Manager](https://docs.pivotal.io/pivotalcf/customizing/managing_errands.html)
+For general information about errands in <%=vars.app_runtime_abbr%>, see [Managing Errands in Ops Manager](https://docs.pivotal.io/pivotalcf/customizing/managing_errands.html)
 
 1. Click **Errands**.
 
