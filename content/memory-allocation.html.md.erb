@@ -2,7 +2,7 @@
 title: VM Memory Allocation
 ---
 
-The service plans you choose determines how memory is allocated to the GemFire processes.
+The service plans you choose determines how memory is allocated to the <%=vars.component_product%> processes.
 One consideration is how much memory is available in each VM.
 
 Memory allocation depends on whether a plan is *colocated* or *non-colocated*:
@@ -13,18 +13,18 @@ comprises three locators and three servers hosted on three VMs.
 - A *non-colocated plan* is one in which each locator or server runs in its own VM. For example, the default medium plan
 comprises three locators and four servers, each running in its own VM, for a total of seven VMs.
 
-The following sections describe how PCC allocates memory based on the total memory of each VM.
+The following sections describe how <%=vars.product_full%> allocates memory based on the total memory of each VM.
 
 ## Memory Allocation for Colocated Plans
 
-- If total VM memory is 5GB or less, 512 MB is allocated for the locator Java heap; 90% of the remaining memory is allocated to the GemFire server's Java heap, and the remainder is allocated to the OS.
-- If total VM memory is greater than 5GB, 10% of total memory is allocated for the locator Java heap; 90% of the remaining memory is allocated to the GemFire server's Java heap, and the remainder is allocated to the OS.
+- If total VM memory is 5GB or less, 512 MB is allocated for the locator Java heap; 90% of the remaining memory is allocated to the <%=vars.component_product%> server's Java heap, and the remainder is allocated to the OS.
+- If total VM memory is greater than 5GB, 10% of total memory is allocated for the locator Java heap; 90% of the remaining memory is allocated to the <%=vars.component_product%> server's Java heap, and the remainder is allocated to the OS.
 
-Server heap is reduced to accommodate the **Pivotal Anti-Virus** and **File Integrity Monitoring (FIM)** PCF add-ons, if they are present.
+Server heap is reduced to accommodate the **Pivotal Anti-Virus** and **File Integrity Monitoring (FIM)** add-ons, if they are present.
 
 ## Memory Allocation for Non-colocated Plans
 
-Under non-colocated plans, each VM hosts one GemFire member, either a locator or a server.
+Under non-colocated plans, each VM hosts one <%=vars.component_product%> member, either a locator or a server.
 
 - If total VM memory is 2GB or less, 1GB is allocated for the locator or server Java heap, and the remainder to the OS.
 - If total VM memory is between 2G and 8GB, 2GB is allocated to the OS, and the remainder to the locator or server Java heap.

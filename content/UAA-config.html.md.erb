@@ -6,21 +6,21 @@ Extra configuration is required when defining users that have specific
 security roles with an
 authentication and enterprise single sign-on (SSO) such as LDAP.
 
-Before PCC installation, create a UAA client
+Before <%=vars.product_full%> installation, create a UAA client
 as described in [Create a UAA Client](create-UAA-client.html).
 
 Complete the remainder of configuration in conjunction with choosing the
 **UAA Auth enabled** radio button on the Security properties page
-when installing the PCC tile,
+when installing the <%=vars.product_short%> tile,
 as detailed in [Security](install-configure.html#security-section).
 
 ##<a id='UAA Roles'></a> The Roles
 
-A PCC service instance internally defines four security roles.
+A <%=vars.product_short%> service instance internally defines four security roles.
 Each role is given predefined permissions for cluster operations.
 Each user is assigned security roles.
-As that user invokes a PCC cluster operation using gfsh,
-the PCC service's security manager verifies that the permission
+As that user invokes a <%=vars.product_short%> cluster operation using gfsh,
+the <%=vars.product_short%> service's security manager verifies that the permission
 required for the cluster operation is one that the user's security
 role has.
 
@@ -28,7 +28,7 @@ The permissions assigned for each of the security roles:
 
 - **PCC_ADMIN** has all permissions needed to manage the cluster and
 can access region data.
-This role has the GemFire permissions
+This role has the <%=vars.component_product%> permissions
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 `CLUSTER:READ`,
@@ -37,16 +37,16 @@ This role has the GemFire permissions
 and `DATA:READ`.
 - **PCC_OPERATOR** has all permissions needed to manage the cluster.
 This role may not handle or see region data.
-This role has the GemFire permissions
+This role has the <%=vars.component_product%> permissions
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 and `CLUSTER:READ`.
 - **PCC_DATA-ACCESS** has all permissions needed to handle and see region data.
-This role has the GemFire permissions
+This role has the <%=vars.component_product%> permissions
 `CLUSTER:READ`,
 `DATA:WRITE`,
 and `DATA:READ`.
-- **PCC_READ-ONLY** has the single GemFire permission `DATA:READ`
+- **PCC_READ-ONLY** has the single <%=vars.component_product%> permission `DATA:READ`
 to see region data.
 
 ##<a id='UAA-Config-Roles'></a> Configuring the Roles
@@ -55,7 +55,7 @@ Configure the UAA server and your Enterprise SSO system
 (such as LDAP) with the space-specific roles.
 
 1. Acquire the Globally Unique Identifier (GUID) for the CF space
-that will host your PCC service instance:
+that will host your <%=vars.product_short%> service instance:
 
     ```
     cf login -a REST-OF-ARGS-HERE
