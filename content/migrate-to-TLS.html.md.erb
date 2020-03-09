@@ -2,8 +2,8 @@
 title: Migrating to a Cluster with Transport Layer Security (TLS) Enabled
 ---
 
-An existing PCC service instance that does not use TLS encryption
-may be migrated to become a PCC service instance with TLS encryption enabled.
+An existing <%=vars.product_full%> service instance that does not use TLS encryption
+may be migrated to become a <%=vars.product_short%> service instance with TLS encryption enabled.
 <p class="note warning"><strong> WARNING!</strong> This procedure will require downtime for the service instance
 during the migration. </p>
 Follow the procedure given here _after_ these prerequisites have
@@ -11,14 +11,14 @@ been met:
 
 - All steps within [Preparing for TLS](prepare-TLS.html)
 have been completed.
-- The service instance has been upgraded to PCC v1.5.2
-or a more recent PCC version. There will be no PCC version change during
+- The service instance has been upgraded to <%=vars.product_short%> v1.5.2
+or a more recent <%=vars.product_short%> version. There will be no <%=vars.product_short%> version change during
 the migration.
 
-Follow this procedure to migrate the existing PCC service instance:
+Follow this procedure to migrate the existing <%=vars.product_short%> service instance:
 
 <ol>
-<li> As a PCF operator, stop all apps.
+<li> As a <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) operator, stop all apps.
 First, list all apps to identify the <code>APP_NAME</code>.
 
 <pre>
@@ -55,8 +55,8 @@ gfsh>describe region --name=REGION_NAME </pre>
     </li>
     <li> For each non-persistent region, use this single <code>gfsh</code> command
     to export all the data within the region.
-    The <code>SERVER_NAME</code> identifies which GemFire server receives the
-    <code>export</code> command and propagates the command to all other GemFire
+    The <code>SERVER_NAME</code> identifies which <%=vars.component_product%> server receives the
+    <code>export</code> command and propagates the command to all other <%=vars.component_product%>
     servers within the cluster.
 
         <pre>
@@ -64,7 +64,7 @@ gfsh>export data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var
     </li>
     </ul>
 </li>
-<li> Your PCF operator needs to target the BOSH Director
+<li> Your <%=vars.app_runtime_abbr%> operator needs to target the BOSH Director
 in order to acquire the <code>DEPLOYMENT_NAME</code>.
     <ul>
     <li> Run
@@ -86,7 +86,7 @@ $ bosh deployments | grep XXX-XXX </pre>
     </li>
     </ul>
 </li>
-<li> Using PCF operator credentials, stop the BOSH deployment:
+<li> Using <%=vars.app_runtime_abbr%> operator credentials, stop the BOSH deployment:
 
     <pre>
 $ bosh -d DEPLOYMENT_NAME stop </pre>
@@ -105,7 +105,7 @@ These three locations are identified within this anonymized portion of the
 manifest file with the symbols <font color=red> &#9312 </font>,
 <font color=red> &#9313 </font>, and <font color=red> &#9314 </font>.
 The first part of the manifest file is omitted,
-as its listed values change based on the PCC version.
+as its listed values change based on the <%=vars.product_short%> version.
 Real passwords have been replaced with the placeholder <code>password</code>,
 and user names have been replaced with the placeholder <code>userX</code>
 within this example.
@@ -371,7 +371,7 @@ earlier in this procedure. For each earlier-exported region, do:
     <pre>
 gfsh>import data --parallel --region=REGION_NAME --member=SERVER_NAME --dir=/var/vcap/store/gemfire-server </pre>
 </li>
-<li> Revise the app such that it works with a TLS-enabled PCC
+<li> Revise the app such that it works with a TLS-enabled <%=vars.product_short%>
 service instance by following the instructions within
 <a href="./tls-enabled-app.html">Developing an App Under TLS</a>.
 Re-build, re-deploy, and start the app.

@@ -1,25 +1,25 @@
 ---
-title: Upgrading Pivotal Cloud Cache
+title: Upgrading VMware Tanzu GemFire
 ---
 
 Upgrade minor release versions from your currently deployed version
 to the target version in sequential order.
-For example, Pivotal Cloud Cache (PCC) v1.2 must be upgraded to PCC v1.3
-prior to upgrading to PCC v1.4.
-Note that each PCC release is compatible with two
-Pivotal Application Service (PAS) and Ops Manager versions,
+For example, <%=vars.product_full%> v1.2 must be upgraded to <%=vars.product_short%> v1.3
+prior to upgrading to <%=vars.product_short%> v1.4.
+Note that each <%=vars.product_short%> release is compatible with two
+<%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) and <%=vars.ops_manager%> versions,
 as specified in the [Product Snapshot and Version Compatibility](product-snapshot.html).
-Incorporate those upgrades to PAS and Ops Manager in your upgrade process 
+Incorporate those upgrades to <%=vars.app_runtime_abbr%> and <%=vars.ops_manager%> in your upgrade process 
 as required to maintain compatibility,
 as described in
 [Upgrading Pivotal Cloud Foundry](https://docs.pivotal.io/pivotalcf/customizing/upgrading-pcf.html).
 
-Follow the steps below to upgrade PCC:
+Follow the steps below to upgrade <%=vars.product_short%>:
 
 1. Download the new version of the tile from the Pivotal Network.
-1. Upload the product to Ops Manager.
+1. Upload the product to <%=vars.ops_manager%>.
 1. Click **Add** next to the uploaded product.
-1. Click on the PCC tile and configure the upgrade options.
+1. Click on the <%=vars.product_short%> tile and configure the upgrade options.
     - To try the upgrade on a small number of service instances first, set the quantity of canary service instances as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades). 
     - Set the number of instances that are to be upgraded in parallel as described in [Service Instance Upgrades](install-configure.html#parallel-upgrades).
     - Under the **Errands** section, choose the **Default (On)** value
@@ -38,16 +38,12 @@ To expedite upgrades,
 an operator can permit developers to upgrade their own service instances
 once the tile has been upgraded.
 
-<<<<<<< HEAD
-An operator enables individual service instance upgrades during
-=======
 An operator enables individual service instance upgrades during 
->>>>>>> v1.9-branch
 tile installation.
-This feature requires PAS/Ops Manager 2.7 or a higher version
-and works for upgrading from PCC 1.9.0 to a higher version.
+This feature requires <%=vars.app_runtime_abbr%>/<%=vars.ops_manager%> 2.7 or a higher version
+and works for upgrading from <%=vars.product_short%> 1.9.0 to a higher version.
 
-Within the PCC tile,
+Within the <%=vars.product_short%> tile,
 in the **Errands** section,
 the default for the
 **Upgrade All Service Instances** errand,
