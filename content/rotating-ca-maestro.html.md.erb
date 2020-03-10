@@ -2,31 +2,31 @@
 title: Managing Certificates Using Maestro
 ---
 
-This topic describes how to check expiration dates and rotate CA certificates used by PCC for TLS communication and managed by the operator.
+This topic describes how to check expiration dates and rotate CA certificates used by <%=vars.product_full%> for TLS communication and managed by the operator.
 
-This topic does not describe how to rotate PCC certificates for individual service instances. 
+This topic does not describe how to rotate <%=vars.product_short%> certificates for individual service instances. 
 Rotating a CA certificate as described here regenerates all the intermediate certificates for service instances.
 
 ## <a id="overview"></a> Overview
 
-When you installed PCC, you generated a CA certificate to BOSH CredHub
+When you installed <%=vars.product_short%>, you generated a CA certificate to BOSH CredHub
 by following the procedures in [Preparing for TLS](prepare-TLS.html).
 You must manually rotate this CA certificate before the certificate expires or if it is compromised.
 
-**For PAS versions 2.8 and later**, certificate rotation is handled by the CredHub Maestro CLI, as documented on this page. For more about Maestro, see
+**For <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) versions 2.8 and later**, certificate rotation is handled by the CredHub Maestro CLI, as documented on this page. For more about Maestro, see
 [Getting Started with CredHub Maestro](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/getting-started-with-maestro-cli.html).
 
-**For PAS versions 2.7 and earlier**, which do not provide Maestro, see [Managing Certificates (pre-Maestro)](rotating-ca.html).
+**For <%=vars.app_runtime_abbr%> versions 2.7 and earlier**, which do not provide Maestro, see [Managing Certificates (pre-Maestro)](rotating-ca.html).
 
-### <a id="pcc-certs"></a> PCC Certificates
+### <a id="pcc-certs"></a> <%=vars.product_short%> Certificates
 
-PCC uses the following certificates, shown here with CredHub paths:
+<%=vars.product_short%> uses the following certificates, shown here with CredHub paths:
 
-- **/services/tls_ca**: CredHub CA that signs certificates for every PCC service instance
+- **/services/tls_ca**: CredHub CA that signs certificates for every <%=vars.product_short%> service instance
 - **/p-bosh/service-instance_GUID/gemfire-locator-certificate**
 - **/p-bosh/service-instance_GUID/gemfire-server-certificate**
 
-where `GUID` is the name of the service instance GUID. When rotating certificates for PCC, the
+where `GUID` is the name of the service instance GUID. When rotating certificates for <%=vars.product_short%>, the
 operator needs to rotate only `/services/tls_ca` as described below. The errand
 `upgrade-all-service-instances` regenerates all certificates for service instances, plus the
 certificates of the locator and server VMs of all the service instances.
@@ -34,16 +34,16 @@ certificates of the locator and server VMs of all the service instances.
 
 ## <a id="credhub"></a> Access BOSH CredHub
 
-Pivotal Cloud Foundry (PCF) stores some of its internal CA and non-CA certificates in the BOSH
+<%=vars.app_runtime_abbr%> stores some of its internal CA and non-CA certificates in the BOSH
 CredHub credentials store.  For more information, see [BOSH CredHub](https://docs.pivotal.io/pivotalcf/credhub/#bosh).
 
 To access the BOSH CredHub credentials store, you must retrieve credentials from BOSH Director
-and then use the credentials to log in to CredHub from the Ops Manager VM.
+and then use the credentials to log in to CredHub from the <%=vars.ops_manager%> VM.
 
 
 To access the BOSH CredHub:
 
-1. In the Ops Manager Installation Dashboard, click the **BOSH Director** tile.
+1. In the <%=vars.ops_manager%> Installation Dashboard, click the **BOSH Director** tile.
 
 1. Click the **Credentials** tab.
 
@@ -66,10 +66,10 @@ To access the BOSH CredHub:
 [Gather Credential and IP Address Information](https://docs.pivotal.io/pivotalcf/2-4/customizing/trouble-advanced.html#gather)
 to obtain the information needed to log in to the BOSH Director VM. Record the IP address for the Ops Manager Director and the Director Credentials.
 
-1. Log in to the Ops Manager VM by following the procedure in
-[Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/2-4/customizing/trouble-advanced.html#ssh).
+1. Log in to the <%=vars.ops_manager%> VM by following the procedure in
+[Log in to the <%=vars.ops_manager%> VM with SSH](https://docs.pivotal.io/pivotalcf/2-4/customizing/trouble-advanced.html#ssh).
 
-1. From the Ops Manager VM, set the API target of the CredHub CLI to your BOSH
+1. From the <%=vars.ops_manager%> VM, set the API target of the CredHub CLI to your BOSH
 CredHub server by running the following command:
 
     ```
@@ -101,7 +101,7 @@ CredHub server by running the following command:
 
 ## <a id="check"></a> Check Expiration Dates
 
-You can check the expiration date for CA and PCC certificates.
+You can check the expiration date for CA and <%=vars.product_short%> certificates.
 
 To check certificate expiration dates:
 
@@ -131,12 +131,12 @@ To check certificate expiration dates:
 
 The Maestro rotation procedure is documented in the Maestro documentation under two topics. Follow the procedures described in [Rotate the Services TLS CA and its Leaf Certificates](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
 
-The Maestro procedure contains multiple "rebind" and "apply changes" steps. You may find the following Cloud Cache-specific details helpful when rotating certificates.
+The Maestro procedure contains multiple "rebind" and "apply changes" steps. You may find the following <%=vars.product_short%>-specific details helpful when rotating certificates.
 
-- [Rebinding Cloud Cache Apps](#rebind-maestro)
+- [Rebinding <%=vars.product_short%> Apps](#rebind-maestro)
 - [Apply Changes](#apply-changes-maestro)
 
-## <a id='rebind-maestro'></a> Rebinding Cloud Cache Apps
+## <a id='rebind-maestro'></a> Rebinding <%=vars.product_short%> Apps
 
 If your apps do not use the trusted store to validate server certificates, you
 must rebind apps to the service instance to receive the updated CA certificate.

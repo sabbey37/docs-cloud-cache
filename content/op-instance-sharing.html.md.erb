@@ -2,12 +2,12 @@
 title: Enable Service-Instance Sharing
 ---
 
-The Cloud Cache implementation of instance sharing permits
-read-only access to a Cloud Cache service instance within one space
+The <%=vars.product_full%> implementation of instance sharing permits
+read-only access to a <%=vars.product_short%> service instance within one space
 by an app within another space.
 A Cloud Foundry `admin` operator,
 or one with administrative privileges,
-may enable service-instance sharing for Cloud Cache service instances.
+may enable service-instance sharing for <%=vars.product_short%> service instances.
 
 Enable service-instance sharing across a foundation with:
 
@@ -15,5 +15,5 @@ Enable service-instance sharing across a foundation with:
 $ cf enable-feature-flag service_instance_sharing
 </pre>
 
-A developer will need to set up Cloud Cache service-instance sharing
+A developer will need to set up <%=vars.product_short%> service-instance sharing
 as detailed in [Service-Instance Sharing](dev-instance-sharing.html).

@@ -2,25 +2,25 @@
 title: Managing Certificates (pre-Maestro)
 ---
 
-This section describes procedures for versions 2.7 and earlier of PAS, which do not provide the [CredHub Maestro CLI](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/getting-started-with-maestro-cli.html). 
+This section describes procedures for versions 2.7 and earlier of <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>), which do not provide the [CredHub Maestro CLI](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/getting-started-with-maestro-cli.html). 
 
-For PAS versions 2.8 and later, certificate rotation is handled by the Maestro utility, as documented in [Managing Certificates Using Maestro](rotating-ca-maestro.html).
+For <%=vars.app_runtime_abbr%> versions 2.8 and later, certificate rotation is handled by the Maestro utility, as documented in [Managing Certificates Using Maestro](rotating-ca-maestro.html).
 
-This topic describes how to check expiration dates and rotate CA certificates used by PCC for TLS communication and managed by the operator.
+This topic describes how to check expiration dates and rotate CA certificates used by <%=vars.product_full%> for TLS communication and managed by the operator.
 
-This topic does not describe how to rotate PCC certificates for individual service instances. 
+This topic does not describe how to rotate <%=vars.product_short%> certificates for individual service instances. 
 Rotating a CA certificate as described here regenerates all the intermediate certificates for service instances.
 
 ## <a id="overview"></a> Overview
 
-When you installed PCC, you generated a CA certificate to BOSH CredHub
+When you installed <%=vars.product_short%>, you generated a CA certificate to BOSH CredHub
 by following the procedures in [Preparing for TLS](prepare-TLS.html).
 You must manually rotate this CA certificate before the certificate expires or if it is compromised.
 
-You must be running a version of PCC that supports certificate rotation. 
-Find your PCC version in the table below. You must be running the minimum patch version or later to perform CA certificate rotation.
+You must be running a version of <%=vars.product_short%> that supports certificate rotation. 
+Find your <%=vars.product_short%> version in the table below. You must be running the minimum patch version or later to perform CA certificate rotation.
 
-| PCC version<br>(Major.Minor)  | Minimum patch version<br>that supports CA rotation |
+| <%=vars.product_short%> version<br>(Major.Minor)  | Minimum patch version<br>that supports CA rotation |
 |--------------|---------------------------|
 | 1.9          | 1.9.0 |
 | 1.8          | 1.8.2 |
@@ -34,18 +34,18 @@ To manually rotate certificates:
 1. [Rotate Certificates Manually](#tls)
 
 <p class="note warning"><strong>Warning</strong>: Do not attempt to rotate a CA certificate on your own.
-Contact <a href="https://support.pivotal.io">Pivotal Support</a>
+Contact <%=vars.support_link%>
 and perform the following procedures with their help.</p>
 
-### <a id="pcc-certs"></a> PCC Certificates
+### <a id="pcc-certs"></a> <%=vars.product_short%> Certificates
 
-PCC uses the following certificates, shown here with CredHub paths:
+<%=vars.product_short%> uses the following certificates, shown here with CredHub paths:
 
-- **/services/tls_ca**: CredHub CA that signs certificates for every PCC service instance
+- **/services/tls_ca**: CredHub CA that signs certificates for every <%=vars.product_short%> service instance
 - **/p-bosh/service-instance_GUID/gemfire-locator-certificate**
 - **/p-bosh/service-instance_GUID/gemfire-server-certificate**
 
-where `GUID` is the name of the service instance GUID. When rotating certificates for PCC, the
+where `GUID` is the name of the service instance GUID. When rotating certificates for <%=vars.product_short%>, the
 operator needs to rotate only `/services/tls_ca` as described below. The errand
 `upgrade-all-service-instances` regenerates all certificates for service instances, plus the
 certificates of the locator and server VMs of all the service instances.
@@ -53,16 +53,16 @@ certificates of the locator and server VMs of all the service instances.
 
 ## <a id="credhub"></a> Access BOSH CredHub
 
-Pivotal Cloud Foundry (PCF) stores some of its internal CA and non-CA certificates in the BOSH
+<%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) stores some of its internal CA and non-CA certificates in the BOSH
 CredHub credentials store.  For more information, see [BOSH CredHub](https://docs.pivotal.io/pivotalcf/credhub/#bosh).
 
 To access the BOSH CredHub credentials store, you must retrieve credentials from BOSH Director
-and then use the credentials to log in to CredHub from the Ops Manager VM.
+and then use the credentials to log in to CredHub from the <%=vars.ops_manager%> VM.
 
 
 To access the BOSH CredHub:
 
-1. In the Ops Manager Installation Dashboard, click the **BOSH Director** tile.
+1. In the <%=vars.ops_manager%> Installation Dashboard, click the **BOSH Director** tile.
 
 1. Click the **Credentials** tab.
 
@@ -85,10 +85,10 @@ To access the BOSH CredHub:
 [Gather Credential and IP Address Information](https://docs.pivotal.io/pivotalcf/2-4/customizing/trouble-advanced.html#gather)
 to obtain the information needed to log in to the BOSH Director VM. Record the IP address for the Ops Manager Director and the Director Credentials.
 
-1. Log in to the Ops Manager VM by following the procedure in
-[Log in to the Ops Manager VM with SSH](https://docs.pivotal.io/pivotalcf/2-4/customizing/trouble-advanced.html#ssh).
+1. Log in to the <%=vars.ops_manager%> VM by following the procedure in
+[Log in to the <%=vars.ops_manager%> VM with SSH](https://docs.pivotal.io/pivotalcf/2-4/customizing/trouble-advanced.html#ssh).
 
-1. From the Ops Manager VM, set the API target of the CredHub CLI to your BOSH
+1. From the <%=vars.ops_manager%> VM, set the API target of the CredHub CLI to your BOSH
 CredHub server by running the following command:
 
     ```
@@ -120,7 +120,7 @@ CredHub server by running the following command:
 
 ## <a id="check"></a> Check Expiration Dates
 
-You can check the expiration date for CA and PCC certificates.
+You can check the expiration date for CA and <%=vars.product_short%> certificates.
 
 To check certificate expiration dates:
 
@@ -166,7 +166,7 @@ To manually rotate the CA certificate:
 ### <a id="obtainorgenerate" class="no-quick-link"></a> Obtain or Generate a New CA Certificate
 
 **If you have a TLS cluster,** obtain the CA (certificate authority) that signs its
-certificate. You will add this to the Ops Manager settings in the next step.
+certificate. You will add this to the <%=vars.ops_manager%> settings in the next step.
 
 **If you use self-signed certificates,** generate a new self-signed certificate with a separate name
 in CredHub. In this example we generate the new certificate with the name “/services/new_ca”:
@@ -180,7 +180,7 @@ $ credhub generate \
     --common-name="servicesCA"
 </pre>
 
-**If you use an intermediate certificate signed by a root CA in credhub,**
+**If you use an intermediate certificate signed by a root CA in CredHub,**
 generate a new certificate signed by the CredHub root CA:
 
 <pre class="terminal">
@@ -193,28 +193,28 @@ $ credhub generate \
     --ca=/path-to-root-ca
 </pre>
 
-### <a id="addnewandold" class="no-quick-link"></a> Add New Certificates to Ops Manager
+### <a id="addnewandold" class="no-quick-link"></a> Add New Certificates to <%=vars.ops_manager%>
 
-To add new and old CA certificates to Ops Manager:
+To add new and old CA certificates to <%=vars.ops_manager%>:
 
 1. Log in to CredHub.
 1. Obtain the current CA with `credhub get --name=/services/tls_ca -k ca`.
 1. Obtain the new CA, either from a pre-existing file, or from your new CredHub location using `credhub get --name=/services/new_ca -k ca`.
 1. Make sure both ca values are pasted into **Ops Manager -> BOSH Director -> Security -> Trusted Certificates**.
-1. Make sure both ca values are pasted into **PAS tile -> Networking -> Certificate Authorities Trusted by Router and HAProxy**
+1. Make sure both ca values are pasted into **<%=vars.app_runtime_abbr%> tile -> Networking -> Certificate Authorities Trusted by Router and HAProxy**
 1. Click **Save**.
 
 ### <a id="applychanges" class="no-quick-link"></a> Apply Changes
 
 <p class="note warning"><strong>Warning</strong>: This procedure involves restarting
-all of the VMs in your PCF deployment to apply a CA certificate. The
+all of the VMs in your deployment to apply a CA certificate. The
 operation can take a long time to complete.</p>
 
 To apply these changes, do the following:
  
 1. Navigate back to the **Installation Dashboard**.
 1. Click **Review Pending Changes**.
-1. Click **ERRANDS on PCC**.
+1. Click **ERRANDS on <%=vars.product_short%>**.
 1. Select **Upgrade All Service Instances**. 
 ![Upgrade All Service Instances](upgrade-all-service-instances.png)
 1. Click **Apply Changes**.
@@ -299,7 +299,7 @@ $ credhub set -n /services/tls_ca \
 After your apps have reconnected to service instances with certificates generated
 by the new CA, remove the old CA certificate:
 
-1. Navigate to the **Installation Dashboard** in Ops Manager and click the **BOSH
+1. Navigate to the **Installation Dashboard** in <%=vars.ops_manager%> and click the **BOSH
 Director** tile.
 
 1. Click **Security**.
@@ -308,7 +308,7 @@ Director** tile.
 
 1. Click **Save**.
 
-1. Navigate to the **Installation Dashboard** in Ops Manager and click the **PAS** tile.
+1. Navigate to the **Installation Dashboard** in <%=vars.ops_manager%> and click the **<%=vars.app_runtime_abbr%>** tile.
 
 1. Click **Networking**.
 
@@ -319,14 +319,14 @@ Director** tile.
 ### <a id="applychanges2" class="no-quick-link"></a> Apply Changes
 
 <p class="note warning"><strong>Warning: </strong> This procedure involves restarting
-	all of the VMs in your PCF deployment to apply a CA certificate. The
+	all of the VMs in your deployment to apply a CA certificate. The
 	operation can take a long time to complete.</p>
 
 To apply these changes, do the following:
  
 1. Navigate back to the **Installation Dashboard**.
 1. Click **Review Pending Changes**.
-1. Click **ERRANDS on PCC**.
+1. Click **ERRANDS on <%=vars.product_short%>**.
 1. Select **Upgrade All Service Instances**. 
 ![Upgrade All Service Instances](upgrade-all-service-instances.png)
 1. Click **Apply Changes**.
