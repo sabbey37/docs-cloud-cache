@@ -27,7 +27,7 @@ When completed, the status changes from `create in progress` to `create succeede
 
 You can create a customized service instance by passing optional parameters to `cf create-service` using the `-c` flag. The `-c` flag accepts a valid JSON object containing service-specific configuration parameters, provided either in-line or in a file.
 
-The PCC service broker supports the following parameters:
+The <%=vars.product_full%> service broker supports the following parameters:
 
 - `tls`: A boolean, that when true, enables TLS for all communication within the cluster.
 - `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by the operator.
@@ -75,7 +75,7 @@ for example `my-service-instance-session-replication`.
 
 To use
 [Spring Session](http://projects.spring.io/spring-session/)
-for session state caching for apps with PCC, follow the steps below:
+for session state caching for apps with <%=vars.product_short%>, follow the steps below:
 
 1. Make the following changes to the app:
   * Replace existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is seconds.
@@ -105,14 +105,14 @@ within a single VM.
 Because the VM is recycled when the service instance is updated or upgraded,
 all data within the region is lost upon update or upgrade.
 
-When post-deploy scripts are enabled for Ops Manager,
+When post-deploy scripts are enabled for <%=vars.ops_manager%>,
 the service instance is created with a single sample region
 called `example_partition_region`.
 The region is of type `PARTITION_REDUNDANT_HEAP_LRU`,
 as described in [Partitioned Region Types for Creating Regions on the Server](region-design.html#partitioned-types).
 
 If `example_partition_region` has **not** been created,
-it is probably because post-deploy scripts are not enabled for Ops Manager,
+it is probably because post-deploy scripts are not enabled for <%=vars.ops_manager%>,
 as described in [Configure a Dev Plan](./install-configure.html#dev-plan).
 
 ## <a id="delete-SI"></a> Delete a Service Instance
