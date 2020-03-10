@@ -2,14 +2,14 @@
 title: Networking for On-Demand Services
 ---
 
-This section describes networking considerations for Pivotal Cloud Cache.
+This section describes networking considerations for <%=vars.product_full%>.
 
 <%# The below partial is in https://github.com/pivotal-cf/docs-partials %>
 
 ## <a id="service-network"></a>Service Network Requirement
 
 <%= partial vars.path_to_partials + '/services/service-networks-v3', :locals => {
-  :platform_name => vars.platform_name} %>
+  :platform_name => vars.app_runtime_full} %>
 
 ### <a id ="architecture_networks"></a>Default Network and Service Network
 
@@ -19,7 +19,7 @@ This section describes networking considerations for Pivotal Cloud Cache.
 ### <a id="network-rules"></a>Required Networking Rules for On-Demand Services
 
 <%= partial vars.path_to_partials + '/services/service_networks_table', :locals => {
-  :platform_name => vars.platform_name,
+  :platform_name => vars.app_runtime_full,
 	:app_runtime_full => vars.app_runtime_full,
 	:product_short => vars.product_short} %>
 
@@ -34,19 +34,19 @@ rules are set up so that connections are open as described in the table below.
   <th>Communication direction(s)</th>
   <th>Notes</th>
   <tr>
-    <td><strong>PCC cluster members</strong></td>
-    <td><strong>PCC cluster members</strong></td>
+    <td><strong><%=vars.product_short%> cluster members</strong></td>
+    <td><strong><%=vars.product_short%> cluster members</strong></td>
     <td>49152-65535</td>
     <td>Two-way</td>
-    <td>Inclusive range. PCC servers and locators communicate with each other using UDP and TCP.</td>
+    <td>Inclusive range. <%=vars.product_short%> servers and locators communicate with each other using UDP and TCP.</td>
   </tr>
   <tr>
-    <td><strong>PCC Service Instance 1</strong></td>
-    <td><strong>PCC Service Instance 2</strong></td>
+    <td><strong><%=vars.product_short%> Service Instance 1</strong></td>
+    <td><strong><%=vars.product_short%> Service Instance 2</strong></td>
     <td>5000-5499</td>
     <td>Two-way</td>
-    <td>Inclusive range. Gateway receivers and gateway senders communicate across WAN-separated service instances.  Each PCC
-service instance uses GemFire defaults for the gateway receiver ports.</td>
+    <td>Inclusive range. Gateway receivers and gateway senders communicate across WAN-separated service instances.  Each <%=vars.product_short%>
+service instance uses <%=vars.component_product%> defaults for the gateway receiver ports.</td>
   </tr>
   <tr>
     <td><strong>ODB</strong></td>
@@ -68,7 +68,7 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
   </tr>
   <tr>
     <td><strong>ODB</strong></td>
-    <td><strong>PAS </strong>
+    <td><strong><%=vars.app_runtime_full%></strong>
     </td>
     <td>8443</td>
     <td>One-way</td>
@@ -78,7 +78,7 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
     <td><strong>Errand VMs</strong></td>
     <td>
       <ul>
-        <li><strong>PAS </strong></li>
+        <li><strong><%=vars.app_runtime_full%></strong></li>
         <li><strong>ODB</strong></li>
       </ul>
     </td>
@@ -102,20 +102,20 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
       The default port is not configurable.  </td>
   </tr>
   <tr>
-    <td><strong>Deployed apps on PAS </strong></td>
+    <td><strong>Deployed apps on <%=vars.app_runtime_full%></strong></td>
     <td><strong>Deployed service instances</strong>
     </td>
     <td>
       <ul>
-        <li>55221 (GemFire locators) </li>
-        <li>40404 (GemFire servers) </li>
+        <li>55221 (<%=vars.component_product%> locators) </li>
+        <li>40404 (<%=vars.component_product%> servers) </li>
       </ul>
     </td>
     <td>Two-way</td>
     <td>These port numbers are not configurable.</td>
   </tr>
   <tr>
-    <td><strong>PAS </strong></td>
+    <td><strong><%=vars.app_runtime_full%></strong></td>
     <td>
       <ul>
         <li><strong>ODB </strong></li>
@@ -125,11 +125,11 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
     <td>8080</td>
     <td>One-way</td>
     <td>PAS communicates with service instances because the Gorouter
-      proxies gfsh requests to GemFire clusters. </td>
+      proxies gfsh requests to <%=vars.component_product%> clusters. </td>
   </tr>
   <tr>
-    <td><strong>PCC</strong></td>
-    <td> <strong>PCC</strong></td>
+    <td><strong><%=vars.product_short%></strong></td>
+    <td> <strong><%=vars.product_short%></strong></td>
     <td>1053</td>
     <td>Two-way</td>
     <td>Allows DNS resolution for clusters communicating 
@@ -137,9 +137,9 @@ service instance uses GemFire defaults for the gateway receiver ports.</td>
   </tr>
 </table>
 
-## <a id ="WAN_details"></a>PCC Instances Across WAN
+## <a id ="WAN_details"></a><%=vars.product_short%> Instances Across WAN
 
-PCC service instances running within distinct PCF foundations
+<%=vars.product_short%> service instances running within distinct <%=vars.app_runtime_full%> foundations
 may communicate with each other across a WAN.
 In a topology such as this,
 the members within one service instance use their own private address space,
