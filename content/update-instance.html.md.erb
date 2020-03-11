@@ -1,5 +1,5 @@
 ---
-title: Updating a Pivotal Cloud Cache Service Instance
+title: Updating a VMware Tanzu GemFire Service Instance
 ---
 
 You can apply all optional parameters to an existing service instance using the `cf update-service` command. You can, for example, scale up a cluster by increasing the number of servers.
@@ -22,7 +22,7 @@ Then the resulting service instance has `5` servers and `new_size_percentage` of
 
 ## <a id="cluster-rebalancing"></a>Rebalancing a Cluster
 
-When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, PCC automatically rebalances data in the cache to distribute data across the cluster.
+When updating a cluster to increase the number of servers, the available heap size is increased. When this happens, <%=vars.product_full%> automatically rebalances data in the cache to distribute data across the cluster.
 
 This automatic rebalancing does not occur when a server leaves the cluster and later rejoins, for example when a VM is re-created, or network connectivity lost and restored.
  In this case, you must manually rebalance the cluster using the gfsh [`rebalance` command](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/rebalance.html) while connected to the cluster under a role that can manage a cluster's data. 
@@ -60,7 +60,7 @@ as all data is on the disk and available upon restart of a server.
 When the server with the primary copy of an entry is stopped,
 the redundant copy still exists on a running server.
 
-To restart a cluster, use the PCF operator credentials to
+To restart a cluster, use the <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) operator credentials to
 run the command:
 
 <code>cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}'</code>
@@ -73,11 +73,11 @@ $ cf update-service my-cluster -c '{"restart": true}'
 
 ## <a id="plan-updates"></a> Changes to the Service Plan
 
-Your PCF operator can change details of the service plan available on the Marketplace. If your operator changes the default value of one of the optional parameters, this does not affect existing service instances.
+Your <%=vars.app_runtime_abbr%> operator can change details of the service plan available on the Marketplace. If your operator changes the default value of one of the optional parameters, this does not affect existing service instances.
 
 However, if your operator changes the allowed values of one of the optional parameters, existing instances that exceed the new limits are not affected, but any subsequent service updates that change the optional parameter must adhere to the new limits.
 
-For example, if the PCF operator changes the plan by decreasing the maximum value for `num_servers`, any future service updates must adhere to the new `num_servers` value limit.
+For example, if the <%=vars.app_runtime_abbr%> operator changes the plan by decreasing the maximum value for `num_servers`, any future service updates must adhere to the new `num_servers` value limit.
 
 You might see the following error message when attempting to update a service instance:
 
@@ -85,7 +85,9 @@ You might see the following error message when attempting to update a service in
 $ cf update-service  my-cloudcache -c '{"num_servers": 5}'
 Updating service instance my-cloudcache as admin...
 FAILED
-Server error, status code: 502, error code: 10001, message: Service broker error: Service cannot be updated at this time, please try again later or contact your operator for more information
+Server error, status code: 502, error code: 10001, message:
+Service broker error: Service cannot be updated at this time,
+please try again later or contact your operator for more information
 </pre>
 
 This error message indicates that the operator has made an update to the plan used by this service instance. You must wait for the operator to apply plan changes to all service instances before you can make further service instance updates.

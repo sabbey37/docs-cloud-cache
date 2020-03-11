@@ -2,8 +2,8 @@
 title: Service-Instance Sharing
 ---
 
-Service-instance sharing for Cloud Cache permits read-only access 
-to a Cloud Cache service instance by an app within a different space.
+Service-instance sharing for <%=vars.product_full%> permits read-only access 
+to a <%=vars.product_short%> service instance by an app within a different space.
 
 Setting up sharing has three steps:
 
@@ -23,7 +23,7 @@ App Y resides within space D, which is part of org B.
 
 ## <a id="set-up-sharing"></a> Share a Service Instance
 
-The Cloud Cache service instance must be up and running prior to sharing.
+The <%=vars.product_short%> service instance must be up and running prior to sharing.
 
 To share the service instance:
 
@@ -36,7 +36,7 @@ Target the space that contains the service to be shared: org A, space C.
     cf share-service SERVICE-X -s SPACE-D -o ORG-B
     ```
 
-    Replace `SERVICE-X` with the Cloud Cache service instance name.
+    Replace `SERVICE-X` with the <%=vars.product_short%> service instance name.
     Replace `SPACE-D` with the space name where the app resides.
     Replace `ORG-B` with the org name where the app resides.
 
@@ -50,7 +50,7 @@ To bind the app to the shared service instance:
 1. An org B developer does a `cf login` with a space developer role.
 Target the org and space that contains the app: org B, space D.
 
-2. Verify that the Cloud Cache service instance is available and
+2. Verify that the <%=vars.product_short%> service instance is available and
 shared across the spaces in the output of the command:
 
     <pre class='terminal'>
@@ -63,12 +63,12 @@ shared across the spaces in the output of the command:
     cf bind APP-Y SERVICE-X
     ```
 
-    Replace `SERVICE-X` with the Cloud Cache service instance name.
+    Replace `SERVICE-X` with the <%=vars.product_short%> service instance name.
     Replace `APP-Y` with the name of the app.
 
 ## <a id="app-sharing-details"></a> App Authentication
 
-Apps that interact with a shared Cloud Cache service instance
+Apps that interact with a shared <%=vars.product_short%> service instance
 which resides in a different space
 will be given a set of read-only credentials.
 The app must acquire and use this set of credentials for authentication.

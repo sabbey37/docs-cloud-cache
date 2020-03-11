@@ -1,8 +1,8 @@
 ---
-title: Monitoring Pivotal Cloud Cache Service Instances
+title: Monitoring VMware Tanzu GemFire Service Instances
 ---
 
-PCC clusters and brokers emit service metrics. 
+<%=vars.product_full%> clusters and brokers emit service metrics. 
 You can use any tool that has a corresponding Cloud Foundry nozzle to read and monitor these metrics in real time.
 
 As an app developer, when you opt to use a data service, you should be prepared to:
@@ -688,7 +688,7 @@ These experimental metrics are specific to a member:
 
 The BOSH `mem-check` errand calculates and outputs
 the quantity of memory used across all PCC service instances.
-This errand helps PCF operators monitor resource costs,
+This errand helps <%=vars.product_full%> (<%=vars.product_short%>) operators monitor resource costs,
 which are based on memory usage.
 
 From the director, run a BOSH command of the form:
@@ -726,9 +726,9 @@ for a two cluster deployment:
 
 Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
 You can use the [Firehose exporter](https://github.com/cloudfoundry-community/firehose_exporter) to export all the metrics from the Firehose,
-which you can then graph with [Grafana](https://github.com/grafana/grafana) to monitor your PCC cluster.
+which you can then graph with [Grafana](https://github.com/grafana/grafana) to monitor your <%=vars.product_short%> cluster.
 
-Follow the instructions [here](https://github.com/pivotal-cf/prometheus-on-PCF) to deploy Prometheus alongside your PCF cluster.
+Follow the instructions [here](https://github.com/pivotal-cf/prometheus-on-PCF) to deploy Prometheus alongside your <%=vars.app_runtime_abbr%> cluster.
 
 Prometheus can be deployed on any IaaS.
 You need to verify that the Firehose exporter job can talk to your UAA VM.
