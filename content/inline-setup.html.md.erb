@@ -5,7 +5,7 @@ title: Setting Up Servers for an Inline Cache
 See [The Inline Cache](design-patterns.html#inline-cache)
 for an introductory description of an inline cache.
 The implementation of an inline cache
-requires custom code deployed on the GemFire servers
+requires custom code deployed on the <%=vars.component_product%> servers
 to interact with the backend data store for read misses
 and for writes.
 
@@ -26,7 +26,7 @@ You implement the `CacheLoader` interface to handle cache misses.
 Each cache miss invokes the `CacheLoader.load` method.
 The `CacheLoader.load` method must acquire and return the value
 for the specified key.
-See the [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
+See the [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
 
 ![inline read misses](inline-read.png)
 
@@ -70,7 +70,7 @@ for the backend-data-store write to complete.
 An asynchronous event queue (AEQ) to queue the write events together with 
 an implementation of the `AsyncEventListener` interface
 provides the desired behavior.
-See the [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
+See the [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
 
 
 ![inline cache server interactions](inline-WB.png)
@@ -118,7 +118,7 @@ After both writes, the app's put operation completes.
 
 An implementation of the `CacheWriter` interface implementation provides
 the correct behavior for write through.
-See the [Pivotal GemFire API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
+See the [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
 You provide a custom implementation of the `CacheWriter.beforeCreate`
 method to handle backend-data-store writes for put operations that add
 a new entry to the region.
@@ -161,7 +161,7 @@ AEQ and the deployed interface implementations.
 with a role that is able to manage both the cluster and the data.
 
 1. Deploy the cache loader and the AEQ listener
-code to the servers within the PCC service instance:
+code to the servers within the <%=vars.product_full%> service instance:
 
     ```
     gfsh>deploy --jars=/path/to/MyLoader.jar,/path/to/MyListener.jar
@@ -198,7 +198,7 @@ and configure the region to use the deployed interface implementations.
 with a role that is able to manage both the cluster and the data.
 
 1. Deploy the cache loader and the cache writer
-code to the servers within the PCC service instance:
+code to the servers within the <%=vars.product_short%> service instance:
 
     ```
     gfsh>deploy --jars=/path/to/MyLoader.jar,/path/to/MyWriter.jar
