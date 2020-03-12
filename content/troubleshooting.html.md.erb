@@ -2,13 +2,13 @@
 title:  Troubleshooting
 ---
 
-Here are problems and fixes related to using PCC.
+Here are problems and fixes related to using <%=vars.product_full%>.
 
 ##<a id='acquire-artifacts'></a> Acquire Artifacts for Troubleshooting
 
-###<a id='gemfire-logs'></a> Gather GemFire Logs
+###<a id='gemfire-logs'></a> Gather <%=vars.component_product%> Logs
 
-GemFire statistics and log files may be obtained by using the
+<%=vars.component_product%> statistics and log files may be obtained by using the
 `gfsh export logs` command.
 See [Export gfsh Logs](using-pcc.html#exporting_logs) for details.
 
@@ -23,11 +23,11 @@ To copy these files to your workstation, run the command:
 bosh2 -e BOSH-ENVIRONMENT -d DEPLOYMENT-NAME scp server/0:/var/vcap/store/gemfire-server/statistics.gfs /tmp
 ```
 
-Alternatively, use `bosh ssh` to access PCC service instance GemFire server VMs
-and directly obtain the GemFire logs that reside within the directory
+Alternatively, use `bosh ssh` to access <%=vars.product_short%> service instance server VMs
+and directly obtain the <%=vars.component_product%> logs that reside within the directory
 `/var/vcap/sys/log/gemfire-server`.
 
-See the Pivotal GemFire [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into Pivotal GemFire VSD.
+See the <%=vars.component_product%> [Installing and Running VSD](http://gemfire.docs.pivotal.io/gemfire/tools_modules/vsd/running_vsd.html) topic for information about loading the statistics files into <%=vars.component_product%> VSD.
 
 ###<a id='thread-dumps'></a> Acquire Thread Dumps
 
@@ -45,8 +45,8 @@ one second.
     acquire the string to substitute for `DEPLOYMENT`.
 
 1. Use the VM in a `bosh ssh` command to ssh in to the
-PCC VM where you want to produce the thread dumps.
-PCC VMs can be referenced using a 0-based index, for example server/0,
+<%=vars.product_short%> VM where you want to produce the thread dumps.
+<%=vars.product_short%> VMs can be referenced using a 0-based index, for example server/0,
 or locator/2:
 
     ```
@@ -59,9 +59,9 @@ or locator/2:
     sudo /var/vcap/packages/bpm/bin/bpm shell JOB-NAME
     ```
     where JOB-NAME is either `gemfire-server` or `gemfire-locator`,
-    depending on which PCC VM you are on.
+    depending on which <%=vars.product_short%> VM you are on.
 
-1. Find the process ID (PID) that is running the GemFire Java process
+1. Find the process ID (PID) that is running the <%=vars.component_product%> Java process
 by running 
 
     ```
@@ -110,7 +110,7 @@ From your local machine, run:
 The `DEPLOYMENT` name is needed in several troubleshooting procedures.
 To acquire the `DEPLOYMENT` name:
 
-1. Use the Pivotal Cloud Foundry CLI. Target the space where the
+1. Use the Cloud Foundry CLI. Target the space where the
 service instance runs.
 
 1. Discover the globally unique identifier (GUID) for the service instance:
@@ -158,7 +158,7 @@ For the example GUID, the `DEPLOYMENT` name is
     to the cluster.
 
     **Action:** Review the logs of your load balancer,
-    and review the logs of your CF Router to ensure the route to your PCC
+    and review the logs of your CF Router to ensure the route to your <%=vars.product_short%>
     cluster is properly registered.
 
     You also can create a service instance and try to connect to it using the
@@ -184,14 +184,14 @@ For the example GUID, the `DEPLOYMENT` name is
 
 - **Problem:**  Client-to-server communication
 
-    **Cause of the Problem:** PCC Clients communicate to PCC servers
+    **Cause of the Problem:** <%=vars.product_short%> clients communicate to <%=vars.product_short%> servers
     on port 40404 and with locators on port 55221.
-    Both of these ports must be reachable from the PAS network to service
+    Both of these ports must be reachable from the <%=vars.app_runtime_full%> network to service
     the network.
 
 - **Problem:**  Membership port range
 
-    **Cause of the Problem:** PCC servers and locators communicate with
+    **Cause of the Problem:** <%=vars.product_short%> servers and locators communicate with
     each other using UDP and TCP.
     The current port range for this communication is `49152-65535`.
 
@@ -202,7 +202,7 @@ For the example GUID, the `DEPLOYMENT` name is
 
     **Cause of the Problem:** Gateway receivers and gateway senders
     communicate across WAN-separated service instances.
-    Each PCC service instance uses GemFire defaults for the
+    Each <%=vars.product_short%> service instance uses <%=vars.component_product%> defaults for the
     gateway receiver ports.
     The default is the inclusive range of port numbers 5000 to 5499.
 
@@ -219,7 +219,7 @@ The service creation issues an error message that starts with
     Instance provisioning failed: There was a problem completing your request.
     ```
 
-    GemFire server logs at
+    <%=vars.component_product%> server logs at
     `/var/vcap/sys/log/gemfire-server/gemfire/server-<N>.log`
     will contain a disk-access error with the string
 
@@ -239,10 +239,10 @@ The service creation issues an error message that starts with
         at org.apache.geode.internal.cache.GemFireCacheImpl.createVMRegion(GemFireCacheImpl.java:3089)
     ``` 
 
-    **Cause of the Problem:** The PCC VMs are underprovisioned;
+    **Cause of the Problem:** The <%=vars.product_short%> VMs are underprovisioned;
     the quantity of disk space is too small.
 
-    **Solution:** Use Ops Manager to provision VMs of at least
+    **Solution:** Use <%=vars.ops_manager%> to provision VMs of at least
     the minimum size.
     See [Configure Service Plans](install-configure.html#plan-config)
     for minimum-size details.
