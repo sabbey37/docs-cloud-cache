@@ -61,24 +61,24 @@ Therefore, do not use:
 
 The create of a gateway receiver will never be
 appropriate for any situation.
-The Cloud Cache cluster will already have gateway receivers,
+The <%=vars.product_full%> cluster will already have gateway receivers,
 and there is no situation in which the cluster can benefit
 from creating more.
 Therefore, do not use:
 
 - gfsh create gateway receiver
 
-### Do Not Export from a GemFire Cluster to a Cloud Cache Cluster
+### Do Not Export from a <%=vars.component_product%> Cluster to a <%=vars.product_short%> Cluster
 
 While the expectation is that configuration and data can be
-exported from a GemFire cluster and then imported into a
-Cloud Cache cluster,
+exported from a <%=vars.component_product%> cluster and then imported into a
+<%=vars.product_short%> cluster,
 this does **not** work.
 Using export and import commands will not have the desired
 effect of migration from one cluster to another.
 The import of cluster configuration requires a state that
-cannot be provided by a Cloud Cache cluster.
-The Cloud Cache cluster will already have its configuration,
+cannot be provided by a <%=vars.product_short%> cluster.
+The <%=vars.product_short%> cluster will already have its configuration,
 and upon restart or upgrade, that same configuration will be used.
 Given that the configuration cannot be imported,
 data import is problematic.
@@ -90,7 +90,7 @@ Therefore, do not use:
 <p class="note"><strong>Note</strong>: The restriction here on the use of
 the <code>gfsh import data</code> does not apply to the procedure
 for migrating from an
-existing Cloud Cache cluster that does not use TLS for encryption to a Cloud Cache cluster
+existing <%=vars.product_short%> cluster that does not use TLS for encryption to a <%=vars.product_short%> cluster
 that does use TLS for encryption.
 See <a href="./migrate-to-TLS.html">Migrating to a TLS-Enabled Cluster</a>
 for that procedure.  </p>
@@ -134,7 +134,7 @@ Value Class : java.lang.String
 Value       : thevalue
 </pre>
 
-In practice, you should perform these get/put operations from a deployed PCF app. To do this, you must bind the service instance to these apps.
+In practice, you should perform these get/put operations from a deployed app. To do this, you must bind the service instance to these apps.
 
 ## <a id="disk-stores"></a> Working with Disk Stores
 
@@ -149,7 +149,7 @@ type of region:
 
 1. Use the directions in 
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-to connect to the Cloud Cache service instance with
+to connect to the <%=vars.product_short%> service instance with
 a role that is able to manage a cluster's data.
 
 
@@ -162,7 +162,7 @@ a role that is able to manage a cluster's data.
 
     Specify a relative path for the disk store location.
     That relative path will be created within `/var/vcap/store/gemfire-server/`.
-    For more details on further options, see the Pivotal GemFire
+    For more details on further options, see the <%=vars.component_product%> 
     [create disk-store Command Reference Page](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/create.html#topic_bkn_zty_ck).
 
 ### <a id="disk-store-destroy"></a> Destroy a Disk Store
@@ -171,7 +171,7 @@ To destroy a disk store:
 
 1. Use the directions in 
 [Connect with gfsh over HTTPS](accessing-instance.html#gfsh-connect-https)
-to connect to the Cloud Cache service instance with
+to connect to the <%=vars.product_short%> service instance with
 a role that is able to manage a cluster's data.
 
 2. Destroy the disk store with a gfsh command of the form:
@@ -180,7 +180,7 @@ a role that is able to manage a cluster's data.
     destroy disk-store --name=<name-of-disk-store>
     ```
 
-    For more details on further options, see the Pivotal GemFire
+    For more details on further options, see the <%=vars.component_product%>
     [destroy disk-store Command Reference Page](http://gemfire.docs.pivotal.io/95/geode/tools_modules/gfsh/command-pages/destroy.html#topic_yfr_l2z_ck).
 
 ## <a id="pulse"></a> Use the Pulse Dashboard
@@ -193,13 +193,13 @@ directions in [Create Service Keys](accessing-instance.html#create-service-key).
 
 To access service metrics, you must have **Enable Plan** selected under **Service Plan Access** on the page where you configure your tile properties. (For details, see the [Configure Service Plans](install-configure.html#plan-config) page.)
 
-Cloud Cache service instances output metrics to the Loggregator Firehose. You can use the
+<%=vars.product_short%> service instances output metrics to the Loggregator Firehose. You can use the
 Firehose plugin  to
 view metrics output on the cf CLI directly. For more information about using the Firehose plugin, see [Installing the Loggregator Firehose Plugin for CLI](https://docs.cloudfoundry.org/loggregator/cli-plugin.html). 
 
 You can also connect the output to a Firehose nozzle. Nozzles are programs that consume data from the Loggregator Firehose. For example, to connect the output to the nozzle for Datadog, see [Datadog Firehose Nozzle](https://github.com/cloudfoundry-attic/datadog-firehose-nozzle) on GitHub.
 
-Cloud Cache supports metrics for the whole cluster and metrics for each member.
+<%=vars.product_short%> supports metrics for the whole cluster and metrics for each member.
 Each server and locator in the cluster outputs metrics.
 
 ### Service Instance (Cluster-wide) Metrics
@@ -209,9 +209,9 @@ Each server and locator in the cluster outputs metrics.
 
 ### Member (per-VM) Metrics
 * member.GarbageCollectionCount: the number of JVM garbage collections that have occurred on this member since startup
-* member.CpuUsage: the percentage of CPU time used by the GemFire process
-* member.GetsAvgLatency: the avg latency of GET requests to this GemFire member
-* member.PutsAvgLatency: the avg latency of PUT requests to this GemFire member
+* member.CpuUsage: the percentage of CPU time used by the <%=vars.component_product%> process
+* member.GetsAvgLatency: the avg latency of GET requests to this <%=vars.component_product%> member
+* member.PutsAvgLatency: the avg latency of PUT requests to this <%=vars.component_product%> member
 * member.JVMPauses: the number of JVM pauses that have occurred on this member since startup
 * member.FileDescriptorLimit: the number of files this member allows to be open at once
 * member.TotalFileDescriptorOpen: the number of files this member has open now
@@ -226,7 +226,7 @@ Service broker metrics are on by default and can be accessed through the Loggreg
 
 ## <a id="exporting_logs"></a> Export gfsh Logs
 
-You can get logs and `.gfs` stats files from your Cloud Cache service instances using the `export logs` command in gfsh.
+You can get logs and `.gfs` stats files from your <%=vars.product_short%> service instances using the `export logs` command in gfsh.
 
 1. Use the [Connect with gfsh over HTTPS](#gfsh-connect-https) procedure to
 connect to the service instance for which you want to see logs.
@@ -262,7 +262,7 @@ For example,
 
 To redeploy an app JAR file after connecting within gfsh
 using credentials that can manage the cluster,
-do the following: 		
+do the following:
 
 1. Run this gfsh command to deploy the updated JAR file:
 

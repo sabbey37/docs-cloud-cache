@@ -1,19 +1,19 @@
 ---
-title: Connecting a Spring Boot App to Pivotal Cloud Cache with Session State Caching
+title: Connecting a Spring Boot App to VMware Tanzu GemFire with Session State Caching
 ---
 <a id="spring-boot-ssc"></a>
 
-This section describes the two ways in which you can connect a Spring Boot app to PCC: 
+This section describes the two ways in which you can connect a Spring Boot app to <%=vars.product_full%>: 
 
 + Using a Tomcat app with a WAR file. This is the default method for Tomcat apps.
 + Using the spring-session-data-gemfire library. This method requires that you use the correct version of these libraries.
 
 ##<a id="tomcat"></a> Use the Tomcat App
 
-To get a Spring Boot app running with session state caching (SSC) on PCC,
+To get a Spring Boot app running with session state caching (SSC) on <%=vars.product_short%>,
 you must create a WAR file using the `spring-boot-starter-tomcat` plugin instead of the `spring-boot-maven` plugin to create a JAR file.
 
-For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to PCF,
+For example, if you want your app to use SSC, you cannot use `spring-boot-maven` to build a JAR file and push your app to <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>),
 because the Java buildpack does not pull in the necessary JAR files for SSC when it detects a Spring JAR file.
 
 To build your WAR file, add this dependency to your `pom.xml`:
@@ -79,20 +79,20 @@ For a full example of running a Spring Boot app that connects with SSC, [run thi
 
 ##<a id="spring-session"></a> Use a Spring Session Data GemFire App
 
-You can connect your Spring app to PCC to do session state caching.
+You can connect your Spring app to <%=vars.product_short%> to do session state caching.
 Use the correct version of the `spring-session-data-gemfire` library;
-apps built for PCC v1.6.0 and later versions are compatible with
+apps built for <%=vars.product_short%> v1.6.0 and later versions are compatible with
 Spring Session Data GemFire v2.1.5.RELEASE and later versions.
 
-###<a id=spring_session_data_gemfire></a> Upgrade PCC and Spring Session Data GemFire
+###<a id=spring_session_data_gemfire></a> Upgrade <%=vars.product_short%> and Spring Session Data GemFire
 
-1. Before your operator upgrades PCC, stop your app.
+1. Before your operator upgrades <%=vars.product_short%>, stop your app.
 This avoids breaking the app in this upgrade process.
 
-1. Upgrade PCC. See [Upgrading Pivotal Cloud Cache](upgrade.html) for details.
+1. Upgrade <%=vars.product_short%>. See [Upgrading <%=vars.product_full%>](upgrade.html) for details.
 
 1. Rebuild your app using a `build.gradle` file that depends on 
-the correct version of Pivotal GemFire.
+the correct version of <%=vars.component_product%>.
 Here is an example `build.gradle` file:
 
     ```
