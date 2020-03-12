@@ -8,13 +8,13 @@ the patterns described in the section on
 [Design Patterns](design-patterns.html).
 
 Call the two service instances A and B.
-The GemFire cluster within each service instance uses an identifier
+The <%=vars.component_product%> cluster within each service instance uses an identifier
 called a `distributed_system_id`.
 This example assigns `distributed_system_id = 1` to cluster A
 and `distributed_system_id = 2` to cluster B.
-GemFire gateway senders provide the communication path and construct that
+<%=vars.component_product%> gateway senders provide the communication path and construct that
 propagates region operations from one cluster to another.
-On the receiving end are GemFire gateway receivers. 
+On the receiving end are <%=vars.component_product%> gateway receivers. 
 Creating a service instance also creates gateway receivers.
 
 The procedures in this section assume that service instances communicate using TLS encryption.

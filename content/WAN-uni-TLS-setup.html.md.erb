@@ -3,14 +3,14 @@ title: Set Up a Unidirectional System with TLS
 ---
 
 This section describes how to set up a unidirectional WAN connection, using TLS encryption,
-between two PCC instances in two different foundations, such that all operations in Cluster A are replicated in Cluster B.
+between two <%=vars.product_full%> instances in two different foundations, such that all operations in Cluster A are replicated in Cluster B.
 Two design patterns that use unidirectional replication are described in
 [Blue-Green Disaster Recovery](design-patterns.html#WAN-pattern)
 and [CQRS Pattern Across a WAN](design-patterns.html#CQRS-WAN-pattern).
 
 ##<a id="wan-uni-tls-assumptions"></a> Assumptions
 
-- You have two PCF foundations, A and B, with a network connection between them.
+- You have two <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) foundations, A and B, with a network connection between them.
 - You wish to establish a TLS-encrypted WAN connection between a service instance on Foundation A and a service instance on Foundation B.
 - The connection will be unidirectional, such that all operations in Cluster A are replicated in Cluster B, but Cluster B does not send operations to Cluster A.
 - The [Preparing for TLS](prepare-TLS.html) procedure has been followed for each foundation, establishing a CredHub “/services/tls_ca” certificate for each.

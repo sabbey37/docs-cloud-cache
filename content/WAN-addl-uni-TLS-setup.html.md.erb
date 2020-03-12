@@ -2,11 +2,11 @@
 title: Set Up an Additional Unidirectional Interaction
 ---
 
-This section describes how to add a unidirectional TLS-encrypted WAN connection to an additional PCC service instance,
-once an initial setup is in place for a first pair of PCC service instances.
+This section describes how to add a unidirectional TLS-encrypted WAN connection to an additional <%=vars.product_full%> service instance,
+once an initial setup is in place for a first pair of <%=vars.product_short%> service instances.
 
-Call the first pair of PCC service instances Cluster A and Cluster B, which reside on Foundation A and Foundation B, respectively.
-This set of directions sets up an interaction between Cluster A and and a third service instance, Cluster C, which resides on third foundation, Foundation C.
+Call the first pair of <%=vars.product_short%> service instances Cluster A and Cluster B, which reside on Foundation A and Foundation B, respectively.
+This set of directions sets up an interaction between Cluster A and and a third service instance, Cluster C, which resides on a third foundation, Foundation C.
 
 ##<a id="wan-bi-tls-assumptions"></a> Assumptions
 
@@ -100,7 +100,7 @@ This set of directions sets up an interaction between Cluster A and and a third 
 
 ## <a id="wan-create-clusters"></a>Create the New Cluster
 
-The GemFire cluster within each service instance uses an identifier called a `distributed_system_id`.
+The <%=vars.component_product%> cluster within each service instance uses an identifier called a `distributed_system_id`.
 This example assumes the assignment of `distributed_system_id = 1` for cluster A,
 `distributed_system_id = 2` for cluster B, and `distributed_system_id = 3` for cluster C. 
 
