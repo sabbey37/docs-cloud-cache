@@ -3,7 +3,7 @@ title:  Region Design
 ---
 <a id="region-design"></a>
 
-Cached data are held in GemFire regions.
+Cached data are held in <%=vars.component_product%> regions.
 Each entry within a region is a key/value pair.
 The choice of key and region type affect
 the performance of the design.
@@ -40,7 +40,7 @@ one or both of these situations exist:
 
 - The region holds vast quantities of data.
 There may be so much data that you need to add more servers to scale the system up.
-PCC can be scaled up without downtime; to learn more, see [Updating a Pivotal Cloud Cache Service Instance](./update-instance.html).
+<%=vars.product_full%> can be scaled up without downtime; to learn more, see [Updating a <%=vars.product_full%> Service Instance](./update-instance.html).
 
 - Operations on the region are write-heavy, meaning that there are a lot of entry updates.
 
@@ -53,11 +53,11 @@ Within the diagram, the partitioned region is highlighted.
 ![Partitioned Region with Redundancy](partitioned-redundant-region.png)
 
 With one redundant copy,
-the GemFire cluster can tolerate a single server failure
+the <%=vars.component_product%> cluster can tolerate a single server failure
 or a service upgrade 
 without losing any region data.
 With one less server,
-GemFire revises which server holds the primary copy of an entry.
+<%=vars.component_product%> revises which server holds the primary copy of an entry.
 
 A partitioned region without redundancy permanently loses data during a service upgrade or if a server goes down.
 All entries hosted in the buckets on the failed server are lost.
@@ -74,13 +74,13 @@ These partitioned region types are supported:
 - `PARTITION_REDUNDANT`
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region.
-In addition, GemFire keeps and maintains a declared number of
+In addition, <%=vars.component_product%> keeps and maintains a declared number of
 redundant copies of all entries.
 The default number of redundant copies is 1.
 - `PARTITION_REDUNDANT_HEAP_LRU`
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region.
-GemFire keeps and maintains a declared number of redundant copies.
+<%=vars.component_product%> keeps and maintains a declared number of redundant copies.
 The default number of redundant copies is 1.
 As a server (JVM) reaches a heap usage of 65% of available heap,
 the server destroys entries as space is needed for updates.
@@ -94,14 +94,14 @@ and all servers persist all entries to disk.
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region,
 and all servers persist all entries to disk.
-In addition, GemFire keeps and maintains a declared number of
+In addition, <%=vars.component_product%> keeps and maintains a declared number of
 redundant copies of all entries.
 The default number of redundant copies is 1.
 - `PARTITION_REDUNDANT_PERSISTENT_OVERFLOW`
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region,
 and all servers persist all entries to disk.
-In addition, GemFire keeps and maintains a declared number of
+In addition, <%=vars.component_product%> keeps and maintains a declared number of
 redundant copies of all entries.
 The default number of redundant copies is 1.
 As a server (JVM) reaches a heap usage of 65% of available heap,
@@ -124,8 +124,8 @@ all servers that host the region have a copy of every entry.
 
 ![Replicated Region](replicated-region.png)
 
-GemFire maintains copies of all region entries on all servers.
-GemFire takes care of distribution and keeps the entries
+<%=vars.component_product%> maintains copies of all region entries on all servers.
+<%=vars.component_product%> takes care of distribution and keeps the entries
 consistent across the servers.
 
 A replicated region is the proper type of region to use when
@@ -167,7 +167,7 @@ for updates.
 
 ## <a id="persistent-regions"></a> Persistence
 
-Persistence adds a level of fault tolerance to a PCC service
+Persistence adds a level of fault tolerance to a <%=vars.product_short%> service
 instance by writing all region updates to local disk.
 Disk data, hence region data, is not lost upon cluster failures
 that exceed redundancy failure tolerances.
@@ -226,7 +226,7 @@ specify the created disk store.
 If the disk store has been created, but the gfsh region creation
 command neglects to specify a disk store, 
 a new `DEFAULT` disk store will be created and used.
-For more details on region creation options, see the Pivotal GemFire
+For more details on region creation options, see the <%=vars.component_product%>
 [create region Command Reference Page](http://gemfire.docs.pivotal.io/geode/tools_modules/gfsh/command-pages/create.html#topic_54B0985FEC5241CA9D26B0CE0A5EA863).
 
 
@@ -284,7 +284,7 @@ and those products do not often change.
 
 Consider that as the client app goes beyond the most simplistic
 of cases for data representation,
-the PCC instance hosts all of these regions
+the <%=vars.product_short%> instance hosts all of these regions
 such that the app can access all of these regions.
 Operations on customer orders, shipments,
 and payments all require product information.

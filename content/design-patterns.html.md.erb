@@ -92,24 +92,24 @@ supports the look-aside pattern, as detailed at
 
 ## <a id="active-active-WAN-pattern"></a> Bidirectional Replication Across a WAN
 
-Two PCC service instances may be connected across a WAN to form
+Two <%=vars.product_full%> service instances may be connected across a WAN to form
 a single distributed system with asynchronous communication.
-The cluster within each of the PCC service instances will host the same region.
-Updates to either PCC service instance
-are propagated across the WAN to the other PCC service instance.
+The cluster within each of the <%=vars.product_short%> service instances will host the same region.
+Updates to either <%=vars.product_short%> service instance
+are propagated across the WAN to the other <%=vars.product_short%> service instance.
 The distributed system implements an eventual consistency
 of the region
 that also handles write conflicts which occur when a single
-region entry is modified in both PCC service instances at the same
+region entry is modified in both <%=vars.product_short%> service instances at the same
 time.
 
 In this active-active system, an external entity implements load-balancing 
 by directing app connections to one of the two service instances. 
-If one of the PCC service instances fails,
+If one of the <%=vars.product_short%> service instances fails,
 apps may be redirected to the remaining service instance.
 
 This diagram shows multiple instances of an app interacting
-with one of the two PCC service instances, cluster A and cluster B.
+with one of the two <%=vars.product_short%> service instances, cluster A and cluster B.
 Any change made in cluster A is sent to cluster B,
 and any change made in cluster B is sent to cluster A.
 
@@ -117,7 +117,7 @@ and any change made in cluster B is sent to cluster A.
 
 ## <a id="WAN-pattern"></a> Blue-Green Disaster Recovery
 
-Two PCC service instances may be connected across a WAN to form
+Two <%=vars.product_short%> service instances may be connected across a WAN to form
 a single distributed system with asynchronous communication.
 An expected use case propagates all changes to a region's data
 from the cluster within one service instance (the primary) to the other,
@@ -141,19 +141,19 @@ cluster B takes over.
 
 ## <a id="CQRS-WAN-pattern"></a> CQRS Pattern Across a WAN
 
-Two PCC service instances may be connected across a WAN to form
+Two <%=vars.product_short%> service instances may be connected across a WAN to form
 a single distributed system that implements
 a CQRS (Command Query Responsibility Segregation) pattern.
 Within this pattern, commands are those that change the state,
 where state is represented by region contents.
 All region operations that change state are directed to the cluster within one
-PCC service instance.
+<%=vars.product_short%> service instance.
 The changes are propagated asynchronously to the cluster within the other
-PCC service instance via WAN replication,
+<%=vars.product_short%> service instance via WAN replication,
 and that other cluster provides only query access to the region data.
 
 This diagram shows an app that may update the region
-within the PCC service instance of cluster A.
+within the <%=vars.product_short%> service instance of cluster A.
 Changes are propagated across the WAN to cluster B. 
 The app bound to cluster B may only query the region data;
 it will not create entries or update the region.
@@ -162,10 +162,10 @@ it will not create entries or update the region.
 
 ## <a id="hub-spoke-pattern"></a> Hub-and-Spoke Topology with WAN Replication
 
-Multiple PCC service instances connected across a WAN
+Multiple <%=vars.product_short%> service instances connected across a WAN
 form a single hub and a set of spokes.
-This diagram shows PCC service instance A is the hub,
-and PCC service instances B, C, and D are spokes.
+This diagram shows <%=vars.product_short%> service instance A is the hub,
+and <%=vars.product_short%> service instances B, C, and D are spokes.
 
 ![Hub-and-Spoke pattern](hub-spoke.png)
 
@@ -183,18 +183,18 @@ Yet many data sets are relevant and used all over the world.
 If the most active location for write and update operations moves over the
 course of a day,
 then a performant design pattern is a variation on the hub-and-spoke
-implementation that changes which PCC service instance is the hub
+implementation that changes which <%=vars.product_short%> service instance is the hub
 to the most active location.
 
-Form a ring that contains each PCC service instance that will
+Form a ring that contains each <%=vars.product_short%> service instance that will
 act as the hub.
 Define a token to identify the hub.
-Over time, pass the token from one PCC service instance to the 
+Over time, pass the token from one <%=vars.product_short%> service instance to the 
 next, around the ring.
 
-This diagram shows PCC service instance A is the hub,
+This diagram shows <%=vars.product_short%> service instance A is the hub,
 as it has the token, represented in this diagram as a star.
-PCC service instances B, C, and D are spokes.
+<%=vars.product_short%> service instances B, C, and D are spokes.
 Write and update operations are directed to the hub.
 
 ![Follow-the-Sun pattern, A is the hub](follow-the-sun-1.png)

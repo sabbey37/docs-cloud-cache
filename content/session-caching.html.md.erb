@@ -6,7 +6,7 @@ title: HTTP Session State Caching
 
 Near caching is when an app locally caches data.
 Near caching uses an embedded cache within the app.
-Web apps that deploy Tomcat with GemFire session state caching
+Web apps that deploy Tomcat with <%=vars.component_product%> session state caching
 have near caching by default.
 To keep an app stateless, you will want to disable near caching.
 
@@ -87,7 +87,7 @@ into the `public` directory:
     ```
 
 6. Use `cf push` to place the configuration into
-the Pivotal Cloud Foundry space that will host this configuration:
+the <%=vars.app_runtime_full%> space that will host this configuration:
 
     ```
     cf push tomcat-config
@@ -191,7 +191,7 @@ Once created, the `cf push` specifies the custom Java buildpack.
     cd java-buildpack
     ```
 
-3. Edit the Geode ruby configuration file such that it disables
+3. Edit the Apache Geode ruby configuration file such that it disables
 caching within the app.
 The file to edit is `lib/java_buildpack/container/tomcat/tomcat_geode_store.rb`.
 The single change is the string `true` to instead be `false`.
