@@ -9,6 +9,8 @@ owner: Cloud Cache Engineers
 
 Features included in this release:
 
+- Fixed an issue that could cause an SSL-enabled cluster to run out of memory
+due to improperly garbage-collected SSL buffer references.
 - Fixed a bug which caused the smoke test errand to fail
 when a dev-plan name was changed.
 - Upgraded the underlying Go language version for various internal components.
@@ -17,6 +19,11 @@ when a dev-plan name was changed.
 ## <a id='v1100'></a>v1.10.0
 
 **Release Date:**   December 17, 2019
+
+<p class="note warning"><strong> Warning</strong>: 
+Cloud Cache 1.10.0 is no longer available for download due to an issue where SSL buffer references are not collected by the garbage collector in situations where SSL is enabled, causing the cluster to run out of memory. Upgrade to Cloud Cache 1.10.1, which fixes the issue.
+</p>
+
 
 Features included in this release:
 
