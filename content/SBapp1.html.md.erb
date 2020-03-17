@@ -1,27 +1,27 @@
 ---
-title: A Spring Boot App
+title: An Example Spring Boot App
 ---
 <a id="sample-SB1"></a>
 
 The versioned example Spring Boot Data GemFire app at
 [PCC-Sample-App-PizzaStore](https://github.com/pivotal-cf/PCC-Sample-App-PizzaStore)
-uses the GemFire cluster within a PCC service instance as a system of record.
+uses the <%=vars.component_product%> cluster within a <%=vars.product_full%> service instance as a system of record.
 Directions for running the app are in the GitHub repository's `README.md` file.
-The app is versioned, and branches of the repository represent PCC
+The app is versioned, and branches of the repository represent <%=vars.product_short%>
 versions.
-For PCC <%=vars.product_version%>, use the branch named
+For <%=vars.product_short%> <%=vars.product_version%>, use the branch named
 `release/<%=vars.product_version_period%>`.
 
 The app uses Spring Boot Data GemFire. The documentation for this opinionated extension of Spring Data GemFire is at [Spring Boot for Apache Geode & Pivotal GemFire Reference Guide](https://docs.spring.io/autorepo/docs/spring-boot-data-geode-build/1.0.0.BUILD-SNAPSHOT/reference/htmlsingle/).
 
-The app saves pizza orders within the GemFire servers of a PCC service
+The app saves pizza orders within the <%=vars.component_product%> servers of a <%=vars.product_short%> service
 instance.
 The app takes orders for pizza toppings and sauces with a REST interface.
 
-In addition, the app demonstrates two distinct features of PCC:
+In addition, the app demonstrates two distinct features of <%=vars.product_short%>:
 
-- Running an app on a TLS-enabled cluster within PCC.
-- GemFire continuous queries as used by a Spring Boot app.
+- Running an app on a TLS-enabled cluster within <%=vars.product_short%>.
+- <%=vars.component_product%> continuous queries as used by a Spring Boot app.
 
 ## Top Down Explanation
 
@@ -37,12 +37,12 @@ the annotation belongs on the class header:
 public class CloudcachePizzaStoreApplication
 ```
 This app is the client within a standard client/server architecture.
-The PCC cluster contains the servers.
+The <%=vars.product_short%> cluster contains the servers.
 The client cache is a driver for interactions with the servers,
 allowing eventual region creation within the client cache.
 
 Annotate the configuration with `@EnableEntityDefinedRegions` to enable
-a runtime scan of classes that define the GemFire regions. 
+a runtime scan of classes that define the <%=vars.component_product%> regions. 
 Within `GemFireConfiguration.java` in this example:
 
 ```
@@ -50,7 +50,7 @@ Within `GemFireConfiguration.java` in this example:
 public class GemFireConfiguration
 ```
 The Spring repository construct is the correct choice to use
-for the data storage, which will be a GemFire region.
+for the data storage, which will be a <%=vars.component_product%> region.
 To implement it,
 annotate this example's `PizzaRepository` implementation
 with `@Repository`:
@@ -60,7 +60,7 @@ with `@Repository`:
 public interface PizzaRepository extends CrudRepository<Pizza, String>
 ```
 
-A GemFire region underlies the Spring repository,
+A <%=vars.component_product%> region underlies the Spring repository,
 storing the ordered pizzas.
 Annotate the `Pizza` class model with `@Region`:
 
@@ -69,7 +69,7 @@ Annotate the `Pizza` class model with `@Region`:
 public class Pizza {
 ```
 
-Within the `Pizza` class, identify the key of the GemFire region entries with
+Within the `Pizza` class, identify the key of the <%=vars.component_product%> region entries with
 the `@Id` annotation.
 It is the `name` field in this example:
 
@@ -82,13 +82,13 @@ The `@SpringBootApplication` annotation
 results in a chain of opinionated defaults,
 all of which are appropriate for this app.
 It identifies the app as a client.
-The client receives a GemFire client cache.
+The client receives a <%=vars.component_product%> client cache.
 Any regions will default to type `PROXY`.
 A proxy type of region forwards all region operations to the
 Gemfire servers; no data is stored within the app's client cache.
 
 See [Configuring Regions](https://docs.spring.io/spring-data-gemfire/docs/current/reference/html/#bootstrap-annotation-config-regions) for Spring details.
-See [Region Design](region-design.html) for PCC details on regions.
+See [Region Design](region-design.html) for <%=vars.product_short%> details on regions.
 
 ## The App Contoller
 
@@ -101,25 +101,25 @@ public class AppController
 ```
 As pizzas are ordered,
 a `CrudRepository.save()` operation causes a
-GemFire `put` operation that updates the region on the GemFire server.
+<%=vars.component_product%> `put` operation that updates the region on the <%=vars.component_product%> server.
 
 ## TLS-Enabled Cluster Demonstration
 
 The app operates in one of two ways:
 
-1. Communication with and within the GemFire cluster uses
+1. Communication with and within the <%=vars.component_product%> cluster uses
 TLS encryption.
-1. Communication with and within the GemFire cluster _does not_ use
+1. Communication with and within the <%=vars.component_product%> cluster _does not_ use
 TLS encryption.
 
 The operation of the running app is unchanged
 whether TLS encryption is enabled within the Gemfire cluster or not.
 
 Setting up this app with TLS encryption enabled
-demonstrates one way to set the needed GemFire properties
+demonstrates one way to set the needed <%=vars.component_product%> properties
 detailed in [Developing an App Under TLS](tls-enabled-app.html).
 It uses Spring profiles.
-The manifest that sets the `tls` profile incorporates the GemFire
+The manifest that sets the `tls` profile incorporates the <%=vars.component_product%>
 properties from file `/resources/application-tls.properties`.
 
 ## Continuous Queries in the App
