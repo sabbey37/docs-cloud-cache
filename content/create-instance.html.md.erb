@@ -33,6 +33,7 @@ The <%=vars.product_full%> service broker supports the following parameters:
 - `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by the operator.
 - `new_size_percentage`: An integer that specifies the percentage of the heap to allocate to young generation. This value must be between `5` and `83`. By default, the new size is 2&nbsp;GB or 10% of heap, whichever is smaller.
 - `distributed_system_id`: An integer that provides a unique identifier for a cluster that participates in a WAN.
+- `shared_write_access`: A boolean, that when true, allows an app within a different space write access to data in the cluster when service-instance sharing is enabled.
 
 This example enables TLS within the cluster:
 
@@ -50,6 +51,13 @@ This example assigns the service a specific distributed system ID, which is impo
 
 <pre class='terminal'>
 $ cf create-service p-cloudcache small my-cloudcache -c '{"distributed_system_id": 2}'
+</pre>
+
+This example creates a cluster that allows write access by an app in
+a different space when service-instance sharing is enabled.
+
+<pre class='terminal'>
+$ cf create-service p-cloudcache small my-cloudcache -c '{"shared_write_access":true}'
 </pre>
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
