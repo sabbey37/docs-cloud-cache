@@ -112,7 +112,11 @@ less than or equal to 255.
 
 ###<a id="plan-config"></a> Configure Service Plans
 
-You can configure five individual plans for your developers. Select the **Plan 1** through **Plan 5** tabs to configure each of them.
+You will configure 11 individual plans by selecting each of the tabs.
+There are **Plan 1** through **Plan 5**,
+three plans that reside on a single VM (called **Co-located Single VM Plan**),
+and three plans that spread locators and servers among three VMs
+(called **Co-located Multi VM Plan**).
 
 ![Configuring a Plan](configure-plan.png)
 
@@ -149,20 +153,21 @@ For more information on how VM memory is allocated, see [VM Memory Allocation](m
 
 When you finish configuring the plan, click **Save** to save your configuration options.
 
-####<a id='small-footprint-plan'></a> Configure a Small Footprint Plan
+####<a id='small-footprint-plan'></a> Configure a Co-located Multi VM Plan
 
-The Small Footprint Plan uses three VMs to implement a default
+Any of the Co-located Multi VM Plans use three VMs to implement a default
 plan with three locators and three servers.
 Each of the three VMs has one locator and one server.
+**Co-located Multi VM Plan 1** has a default plan name of `small-footprint`. 
 
-This plan is appropriate for production installations that can tolerate the
+This type of plan is appropriate for production installations that can tolerate the
 diminished load-handling capacity and reduced resilience that would
 result from the loss of a VM.
 Installations needing resilience in the face of a VM loss
 should use a plan in which each <%=vars.product_short%> cluster member resides within
 its own VM.
 
-A <%=vars.product_short%> service instance using the Small Footprint Plan may be created
+A <%=vars.product_short%> service instance using a Co-located Multi VM Plan may be created
 with more servers than the default three servers.
 Follow the instructions within
 [Creating a <%=vars.product_full%> Service Instance](create-instance.html)
@@ -187,10 +192,10 @@ running.
 An error message will be issued if an attempt is made to scale down
 by more than one server at a time,
 or if an attempt is made to reduce the number of servers below the
-minimum size of the default Small Footprint Plan size of three servers.
+minimum size of the default Co-located Multi VM Plan size of three servers.
 
-To configure a Small Footprint Plan,
-enable the plan with the Small Footprint Plan tab.
+To configure a Co-located Multi VM Plan,
+enable the plan with the Co-located Multi VM Plan tab.
 
 ![Configuring a Small Footprint Plan](configure-sf-plan.png)
 
