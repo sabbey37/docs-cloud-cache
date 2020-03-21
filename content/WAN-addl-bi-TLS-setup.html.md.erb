@@ -245,7 +245,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
    displaying the Cluster A service key, as above, before updating it to append credentials for
    the additional cluster.
    <br /><br />The following example adds Cluster C's credentials to Cluster A's `remote_clusters` element:
-
+<a id='update-service-with-two-creds'></a>
     <pre class='terminal'>
     $ cf update-service wan1 -c '
     {
@@ -257,6 +257,21 @@ In the `cf create-service` command, use the `-c` option to specify the following
           "10.1.16.6:1053",
           "10.1.16.8:1053"
          ],
+        },
+        "remote_locators": [
+         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+        ],
+        "trusted_sender_credentials": [
+         {
+          "username": "gateway_sender_PQR",
+          "password": "gws-PQR-password",
+         }
+        ]
+       },
+       {
+        "recursors": {
          "services-subnet-3.service-instance-id-3.bosh": [
           "10.2.32.7:1053",
           "10.2.32.6:1053",
@@ -264,17 +279,12 @@ In the `cf create-service` command, use the `-c` option to specify the following
          ]
         },
         "remote_locators": [
-         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
-         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
-         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id1.locator.services-subnet-3.service-instance-id-3.bosh[55221]",
          "id2.locator.services-subnet-3.service-instance-id-3.bosh[55221]",
          "id3.locator.services-subnet-3.service-instance-id-3.bosh[55221]"
         ],
         "trusted_sender_credentials": [
          {
-          "username": "gateway_sender_PQR",
-          "password": "gws-PQR-password",
           "username": "gateway_sender_XYZ",
           "password": "gws-XYZ-password"
          }
