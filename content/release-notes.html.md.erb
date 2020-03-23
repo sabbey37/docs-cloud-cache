@@ -4,14 +4,30 @@ title: VMware Tanzu GemFire Release Notes
 
 ## <a id='v1110'></a>v1.11.0
 
-**Release Date:**  <%=vars.release_date%>
+**Release Date:**  March 23,2020
 
 Features included in this release:
 
-- <%=vars.product_full%> 1.11 ???.
-
+- <%=vars.product_full%> is our product's new name.
+<%=vars.product_short%> used to be called Pivotal Cloud Cache.
+- When an app runs within a different space than the <%=vars.product_short%>
+service instance,
+the service instance may now be configured to permit the app to write data. 
+- [Configure Service Plans](install-configure.html#plan-config) describes
+the revised set of offered service plans.
+The Small Footprint Plan becomes a set of three colocated multi-VM plans.
+The Dev Plan becomes a set of three colocated single-VM plans.
+- The service key shows whether or not a service instance has TLS encryption
+enabled with the `tls-enabled` flag.
+- Fixed a bug in which installation of the <%=vars.product_short%> tile
+would fail if there was an upper case letter in the name of
+the service network name.
+- Fixed a bug which caused the smoke test to fail if the plan name for
+a colocated single-VM plan changed.
+- Fixed a bug in which only two sets of WAN cluster details
+were visible in service keys when there ought to have been three sets. 
 - <%=vars.product_short%> runs <%=vars.component_product%> <%=vars.product_version_gemfire%>
-- <%=vars.product_short%> supports <%=vars.app_runtime_full%> ?.?.
+- <%=vars.product_short%> supports <%=vars.app_runtime_full%> 2.9.
 - <%=vars.product_short%> ships with JDK 1.8_222.
 
 ## Quick App Development
