@@ -98,11 +98,11 @@ with a security role that can manage cluster data:
   create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
   ```
 
-### <a id="service-instance-dev-plan"></a> Dev Plans
+### <a id="service-instance-dev-plan"></a> Single-VM Plans
 
-The Dev Plan is a type of service plan
+The Colocated Single-VM Plan is a type of service plan
 that is useful for development and testing.
-This example creates a Dev Plan service instance:
+This example creates a Colocated Single-VM Plan service instance:
 
 <pre class='terminal'>
 $ cf create-service p-cloudcache dev-plan my-dev-cloudcache
@@ -121,7 +121,7 @@ as described in [Partitioned Region Types for Creating Regions on the Server](re
 
 If `example_partition_region` has **not** been created,
 it is probably because post-deploy scripts are not enabled for <%=vars.ops_manager%>,
-as described in [Configure a Dev Plan](./install-configure.html#dev-plan).
+as described in [Configure a Co-located Single VM Plan](./install-configure.html#dev-plan).
 
 ## <a id="delete-SI"></a> Delete a Service Instance
 
