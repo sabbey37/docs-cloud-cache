@@ -199,23 +199,26 @@ enable the plan with the Co-located Multi VM Plan tab.
 
 ![Configuring a Small Footprint Plan](configure-sf-plan.png)
 
-####<a id='dev-plan'></a> Configure a Dev Plan
+####<a id='dev-plan'></a> Configure a Co-located Single VM Plan
 
-A Dev Plan is a type of service plan.
-Use a Dev Plan for development and testing.
+A Co-located Single VM Plan is a type of service plan.
 The plan provides a single locator and server,
 which are colocated within a single VM. 
-The Dev Plan automatically creates a single region called
+
+<p class="note warning"><strong> WARNING:</strong> Data loss results when the single VM this plan provides goes down or restarts.</p>
+
+The plan automatically creates a single region called
 `example_partition_region`.
 The region type is `PARTITION`, a partitioned region without
 redundancy or persistence of entries.
-You can create other regions as desired with a Dev Plan service instance.
+You can create other regions as desired with a Co-located Single VM Plan service instance.
 
-The page for configuring a Dev Plan is similar to the page for configuring 
+There are three Co-located Single VM Plans to configure.
+The page for configuring this plan is similar to the page for configuring 
 other service plans.
-To configure the Dev Plan, input information in the fields and make selections from the options on the **Plan for test development** page. 
+To configure a Co-located Single VM Plan Dev Plan, input information in the fields and make selections from the options on each **Configure Co-located Single VM Plan** page. 
 
-![Dev Plan Configuration Sections](dev-plan.png)
+![Co-located Single VM Plan Configuration Sections](dev-plan.png)
 
 ###<a id='syslog'></a> Syslog
 
