@@ -278,8 +278,8 @@ Click **Save** after changing values.
 
 ###<a id='security-section'></a> Security
 
-There are four configuration aspects to the Security settings.
-Each of the four must be considered and appropriately handled
+There are three configuration aspects to the Security settings.
+Each of the three must be considered and appropriately handled
 within these settings.
 Once the Security properties settings have been set,
 click **Save**.
@@ -287,7 +287,7 @@ The Security properties Settings page appears as:
 
 ![Security section](security-settings.png)
 
-The four items in this page to handle are:
+The three items in this page to handle are:
 
 1.  The environment may be configured to more securely store service keys
 within CredHub,
@@ -296,21 +296,12 @@ To enable this functionality,
 click on the box labeled **Enable Secure Service Instance Credentials**
 to enable use of CredHub.
 
-2. To permit the creation of a <%=vars.product_short%> service instance that will
-TLS-encrypt communications within the cluster,
-check the box labeled **TLS Supported**.
-Checking the box does not cause new service instances to encrypt
-communications; follow the directions in [Provide Optional Parameters](create-instance.html#params) to create a new service instance with
-TLS encryption.
-
-3. An 'X' is required in the text box to promote the understanding that
-a TLS-enabled service instance cannot be created if the <%=vars.app_runtime_abbr%> environment
-is not set up to handle TLS. A TLS-enabled environment is 
-required independent of whether a TLS-enabled cluster will be
-created; see [Preparing for TLS](prepare-TLS.html) for how to
+2. An 'X' is required in the text box to promote the understanding that
+the environment must be set up to handle TLS encryption.
+See [Preparing for Transport Layer Security (TLS)](prepare-TLS.html) for how to
 prepare the <%=vars.app_runtime_abbr%> environment.
 
-4. If User Account and Authentication (UAA) of <%=vars.product_short%> users will go
+3. If User Account and Authentication (UAA) of <%=vars.product_short%> users will go
 through an external system,
 enable that with the radio button labeled **UAA Auth enabled**.
 With UAA enabled, create a UAA client before doing this tile installation
