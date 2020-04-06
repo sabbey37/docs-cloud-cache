@@ -3,30 +3,35 @@ title: View Available Plans
 ---
 
 Run `cf marketplace` to view the installed <%=vars.product_full%> tile version and
-its associated <%=vars.component_product%> version. For example:
+its associated <%=vars.component_product%> version. In this example, only a single plan is available:
 
 <pre class='terminal'>
-$ cf marketplace
-Getting services from marketplace in org system / space system as admin...
-OK
+% cf marketplace
+Getting services from marketplace in org system / space system
+ as admin...
 
-service       plans           description                                                broker
-p-cloudcache  small-footprint Pivotal Cloud Cache(PCC v1.9.1-build.12, GemFire v9.8.4)   cloudcache-broker
+service       plans     description                                                                      broker
+p-cloudcache  dev-plan  VMware Tanzu GemFire(version "1.11.0-build.78", VMware GemFire version "9.9.1")  cloudcache-broker
 </pre>
 
-Run `cf marketplace -s p-cloudcache` to view all plans available for <%=vars.product_short%>. The plan names displayed are configured by the operator on tile installation.
+Run `cf marketplace -s p-cloudcache` to view all plans available
+for <%=vars.product_short%>.
+The plan names displayed are configured by the operator during
+tile installation.
+In this example, a subset of the available plans are enabled.
 
 <pre class='terminal'>
-$ cf marketplace -s p-cloudcache
+% cf marketplace -s p-cloudcache
+Getting service plan information for service p-cloudcache
+ as admin...
 
-Getting service plan information for service p-cloudcache as admin...
-OK
-
-service plan   description      free or paid
-extra-small    Caching Plan 1   free
-small          Caching Plan 2   free
-medium         Caching Plan 3   free
-large          Caching Plan 4   free
-extra-large    Caching Plan 5   free
+service plan      description      free or paid
+extra-small       Caching Plan 1   free
+small             Caching Plan 2   free
+medium            Caching Plan 3   free
+dev-plan1         Single-VM Plan   free
+dev-plan2         Single-VM Plan   free
+small-footprint1  Multi-VM Plan    free
+small-footprint2  Multi-VM Plan    free
 </pre>
 
