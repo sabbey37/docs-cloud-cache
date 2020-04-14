@@ -722,19 +722,3 @@ for a two cluster deployment:
            Used Global Total = 2390 MB
            Max Global Total = 6402 MB
 ```
-
-## <a id="monitoring-prometheus"></a> Monitoring Pivotal Cloud Cache Service Instances with Prometheus
-
-Prometheus is one of various tools you can use to monitor services instances. It is a monitoring and alerting toolkit that allows for metric scraping.
-You can use the [Firehose exporter](https://github.com/cloudfoundry-community/firehose_exporter) to export all the metrics from the Firehose,
-which you can then graph with [Grafana](https://github.com/grafana/grafana) to monitor your PCC cluster.
-
-Follow the instructions [here](https://github.com/pivotal-cf/prometheus-on-PCF) to deploy Prometheus alongside your PCF cluster.
-
-Prometheus can be deployed on any IaaS.
-You need to verify that the Firehose exporter job can talk to your UAA VM.
-This might involve opening up firewall rules or enabling your VM to allow outgoing traffic.
-
-![Grafana Example](grafana.png)
-
-You can run queries on, and build a custom dashboard of, specific metrics that are important to you.
