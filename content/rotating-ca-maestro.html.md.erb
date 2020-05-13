@@ -14,7 +14,7 @@ by following the procedures in [Preparing for TLS](prepare-TLS.html).
 You must manually rotate this CA certificate before the certificate expires or if it is compromised.
 
 **For <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) versions 2.8 and later**, certificate rotation is handled by the CredHub Maestro CLI, as documented on this page. For more about Maestro, see
-[Getting Started with CredHub Maestro](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/getting-started-with-maestro-cli.html).
+[Getting Started with CredHub Maestro](https://docs.pivotal.io/platform/security/pcf-infrastructure/getting-started-with-maestro-cli.html).
 
 **For <%=vars.app_runtime_abbr%> versions 2.7 and earlier**, which do not provide Maestro, see [Managing Certificates (pre-Maestro)](rotating-ca.html).
 
@@ -129,7 +129,7 @@ To check certificate expiration dates:
 
 ##<a id='rotate-ca-maestro'></a> Rotate CA Certificates Using Maestro
 
-The Maestro rotation procedure is documented in the Maestro documentation under two topics. Follow the procedures described in [Rotate the Services TLS CA and its Leaf Certificates](https://docs-pcf-staging.cfapps.io/platform/2-8/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
+The Maestro rotation procedure is documented in the Maestro documentation under two topics. Follow the procedures described in [Rotate the Services TLS CA and its Leaf Certificates](https://docs.pivotal.io/platform/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
 
 The Maestro procedure contains multiple "rebind" and "apply changes" steps. You may find the following <%=vars.product_short%>-specific details helpful when rotating certificates.
 
