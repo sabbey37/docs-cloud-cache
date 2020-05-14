@@ -12,7 +12,7 @@ versions.
 For <%=vars.product_short%> <%=vars.product_version%>, use the branch named
 `release/<%=vars.product_version_period%>`.
 
-The app uses Spring Boot Data GemFire. The documentation for this opinionated extension of Spring Data GemFire is at [Spring Boot for Apache Geode & Pivotal GemFire Reference Guide](https://docs.spring.io/autorepo/docs/spring-boot-data-geode-build/1.0.0.BUILD-SNAPSHOT/reference/htmlsingle/).
+The app uses Spring Boot Data GemFire. The documentation for this opinionated extension of Spring Data GemFire is at [Spring Boot for Apache Geode & Pivotal GemFire Reference Guide](https://docs.spring.io/autorepo/docs/spring-boot-data-geode-build/1.2.6.BUILD-SNAPSHOT/reference/htmlsingle/).
 
 The app saves pizza orders within the <%=vars.component_product%> servers of a <%=vars.product_short%> service
 instance.
@@ -34,21 +34,18 @@ the annotation belongs on the class header:
 
 ```
 @SpringBootApplication
+@EnableEntityDefinedRegions
 public class CloudcachePizzaStoreApplication
 ```
+
+The `@EnableEntityDefinedRegions` annotation enables
+a runtime scan of classes that define the regions. 
+
 This app is the client within a standard client/server architecture.
 The <%=vars.product_short%> cluster contains the servers.
 The client cache is a driver for interactions with the servers,
 allowing eventual region creation within the client cache.
 
-Annotate the configuration with `@EnableEntityDefinedRegions` to enable
-a runtime scan of classes that define the <%=vars.component_product%> regions. 
-Within `GemFireConfiguration.java` in this example:
-
-```
-@EnableEntityDefinedRegions(basePackageClasses = Pizza.class)
-public class GemFireConfiguration
-```
 The Spring repository construct is the correct choice to use
 for the data storage, which will be a <%=vars.component_product%> region.
 To implement it,
@@ -84,8 +81,8 @@ all of which are appropriate for this app.
 It identifies the app as a client.
 The client receives a <%=vars.component_product%> client cache.
 Any regions will default to type `PROXY`.
-A proxy type of region forwards all region operations to the
-Gemfire servers; no data is stored within the app's client cache.
+A proxy type of region forwards all region operations to the servers;
+no data is stored within the app's client cache.
 
 See [Configuring Regions](https://docs.spring.io/spring-data-gemfire/docs/current/reference/html/#bootstrap-annotation-config-regions) for Spring details.
 See [Region Design](region-design.html) for <%=vars.product_short%> details on regions.
@@ -113,14 +110,8 @@ TLS encryption.
 TLS encryption.
 
 The operation of the running app is unchanged
-whether TLS encryption is enabled within the Gemfire cluster or not.
-
-Setting up this app with TLS encryption enabled
-demonstrates one way to set the needed <%=vars.component_product%> properties
-detailed in [Developing an App Under TLS](tls-enabled-app.html).
-It uses Spring profiles.
-The manifest that sets the `tls` profile incorporates the <%=vars.component_product%>
-properties from file `/resources/application-tls.properties`.
+whether TLS encryption is enabled within the <%=vars.component_product%>
+cluster or not.
 
 ## Continuous Queries in the App
 
@@ -133,7 +124,7 @@ Its callback logs the order.
 
 The second CQ queries for pizzas with a `PESTO` sauce.
 When a pesto-sauced pizza is ordered,
-the callback adds that pizza to a second region called `Name`.
+the callback adds that pizza's name to a second region called `Name`.
 
 Within a Spring Boot Data GemFire app,
 to specify a continuous query:
