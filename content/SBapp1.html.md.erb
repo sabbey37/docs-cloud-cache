@@ -5,22 +5,23 @@ title: An Example Spring Boot App
 
 The versioned example Spring Boot Data GemFire app at
 [PCC-Sample-App-PizzaStore](https://github.com/pivotal-cf/PCC-Sample-App-PizzaStore)
-uses the <%=vars.component_product%> cluster within a <%=vars.product_full%> service instance as a system of record.
+uses the <%=vars.product_full%> service instance as a system of record.
 Directions for running the app are in the GitHub repository's `README.md` file.
 The app is versioned, and branches of the repository represent <%=vars.product_short%>
 versions.
 For <%=vars.product_short%> <%=vars.product_version%>, use the branch named
 `release/<%=vars.product_version_period%>`.
 
-The app uses Spring Boot Data GemFire. The documentation for this opinionated extension of Spring Data GemFire is at [Spring Boot for Apache Geode & Pivotal GemFire Reference Guide](https://docs.spring.io/autorepo/docs/spring-boot-data-geode-build/1.2.6.BUILD-SNAPSHOT/reference/htmlsingle/).
+The app uses Spring Boot Data GemFire. The documentation for this opinionated extension of Spring Data GemFire is at [Spring Boot for Apache Geode & Pivotal GemFire Reference Guide](https://docs.spring.io/spring-boot-data-geode-build/1.2.x/reference/html5/).
 
 The app saves pizza orders within the <%=vars.component_product%> servers of a <%=vars.product_short%> service
 instance.
-The app takes orders for pizza toppings and sauces with a REST interface.
+A REST interface provides a way for the app to take orders for
+pizza toppings and sauces.
 
 In addition, the app demonstrates two distinct features of <%=vars.product_short%>:
 
-- Running an app on a TLS-enabled cluster within <%=vars.product_short%>.
+- Running an app on a TLS-enabled cluster.
 - <%=vars.component_product%> continuous queries as used by a Spring Boot app.
 
 ## Top Down Explanation
@@ -30,7 +31,7 @@ at the topmost level of the app,
 the `@SpringBootApplication` annotation causes
 the app to have a `ClientCache` instance.
 Within the example app's `CloudcachePizzaStoreApplication` class,
-the annotation belongs on the class header:
+place the annotation at the class definition level:
 
 ```
 @SpringBootApplication
@@ -43,10 +44,9 @@ a runtime scan of classes that define the regions.
 
 This app is the client within a standard client/server architecture.
 The <%=vars.product_short%> cluster contains the servers.
-The client cache is a driver for interactions with the servers,
-allowing eventual region creation within the client cache.
+The client cache is a driver for interactions with the servers.
 
-The Spring repository construct is the correct choice to use
+The Spring repository construct is the preferred choice to use
 for the data storage, which will be a <%=vars.component_product%> region.
 To implement it,
 annotate this example's `PizzaRepository` implementation
