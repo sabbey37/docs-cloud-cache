@@ -20,7 +20,7 @@ This set of directions sets up an interaction between Cluster A and and a third 
 
 1. Log into Foundation A using Foundation A Cloud Foundry credentials.
 
-1. View the Cluster A service key and save a copy of the `remote_cluster_info` element, which includes the `recursors` array, `remote_locators` array,
+1. View the Cluster A service key and save a copy of the `remote_cluster_info` element, which includes the `remote_locators` array,
    and `trusted_sender_credentials`. These are the credentials that enable other clusters to communicate with Cluster A.
 
     <pre class='terminal'>
@@ -80,13 +80,6 @@ This set of directions sets up an interaction between Cluster A and and a third 
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-         "services-subnet-2.service-instance-id-2.bosh": [
-          "10.1.16.7:1053",
-          "10.1.16.6:1053",
-          "10.1.16.8:1053"
-         ]
-        },
         "remote_locators": [
          "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
@@ -146,7 +139,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
     `create succeeded` when service creation is completed.
 
 1. While logged in to Foundation C, create a service key for Cluster C and save a copy of the
-   `remote_cluster_info` element, which includes the `recursors` array, `remote_locators` array, and
+   `remote_cluster_info` element, which includes the `remote_locators` array and
    `trusted_sender_credentials`. These are the credentials that enable other clusters to communicate
    with Cluster C.
 
@@ -208,13 +201,6 @@ In the `cf create-service` command, use the `-c` option to specify the following
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-          "services-subnet.service-instance-id.bosh": [
-            "10.0.8.5:1053",
-            "10.0.8.7:1053",
-            "10.0.8.6:1053"
-          ]
-        }
         "remote_locators": [
           "id1.locator.services-subnet.service-instance-id.bosh[55221]",
           "id2.locator.services-subnet.service-instance-id.bosh[55221]",
@@ -345,18 +331,6 @@ In the `cf create-service` command, use the `-c` option to specify the following
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-         "services-subnet-2.service-instance-id-2.bosh": [
-          "10.1.16.7:1053",
-          "10.1.16.6:1053",
-          "10.1.16.8:1053"
-         ],
-         "services-subnet-3.service-instance-id-3.bosh": [
-          "10.2.32.7:1053",
-          "10.2.32.6:1053",
-          "10.2.32.8:1053"
-         ]
-        },
         "remote_locators": [
          "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
