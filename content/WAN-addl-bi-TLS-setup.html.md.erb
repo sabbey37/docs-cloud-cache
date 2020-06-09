@@ -20,7 +20,7 @@ This set of directions sets up an interaction between Cluster A and and a third 
 
 1. Log into Foundation A using Foundation A Cloud Foundry credentials.
 
-1. View the Cluster A service key and save a copy of the `remote_cluster_info` element, which includes the `remote_locators` array,
+1. View the Cluster A service key and save a copy of the `remote_cluster_info` element, which includes the `recursors` array, the `remote_locators` array,
    and `trusted_sender_credentials`. These are the credentials that enable other clusters to communicate with Cluster A.
 
     <pre class='terminal'>
@@ -145,7 +145,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
     `create succeeded` when service creation is completed.
 
 1. While logged in to Foundation C, create a service key for Cluster C and save a copy of the
-   `remote_cluster_info` element, which includes the `remote_locators` array and
+   `remote_cluster_info` element, which includes the `recursors` array, the `remote_locators` array and
    `trusted_sender_credentials`. These are the credentials that enable other clusters to communicate
    with Cluster C.
 
