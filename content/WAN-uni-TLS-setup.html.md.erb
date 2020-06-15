@@ -277,7 +277,7 @@ replication, but does not send operations to Cluster A:
     </pre>
 
     Verify that the `wan{}` field of the Cluster A service key contains a `remote_clusters`
-    element which specifies contact information for Cluster B, including Cluster B's `recursors` array,
+    element which specifies contact information for Cluster B, including the
     `remote_locators` array, but **NOT** Cluster B's `trusted_sender_credentials`:
 
     <pre class='terminal'>
@@ -336,13 +336,6 @@ replication, but does not send operations to Cluster A:
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-         "services-subnet-2.service-instance-id-2.bosh": [
-          "10.1.16.7:1053",
-          "10.1.16.6:1053",
-          "10.1.16.8:1053"
-         ]
-        },
         "remote_locators": [
          "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
@@ -364,7 +357,7 @@ replication, but does not send operations to Cluster A:
     </pre>
 
     Verify that the `wan{}` field of the Cluster B service key contains a `remote_clusters`
-    element which specifies contact information for Cluster A, including Cluster A's `recursors` array,
+    element which specifies contact information for Cluster A, including the
     `remote_locators` array, and `trusted_sender_credentials`:
 
     <pre class='terminal'>
@@ -423,13 +416,6 @@ replication, but does not send operations to Cluster A:
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-         "services-subnet.service-instance-id.bosh": [
-          "10.0.8.6:1053",
-          "10.0.8.7:1053",
-          "10.0.8.5:1053"
-         ]
-        },
         "remote_locators": [
          "id1.locator.services-subnet.service-instance-id.bosh[55221]",
          "id2.locator.services-subnet.service-instance-id.bosh[55221]",

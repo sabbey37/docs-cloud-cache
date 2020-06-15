@@ -20,7 +20,7 @@ This set of directions sets up an interaction between Cluster A and and a third 
 
 1. Log into Foundation A using Foundation A Cloud Foundry credentials.
 
-1. View the Cluster A service key and save a copy of the `remote_cluster_info` element, which includes the `recursors` array, `remote_locators` array,
+1. View the Cluster A service key and save a copy of the `remote_cluster_info` element, which includes the `recursors` array, the `remote_locators` array,
    and `trusted_sender_credentials`. These are the credentials that enable other clusters to communicate with Cluster A.
 
     <pre class='terminal'>
@@ -80,13 +80,6 @@ This set of directions sets up an interaction between Cluster A and and a third 
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-         "services-subnet-2.service-instance-id-2.bosh": [
-          "10.1.16.7:1053",
-          "10.1.16.6:1053",
-          "10.1.16.8:1053"
-         ]
-        },
         "remote_locators": [
          "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
@@ -145,8 +138,16 @@ In the `cf create-service` command, use the `-c` option to specify the following
     Output from the `cf services` command will show the `last operation` as
     `create succeeded` when service creation is completed.
 
-1. While logged in to Foundation C, create a service key for Cluster C and save a copy of the
-   `remote_cluster_info` element, which includes the `recursors` array, `remote_locators` array, and
+1. While logged in to Foundation C, create a service key for Cluster C.
+
+    <pre class='terminal'>
+    $ cf create-service-key wan3 k3
+    Creating service key wan3 for service instance k3 ...
+    OK
+    </pre>
+   
+    Display the service key and save a copy of the
+   `remote_cluster_info` element, which includes the `recursors` array, the `remote_locators` array and
    `trusted_sender_credentials`. These are the credentials that enable other clusters to communicate
    with Cluster C.
 
@@ -208,13 +209,6 @@ In the `cf create-service` command, use the `-c` option to specify the following
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-          "services-subnet.service-instance-id.bosh": [
-            "10.0.8.5:1053",
-            "10.0.8.7:1053",
-            "10.0.8.6:1053"
-          ]
-        }
         "remote_locators": [
           "id1.locator.services-subnet.service-instance-id.bosh[55221]",
           "id2.locator.services-subnet.service-instance-id.bosh[55221]",
@@ -235,9 +229,8 @@ In the `cf create-service` command, use the `-c` option to specify the following
    array and the `remote_locators` array, but **NOT** the `trusted_sender_credentials`.
    This allows Cluster A to send messages to Cluster C, but blocks data flow from Cluster C to Cluster A.
    <br /><br />**IMPORTANT:** You must also retain the credentials for all clusters with which Cluster A
-   interacts, in this example those of Cluster B. The existing credentials can be copied by
-   displaying the Cluster A service key, as above, before updating it to append credentials for
-   the additional cluster.
+   interacts, in this example those of Cluster B.
+   The existing `remote_locators` and `recursors` credentials can be copied from the `remote_cluster_info` entry in Cluster B's service key, before updating the Cluster A service instance to append credentials for the additional cluster. Do not include Cluster B's `trusted_sender_credentials`.
    <br /><br />The following example adds Cluster C's credentials to Cluster A's `remote_clusters` element:
 
     <pre class='terminal'>
@@ -250,7 +243,16 @@ In the `cf create-service` command, use the `-c` option to specify the following
           "10.1.16.7:1053",
           "10.1.16.6:1053",
           "10.1.16.8:1053"
-         ],
+         ]
+        },
+        "remote_locators": [
+         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+        ]
+       },
+       {
+        "recursors": {
          "services-subnet-3.service-instance-id-3.bosh": [
           "10.2.32.7:1053",
           "10.2.32.6:1053",
@@ -258,19 +260,20 @@ In the `cf create-service` command, use the `-c` option to specify the following
          ]
         },
         "remote_locators": [
-         "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
-         "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
-         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id1.locator.services-subnet-3.service-instance-id-3.bosh[55221]",
          "id2.locator.services-subnet-3.service-instance-id-3.bosh[55221]",
          "id3.locator.services-subnet-3.service-instance-id-3.bosh[55221]"
-        ],
+        ]
        }
       }
      ]
     }'
     Updating service instance wan1 as admin
     </pre>
+
+    Verify the completion of the service update prior to continuing to the next step.
+    Output from the `cf services` command will show the `last operation` as
+    `update succeeded` when service update is completed.
 
 1. To verify that a service instance has been correctly updated, delete and recreate the cluster service key.
    The recreated service key will have the same user identifiers and passwords as its predecessor, and will reflect the changes you
@@ -286,10 +289,12 @@ In the `cf create-service` command, use the `-c` option to specify the following
     </pre>
 
     Verify that the `wan{}` field of the Cluster A service key contains a `remote_clusters`
-    element which specifies contact information for Cluster B, including Cluster B's `recursors` array,
+    element which specifies contact information for Cluster B, including Cluster B's 
     `remote_locators` array, but **NOT** `trusted_sender_credentials`:
 
     <pre class='terminal'>
+    $ cf service-key wan1 k1
+
     Getting key k1 for service instance wan1 as admin...
 
     {
@@ -322,6 +327,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
        }
       ]
      },
+     "tls-enabled": "true",
      "urls": {
       "gfsh": "https://cloudcache-1.example.com/gemfire/v1",
       "pulse": "https://cloudcache-1.example.com/pulse"
@@ -345,26 +351,18 @@ In the `cf create-service` command, use the `-c` option to specify the following
      "wan": {
       "remote_clusters": [
        {
-        "recursors": {
-         "services-subnet-2.service-instance-id-2.bosh": [
-          "10.1.16.7:1053",
-          "10.1.16.6:1053",
-          "10.1.16.8:1053"
-         ],
-         "services-subnet-3.service-instance-id-3.bosh": [
-          "10.2.32.7:1053",
-          "10.2.32.6:1053",
-          "10.2.32.8:1053"
-         ]
-        },
         "remote_locators": [
          "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
+        ]
+       },
+       {
+        "remote_locators": [
          "id1.locator.services-subnet-3.service-instance-id-3.bosh[55221]",
          "id2.locator.services-subnet-3.service-instance-id-3.bosh[55221]",
          "id3.locator.services-subnet-3.service-instance-id-3.bosh[55221]"
-        ],
+        ]
        }
       ]
      }
