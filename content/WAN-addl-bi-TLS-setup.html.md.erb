@@ -236,9 +236,8 @@ In the `cf create-service` command, use the `-c` option to specify the following
    array, `remote_locators` array, and `trusted_sender_credentials`. This allows Cluster A to
    communicate with Cluster C, and to accept data from Cluster C.
    <br /><br />**IMPORTANT:** You must also retain the credentials for all clusters with which Cluster A
-   interacts, in this example those of Cluster B. The existing credentials can be copied by
-   displaying the Cluster A service key, as above, before updating it to append credentials for
-   the additional cluster.
+   interacts, in this example those of Cluster B.
+   The existing credentials can be copied from the `remote_cluster_info` entry in Cluster B's service key, before updating the Cluster A service instance to append credentials for the additional cluster.
    <br /><br />The following example adds Cluster C's credentials to Cluster A's `remote_clusters` element:
 
     <pre class='terminal'>
