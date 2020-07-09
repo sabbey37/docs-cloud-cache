@@ -8,7 +8,19 @@ title: VMware Tanzu GemFire Release Notes
 
 Features included in this release:
 
-- <%=vars.product_short%> runs <%=vars.component_product%> <%=vars.product_version_gemfire%>
+- Fixed a bug that caused a
+    ```
+    cf update-service --restart
+    ```
+    to only start servers, and not start locators.
+- BOSH BBR bug item
+- Fixed a bug that caused setting up WAN replication to fail
+when external authentication and enterprise single sign-on (SSO)
+was configured.
+- [Telemetry](https://docs.pivotal.io/pivotal-telemetry/1-1/index.html) support
+allows <%=vars.product_short%> service instances to send diagnostic
+information to VMware.
+- <%=vars.product_short%> runs <%=vars.component_product%> v9.9.2.
 - <%=vars.product_short%> ships with JDK 1.8_???.
 
 ## <a id='v1110'></a>v1.11.0
