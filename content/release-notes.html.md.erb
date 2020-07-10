@@ -13,7 +13,10 @@ Features included in this release:
     cf update-service --restart
     ```
     to only start servers, and not start locators.
-- BOSH BBR bug item
+- Fixed a bug which caused BOSH backup and restore to fail with an
+`Unable to form SSL connection` error
+in a TLS-enabled service instance with the secure credentials option
+selected in the tile configuration.
 - Fixed a bug that caused setting up WAN replication to fail
 when external authentication and enterprise single sign-on (SSO)
 was configured.
