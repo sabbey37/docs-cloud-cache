@@ -9,6 +9,23 @@ owner: Cloud Cache Engineers
 
 Features included in this release:
 
+- Fixed a bug that caused a
+    ```
+    cf update-service --restart
+    ```
+    to only start servers, and not start locators.
+- Fixed a bug which caused BOSH backup and restore to fail with an
+`Unable to form SSL connection` error
+in a TLS-enabled service instance with the secure credentials option
+selected in the tile configuration.
+- Fixed a bug that caused setting up WAN replication to fail
+when external authentication was configured.
+- All WAN-connected clusters now appear in the regenerated service key
+when configuring WAN,
+correcting a bug in which only one remote cluster appeared in the service key.
+- [Telemetry](https://docs.pivotal.io/pivotal-telemetry/1-1/index.html) support
+allows <%=vars.product_short%> service instances to send diagnostic
+information to VMware.
 - Cloud Cache runs Pivotal GemFire 9.9.2.
 - <%=vars.product_short%> ships with JDK 1.8_???.
 
