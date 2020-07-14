@@ -252,25 +252,28 @@ In order to implement a bidirectional WAN connection between two clusters, each 
     <pre class='terminal'>
     $ cf update-service wan2 -c '
     {
-      "remote_clusters":[
-      {
-        "recursors": {
-          "services-subnet.service-instance-id.bosh": [
-            "10.0.8.5:1053",
-            "10.0.8.7:1053",
-            "10.0.8.6:1053"
+      "remote_clusters": [
+        {
+          "recursors": {
+            "services-subnet.service-instance-id.bosh": [
+              "10.0.8.5:1053",
+              "10.0.8.7:1053",
+              "10.0.8.6:1053"
+            ]
+          },
+          "remote_locators": [
+            "id1.locator.services-subnet.service-instance-id.bosh[55221]",
+            "id2.locator.services-subnet.service-instance-id.bosh[55221]",
+            "id3.locator.services-subnet.service-instance-id.bosh[55221]"
+          ],
+          "trusted_sender_credentials": [
+            {
+              "username": "gateway_sender_GHI",
+              "password":"gws-GHI-password"
+            }
           ]
         }
-        "remote_locators":[
-          "id1.locator.services-subnet.service-instance-id.bosh[55221]",
-          "id2.locator.services-subnet.service-instance-id.bosh[55221]",
-          "id3.locator.services-subnet.service-instance-id.bosh[55221]"
-        "trusted_sender_credentials":[
-        {
-          "username": "gateway_sender_GHI",
-          "password":"gws-GHI-password"
-        }]
-      }]
+      ]
     }'
     Updating service instance wan2 as admin
     </pre>
