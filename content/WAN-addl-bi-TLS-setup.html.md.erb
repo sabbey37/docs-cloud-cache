@@ -117,7 +117,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
     <pre class='terminal'>
     $ cf create-service p-cloudcache wan-cluster wan3 -c '{
     "tls" : true,
-    "distributed_system_id" : 3 
+    "distributed_system_id" : 3,
       "remote_clusters":[
        {
         "recursors": {
@@ -126,7 +126,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
             "10.0.8.7:1053",
             "10.0.8.6:1053"
           ]
-        }
+        },
         "remote_locators":[
           "id1.locator.services-subnet.service-instance-id.bosh[55221]",
           "id2.locator.services-subnet.service-instance-id.bosh[55221]",
@@ -373,12 +373,12 @@ In the `cf create-service` command, use the `-c` option to specify the following
         "remote_locators": [
          "id1.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
          "id2.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
-         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
+         "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
         ],
         "trusted_sender_credentials": [
          {
           "username": "gateway_sender_PQR",
-          "password": "gws-PQR-password",
+          "password": "gws-PQR-password"
          }
         ]
        },
