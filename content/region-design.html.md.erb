@@ -82,7 +82,7 @@ Region entries are placed into the buckets that are
 distributed across all servers hosting the region.
 <%=vars.component_product%> keeps and maintains a declared number of redundant copies.
 The default number of redundant copies is 1.
-As a server (JVM) reaches a heap usage of 65% of available heap,
+As a server (JVM) reaches a heap usage of 75% of available heap,
 the server destroys entries as space is needed for updates.
 The oldest entry in the bucket where a new entry lives
 is the one chosen for destruction.
@@ -104,14 +104,14 @@ and all servers persist all entries to disk.
 In addition, <%=vars.component_product%> keeps and maintains a declared number of
 redundant copies of all entries.
 The default number of redundant copies is 1.
-As a server (JVM) reaches a heap usage of 65% of available heap,
+As a server (JVM) reaches a heap usage of 75% of available heap,
 the server overflows entries to disk when it needs to make space
 for updates.
 - `PARTITION_PERSISTENT_OVERFLOW`
 Region entries are placed into the buckets that are
 distributed across all servers hosting the region,
 and all servers persist all entries to disk.
-As a server (JVM) reaches a heap usage of 65% of available heap,
+As a server (JVM) reaches a heap usage of 75% of available heap,
 the server overflows entries to disk when it needs to make space
 for updates.
 
@@ -154,14 +154,14 @@ These replicated region types are supported:
 All servers hosting the region have a copy of all entries.
 - `REPLICATE_HEAP_LRU`
 All servers hosting the region have a copy of all entries.
-As a server (JVM) reaches a heap usage of 65% of available heap,
+As a server (JVM) reaches a heap usage of 75% of available heap,
 the server destroys entries as it needs to make space for updates.
 - `REPLICATE_PERSISTENT`
 All servers hosting the region have a copy of all entries,
 and all servers persist all entries to disk.
 - `REPLICATE_PERSISTENT_OVERFLOW`
 All servers hosting the region have a copy of all entries.
-As a server (JVM) reaches a heap usage of 65% of available heap,
+As a server (JVM) reaches a heap usage of 75% of available heap,
 the server overflows entries to disk as it need to make space
 for updates.
 
@@ -195,7 +195,7 @@ is crossed.
 ## <a id="overflow"></a> Overflow
 
 Region overflow is an eviction action that keeps heap memory space
-usage below a fixed threshold of 65% of available heap memory space.
+usage below a fixed threshold of 75% of available heap memory space.
 For a region that pushes at the limits of memory usage,
 overflow reduces the number of or eliminates pauses for
 stop-the-world garbage collection.
