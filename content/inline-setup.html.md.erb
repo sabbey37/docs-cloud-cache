@@ -26,7 +26,7 @@ You implement the `CacheLoader` interface to handle cache misses.
 Each cache miss invokes the `CacheLoader.load` method.
 The `CacheLoader.load` method must acquire and return the value
 for the specified key.
-See the [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
+Find a link to the API documentation at [<%=vars.component_product%> Documentation](https://geode.apache.org/docs).
 
 ![inline read misses](inline-read.png)
 
@@ -70,7 +70,7 @@ for the backend-data-store write to complete.
 An asynchronous event queue (AEQ) to queue the write events together with 
 an implementation of the `AsyncEventListener` interface
 provides the desired behavior.
-See the [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
+Find a link to the API documentation at [<%=vars.component_product%> Documentation](https://geode.apache.org/docs).
 
 
 ![inline cache server interactions](inline-WB.png)
@@ -118,7 +118,7 @@ After both writes, the app's put operation completes.
 
 An implementation of the `CacheWriter` interface implementation provides
 the correct behavior for write through.
-See the [<%=vars.component_product%> API Documentation](http://gemfire-apis.docs.pivotal.io/) for the interface's details.
+Find a link to the API documentation at [<%=vars.component_product%> Documentation](https://geode.apache.org/docs).
 You provide a custom implementation of the `CacheWriter.beforeCreate`
 method to handle backend-data-store writes for put operations that add
 a new entry to the region.
