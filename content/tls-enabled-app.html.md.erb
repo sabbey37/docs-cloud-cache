@@ -4,7 +4,7 @@ title: Developing an App Under TLS
 
 Apps that connect to a TLS-enabled <%=vars.product_full%> service instance
 must set properties to configure the communication with
-the <%=vars.component_product%> components within the <%=vars.product_short%> service instance.
+the cluster components within the <%=vars.product_short%> service instance.
 
 Ensure that the cluster-level prerequisite step of
 [Preparing for TLS](prepare-TLS.html) has been completed.
@@ -13,15 +13,15 @@ For a Spring Data GemFire app
 with a Spring Data GemFire library dependency of
 2.2.0.BUILD-SNAPSHOT or a more recent version,
 attach the `@EnableSsl` annotation to your configuration class
-to enable the TLS encryption for all <%=vars.component_product%> components.
-Also set these <%=vars.component_product%> properties:
+to enable the TLS encryption for all cluster components.
+Also set these properties:
 
 ```
 ssl-use-default-context=true
 ssl-endpoint-identification-enabled=false
 ```
 
-For other apps, the <%=vars.component_product%> properties should be
+For other apps, the properties should be
 
 ```
 ssl-enabled-components=all

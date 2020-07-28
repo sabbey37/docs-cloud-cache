@@ -92,7 +92,7 @@ The set of credentials are in the VCAP_SERVICES environment variable,
 with a role of `readonly` or `cluster_operator_XXX`.
 The app must parse the VCAP_SERVICES environment variable to
 extract the credentials.
-The app uses the credentials to set a <%=vars.component_product%> property that then gets passed
+The app uses the credentials to set a property that then gets passed
 to the `ClientCacheFactory` for the purpose of authentication
 prior to creating the cache.
 
