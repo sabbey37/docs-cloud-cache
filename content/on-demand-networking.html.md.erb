@@ -46,7 +46,7 @@ rules are set up so that connections are open as described in the table below.
     <td>5000-5499</td>
     <td>Two-way</td>
     <td>Inclusive range. Gateway receivers and gateway senders communicate across WAN-separated service instances.  Each <%=vars.product_short%>
-service instance uses <%=vars.component_product%> defaults for the gateway receiver ports.</td>
+service instance uses cluster defaults for the gateway receiver ports.</td>
   </tr>
   <tr>
     <td><strong>ODB</strong></td>
@@ -125,7 +125,7 @@ service instance uses <%=vars.component_product%> defaults for the gateway recei
     <td>8080</td>
     <td>One-way</td>
     <td>PAS communicates with service instances because the Gorouter
-      proxies gfsh requests to <%=vars.component_product%> clusters. </td>
+      proxies gfsh requests to clusters. </td>
   </tr>
   <tr>
     <td><strong><%=vars.product_short%></strong></td>

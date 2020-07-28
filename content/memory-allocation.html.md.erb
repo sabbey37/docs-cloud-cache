@@ -2,7 +2,7 @@
 title: VM Memory Allocation
 ---
 
-The service plans you choose determines how memory is allocated to the <%=vars.component_product%> processes.
+The service plans you choose determines how memory is allocated to the cluster processes.
 One consideration is how much memory is available in each VM.
 
 Memory allocation depends on whether a plan is *colocated* or *non-colocated*:
@@ -17,14 +17,14 @@ The following sections describe how <%=vars.product_full%> allocates memory base
 
 ## Memory Allocation for Colocated Plans
 
-- If total VM memory is 5GB or less, 512 MB is allocated for the locator Java heap; 90% of the remaining memory is allocated to the <%=vars.component_product%> server's Java heap, and the remainder is allocated to the OS.
-- If total VM memory is greater than 5GB, 10% of total memory is allocated for the locator Java heap; 90% of the remaining memory is allocated to the <%=vars.component_product%> server's Java heap, and the remainder is allocated to the OS.
+- If total VM memory is 5GB or less, 512 MB is allocated for the locator Java heap; 90% of the remaining memory is allocated to the cluster server's Java heap, and the remainder is allocated to the OS.
+- If total VM memory is greater than 5GB, 10% of total memory is allocated for the locator Java heap; 90% of the remaining memory is allocated to the cluster server's Java heap, and the remainder is allocated to the OS.
 
 Server heap is reduced to accommodate the **Anti-Virus** and **File Integrity Monitoring (FIM)** add-ons, if they are present.
 
 ## Memory Allocation for Non-colocated Plans
 
-Under non-colocated plans, each VM hosts one <%=vars.component_product%> member, either a locator or a server.
+Under non-colocated plans, each VM hosts one cluster member, either a locator or a server.
 
 - If total VM memory is 2GB or less, 1GB is allocated for the locator or server Java heap, and the remainder to the OS.
 - If total VM memory is between 2G and 8GB, 2GB is allocated to the OS, and the remainder to the locator or server Java heap.

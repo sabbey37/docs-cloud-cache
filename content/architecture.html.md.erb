@@ -5,76 +5,16 @@ title: VMware Tanzu GemFire Architecture
 ## <a id='GFBasics'></a>Tanzu GemFire Basics
 
 <%=vars.component_product%> is the data store within <%=vars.product_full%>.
-A <%=vars.product_short%> service instance requires a small amount of administrative <%=vars.component_product%> setup, and any app will use a limited portion of the <%=vars.component_product%> API.
+A <%=vars.product_short%> service instance requires a small amount of administrative setup, and any app will use a limited portion of the API.
 
-The <%=vars.product_short%> architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of <%=vars.component_product%> servers maintained by a <%=vars.product_short%> service instance. The <%=vars.component_product%> servers provide a low-latency, consistent, fault-tolerant data store within <%=vars.product_short%>.
+The <%=vars.product_short%> architectural model is a client-server model. The clients are apps or microservices, and the servers are a set of cluster servers maintained by a <%=vars.product_short%> service instance. The servers provide a low-latency, consistent, fault-tolerant data store within <%=vars.product_short%>.
 
 ![Client Server Model](client-server.png)
 
-<%=vars.component_product%> holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called **regions**. A region is a map (or dictionary) data structure.
+The cluster holds data in key/value pairs. Each pair is called an **entry**. Entries are logically grouped into sets called **regions**. A region is a map (or dictionary) data structure.
 
-The app (client) uses <%=vars.product_short%> as a cache. A cache lookup (read) is a get operation on a <%=vars.component_product%> region. The cache operation of a cache write is a put operation on a <%=vars.component_product%> region.
-The <%=vars.component_product%> command-line interface, called gfsh, facilitates region administration. Use gfsh to create and destroy regions within the <%=vars.product_short%> service instance.
-
-## <a id='pcc-cluster-architecture'></a>The <%=vars.product_short%> Cluster
-
-<%=vars.product_short%> deploys cache clusters that use <%=vars.component_product%> to provide high availability, replication guarantees, and eventual consistency.
-
-When you first spin up a cluster, you have three locators and at least four servers.
-
-<% mermaid_diagram do %>
-  graph TD;
-  Client
-  subgraph Cluster
-  subgraph locators
-  Locator1
-  Locator2
-  Locator3
-  end
-  subgraph servers
-  Server1
-  Server2
-  Server3
-  Server4
-  end
-  end
-  Client==>Locator1
-  Client-->Server1
-  Client-->Server2
-  Client-->Server3
-  Client-->Server4
-<% end %>
-
-When you scale up the cluster, you have more servers, increasing the capacity of the cache. There are always three locators.
-
-<% mermaid_diagram do %>
-  graph TD;
-  Client
-  subgraph Cluster
-  subgraph locators
-  Locator1
-  Locator2
-  Locator3
-  end
-  subgraph servers
-  Server1
-  Server2
-  Server3
-  Server4
-  Server5
-  Server6
-  Server7
-  end
-  end
-  Client==>Locator1
-  Client-->Server1
-  Client-->Server2
-  Client-->Server3
-  Client-->Server4
-  Client-->Server5
-  Client-->Server6
-  Client-->Server7
-<% end %>
+The app (client) uses <%=vars.product_short%> as a cache. A cache lookup (read) is a get operation on a region. The cache operation of a cache write is a put operation on a region.
+The command-line interface, called gfsh, facilitates region administration. Use gfsh to create and destroy regions within the <%=vars.product_short%> service instance.
 
 ## <a id='MemberCommunication'></a>Member Communication
 

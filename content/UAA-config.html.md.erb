@@ -28,7 +28,7 @@ The permissions assigned for each of the security roles:
 
 - **PCC_ADMIN** has all permissions needed to manage the cluster and
 can access region data.
-This role has the <%=vars.component_product%> permissions
+This role has the permissions
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 `CLUSTER:READ`,
@@ -37,16 +37,16 @@ This role has the <%=vars.component_product%> permissions
 and `DATA:READ`.
 - **PCC_OPERATOR** has all permissions needed to manage the cluster.
 This role may not handle or see region data.
-This role has the <%=vars.component_product%> permissions
+This role has the permissions
 `CLUSTER:MANAGE`,
 `CLUSTER:WRITE`,
 and `CLUSTER:READ`.
 - **PCC_DATA-ACCESS** has all permissions needed to handle and see region data.
-This role has the <%=vars.component_product%> permissions
+This role has the permissions
 `CLUSTER:READ`,
 `DATA:WRITE`,
 and `DATA:READ`.
-- **PCC_READ-ONLY** has the single <%=vars.component_product%> permission `DATA:READ`
+- **PCC_READ-ONLY** has the single permission `DATA:READ`
 to see region data.
 
 ##<a id='UAA-Config-Roles'></a> Configuring the Roles
