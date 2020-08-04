@@ -135,8 +135,9 @@ one or more of these situations exist:
 Each write of an entry must be propagated to all servers
 that host the region.
 As a consequence,
-performance suffers when many concurrent write accesses
-cause subsequent writes to all other servers hosting the region.
+where there are many concurrent write accesses,
+the resulting subsequent writes to all other servers hosting the region
+cause a loss of performance.
 - The overall quantity of entries is not so large as to push the limits of memory space for a single server.
 The <%=vars.app_runtime_abbr%> service plan sets the server memory size.
 - The entries of a region are frequently accessed
