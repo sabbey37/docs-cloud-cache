@@ -164,21 +164,11 @@ For the example GUID, the `DEPLOYMENT` name is
     You also can create a service instance and try to connect to it using the
     gfsh CLI. This requires creating a service key.
 
-- **Error message:** "Could not perform create/put on Cloud Cache cluster"
+- **Error message:** "Could not perform create/put on locator LOCATOR-ADDRESS"
 
-    **Cause of the Problem:** The smoke test was unable to write data
-    to the cluster.
+    **Cause of the Problem:** `LOCATOR-ADDRESS` is the BOSH DNS name of
+    the locator. The smoke test was unable to write data to the cluster.
     The user may not have permissions to create a region or write data.
-
-- **Error message:** "Could not retrieve value from Cloud Cache cluster"
-
-    **Cause of the Problem:** The smoke test was unable to read back the data
-    it wrote.
-    Data loss can happen if a cluster member improperly stops and starts
-    again or if the member machine crashes and is resurrected by BOSH.
-
-    **Action:**  Run BOSH `logs` to view the logs on the broker to see if
-    there were any interruptions to the cluster by a service update.
 
 ###<a id='general-connectivity'></a> General Connectivity
 
