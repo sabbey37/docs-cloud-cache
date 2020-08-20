@@ -275,16 +275,17 @@ Certificate was added to keystore
 
 After you have created the truststore, you can use the cluster's command line interface, `gfsh`, to connect to the cluster over HTTPS.
 
-1. Acquire the correct `gfsh` by downloading the correct <%=vars.component_product%> ZIP archive
-from [<%=vars.pivnet%>](https://network.pivotal.io/products/pivotal-gemfire).
-See [View Available Plans](view-plans.html) to identify the correct
-<%=vars.component_product%> version.
+1. For this Beta release, acquire `gfsh` by downloading the compressed TAR
+file at [apache-geode-1.13.0-build.312.tgz](https://maven.apachegeode-ci.info/snapshots/org/apache/geode/apache-geode/1.13.0-build.312/apache-geode-1.13.0-build.312.tgz).
 Note that a JDK or JRE will also be required.
-<p class="note"><strong>Note</strong>: An attempt to use the wrong `gfsh` version will result in an error message indicating that there is a version mismatch.</p>
-1. Unzip the <%=vars.component_product%> ZIP archive. 
+1. Expand the <%=vars.component_product%> compressed TAR file. 
 `gfsh` is within the `bin` directory in the expanded <%=vars.component_product%>.
 Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Run `gfsh`,
+1. Run `gfsh`
+
+    ```
+    $ /PATH/TO/apache-geode-1.13.0-build.312/bin/gfsh
+    ```
 and then issue a `connect` command of the form:
 
     ```
@@ -313,7 +314,7 @@ and then issue a `connect` command of the form:
     the `USER-NAME` and `USER-PASSWORD` are your credentials as 
     issued and set up by your organization within your SSO system.
 
-### <a id="dev-establish-https"></a> Establish the Connection with HTTPS in a Development Environment 
+### <a id="dev-establish-https"></a> Establish the Connection in a Development Environment 
 
 When working in a non-production, development environment,
 a developer may choose to work in a less secure manner
@@ -321,31 +322,32 @@ by eliminating the truststore and SSL mutual authentication.
 
 The steps to establish the `gfsh` connection become:
 
-1. Acquire `gfsh` by downloading the correct <%=vars.component_product%> ZIP archive
-from [<%=vars.pivnet%>](https://network.pivotal.io/products/pivotal-gemfire).
-See [View Available Plans](view-plans.html) to identify the correct
-<%=vars.component_product%> version.
-Note that a JDK or JRE will also be required,
-as specified in the release notes.
-
-1. Unzip the <%=vars.component_product%> ZIP archive. 
+1. For this Beta release, acquire `gfsh` by downloading the compressed TAR
+file at [apache-geode-1.13.0-build.312.tgz](https://maven.apachegeode-ci.info/snapshots/org/apache/geode/apache-geode/1.13.0-build.312/apache-geode-1.13.0-build.312.tgz).
+Note that a JDK or JRE will also be required.
+1. Expand the <%=vars.component_product%> compressed TAR file. 
 `gfsh` is within the `bin` directory in the expanded <%=vars.component_product%>.
 Use `gfsh` with Unix or `gfsh.bat` with Windows.
-
 1. Acquire the `connect` command (the `gfsh_login_string`) from the service key. This command will connect as the cluster_operator role.
 This `connect` command assumes that the installation is configured *without* an authentication and enterprise 
 single sign-on (SSO) system such as LDAP.
-1. Run `gfsh`, and then issue the acquired `connect` command:
+1. Run `gfsh`
 
-<pre class='terminal'>
-gfsh>connect --url=https://cloudcache-1.example.com/gemfire/v1 
-  --user=cluster_operator_XXX --password=cluster_operator-password
-  --skip-ssl-validation
-</pre>
+    ```
+    $ /PATH/TO/apache-geode-1.13.0-build.312/bin/gfsh
+    ```
 
-At each of the nine `gfsh` prompts that ask for keystore, truststore,
-and SSL details, hit `Enter` to step through the prompts
-and connect.
+    and then issue the acquired `connect` command:
+
+    <pre class='terminal'>
+    gfsh>connect --url=https://cloudcache-1.example.com/gemfire/v1 
+      --user=cluster_operator_XXX --password=cluster_operator-password
+      --skip-ssl-validation
+    </pre>
+
+    At each of the nine `gfsh` prompts that ask for keystore, truststore,
+    and SSL details, hit `Enter` to step through the prompts
+    and connect.
 
 ## <a id="tls-termination"></a> Determine Your TLS Termination
 
