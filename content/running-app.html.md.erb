@@ -25,4 +25,66 @@ Your app can use this information to configure components, such as the GemFire c
 
 ## <a id="app-location"></a> Communicating with a Service Instance
 
-Prose goes here about using service gateway.
+An app may be running in one of three locations:
+
+- The app is in in the same foundation as the 
+<%=vars.product_short%> service instance.
+For this discussion, the app is a services foundation app.
+- The app is in a different foundation than the
+<%=vars.product_short%> service instance.
+For this discussion, the app is an app foundation app.
+- The app is not running within any foundation.
+For this discussion, the app is an off-platform app,
+where a platform is composed of all foundations.
+
+To communicate with the <%=vars.product_short%> service instance,
+app foundation apps and off-platform apps require a service gateway.
+
+### <a id="run-app-foundation-app"></a> Run a Spring Boot Data Geode App Foundation App
+
+Follow these steps to run a Spring Boot Data Geode app that is
+located within an app foundation.
+
+DO WE STILL NEED A USER-DEFINED SERVICE INSTANCE?
+NONE OF THESE STEPS SAY ANYTHING ABOUT THAT.
+
+1. An operator takes the steps needed to [Configure a Service Gateway](configure-service-gateway.html).
+2. Create a <%=vars.product_short%> service instance with
+service-gateway access enabled as described in
+[Create a Service Instance](create-instance.html#create-SI).
+3. CREATE A TRUSTSTORE
+4. Copy the truststore to the `resources` directory within the
+app source code.
+5. Populate a properties file in the `resources` directory within the
+app source code.
+PROBABLY NEED TO SAY SOMETHING ABOUT HOW THE APP KNOWS TO USE THE PROPERTIES
+FILE. 
+6. Build the app.
+7. Push the app to the app foundation.
+
+
+### <a id="run-off-platform-app"></a> Run an Off-Platform Spring Boot Data Geode App
+
+Follow these steps to run a Spring Boot Data Geode app that is
+not located within any foundation.
+
+1. An operator takes the steps needed to [Configure a Service Gateway](configure-service-gateway.html).
+2. Create a <%=vars.product_short%> service instance with
+service-gateway access enabled as described in
+[Create a Service Instance](create-instance.html#create-SI).
+3. CREATE A TRUSTSTORE
+4. Copy the truststore to the `resources` directory within the
+app source code.
+5. Populate a properties file called `application-off-platform.properties`in the `resources` directory within the
+app source code.
+PROBABLY NEED TO SAY SOMETHING ABOUT HOW THE APP KNOWS TO USE THE PROPERTIES
+FILE.  MUST ALL APPS USE PROFILES?
+6. KAREN'S ADDED STEP: BUILD THE APP
+7. Run the app. WHAT ELSE IS REQUIRED? MUST THE APP USE PROFILES? NEED TO
+SPECIFY THE TRUSTSTORE LOCATION AND PASSWORD IN THE RUN COMMAND?
+
+    ```
+    mvn spring-boot:run -Dspring-boot.run.profiles=off-platform -Dspring-boot.run.jvmArguments="-Djavax.net.ssl.trustStore=/tmp/mytruststore1.jks -Djavax.net.ssl.trustStorePassword=TRUST-STORE-PASSWD"
+    ```
+    where `TRUST-STORE-PASSWD` is the invented password specified when
+    creating the truststore.
