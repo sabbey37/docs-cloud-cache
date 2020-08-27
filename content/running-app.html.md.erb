@@ -111,13 +111,12 @@ Follow this procedure to create the truststore.
 where the <%=vars.product_short%> service instance runs.
 
     ```
-    credhub get --name="/services/tls_ca" -k certificate > services_ca.crt
+    credhub get --name="/services/tls_ca" -k certificate > services_ca
     ```
 2. Acquire the CA certificate from the location of your TLS termination
 within the services foundation where
 the <%=vars.product_short%> service instance runs.
-Store the certificate in a `.crt` file.;
-for the examples provided here, the file is named `root_ca_certificate.crt`.
+For the example provided here, the file is named `root_ca_certificate`.
 If your TLS termination is at the GoRouter,
 then the certificate can be acquired from the Ops Manager tile under
 **Settings**, **Advanced Options**, **Download Root CA Cert**.
@@ -126,7 +125,7 @@ then the certificate can be acquired from the Ops Manager tile under
 acquired certificates:
 
     ```
-    keytool -importcert -file services_ca.crt -keystore apptruststore.jks -storetype JKS
+    keytool -importcert -file services_ca -keystore apptruststore.jks -storetype JKS
     keytool -importcert -alias root_ca -file root_ca_certificate -keystore apptruststore.jks -storetype JKS
     ```
 
