@@ -45,22 +45,31 @@ app foundation apps and off-platform apps require a service gateway.
 Follow these steps to run a Spring Boot Data Geode app that is
 located within an app foundation.
 
-DO WE STILL NEED A USER-DEFINED SERVICE INSTANCE?
-NONE OF THESE STEPS SAY ANYTHING ABOUT THAT.
-
 1. An operator takes the steps needed to [Configure a Service Gateway](configure-service-gateway.html).
 2. Create a <%=vars.product_short%> service instance with
 service-gateway access enabled as described in
 [Create a Service Instance](create-instance.html#create-SI).
-3. CREATE A TRUSTSTORE
+3. Follow the directions to [Create a Truststore for the App](running-app.html#app-truststore).
 4. Copy the truststore to the `resources` directory within the
 app source code.
-5. Populate a properties file in the `resources` directory within the
-app source code.
-PROBABLY NEED TO SAY SOMETHING ABOUT HOW THE APP KNOWS TO USE THE PROPERTIES
-FILE. 
+5. If the app foundation does not include a user-defined service instance,
+populate a `resources/application.properties` file 
+within the app source code,
+as described in [Specifying Application Properties](running-app.html#app-properties).
 6. Build the app.
-7. Push the app to the app foundation.
+7. Update the app's `manifest.yml` specification to include Java options
+that specify the truststore and the password created for the truststore.
+Disable the foundation's additional security, since this specification
+provides what is necessary.
+The `env` portion of the manifest will be of the form:
+
+    ```
+    env:
+        JAVA_OPTS: '-Djavax.net.ssl.trustStore=/home/vcap/app/BOOT-INF/classes/mytruststore.jks -Djavax.net.ssl.trustStorePassword=TRUST-STORE-PASSWD-HERE'
+        JBP_CONFIG_CONTAINER_SECURITY_PROVIDER: '{ key_manager_enabled: false }'
+    ```
+8. Push the app to the app foundation.
+
 
 
 ### <a id="run-off-platform-app"></a> Run an Off-Platform Spring Boot Data Geode App
@@ -72,19 +81,89 @@ not located within any foundation.
 2. Create a <%=vars.product_short%> service instance with
 service-gateway access enabled as described in
 [Create a Service Instance](create-instance.html#create-SI).
-3. CREATE A TRUSTSTORE
+3. Follow the directions to [Create a Truststore for the App](running-app.html#app-truststore).
 4. Copy the truststore to the `resources` directory within the
 app source code.
-5. Populate a properties file called `application-off-platform.properties`in the `resources` directory within the
-app source code.
-PROBABLY NEED TO SAY SOMETHING ABOUT HOW THE APP KNOWS TO USE THE PROPERTIES
-FILE.  MUST ALL APPS USE PROFILES?
-6. KAREN'S ADDED STEP: BUILD THE APP
-7. Run the app. WHAT ELSE IS REQUIRED? MUST THE APP USE PROFILES? NEED TO
-SPECIFY THE TRUSTSTORE LOCATION AND PASSWORD IN THE RUN COMMAND?
+5. Populate a `resources/application.properties` file within the
+app source code as described in [Specifying Application Properties](running-app.html#app-properties).
+6. Build the app.
+7. Run the app. 
+Note that a Spring Boot Data Geode app must specify the truststore
+and its password in both the `application.properties` file and in
+the command that invokes the app.
+An example maven command might look similar to:
 
     ```
-    mvn spring-boot:run -Dspring-boot.run.profiles=off-platform -Dspring-boot.run.jvmArguments="-Djavax.net.ssl.trustStore=/tmp/mytruststore1.jks -Djavax.net.ssl.trustStorePassword=TRUST-STORE-PASSWD"
+    mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Djavax.net.ssl.trustStore=/PATH/TO/truststore.jks -Djavax.net.ssl.trustStorePassword=TRUST-STORE-PASSWD"
     ```
     where `TRUST-STORE-PASSWD` is the invented password specified when
     creating the truststore.
+
+### <a id="app-truststore"></a> Create a Truststore for the App
+
+Good stuff here.
+
+### <a id="app-properties"></a> Specifying Application Properties
+
+An `application.properties` file will contain these properties,
+with property values filled in to the right of the equals sign:
+
+```
+spring.data.gemfire.pool.locators=
+service-gateway.hostname=
+service-gateway.port=
+spring.data.gemfire.pool.default.socket-factory-bean-name=
+spring.data.gemfire.security.username=
+spring.data.gemfire.security.password=
+spring.data.gemfire.security.ssl.components=
+gemfire.ssl-truststore=
+gemfire.ssl-truststore-password=
+gemfire.ssl-keystore=
+gemfire.ssl-keystore-password=
+```
+Here are descriptions of the value needed for each property:
+
+- Define `spring.data.gemfire.pool.locators`
+    with a comma-separated list of the three locators given within
+    the `locators` element of the <%=vars.product_short%> service instance
+    service key, near the beginning of the service key. 
+    Include the entire specification for each locator with its port number, 
+    but do not include the quotation marks.
+
+- Define `service-gateway.hostname` with the value of the `services_gateway`
+    element of the <%=vars.product_short%> service instance
+    service key.
+    Do not include the colon or the port number.
+
+- Define `service-gateway.port` with only the value of the port number
+    from the `services_gateway`
+    element of the <%=vars.product_short%> service instance
+    service key.
+
+- Define `spring.data.gemfire.pool.default.socket-factory-bean-name`
+    with the bean which points to the SNI proxy socket factory.
+
+- Define `spring.data.gemfire.security.username` with the
+    `username` element of the `cluster_operator` role,
+    from the `users` element
+    of the <%=vars.product_short%> service instance service key. 
+
+- Define `spring.data.gemfire.security.password` with the
+    `password` element of the `cluster_operator` role,
+    from the `users` element
+    of the <%=vars.product_short%> service instance service key. 
+
+- Define `spring.data.gemfire.security.ssl.components` with the value `all`.
+
+- Define `gemfire.ssl-truststore` with the path to and file name of the 
+    truststore within the app's environment.
+
+- Define `gemfire.ssl-truststore-password` with the password specified
+    when creating the truststore.
+
+- Include `gemfire.ssl-keystore=` in the application properties file,
+    but leave the value blank.
+
+- Include `gemfire.ssl-keystore-password=` in the application properties
+    file, but leave the value blank.
+
