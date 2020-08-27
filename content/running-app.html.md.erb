@@ -101,7 +101,34 @@ An example maven command might look similar to:
 
 ### <a id="app-truststore"></a> Create a Truststore for the App
 
-Good stuff here.
+The app needs a truststore so that it can establish a TLS-encrypted
+connection with the <%=vars.product_short%> service instance.
+This truststore needs two CA certificates within it.
+
+Follow this procedure to create the truststore.
+
+1. Acquire the `services/tls_ca` from CredHub on the services foundation
+where the <%=vars.product_short%> service instance runs.
+
+    ```
+    credhub get --name="/services/tls_ca" -k certificate > services_ca.crt
+    ```
+2. Acquire the CA certificate from the location of your TLS termination
+within the services foundation where
+the <%=vars.product_short%> service instance runs.
+Store the certificate in a `.crt` file.;
+for the examples provided here, the file is named `root_ca_certificate.crt`.
+If your TLS termination is at the GoRouter,
+then the certificate can be acquired from the Ops Manager tile under
+**Settings**, **Advanced Options**, **Download Root CA Cert**.
+ 
+3. Use these `keytool` commands to form the truststore using the two
+acquired certificates:
+
+    ```
+    keytool -importcert -file services_ca.crt -keystore apptruststore.jks -storetype JKS
+    keytool -importcert -alias root_ca -file root_ca_certificate -keystore apptruststore.jks -storetype JKS
+    ```
 
 ### <a id="app-properties"></a> Specifying Application Properties
 
