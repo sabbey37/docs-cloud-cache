@@ -40,7 +40,7 @@ where a platform is composed of all foundations.
 To communicate with the <%=vars.product_short%> service instance,
 app foundation apps and off-platform apps require a service gateway.
 
-### <a id="run-app-foundation-app"></a> Run a Spring Boot Data Geode App Foundation App
+### <a id="run-app-foundation-app"></a> Run an App Foundation Spring Boot Data Geode App
 
 Follow these steps to run a Spring Boot Data Geode app that is
 located within an app foundation.
@@ -57,11 +57,13 @@ populate a `resources/application.properties` file
 within the app source code,
 as described in [Specifying Application Properties](running-app.html#app-properties).
 6. Build the app.
-7. Update the app's `manifest.yml` specification to include Java options
+7. If the `@EnableClusterConfiguration` annotation is used by the app,
+update the app's `manifest.yml` specification to include Java options
 that specify the truststore and the password created for the truststore.
 Disable the foundation's additional security, since this specification
 provides what is necessary.
-The `env` portion of the manifest will be of the form:
+The `env` portion of the manifest for an app that uses
+`@EnableClusterConfiguration` will be of the form:
 
     ```
     env:
@@ -88,7 +90,9 @@ app source code.
 app source code as described in [Specifying Application Properties](running-app.html#app-properties).
 6. Build the app.
 7. Run the app. 
-Note that a Spring Boot Data Geode app must specify the truststore
+If the `@EnableClusterConfiguration` annotation is used by
+the Spring Boot Data Geode app,
+the app must specify the truststore
 and its password in both the `application.properties` file and in
 the command that invokes the app.
 An example maven command might look similar to:
@@ -99,9 +103,16 @@ An example maven command might look similar to:
     where `TRUST-STORE-PASSWD` is the invented password specified when
     creating the truststore.
 
+    If the app does not use the `@EnableClusterConfiguration` annotation,
+    the example maven command becomes
+
+    ```
+    mvn spring-boot:run
+    ```
+
 ### <a id="app-truststore"></a> Create a Truststore for the App
 
-The app needs a truststore so that it can establish a TLS-encrypted
+The app needs a truststore so that it can establish a TLS
 connection with the <%=vars.product_short%> service instance.
 This truststore needs two CA certificates within it.
 
@@ -150,7 +161,7 @@ gemfire.ssl-keystore-password=
 Here are descriptions of the value needed for each property:
 
 - Define `spring.data.gemfire.pool.locators`
-    with a comma-separated list of the three locators given within
+    with a comma-separated list of the locators given within
     the `locators` element of the <%=vars.product_short%> service instance
     service key, near the beginning of the service key. 
     Include the entire specification for each locator with its port number, 

@@ -18,8 +18,11 @@ This will include the two cf CLI commands:
     cf create-shared-domain tcp.${BOSH_ENV_NAME}.cf-app.com --router-group default-tcp
     ```
     ```
-    cf update-quota default --reserved-route-ports 10
+    cf update-quota default --reserved-route-ports N
     ```
+    Replace `N` with an integer that is at least as large as the
+    quantity of service instances that will be exposed to apps running
+    in locations that are not within the services foundation.
 
 - Configure the <%=vars.product_short%> tile to enable the service gateway
 as described in [Settings: Enable Creation of a Service Gateway](install-configure.html#settings).

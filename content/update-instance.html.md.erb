@@ -63,13 +63,27 @@ the redundant copy still exists on a running server.
 To restart a cluster, use the <%=vars.app_runtime_full%> (<%=vars.app_runtime_abbr%>) operator credentials to
 run the command:
 
-<code>cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}'</code>
+```
+cf update-service SERVICE-INSTANCE-NAME -c '{"restart": true}'
+```
 
 For example:
 
 <pre class='terminal'>
 $ cf update-service my-cluster -c '{"restart": true}'
 </pre>
+
+## <a id="add-service-gateway"></a> Adding a Service Gateway
+
+A service gateway may be added to a service instance that has TLS
+connections enabled.
+Use the command
+
+```
+cf update-service SERVICE-INSTANCE-NAME -c '{"services_gateway":true, "tls":true}
+```
+where `SERVICE-INSTANCE-NAME` is the name assigned to the service instance
+upon creation.
 
 ## <a id="plan-updates"></a> Changes to the Service Plan
 
