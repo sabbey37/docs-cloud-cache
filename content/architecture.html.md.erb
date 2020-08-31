@@ -16,6 +16,32 @@ The cluster holds data in key/value pairs. Each pair is called an **entry**. Ent
 The app (client) uses <%=vars.product_short%> as a cache. A cache lookup (read) is a get operation on a region. The cache operation of a cache write is a put operation on a region.
 The command-line interface, called gfsh, facilitates region administration. Use gfsh to create and destroy regions within the <%=vars.product_short%> service instance.
 
+## <a id='AppLocation'></a>The App's Location
+
+A running app's location affects how it communicates with the
+<%=vars.product_short%> service instance.
+Apps may run in one of three locations:
+
+- In the services foundation where the <%=vars.product_short%>
+service instance runs. These apps require no extra communication support.
+- In an app foundation, where a user-provided service instance proxies
+the communication to the <%=vars.product_short%> service instance.
+Communication with the <%=vars.product_short%> service instance requires
+a service gateway.
+- Outside of any platform, where a platform is composed of any and all
+foundations. 
+Communication with the <%=vars.product_short%> service instance requires
+a service gateway.
+
+![Interaction of Apps and Foundations](app-location.png)
+
+To use a service gateway, the operator must
+[Configure a Service Gateway](configure-service-gateway.html).
+The developer must [Provide Optional Parameters](create-instance.html#params)
+when creating the <%=vars.product_short%> service instance.
+And, the app must be given and use properties that authenticate
+and authorize [Communicating with a Service Instance](running-app.html#app-location) through the service gateway.
+
 ## <a id='MemberCommunication'></a>Member Communication
 
 When a client connects to the cluster, it first connects to a locator. The locator replies with the IP address of a server for it to talk to. The client then connects to that server.

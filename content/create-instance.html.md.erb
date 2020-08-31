@@ -30,6 +30,9 @@ You can create a customized service instance by passing optional parameters to `
 The <%=vars.product_full%> service broker supports the following parameters:
 
 - `tls`: A boolean, that when true, enables TLS for all communication within the cluster.
+- `services_gateway`: A boolean, that when true, causes the creation of a
+service gateway. The service instance must also use TLS for communication
+within the cluster.
 - `num_servers`: An integer that specifies the number of server instances in the cluster. The minimum value is `4`. The maximum and default values are configured by the operator.
 - `new_size_percentage`: An integer that specifies the percentage of the heap to allocate to young generation. This value must be between `5` and `83`. By default, the new size is 2&nbsp;GB or 10% of heap, whichever is smaller.
 - `distributed_system_id`: An integer that provides a unique identifier for a cluster that participates in a WAN.
@@ -39,6 +42,12 @@ This example enables TLS within the cluster:
 
 <pre class='terminal'>
 $ cf create-service p-cloudcache small TLS-cluster -c '{"tls": true}'
+</pre>
+
+This example creates a service gateway that is connected to the cluster:
+
+<pre class='terminal'>
+$ cf create-service p-cloudcache small TLS-cluster -c '{"tls": true, “services_gateway”: true}'
 </pre>
 
 This example creates the service with five service instances in the cluster:

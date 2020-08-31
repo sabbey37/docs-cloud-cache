@@ -1,0 +1,206 @@
+---
+title: Running an App
+---
+
+## <a id="java-build-pack-requirement"></a> Java Build Pack Requirements
+
+To ensure that your app can use all the features from <%=vars.product_full%>,
+use the latest buildpack.
+The buildpack is available on GitHub at [cloudfoundry/java-buildpack](https://github.com/cloudfoundry/java-buildpack).
+
+
+## <a id="bind-service"></a> Bind an App to a Service Instance
+
+Binding your apps to a service instance enables the apps to connect to the service instance and read or write data to the region.
+Run `cf bind-service APP-NAME SERVICE-INSTANCE-NAME` to bind an app to your service instance.
+Replace `APP-NAME` with the name of the app.
+Replace `SERVICE-INSTANCE-NAME` with the name you chose for your service instance.
+
+<pre class='terminal'>
+$ cf bind-service my-app my-cloudcache
+</pre>
+
+Binding an app to the service instance provides connection information through the `VCAP_SERVICES` environment variable.
+Your app can use this information to configure components, such as the GemFire client cache, to use the service instance.
+
+## <a id="app-location"></a> Communicating with a Service Instance
+
+An app may be running in one of three locations:
+
+- The app is in in the same foundation as the 
+<%=vars.product_short%> service instance.
+For this discussion, the app is a services foundation app.
+- The app is in a different foundation than the
+<%=vars.product_short%> service instance.
+For this discussion, the app is an app foundation app.
+- The app is not running within any foundation.
+For this discussion, the app is an off-platform app,
+where a platform is composed of all foundations.
+
+To communicate with the <%=vars.product_short%> service instance,
+app foundation apps and off-platform apps require a service gateway.
+
+### <a id="run-app-foundation-app"></a> Run an App Foundation Spring Boot Data Geode App
+
+Follow these steps to run a Spring Boot Data Geode app that is
+located within an app foundation.
+
+1. An operator takes the steps needed to [Configure a Service Gateway](configure-service-gateway.html).
+2. Create a <%=vars.product_short%> service instance with
+service-gateway access enabled as described in
+[Create a Service Instance](create-instance.html#create-SI).
+3. Follow the directions to [Create a Truststore for the App](running-app.html#app-truststore).
+4. Copy the truststore to the `resources` directory within the
+app source code.
+5. If the app foundation does not include a user-defined service instance,
+populate a `resources/application.properties` file 
+within the app source code,
+as described in [Specifying Application Properties](running-app.html#app-properties).
+6. Build the app.
+7. If the `@EnableClusterConfiguration` annotation is used by the app,
+update the app's `manifest.yml` specification to include Java options
+that specify the truststore and the password created for the truststore.
+Disable the foundation's additional security, since this specification
+provides what is necessary.
+The `env` portion of the manifest for an app that uses
+`@EnableClusterConfiguration` will be of the form:
+
+    ```
+    env:
+        JAVA_OPTS: '-Djavax.net.ssl.trustStore=/home/vcap/app/BOOT-INF/classes/mytruststore.jks -Djavax.net.ssl.trustStorePassword=TRUST-STORE-PASSWD-HERE'
+        JBP_CONFIG_CONTAINER_SECURITY_PROVIDER: '{ key_manager_enabled: false }'
+    ```
+8. Push the app to the app foundation.
+
+
+
+### <a id="run-off-platform-app"></a> Run an Off-Platform Spring Boot Data Geode App
+
+Follow these steps to run a Spring Boot Data Geode app that is
+not located within any foundation.
+
+1. An operator takes the steps needed to [Configure a Service Gateway](configure-service-gateway.html).
+2. Create a <%=vars.product_short%> service instance with
+service-gateway access enabled as described in
+[Create a Service Instance](create-instance.html#create-SI).
+3. Follow the directions to [Create a Truststore for the App](running-app.html#app-truststore).
+4. Copy the truststore to the `resources` directory within the
+app source code.
+5. Populate a `resources/application.properties` file within the
+app source code as described in [Specifying Application Properties](running-app.html#app-properties).
+6. Build the app.
+7. Run the app. 
+If the `@EnableClusterConfiguration` annotation is used by
+the Spring Boot Data Geode app,
+the app must specify the truststore
+and its password in both the `application.properties` file and in
+the command that invokes the app.
+An example maven command might look similar to:
+
+    ```
+    mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Djavax.net.ssl.trustStore=/PATH/TO/truststore.jks -Djavax.net.ssl.trustStorePassword=TRUST-STORE-PASSWD"
+    ```
+    where `TRUST-STORE-PASSWD` is the invented password specified when
+    creating the truststore.
+
+    If the app does not use the `@EnableClusterConfiguration` annotation,
+    the example maven command becomes
+
+    ```
+    mvn spring-boot:run
+    ```
+
+### <a id="app-truststore"></a> Create a Truststore for the App
+
+The app needs a truststore so that it can establish a TLS
+connection with the <%=vars.product_short%> service instance.
+This truststore needs two CA certificates within it.
+
+Follow this procedure to create the truststore.
+
+1. Acquire the `services/tls_ca` from CredHub on the services foundation
+where the <%=vars.product_short%> service instance runs.
+
+    ```
+    credhub get --name="/services/tls_ca" -k certificate > services_ca
+    ```
+2. Acquire the CA certificate from the location of your TLS termination
+within the services foundation where
+the <%=vars.product_short%> service instance runs.
+For the example provided here, the file is named `root_ca_certificate`.
+If your TLS termination is at the GoRouter,
+then the certificate can be acquired from the Ops Manager tile under
+**Settings**, **Advanced Options**, **Download Root CA Cert**.
+ 
+3. Use these `keytool` commands to form the truststore using the two
+acquired certificates:
+
+    ```
+    keytool -importcert -file services_ca -keystore apptruststore.jks -storetype JKS
+    keytool -importcert -alias root_ca -file root_ca_certificate -keystore apptruststore.jks -storetype JKS
+    ```
+
+### <a id="app-properties"></a> Specifying Application Properties
+
+An `application.properties` file will contain these properties,
+with property values filled in to the right of the equals sign:
+
+```
+spring.data.gemfire.pool.locators=
+service-gateway.hostname=
+service-gateway.port=
+spring.data.gemfire.pool.default.socket-factory-bean-name=
+spring.data.gemfire.security.username=
+spring.data.gemfire.security.password=
+spring.data.gemfire.security.ssl.components=
+gemfire.ssl-truststore=
+gemfire.ssl-truststore-password=
+gemfire.ssl-keystore=
+gemfire.ssl-keystore-password=
+```
+Here are descriptions of the value needed for each property:
+
+- Define `spring.data.gemfire.pool.locators`
+    with a comma-separated list of the locators given within
+    the `locators` element of the <%=vars.product_short%> service instance
+    service key, near the beginning of the service key. 
+    Include the entire specification for each locator with its port number, 
+    but do not include the quotation marks.
+
+- Define `service-gateway.hostname` with the value of the `services_gateway`
+    element of the <%=vars.product_short%> service instance
+    service key.
+    Do not include the colon or the port number.
+
+- Define `service-gateway.port` with only the value of the port number
+    from the `services_gateway`
+    element of the <%=vars.product_short%> service instance
+    service key.
+
+- Define `spring.data.gemfire.pool.default.socket-factory-bean-name`
+    with the bean which points to the SNI proxy socket factory.
+
+- Define `spring.data.gemfire.security.username` with the
+    `username` element of the `cluster_operator` role,
+    from the `users` element
+    of the <%=vars.product_short%> service instance service key. 
+
+- Define `spring.data.gemfire.security.password` with the
+    `password` element of the `cluster_operator` role,
+    from the `users` element
+    of the <%=vars.product_short%> service instance service key. 
+
+- Define `spring.data.gemfire.security.ssl.components` with the value `all`.
+
+- Define `gemfire.ssl-truststore` with the path to and file name of the 
+    truststore within the app's environment.
+
+- Define `gemfire.ssl-truststore-password` with the password specified
+    when creating the truststore.
+
+- Include `gemfire.ssl-keystore=` in the application properties file,
+    but leave the value blank.
+
+- Include `gemfire.ssl-keystore-password=` in the application properties
+    file, but leave the value blank.
+
