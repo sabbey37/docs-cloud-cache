@@ -2,21 +2,33 @@
 title: Networking for On-Demand Services
 ---
 
+<div class="quick-links">
+    <ul>
+        <li><a href="#service-network">Service Network Requirement</a>
+               <ul>
+                  <li><a href="#architecture_networks">Default Network and Service Network</a></li>
+                  <li><a href="#network-rules">Required Networking Rules for On-Demand Services</a></li>
+               </ul>
+        </li>
+        <li><a href="#WAN_details"><%=vars.product_short%> Instances Across WAN</a></li>
+    </ul>
+</div>
+
 This section describes networking considerations for <%=vars.product_full%>.
 
 <%# The below partial is in https://github.com/pivotal-cf/docs-partials %>
 
-## <a id="service-network"></a>Service Network Requirement
+<h2> <a id="service-network"></a>Service Network Requirement </h2>
 
 <%= partial vars.path_to_partials + '/services/service-networks-v3', :locals => {
   :platform_name => vars.app_runtime_full} %>
 
-### <a id ="architecture_networks"></a>Default Network and Service Network
+<h3> <a id ="architecture_networks"></a>Default Network and Service Network </h3>
 
 <%= partial vars.path_to_partials + '/services/on_demand_architecture', :locals => {
   :product_short => vars.product_short} %>
 
-### <a id="network-rules"></a>Required Networking Rules for On-Demand Services
+<h3> <a id="network-rules"></a>Required Networking Rules for On-Demand Services </h3>
 
 <%= partial vars.path_to_partials + '/services/service_networks_table', :locals => {
   :platform_name => vars.app_runtime_full,
@@ -137,7 +149,7 @@ service instance uses <%=vars.component_product%> defaults for the gateway recei
   </tr>
 </table>
 
-## <a id ="WAN_details"></a><%=vars.product_short%> Instances Across WAN
+<h2> <a id ="WAN_details"></a><%=vars.product_short%> Instances Across WAN </h2>
 
 <%=vars.product_short%> service instances running within distinct <%=vars.app_runtime_full%> foundations
 may communicate with each other across a WAN.
