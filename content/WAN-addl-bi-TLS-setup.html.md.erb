@@ -86,10 +86,7 @@ This set of directions sets up an interaction between Cluster A and and a third 
          "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-         {
-          "password": "gws-PQR-password",
-          "username": "gateway_sender_PQR"
-         }
+         "gateway_sender_PQR"
         ]
        }
       ]
@@ -222,12 +219,12 @@ In the `cf create-service` command, use the `-c` option to specify the following
           "id3.locator.services-subnet.service-instance-id.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-        {
-          "username": "gateway_sender_GHI",
-          "password":"gws-GHI-password"
-        }]
-       }]
-    }'
+          "gateway_sender_GHI"
+        ]
+       }
+      ]
+     }
+    }
     </pre>
 
 1. While logged in to Foundation A, update the Cluster A service instance to add the Cluster C
@@ -376,10 +373,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
          "id3.locator.services-subnet-2.service-instance-id-2.bosh[55221]",
         ],
         "trusted_sender_credentials": [
-         {
-          "username": "gateway_sender_PQR",
-          "password": "gws-PQR-password",
-         }
+         "gateway_sender_PQR"
         ]
        },
        {
@@ -389,10 +383,7 @@ In the `cf create-service` command, use the `-c` option to specify the following
          "id3.locator.services-subnet-3.service-instance-id-3.bosh[55221]"
         ],
         "trusted_sender_credentials": [
-         {
-          "username": "gateway_sender_XYZ",
-          "password": "gws-XYZ-password"
-         }
+         "gateway_sender_XYZ"
         ]
        }
       ]
