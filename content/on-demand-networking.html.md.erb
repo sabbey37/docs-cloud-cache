@@ -126,6 +126,19 @@ service instance uses cluster defaults for the gateway receiver ports.</td>
     <td>Two-way</td>
     <td>These port numbers are not configurable.</td>
   </tr>
+    <tr>
+    <td><strong>Deployed apps on <%=vars.app_runtime_full%> using Redis API</strong></td>
+    <td><strong>Deployed service instances</strong>
+    </td>
+    <td>
+      <ul>
+        <li>6379</li>
+        <li>16379 (TLS)</li>
+      </ul>
+    </td>
+    <td>Two-way</td>
+    <td>These port numbers are not configurable. The TLS port is enabled when TLS is enabled for the service instance. If TLS is enabled, the non-TLS port will not be available.</td>
+  </tr>
   <tr>
     <td><strong><%=vars.app_runtime_full%></strong></td>
     <td>

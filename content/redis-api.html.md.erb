@@ -1,0 +1,48 @@
+---
+title: Redis API for <%=vars.product_full%>
+---
+
+## <a id="enable-redis-api"></a> Starting a Tanzu GemFire Service Instance with a Redis Tag
+
+When a Tanzu GemFire service instance is started the Redis API for <%=vars.product_full%> is already available.
+
+In order to access the API, ensure that your operator has [opened port 6379 or 16379 (TLS)](on-demand-networking.html).
+
+## <a id="enable-unsupported-commands"></a> Enable Unsupported Commands
+
+Redis API for <%=vars.product_full%> [does not support all Redis commands](https://geode.apache.org/docs/guide/<%=vars.component_product_version_nodot%>/tools_modules/redis_api_for_geode.html#included-commands).  If you
+would like to enable unsupported commands (commands that have been implemented, but not fully tested), follow these steps:
+
+1. [Connect to your instance using gfsh](accessing-instance.html#dev-establish-https)
+2. Run the following command in `gfsh`:
+  `redis --enable-unsupported-commands`
+
+## <a id="migration"></a> Migration Guide
+
+Migrating an existing application that uses the Redis tile typically requires the following steps:
+
+1. Add the "redis" tag to your <%=vars.product_full%> service:
+  - When creating a new service, add the option: `-t "redis"` to the [create service command](create-instance.html)
+  - For an existing service, the tag can be updated:
+    <pre class='terminal'>
+      $ cf update-service YOUR-SERVICE-NAME -t "redis"
+    </pre>
+
+2. If your app is still bound to a Redis service, first it needs to be unbound:
+    <pre class='terminal'>
+      $ cf unbind-service APP-NAME SERVICE-INSTANCE-NAME
+    </pre>
+
+3. Bind your app to the new <%=vars.product_full%> service:
+    <pre class='terminal'>
+      $ cf bind-service APP-NAME SERVICE-INSTANCE-NAME
+    </pre>
+
+## <a id="tls"></a> TLS
+
+Unlike the Redis tile (where both TLS and non-TLS ports can be available at the same time), only a [single port](on-demand-networking.html) is active for the Redis API for <%=vars.product_full%>.
+If TLS is enabled, all connections must be made using a TLS-capable client since the non-TLS port will not be available.
+
+## <a id="back-up"></a> Back Up and Restoration
+
+As the Redis API does not persist any data to disk, it is not possible to back up and restore.
