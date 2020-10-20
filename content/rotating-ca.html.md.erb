@@ -81,3 +81,46 @@ delete that certificate by running:
         - `duration` is set to 1825, which is a recommended value of five years. If you do not specify a duration, the default value is 365 or one year.
         - `ca` is the path to the root CA for the new certificate. Replace `PATH-TO-ROOT-CA` with the appropriate path for the root CA.
 
+### <a id="WAN-collect-four-certs"></a> Collect the Four Certificates
+
+Each of cluster A and cluster B has a current certificate and the newly
+generated one from the previous step,
+totalling four certificates.
+
+1. On cluster A, log in to CredHub.
+
+2. On cluster A, get the _current_ Services TLS CA certificate by
+capturing the certificate in the output of: 
+   
+    ```
+    credhub get --name=/services/tls_ca -k ca
+    ```
+
+3. On cluster A, get the _new_ Services TLS CA certificate either from a pre-existing file,
+or from your new CredHub location by capturing the certificate in the output of:
+
+    ```
+    credhub get --name=/services/new_ca -k ca
+    ```
+
+1. On cluster B, log in to CredHub.
+
+2. On cluster B, get the _current_ Services TLS CA certificate by
+capturing the certificate in the output of: 
+   
+    ```
+    credhub get --name=/services/tls_ca -k ca
+    ```
+
+3. On cluster B, get the _new_ Services TLS CA certificate either from a pre-existing file,
+or from your new CredHub location by capturing the certificate in the output of:
+
+    ```
+    credhub get --name=/services/new_ca -k ca
+    ```
+
+### <a id="WAN-add-certsAandB"></a> Add the Four Certificates to Ops Manager and TAS for VMs
+
+This step adds all four certificates to Ops Manager.
+
+
