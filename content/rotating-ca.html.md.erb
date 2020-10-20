@@ -6,10 +6,78 @@ This section specifies the procedure to follow to check expiration dates
 and rotate certificates.
 
 To rotate the Services TLS CA and its leaf certificates,
+for service instances that are _not_ connected by WAN gateways,
 use one of the following procedures:
 
 - If running Ops Manager 2.10, follow the procedure in
 [Rotate the Services TLS CA and Its Leaf Certificates](https://docs.pivotal.io/ops-manager/2-10/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
 - If running Ops Manager 2.9, follow the procedure in
 [Rotate the Services TLS CA and Its Leaf Certificates](https://docs.pivotal.io/ops-manager/2-9/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
+
+## <a id="cert-rot-WAN"></a> WAN-Connected Service Instances
+
+Follow this procedure for rotating the certificates for clusters that
+are connected via WAN gateways.
+
+The procedure assumes two service instances, one called cluster A
+and the other called cluster B.
+
+### <a id="WAN-get-certsAandB"></a> Get New TLS CA Certificates
+
+Follow these steps to obtain a new TLS CA certificate twice,
+once for cluster A, and once for cluster B.
+
+1. Check if CredHub has a new temporary certificate from
+a previous rotation attempt. Run:
+
+    ```
+    credhub get -n /services/new_ca
+    ```
+
+    <p class="note"><strong>Note</strong>: This procedure assumes that
+    <code>/services/new_ca</code> is the CredHub location used when generating
+    the temporary certificate.
+    If you used a different location, specify that location instead.</p>
+
+2. If an older temporary certificate already exists,
+delete that certificate by running:
+    
+    ```
+    credhub delete -n /services/new_ca
+    ```
+
+3. Do one of the following:
+    - **If you have a TLS cluster**: Obtain the CA that signs its certificate. You add this to the Ops Manager settings in the next high-level step.
+    - **If you use self-signed certificates**: Generate a new self-signed certificate with a new name or path in CredHub:
+
+        ```
+        credhub generate \
+        --name="/services/new_ca" \
+        --type="certificate" \
+        --no-overwrite \
+        --is-ca \
+        --duration=1825 \
+        --common-name="opsmgr-services-tls-ca"
+        ```
+        where
+        - `name` is the CredHub path or name of the new certificate. You can use `/services/new_ca` or substitute a different name as long as you use the value consistently in the rest of the procedure.
+        - `common-name` is the common name of the generated certificate. You can use `opsmgr-services-tls-ca` or substitute a different common name as long as you use the value consistently in the rest of the procedure.
+        - `duration` is set to 1825, which is a recommended value of five years. If you do not specify a duration, the default value is 365 or one year.
+    - **If you use an intermediate certificate signed by a root CA in CredHub**:Generate a new certificate signed by the CredHub root CA by running:
+
+        ```
+        credhub generate \
+        --name="/services/new_ca" \
+        --type="certificate" \
+        --no-overwrite \
+        --is-ca \
+        --duration=1825 \
+        --common-name="opsmgr-services-tls-ca" \
+        --ca=/PATH-TO-ROOT-CA
+        ```
+        where
+        - `name` is the CredHub path or name of the new certificate. You can use `/services/new_ca` or substitute a different name as long as you use the value consistently in the rest of the procedure.
+        - `common-name` is the common name of the generated certificate. You can use `opsmgr-services-tls-ca` or substitute a different common name as long as you use the value consistently in the rest of the procedure.
+        - `duration` is set to 1825, which is a recommended value of five years. If you do not specify a duration, the default value is 365 or one year.
+        - `ca` is the path to the root CA for the new certificate. Replace `PATH-TO-ROOT-CA` with the appropriate path for the root CA.
 
