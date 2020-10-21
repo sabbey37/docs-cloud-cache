@@ -22,10 +22,20 @@ are connected via WAN gateways.
 The procedure assumes two service instances, one called cluster A
 and the other called cluster B.
 
+The procedure is broken into parts. 
+Do the parts in the order listed.
+The parts are:
+
+- [Get New TLS CA Certificates](#WAN-get-certsAandB)
+- [Collect the Four Certificates](#WAN-collect-four-certs)
+- [Add the Four Certificates to the Tiles](#WAN-add-certsAandB)
+- [Apply Changes for the First Time](#WAN-apply-first)
+
 ### <a id="WAN-get-certsAandB"></a> Get New TLS CA Certificates
 
-Follow these steps to obtain a new TLS CA certificate twice,
-once for cluster A, and once for cluster B.
+Follow these steps twice to obtain a new TLS CA certificate,
+once to obtain a new TLS CA certificate for cluster A,
+and once to obtain a new TLS CA certificate for cluster B.
 
 1. Check if CredHub has a new temporary certificate from
 a previous rotation attempt. Run:
@@ -119,8 +129,59 @@ or from your new CredHub location by capturing the certificate in the output of:
     credhub get --name=/services/new_ca -k ca
     ```
 
-### <a id="WAN-add-certsAandB"></a> Add the Four Certificates to Ops Manager and TAS for VMs
+### <a id="WAN-add-certsAandB"></a> Add the Four Certificates to the Tiles
 
-This step adds all four certificates to Ops Manager.
+This part adds all four certificates to the tiles.
+The four certificates are:
 
+- The current TLS CA certificate for cluster A (called `/services/tls_ca`)
+- The current TLS CA certificate for cluster B (also called `/services/tls_ca`)
+- The new TLS CA certificate for cluster A (called `/services/new_ca`)
+- The new TLS CA certificate for cluster B (also called `/services/new_ca`)
+
+1. On cluster A, paste all four certificates
+(ordering of the certificates does not matter)
+into the **BOSH Director > Security > Trusted Certificates** field.
+Click **Save**.
+
+2. On cluster A, paste all four certificates
+(ordering of the certificates does not matter)
+into two fields of the VMware Tanzu Application Service tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+3. On cluster A, paste all four certificates
+(ordering of the certificates does not matter)
+into two fields of the Isolation Segment tile,
+if the environment has this optional tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+4. On cluster B, paste all four certificates
+(ordering of the certificates does not matter)
+into the **BOSH Director > Security > Trusted Certificates** field.
+Click **Save**.
+
+5. On cluster B, paste all four certificates
+(ordering of the certificates does not matter)
+into two fields of the VMware Tanzu Application Service tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+6. On cluster B, paste all four certificates
+(ordering of the certificates does not matter)
+into two fields of the Isolation Segment tile,
+if the environment has this optional tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+### <a id="WAN-apply-first"></a> Apply Changes for the First Time
 
