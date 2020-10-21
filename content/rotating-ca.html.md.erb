@@ -185,3 +185,28 @@ Click **Save**.
 
 ### <a id="WAN-apply-first"></a> Apply Changes for the First Time
 
+<p class="note warning"><strong>Warning</strong>: This procedure involves
+redeploying all of the VMs in your <%= vars.ops_manager %> deployment
+to apply a CA certificate. The operation can take a long time to complete.
+<br><br>You may apply the changes to both cluster A and cluster B at the
+same time.</p>
+
+Follow these steps twice, once to apply the changes to cluster A,
+and once to apply the changes to cluster B.
+
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles, are selected.
+1. Identify which on-demand service tiles are using the Services TLS CA certificate. Run:
+
+    ```
+    credhub curl -p /api/v1/certificates?name=%2Fservices%2Ftls_ca
+    ```
+    From the returned list, identify which on-demand service tiles use TLS in
+    your deployment, such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
+1. For each on-demand service tile that uses TLS:
+    1. Expand the errands.
+    1. Enable the errand to upgrade all service instances.
+        <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
+1. Click **Apply Changes**.
+
