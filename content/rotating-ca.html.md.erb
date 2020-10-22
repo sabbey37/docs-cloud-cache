@@ -30,6 +30,7 @@ The parts are:
 - [Collect the Four Certificates](#WAN-collect-four-certs)
 - [Add the Four Certificates to the Tiles](#WAN-add-certsAandB)
 - [Apply Changes for the First Time](#WAN-apply-first)
+- [Set New Services TLS CA Certificate](#WAN-set-new-cert)
 
 ### <a id="WAN-get-certsAandB"></a> Get New TLS CA Certificates
 
@@ -209,4 +210,40 @@ and once to apply the changes to cluster B.
     1. Enable the errand to upgrade all service instances.
         <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
 1. Click **Apply Changes**.
+
+### <a id="WAN-set-new-cert"></a> Set New Services TLS CA Certificate
+
+Set the new Services TLS CA certificate in CredHub.
+Do this on cluster A with cluster A's new TLS CA certificate,
+and do this on cluster B with cluster B's new TLS CA certificate.
+
+Do one of the following:
+
+- **If you have an existing certificate:** Obtain the CA certificate and private key file corresponding
+  to the certificate that you got in the [Get New TLS CA Certificates](#WAN-get-certsAandB) part of the procedure. Then, run:
+
+    ```
+    credhub set \
+    --name="/services/tls_ca" \
+    --type="certificate" \
+    --certificate=PEM-PATH/root.pem \
+    --private=CERT-KEY
+    ```
+    Where:
+    - `certificate` is the location of the `root.pem` file for the certificate. Replace `PEM-PATH` with the path of your certificate's `root.pem` file.
+    - `private` is the private key for the new certificate. Replace `CERT-KEY` with the value of the private key for your certificate.
+- **If you created a new self-signed or intermediary certificate:** Set the `/services/new_ca` that you generated in the [Get New TLS CA Certificates](#WAN-get-certsAandB) part of the procedure as the Services TLS CA:
+
+    ```
+    credhub get -n /services/new_ca -k ca > new_ca.ca
+    credhub get -n /services/new_ca -k certificate > new_ca.certificate
+    credhub get -n /services/new_ca -k private_key > new_ca.private_key
+    credhub set -n /services/tls_ca \
+    --type=certificate \
+    --root=new_ca.ca \
+    --certificate=new_ca.certificate \
+    --private=new_ca.private_key
+    ```
+
+
 
