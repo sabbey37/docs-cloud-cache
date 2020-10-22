@@ -247,3 +247,29 @@ Do one of the following:
 
 
 
+### <a id="WAN-apply-second"></a> Apply Changes for the Second Time
+
+<p class="note warning"><strong>Warning</strong>: This procedure involves
+redeploying all of the VMs in your <%= vars.ops_manager %> deployment
+to apply a CA certificate. The operation can take a long time to complete.
+<br><br>You may apply the changes to both cluster A and cluster B at the
+same time.</p>
+
+In this step, you apply changes to ensure that all on-demand service instances
+generate new leaf certificates from the new Services TLS CA.
+
+Follow these steps twice, once to apply the changes to cluster A,
+and once to apply the changes to cluster B.
+
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles,
+are deselected in order to reduce deployment time.
+1. Select only the on-demand services tiles that use TLS,
+such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
+1. For each on-demand service tile that uses TLS:
+    1. Expand the errands.
+    1. Enable the errand to upgrade all service instances.
+        <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
+1. Click **Apply Changes**.
+
