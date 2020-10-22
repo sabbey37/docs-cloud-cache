@@ -33,6 +33,7 @@ The parts are:
 - [Set New Services TLS CA Certificate](#WAN-set-new-cert)
 - [Apply Changes for the Second Time](#WAN-apply-second)
 - [Remove the Old Services TLS CA Certificates](#WAN-remove-old)
+- [Apply Changes for the Third Time](#WAN-apply-third)
 
 ### <a id="WAN-get-certsAandB"></a> Get New TLS CA Certificates
 
@@ -298,3 +299,40 @@ the VMware Tanzu Application Service tile:
 You will remove one old CA certificate for cluster A 
 and one old certificate for cluster B.
 Click **Save**.
+
+### <a id="WAN-apply-third"></a> Apply Changes for the Third Time
+
+As a security best practice,
+you should remove outdated certificates as soon as possible
+from your deployment.
+You can schedule this step to a convenient time,
+because for most deployments you will not lose any deployment functionality
+if you do not perform this step immediately.
+
+For some deployments,
+you may encounter an error if you create a service instance in a deployment
+that contains an expired Services TLS CA certificate.
+For more information, see this [Knowledgebase Article]
+(https://community.pivotal.io/s/article/Cloud-Controller-fails-to-create-service-instance-when-there-is-an-old-expired-cert-installed-on-the-system).
+
+<p class="note warning"><strong>Warning</strong>: This procedure involves
+redeploying all of the VMs in your <%= vars.ops_manager %> deployment
+to apply a CA certificate. The operation can take a long time to complete.
+<br><br>You may apply the changes to both cluster A and cluster B at the
+same time.</p>
+
+Follow these steps twice, once to apply the changes to cluster A,
+and once to apply the changes to cluster B.
+
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles,
+are deselected in order to reduce deployment time.
+1. Select only the on-demand services tiles that use TLS,
+such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
+1. For each on-demand service tile that uses TLS:
+    1. Expand the errands.
+    1. Enable the errand to upgrade all service instances.
+        <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
+1. Click **Apply Changes**.
+
