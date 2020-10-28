@@ -16,17 +16,19 @@ use one of the following procedures:
 
 ## <a id="cert-rot-WAN"></a> WAN-Connected Service Instances
 
-Follow this procedure for rotating the certificates for clusters that
-are connected via WAN gateways.
+Follow this procedure for rotating the certificates of foundations,
+when service instances connected via WAN gateways reside
+on distinct foundations.
 
-The procedure assumes two service instances, one called cluster A
-and the other called cluster B.
+The procedure assumes two foundations have service instances,
+one called foundation A
+and the other called foundation B.
 The procedure may be followed by installations that have more
-than two clusters.
-To expand the procedure to cover more clusters,
-in each place where cluster A and cluster B are identified,
-also apply the directions for a third cluster C,
-a fourth cluster D, and so on.
+than two foundations.
+To expand the procedure to cover more foundations,
+in each place where foundation A and foundation B are identified,
+also apply the directions for a third foundation C,
+a fourth foundation D, and so on.
 
 The procedure is broken into parts. 
 Do the parts in the order listed.
@@ -44,8 +46,8 @@ The parts are:
 ### <a id="WAN-get-certsAandB"></a> Get New TLS CA Certificates
 
 Follow these steps twice to obtain a new TLS CA certificate,
-once to obtain a new TLS CA certificate for cluster A,
-and once to obtain a new TLS CA certificate for cluster B.
+once to obtain a new TLS CA certificate for foundation A,
+and once to obtain a new TLS CA certificate for foundation B.
 
 1. Check if CredHub has a new temporary certificate from
 a previous rotation attempt. Run:
@@ -103,36 +105,36 @@ delete that certificate by running:
 
 ### <a id="WAN-collect-all-certs"></a> Collect All the Certificates
 
-Each of cluster A and cluster B has a current certificate and the newly
+Each of foundation A and foundation B has a current certificate and the newly
 generated one from the previous step,
-totalling four certificates across two clusters.
+totalling four certificates across two foundations.
 
-1. On cluster A, log in to CredHub.
+1. On foundation A, log in to CredHub.
 
-2. On cluster A, get the _current_ Services TLS CA certificate by
+2. On foundation A, get the _current_ Services TLS CA certificate by
 capturing the certificate in the output of: 
    
     ```
     credhub get --name=/services/tls_ca -k ca
     ```
 
-3. On cluster A, get the _new_ Services TLS CA certificate either from a pre-existing file,
+3. On foundation A, get the _new_ Services TLS CA certificate either from a pre-existing file,
 or from your new CredHub location by capturing the certificate in the output of:
 
     ```
     credhub get --name=/services/new_ca -k ca
     ```
 
-1. On cluster B, log in to CredHub.
+1. On foundation B, log in to CredHub.
 
-2. On cluster B, get the _current_ Services TLS CA certificate by
+2. On foundation B, get the _current_ Services TLS CA certificate by
 capturing the certificate in the output of: 
    
     ```
     credhub get --name=/services/tls_ca -k ca
     ```
 
-3. On cluster B, get the _new_ Services TLS CA certificate either from a pre-existing file,
+3. On foundation B, get the _new_ Services TLS CA certificate either from a pre-existing file,
 or from your new CredHub location by capturing the certificate in the output of:
 
     ```
@@ -142,19 +144,19 @@ or from your new CredHub location by capturing the certificate in the output of:
 ### <a id="WAN-add-certsAandB"></a> Add All the Certificates to the Tiles
 
 This part adds all the certificates (current and new) to the tiles.
-For a system with two clusters, the four certificates are:
+For a system with two foundations, the four certificates are:
 
-- The current TLS CA certificate for cluster A (called `/services/tls_ca`)
-- The current TLS CA certificate for cluster B (also called `/services/tls_ca`)
-- The new TLS CA certificate for cluster A (called `/services/new_ca`)
-- The new TLS CA certificate for cluster B (also called `/services/new_ca`)
+- The current TLS CA certificate for foundation A (called `/services/tls_ca`)
+- The current TLS CA certificate for foundation B (also called `/services/tls_ca`)
+- The new TLS CA certificate for foundation A (called `/services/new_ca`)
+- The new TLS CA certificate for foundation B (also called `/services/new_ca`)
 
-1. On cluster A, paste all certificates
+1. On foundation A, paste all certificates
 (ordering of the certificates does not matter)
 into the **BOSH Director > Security > Trusted Certificates** field.
 Click **Save**.
 
-2. On cluster A, paste all certificates
+2. On foundation A, paste all certificates
 (ordering of the certificates does not matter)
 into two fields of the VMware Tanzu Application Service tile:
 **Networking > Certificate Authorities trusted by the Gorouter**
@@ -162,7 +164,7 @@ and
 **Networking > Certificate Authorities trusted by the HAProxy**.
 Click **Save**.
 
-3. On cluster A, paste all certificates
+3. On foundation A, paste all certificates
 (ordering of the certificates does not matter)
 into two fields of the Isolation Segment tile,
 if the environment has this optional tile:
@@ -171,12 +173,12 @@ and
 **Networking > Certificate Authorities trusted by the HAProxy**.
 Click **Save**.
 
-4. On cluster B, paste all certificates
+4. On foundation B, paste all certificates
 (ordering of the certificates does not matter)
 into the **BOSH Director > Security > Trusted Certificates** field.
 Click **Save**.
 
-5. On cluster B, paste all certificates
+5. On foundation B, paste all certificates
 (ordering of the certificates does not matter)
 into two fields of the VMware Tanzu Application Service tile:
 **Networking > Certificate Authorities trusted by the Gorouter**
@@ -184,7 +186,7 @@ and
 **Networking > Certificate Authorities trusted by the HAProxy**.
 Click **Save**.
 
-6. On cluster B, paste all certificates
+6. On foundation B, paste all certificates
 (ordering of the certificates does not matter)
 into two fields of the Isolation Segment tile,
 if the environment has this optional tile:
@@ -198,11 +200,11 @@ Click **Save**.
 <p class="note warning"><strong>Warning</strong>: This procedure involves
 redeploying all of the VMs in your <%= vars.ops_manager %> deployment
 to apply a CA certificate. The operation can take a long time to complete.
-<br><br>You may apply the changes to both cluster A and cluster B at the
+<br><br>You may apply the changes to both foundation A and foundation B at the
 same time.</p>
 
-Follow these steps twice, once to apply the changes to cluster A,
-and once to apply the changes to cluster B.
+Follow these steps twice, once to apply the changes to foundation A,
+and once to apply the changes to foundation B.
 
 1. Navigate back to the **Installation Dashboard**.
 1. Click **Review Pending Changes**.
@@ -223,8 +225,8 @@ and once to apply the changes to cluster B.
 ### <a id="WAN-set-new-cert"></a> Set New Services TLS CA Certificate
 
 Set the new Services TLS CA certificate in CredHub.
-Do this on cluster A with cluster A's new TLS CA certificate,
-and do this on cluster B with cluster B's new TLS CA certificate.
+Do this on foundation A with foundation A's new TLS CA certificate,
+and do this on foundation B with foundation B's new TLS CA certificate.
 
 Do one of the following:
 
@@ -261,14 +263,14 @@ Do one of the following:
 <p class="note warning"><strong>Warning</strong>: This procedure involves
 redeploying all of the VMs in your <%= vars.ops_manager %> deployment
 to apply a CA certificate. The operation can take a long time to complete.
-<br><br>You may apply the changes to both cluster A and cluster B at the
+<br><br>You may apply the changes to both foundation A and foundation B at the
 same time.</p>
 
 In this step, you apply changes to ensure that all on-demand service instances
 generate new leaf certificates from the new Services TLS CA.
 
-Follow these steps twice, once to apply the changes to cluster A,
-and once to apply the changes to cluster B.
+Follow these steps twice, once to apply the changes to foundation A,
+and once to apply the changes to foundation B.
 
 1. Navigate back to the **Installation Dashboard**.
 1. Click **Review Pending Changes**.
@@ -286,32 +288,32 @@ such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, a
 
 After your apps have reconnected to service instances with the certificates
 generated by the new CA, both of the old CA certificates may be removed.
-There will be one old CA certificate for cluster A
-and one old certificate for cluster B.
+There will be one old CA certificate for foundation A
+and one old certificate for foundation B.
 
-Follow these steps twice, once for cluster A,
-and once for cluster B.
+Follow these steps twice, once for foundation A,
+and once for foundation B.
 
 1. Delete the two old CA certificates from
 the BOSH Director tile **Security > Trusted Certificates** field.
-You will remove one old CA certificate for cluster A 
-and one old certificate for cluster B.
+You will remove one old CA certificate for foundation A 
+and one old certificate for foundation B.
 Click **Save**.
 
 1. Delete the two old CA certificates from the two fields of
 the VMware Tanzu Application Service tile:
 **Networking > Certificate Authorities trusted by the Gorouter** and
 **Networking > Certificate Authorities trusted by the HAProxy**.
-You will remove one old CA certificate for cluster A 
-and one old certificate for cluster B.
+You will remove one old CA certificate for foundation A 
+and one old certificate for foundation B.
 Click **Save**.
 
 1. Delete the two old CA certificates from the two fields
 of the Isolation Segment tile, if the environment has this optional tile:
 **Networking > Certificate Authorities trusted by the Gorouter**
 and **Networking > Certificate Authorities trusted by the HAProxy**.
-You will remove one old CA certificate for cluster A 
-and one old certificate for cluster B.
+You will remove one old CA certificate for foundation A 
+and one old certificate for foundation B.
 Click **Save**.
 
 ### <a id="WAN-apply-third"></a> Apply Changes for the Third Time
@@ -332,11 +334,11 @@ For more information, see this [Knowledgebase Article]
 <p class="note warning"><strong>Warning</strong>: This procedure involves
 redeploying all of the VMs in your <%= vars.ops_manager %> deployment
 to apply a CA certificate. The operation can take a long time to complete.
-<br><br>You may apply the changes to both cluster A and cluster B at the
+<br><br>You may apply the changes to both foundation A and foundation B at the
 same time.</p>
 
-Follow these steps twice, once to apply the changes to cluster A,
-and once to apply the changes to cluster B.
+Follow these steps twice, once to apply the changes to foundation A,
+and once to apply the changes to foundation B.
 
 1. Navigate back to the **Installation Dashboard**.
 1. Click **Review Pending Changes**.
