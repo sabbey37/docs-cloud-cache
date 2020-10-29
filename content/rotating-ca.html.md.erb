@@ -34,7 +34,7 @@ The procedure is broken into parts.
 Do the parts in the order listed.
 The parts are:
 
-- [Get New TLS CA Certificates](#WAN-get-certsAandB)
+- [Generate New TLS CA Certificates](#WAN-get-certsAandB)
 - [Collect All the Certificates](#WAN-collect-all-certs)
 - [Add All the Certificates to the Tiles](#WAN-add-certsAandB)
 - [Apply Changes for the First Time](#WAN-apply-first)
@@ -43,11 +43,11 @@ The parts are:
 - [Remove the Old Services TLS CA Certificates](#WAN-remove-old)
 - [Apply Changes for the Third Time](#WAN-apply-third)
 
-### <a id="WAN-get-certsAandB"></a> Get New TLS CA Certificates
+### <a id="WAN-get-certsAandB"></a> Generate New TLS CA Certificates
 
 Follow these steps twice to obtain a new TLS CA certificate,
-once to obtain a new TLS CA certificate for foundation A,
-and once to obtain a new TLS CA certificate for foundation B.
+once to generate a new TLS CA certificate for foundation A,
+and once to generate a new TLS CA certificate for foundation B.
 
 1. Check if CredHub has a new temporary certificate from
 a previous rotation attempt. Run:
@@ -69,7 +69,7 @@ delete that certificate by running:
     ```
 
 3. Do one of the following:
-    - **If you have a TLS cluster**: If you generate certificates from your own private or public CA, obtain a new certificate from that CA. You add this to the Ops Manager settings in the next high-level step.
+    - **If you get your certificates from your CA**: If you generate certificates from your own private or public CA, obtain a new certificate from that CA. You add this to the Ops Manager settings in the next high-level step.
     - **If you use self-signed certificates**: Generate a new self-signed certificate with a new name or path in CredHub:
 
         ```
