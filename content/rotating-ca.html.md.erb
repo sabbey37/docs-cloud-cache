@@ -144,7 +144,7 @@ or from your new CredHub location by capturing the certificate in the output of:
 ### <a id="WAN-add-certsAandB"></a> Add All the Certificates to the Tiles
 
 This part adds all the certificates (current and new) to the tiles.
-For a system with two foundations, the four certificates are:
+For a distributed system with two foundations, the four certificates are:
 
 - The current TLS CA certificate for foundation A (called `/services/tls_ca`)
 - The current TLS CA certificate for foundation B (also called `/services/tls_ca`)
@@ -343,7 +343,7 @@ and once to apply the changes to foundation B.
 1. Navigate back to the **Installation Dashboard**.
 1. Click **Review Pending Changes**.
 1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles,
-are deselected in order to reduce deployment time.
+are selected.
 1. Select only the on-demand services tiles that use TLS,
 such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
 1. For each on-demand service tile that uses TLS:
