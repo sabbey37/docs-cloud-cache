@@ -6,9 +6,349 @@ This section specifies the procedure to follow to check expiration dates
 and rotate certificates.
 
 To rotate the Services TLS CA and its leaf certificates,
+for service instances that are _not_ connected by WAN gateways,
 use one of the following procedures:
 
 - If running Ops Manager 2.9, follow the procedure in
 [Rotate the Services TLS CA and Its Leaf Certificates](https://docs.pivotal.io/ops-manager/2-9/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
 - If running Ops Manager 2.8, follow the procedure in
 [Rotating the Services TLS CA and Its Leaf Certificates](https://docs.pivotal.io/ops-manager/2-8/security/pcf-infrastructure/services_tls_ca_rotate.html).
+
+## <a id="cert-rot-WAN"></a> WAN-Connected Service Instances
+
+Follow this procedure for rotating the certificates of foundations,
+when service instances connected via WAN gateways reside
+on distinct foundations.
+
+The procedure assumes two foundations have service instances,
+one called foundation A
+and the other called foundation B.
+The procedure may be followed by installations that have more
+than two foundations.
+To expand the procedure to cover more foundations,
+in each place where foundation A and foundation B are identified,
+also apply the directions for a third foundation C,
+a fourth foundation D, and so on.
+
+The procedure is broken into parts. 
+Do the parts in the order listed.
+The parts are:
+
+- [Generate New TLS CA Certificates](#WAN-get-certsAandB)
+- [Collect All the Certificates](#WAN-collect-all-certs)
+- [Add All the Certificates to the Tiles](#WAN-add-certsAandB)
+- [Apply Changes for the First Time](#WAN-apply-first)
+- [Set New Services TLS CA Certificate](#WAN-set-new-cert)
+- [Apply Changes for the Second Time](#WAN-apply-second)
+- [Remove the Old Services TLS CA Certificates](#WAN-remove-old)
+- [Apply Changes for the Third Time](#WAN-apply-third)
+
+### <a id="WAN-get-certsAandB"></a> Generate New TLS CA Certificates
+
+Follow these steps twice to obtain a new TLS CA certificate,
+once to generate a new TLS CA certificate for foundation A,
+and once to generate a new TLS CA certificate for foundation B.
+
+1. Check if CredHub has a new temporary certificate from
+a previous rotation attempt. Run:
+
+    ```
+    credhub get -n /services/new_ca
+    ```
+
+    <p class="note"><strong>Note</strong>: This procedure assumes that
+    <code>/services/new_ca</code> is the CredHub location used when generating
+    the temporary certificate.
+    If you used a different location, specify that location instead.</p>
+
+2. If an older temporary certificate already exists,
+delete that certificate by running:
+    
+    ```
+    credhub delete -n /services/new_ca
+    ```
+
+3. Do one of the following:
+    - **If you get your certificates from your CA**: If you generate certificates from your own private or public CA, obtain a new certificate from that CA. You add this to the Ops Manager settings in the next high-level step.
+    - **If you use self-signed certificates**: Generate a new self-signed certificate with a new name or path in CredHub:
+
+        ```
+        credhub generate \
+        --name="/services/new_ca" \
+        --type="certificate" \
+        --no-overwrite \
+        --is-ca \
+        --duration=1825 \
+        --common-name="opsmgr-services-tls-ca"
+        ```
+        where
+        - `name` is the CredHub path or name of the new certificate. You can use `/services/new_ca` or substitute a different name as long as you use the value consistently in the rest of the procedure.
+        - `common-name` is the common name of the generated certificate. You can use `opsmgr-services-tls-ca` or substitute a different common name as long as you use the value consistently in the rest of the procedure.
+        - `duration` is set to 1825, which is a recommended value of five years. If you do not specify a duration, the default value is 365 or one year.
+    - **If you use an intermediate certificate signed by a root CA in CredHub**:Generate a new certificate signed by the CredHub root CA by running:
+
+        ```
+        credhub generate \
+        --name="/services/new_ca" \
+        --type="certificate" \
+        --no-overwrite \
+        --is-ca \
+        --duration=1825 \
+        --common-name="opsmgr-services-tls-ca" \
+        --ca=/PATH-TO-ROOT-CA
+        ```
+        where
+        - `name` is the CredHub path or name of the new certificate. You can use `/services/new_ca` or substitute a different name as long as you use the value consistently in the rest of the procedure.
+        - `common-name` is the common name of the generated certificate. You can use `opsmgr-services-tls-ca` or substitute a different common name as long as you use the value consistently in the rest of the procedure.
+        - `duration` is set to 1825, which is a recommended value of five years. If you do not specify a duration, the default value is 365 or one year.
+        - `ca` is the path to the root CA for the new certificate. Replace `PATH-TO-ROOT-CA` with the appropriate path for the root CA.
+
+### <a id="WAN-collect-all-certs"></a> Collect All the Certificates
+
+Each of foundation A and foundation B has a current certificate and the newly
+generated one from the previous step,
+totalling four certificates across two foundations.
+
+1. On foundation A, log in to CredHub.
+
+2. On foundation A, get the _current_ Services TLS CA certificate by
+capturing the certificate in the output of: 
+   
+    ```
+    credhub get --name=/services/tls_ca -k ca
+    ```
+
+3. On foundation A, get the _new_ Services TLS CA certificate either from a pre-existing file,
+or from your new CredHub location by capturing the certificate in the output of:
+
+    ```
+    credhub get --name=/services/new_ca -k ca
+    ```
+
+1. On foundation B, log in to CredHub.
+
+2. On foundation B, get the _current_ Services TLS CA certificate by
+capturing the certificate in the output of: 
+   
+    ```
+    credhub get --name=/services/tls_ca -k ca
+    ```
+
+3. On foundation B, get the _new_ Services TLS CA certificate either from a pre-existing file,
+or from your new CredHub location by capturing the certificate in the output of:
+
+    ```
+    credhub get --name=/services/new_ca -k ca
+    ```
+
+### <a id="WAN-add-certsAandB"></a> Add All the Certificates to the Tiles
+
+This part adds all the certificates (current and new) to the tiles.
+For a distributed system with two foundations, the four certificates are:
+
+- The current TLS CA certificate for foundation A (called `/services/tls_ca`)
+- The current TLS CA certificate for foundation B (also called `/services/tls_ca`)
+- The new TLS CA certificate for foundation A (called `/services/new_ca`)
+- The new TLS CA certificate for foundation B (also called `/services/new_ca`)
+
+1. On foundation A, paste all certificates
+(ordering of the certificates does not matter)
+into the **BOSH Director > Security > Trusted Certificates** field.
+Click **Save**.
+
+2. On foundation A, paste all certificates
+(ordering of the certificates does not matter)
+into two fields of the VMware Tanzu Application Service tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+3. On foundation A, paste all certificates
+(ordering of the certificates does not matter)
+into two fields of the Isolation Segment tile,
+if the environment has this optional tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+4. On foundation B, paste all certificates
+(ordering of the certificates does not matter)
+into the **BOSH Director > Security > Trusted Certificates** field.
+Click **Save**.
+
+5. On foundation B, paste all certificates
+(ordering of the certificates does not matter)
+into two fields of the VMware Tanzu Application Service tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+6. On foundation B, paste all certificates
+(ordering of the certificates does not matter)
+into two fields of the Isolation Segment tile,
+if the environment has this optional tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+Click **Save**.
+
+### <a id="WAN-apply-first"></a> Apply Changes for the First Time
+
+<p class="note warning"><strong>Warning</strong>: This procedure involves
+redeploying all of the VMs in your <%= vars.ops_manager %> deployment
+to apply a CA certificate. The operation can take a long time to complete.
+<br><br>You may apply the changes to both foundation A and foundation B at the
+same time.</p>
+
+Follow these steps twice, once to apply the changes to foundation A,
+and once to apply the changes to foundation B.
+
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles, are selected.
+1. Identify which on-demand service tiles are using the Services TLS CA certificate. Run:
+
+    ```
+    credhub curl -p /api/v1/certificates?name=%2Fservices%2Ftls_ca
+    ```
+    From the returned list, identify which on-demand service tiles use TLS in
+    your deployment, such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
+1. For each on-demand service tile that uses TLS:
+    1. Expand the errands.
+    1. Enable the errand to upgrade all service instances.
+        <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
+1. Click **Apply Changes**.
+
+### <a id="WAN-set-new-cert"></a> Set New Services TLS CA Certificate
+
+Set the new Services TLS CA certificate in CredHub.
+Do this on foundation A with foundation A's new TLS CA certificate,
+and do this on foundation B with foundation B's new TLS CA certificate.
+
+Do one of the following:
+
+- **If you have an existing certificate:** Obtain the CA certificate and private key file corresponding
+  to the certificate that you got in the [Get New TLS CA Certificates](#WAN-get-certsAandB) part of the procedure. Then, run:
+
+    ```
+    credhub set \
+    --name="/services/tls_ca" \
+    --type="certificate" \
+    --certificate=PEM-PATH/root.pem \
+    --private=CERT-KEY
+    ```
+    Where:
+    - `certificate` is the location of the `root.pem` file for the certificate. Replace `PEM-PATH` with the path of your certificate's `root.pem` file.
+    - `private` is the private key for the new certificate. Replace `CERT-KEY` with the value of the private key for your certificate.
+- **If you created a new self-signed or intermediary certificate:** Set the `/services/new_ca` that you generated in the [Get New TLS CA Certificates](#WAN-get-certsAandB) part of the procedure as the Services TLS CA:
+
+    ```
+    credhub get -n /services/new_ca -k ca > new_ca.ca
+    credhub get -n /services/new_ca -k certificate > new_ca.certificate
+    credhub get -n /services/new_ca -k private_key > new_ca.private_key
+    credhub set -n /services/tls_ca \
+    --type=certificate \
+    --root=new_ca.ca \
+    --certificate=new_ca.certificate \
+    --private=new_ca.private_key
+    ```
+
+
+
+### <a id="WAN-apply-second"></a> Apply Changes for the Second Time
+
+<p class="note warning"><strong>Warning</strong>: This procedure involves
+redeploying all of the VMs in your <%= vars.ops_manager %> deployment
+to apply a CA certificate. The operation can take a long time to complete.
+<br><br>You may apply the changes to both foundation A and foundation B at the
+same time.</p>
+
+In this step, you apply changes to ensure that all on-demand service instances
+generate new leaf certificates from the new Services TLS CA.
+
+Follow these steps twice, once to apply the changes to foundation A,
+and once to apply the changes to foundation B.
+
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles,
+are deselected in order to reduce deployment time.
+1. Select only the on-demand services tiles that use TLS,
+such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
+1. For each on-demand service tile that uses TLS:
+    1. Expand the errands.
+    1. Enable the errand to upgrade all service instances.
+        <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
+1. Click **Apply Changes**.
+
+### <a id="WAN-remove-old"></a> Remove the Old Services TLS CA Certificates
+
+After your apps have reconnected to service instances with the certificates
+generated by the new CA, both of the old CA certificates may be removed.
+There will be one old CA certificate for foundation A
+and one old certificate for foundation B.
+
+Follow these steps twice, once for foundation A,
+and once for foundation B.
+
+1. Delete the two old CA certificates from
+the BOSH Director tile **Security > Trusted Certificates** field.
+You will remove one old CA certificate for foundation A 
+and one old certificate for foundation B.
+Click **Save**.
+
+1. Delete the two old CA certificates from the two fields of
+the VMware Tanzu Application Service tile:
+**Networking > Certificate Authorities trusted by the Gorouter** and
+**Networking > Certificate Authorities trusted by the HAProxy**.
+You will remove one old CA certificate for foundation A 
+and one old certificate for foundation B.
+Click **Save**.
+
+1. Delete the two old CA certificates from the two fields
+of the Isolation Segment tile, if the environment has this optional tile:
+**Networking > Certificate Authorities trusted by the Gorouter**
+and **Networking > Certificate Authorities trusted by the HAProxy**.
+You will remove one old CA certificate for foundation A 
+and one old certificate for foundation B.
+Click **Save**.
+
+### <a id="WAN-apply-third"></a> Apply Changes for the Third Time
+
+As a security best practice,
+you should remove outdated certificates as soon as possible
+from your deployment.
+You can schedule this step to a convenient time,
+because for most deployments you will not lose any deployment functionality
+if you do not perform this step immediately.
+
+For some deployments,
+you may encounter an error if you create a service instance in a deployment
+that contains an expired Services TLS CA certificate.
+For more information, see this [Knowledgebase Article]
+(https://community.pivotal.io/s/article/Cloud-Controller-fails-to-create-service-instance-when-there-is-an-old-expired-cert-installed-on-the-system).
+
+<p class="note warning"><strong>Warning</strong>: This procedure involves
+redeploying all of the VMs in your <%= vars.ops_manager %> deployment
+to apply a CA certificate. The operation can take a long time to complete.
+<br><br>You may apply the changes to both foundation A and foundation B at the
+same time.</p>
+
+Follow these steps twice, once to apply the changes to foundation A,
+and once to apply the changes to foundation B.
+
+1. Navigate back to the **Installation Dashboard**.
+1. Click **Review Pending Changes**.
+1. Ensure that all product tiles, including <%= vars.app_runtime_abbr %>, <%= vars.windows_runtime_abbr %>, Isolation Segment, and partner tiles,
+are selected.
+1. Select only the on-demand services tiles that use TLS,
+such as MySQL for VMware Tanzu, Tanzu GemFire for VMs, Redis for VMware Tanzu, and RabbitMQ for VMware Tanzu [VMs].
+1. For each on-demand service tile that uses TLS:
+    1. Expand the errands.
+    1. Enable the errand to upgrade all service instances.
+        <p class="note"><strong>Note:</strong> The name of the upgrade all service instances errand may differ slightly between services.</p>
+1. Click **Apply Changes**.
+
