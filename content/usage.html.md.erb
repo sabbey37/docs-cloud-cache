@@ -4,10 +4,14 @@ title: Recommended Usage and Limitations
 
 - See [Design Patterns](./design-patterns.html)
 for descriptions of the variety of design patterns that <%=vars.product_full%> supports.
-- <%=vars.product_short%> stores objects in key/value pairs, where the value can be any object.
+- <%=vars.product_short%> stores objects in key/value pairs,
+where the value can be any object.
 - See [gfsh Command Restrictions](using-pcc.html#gfsh-restrictions) for limitations on the use of gfsh commands.
 
 ## Limitations
 
 - <%=vars.product_short%> does not support scaling down the cluster.
-- <%=vars.product_short%> does not support plan migrations, for example, with the `-p` flag to the `cf update-service` command.
+- <%=vars.product_short%> does not support plan migrations.
+The `-p` option to the `cf update-service` command is not supported.
+- <%=vars.product_short%> does not publish locator metrics for service
+instances created as Co-located Single VM plans or Co-located Multi VM plans.
