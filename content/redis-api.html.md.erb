@@ -4,22 +4,23 @@ title: Redis API
 
 ## <a id="starting-redis-api"></a> Starting a Tanzu GemFire Service Instance with Redis API
 
-When a Tanzu GemFire service instance is started, the Redis API is already available.
+To use the Redis API it must first be enabled when creating or updating a Tanzu GemFire service instance.
 
 In order to access the API, ensure that your operator has [opened port 6379 or 16379 (TLS)](on-demand-networking.html).
 
-Add the "redis" tag to your <%=vars.product_full%> service:
-  - When creating a new service, add the option: `-t "redis"` to the create service command:
+Enable redis and add the "redis" tag to your <%=vars.product_full%> service:
+  - When creating a new service, add the options `-c '{"redis":true}'` and `-t "redis"` to the create service command:
     <pre class='terminal'>
-      $ cf create-service p-cloudcache PLAN-NAME YOUR-SERVICE-NAME -t "redis"
+      $ cf create-service p-cloudcache PLAN-NAME YOUR-SERVICE-NAME -c '{"redis":true}' -t "redis"
     </pre>
 
-  - For an existing service, the tag can be updated:
+  - For an existing service, redis can also be enabled:
     <pre class='terminal'>
-      $ cf update-service YOUR-SERVICE-NAME -t "redis"
+      $ cf update-service YOUR-SERVICE-NAME -c '{"redis":true}' -t "redis"
     </pre>
+    Note that this will result in all members of the cluster being restarted.
 
-If you are migrating from an existing application that uses the Redis tile you will typically need to do the following:
+If you are migrating from an existing application that uses the Redis tile, you will typically need to do the following:
 
 1. If your app is still bound to the Redis service, it needs to be unbound:
     <pre class='terminal'>
@@ -41,7 +42,7 @@ will not be available.
 
 To enable Redis and TLS on a Tanzu GemFire service instance, run the following command when you create your service:
   <pre class=”terminal”>
-    $ cf create-service p-cloudcache PLAN-NAME YOUR-SERVICE-NAME -t redis -c '{"tls": true}'
+    $ cf create-service p-cloudcache PLAN-NAME YOUR-SERVICE-NAME -t redis -c '{"redis":true,"tls":true}'
   </pre>
 
 ## <a id="back-up"></a> Back Up and Restoration
