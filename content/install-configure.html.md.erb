@@ -109,7 +109,7 @@ less than or equal to 255.
 
 ![Default Distributed System ID setting](dist-sys-ID-default.png)
 
-#### Settings: Enable Creation of a Service Gateway
+###<a id="settings-sg"></a> Settings: Enable Creation of a Service Gateway
 
 If the communication between apps and the 
 <%=vars.product_short%> service instance require a service gateway,
@@ -117,10 +117,32 @@ choose the 'Yes' radio button in the **Enable Service Gateway** setting.
 This will permit the instantiation of the service gateway when
 a service instance is created and specifies a service gateway.
 
-Enter the Fully Qualified Domain Name (FQDN) that was used when
-enabling TCP routing.
+Enter a Fully Qualified Domain Name (FQDN) for the
+**FQDN for TCP Router** field.
+This was the FQDN used when enabling TCP routing.
+The FQDN may also be found in the output of the `cf domains` command.
+From the output, choose the `name` field  with type `tcp`.
+
+Set the **Ingress Port for TCP Router** field with an unused port
+that was noted when TCP routing was enabled.
+Alternatively, to find the range of ports from which to choose,
+from **Ops Manager**, click **Tanzu Application Service**,
+and then choose **Networking**.
+The range of ports from which to choose is near the bottom of the page
+in a field named **TCP routing ports** under the heading of **TCP routing**.
+
+Click **Save**.
 
 ![Enable Service Gateway setting](enable-svc-gateway.png)
+
+To complete enabling the creation of a service gateway,
+within the <%=vars.product_short%> tile settings,
+click on **Resource Config**.
+Enter a value of at least 1 for the **TCP Router** **INSTANCES** field.
+
+Click **SAVE**.
+
+![Set TCP Router instances setting](TCPRouter-instances.png)
 
 ###<a id="plan-config"></a> Configure Service Plans
 
