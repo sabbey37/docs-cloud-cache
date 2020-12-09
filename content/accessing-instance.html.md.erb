@@ -275,18 +275,26 @@ Certificate was added to keystore
 
 After you have created the truststore, you can use the cluster's command line interface, `gfsh`, to connect to the cluster over HTTPS.
 
-1. For this Beta release, acquire `gfsh` by downloading the compressed TAR
-file at [apache-geode-1.13.0-build.312.tgz](https://maven.apachegeode-ci.info/snapshots/org/apache/geode/apache-geode/1.13.0-build.312/apache-geode-1.13.0-build.312.tgz).
+1. Acquire the compressed TAR file of Apache Geode from the
+[Apache Geode Releases](https://geode.apache.org/releases/) page.
+Discover the correct version to download by referencing the
+table in [Product Snapshot and Version Compatibility](product-snapshot.html).
 Note that a JDK or JRE will also be required.
 1. Expand the <%=vars.component_product%> compressed TAR file. 
 `gfsh` is within the `bin` directory in the expanded <%=vars.component_product%>.
-Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Run `gfsh`
+1. Run `gfsh` on Unix with a command of the form:
 
     ```
-    $ /PATH/TO/apache-geode-1.13.0-build.312/bin/gfsh
+    /PATH/TO/apache-geode-1.13.1/bin/gfsh
     ```
-and then issue a `connect` command of the form:
+
+    or, on Windows with a command of the form:
+
+    ```
+    \PATH\TO\apache-geode-1.13.1\bin\gfsh.bat
+    ```
+
+    and then at the gfsh prompt, issue a `connect` command of the form:
 
     ```
     connect --use-http=true --url=HTTPS-gfsh-URL
@@ -322,19 +330,28 @@ by eliminating the truststore and SSL mutual authentication.
 
 The steps to establish the `gfsh` connection become:
 
-1. For this Beta release, acquire `gfsh` by downloading the compressed TAR
-file at [apache-geode-1.13.0-build.312.tgz](https://maven.apachegeode-ci.info/snapshots/org/apache/geode/apache-geode/1.13.0-build.312/apache-geode-1.13.0-build.312.tgz).
+1. Acquire the `connect` command (the `gfsh_login_string`) from the service key.
+This command will connect using the cluster_operator role.
+This `connect` command assumes that the installation is configured
+*without* an authentication and enterprise single sign-on (SSO) system
+such as LDAP.
+1. Acquire the compressed TAR file of Apache Geode from the
+[Apache Geode Releases](https://geode.apache.org/releases/) page.
+Discover the correct version to download by referencing the
+table in [Product Snapshot and Version Compatibility](product-snapshot.html).
 Note that a JDK or JRE will also be required.
 1. Expand the <%=vars.component_product%> compressed TAR file. 
 `gfsh` is within the `bin` directory in the expanded <%=vars.component_product%>.
-Use `gfsh` with Unix or `gfsh.bat` with Windows.
-1. Acquire the `connect` command (the `gfsh_login_string`) from the service key. This command will connect as the cluster_operator role.
-This `connect` command assumes that the installation is configured *without* an authentication and enterprise 
-single sign-on (SSO) system such as LDAP.
-1. Run `gfsh`
+1. Run `gfsh` on Unix with a command of the form:
 
     ```
-    $ /PATH/TO/apache-geode-1.13.0-build.312/bin/gfsh
+    /PATH/TO/apache-geode-1.13.1/bin/gfsh
+    ```
+
+    or, on Windows with a command of the form:
+
+    ```
+    \PATH\TO\apache-geode-1.13.1\bin\gfsh.bat
     ```
 
     and then issue the acquired `connect` command:
