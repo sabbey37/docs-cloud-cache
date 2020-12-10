@@ -47,7 +47,7 @@ $ cf create-service p-cloudcache small TLS-cluster -c '{"tls": true}'
 This example creates a service gateway that is connected to the cluster:
 
 <pre class='terminal'>
-$ cf create-service p-cloudcache small TLS-cluster -c '{"tls": true, “services_gateway”: true}'
+$ cf create-service p-cloudcache small TLS-cluster -c '{"tls": true, “service_gateway”: true}'
 </pre>
 
 This example creates the service with five service instances in the cluster:
