@@ -1,0 +1,151 @@
+---
+title:  Installing and Running VSD
+---
+
+Start the VSD tool, load statistics files, and maintain the view you want on your statistics.
+
+## <a id="running_vsd__section_454242C82E2748F2B1B902E8E566A605"></a>Install VSD
+
+<a id="running_vsd__section_CBD5B04ACC554029B5C710CE8E244FEA"></a>
+
+VSD is a free analysis tool and is provided as-is.
+See [VSD System Requirements](vsd_system_requirements.html) to view a list of platforms that are known to work with VSD.
+
+VSD is available for download from the [Pivotal GemFire download page](https://network.pivotal.io/products/pivotal-gemfire).
+It can be installed anywhere, but if GemFire is installed in _product-dir_, you may wish to install VSD in <code><em>product-dir</em>/tools/vsd</code>
+so it can be conveniently launched from `gfsh` using the `start vsd` command.
+
+Download the VSD archive, usually named something like `pivotal-gemfire-vsd.zip`, and unpack it in a directory of your choosing.
+For this example, assume and VSD was downloaded, unzipped, and installed in <code><em>product-dir</em>/tools/vsd</code>.
+
+**Note:**
+VSD is a 32-bit application. If you are running VSD on a 64-bit machine, you may need to install 32-bit OS libraries to run the application if they are not already installed.
+On Linux, to find out which libraries are missing, run the following `ldd` command:
+
+``` pre
+ldd <product_dir>/tools/vsd/bin/vsdwishLinux
+```
+
+The VSD tool installation has two subdirectories, **bin** and **lib**:
+
+-   **bin**. Contains scripts and binaries that can be used to run VSD on a variety of operating systems, including:
+
+    -   vsd - script for Solaris, Linux, and Mac
+    -   vsd.bat - script for Windows
+    -   vsdwishSunOS - binary for Solaris
+    -   vsdwishLinux - binary for Linux
+    -   vsdwishDarwin - binary for Mac
+    -   vsdwishWindows\_NT.exe - binary for Windows
+
+-   **lib**. The jars and binary libraries needed to run VSD.
+
+## <a id="configure-statistics-sampling-gemfire"></a>Configure Statistics Sampling in GemFire
+
+Before you use VSD, you must enable the collection of GemFire statistics at runtime. Set the following configurations in gemfire.properties:
+
+``` pre
+statistic-sampling-enabled=true
+statistic-archive-file=myStats.gfs
+```
+
+Since collecting statistics at the default sampling rate of once every second does not affect performance, we recommend that sampling should always be enabled; including during development, testing, and in production.
+
+There is a special category of statistics called time-based statistics that can be very useful in troubleshooting and assessing the performance of some GemFire operations, but they should be used with caution because their collection can affect performance. These statistics can be enabled using the following gemfire.properties configuration:
+
+``` pre
+enable-time-statistics=true
+```
+
+When the distributed system is up and running, every GemFire instance generates a statistics file. To simplify browsing these statistics in VSD, you may want to copy all the statistics files from all members into one directory so that you can easily load the files into VSD.
+
+## <a id="running_vsd__section_0FB02D8CCBD940B6AF5C271709D01311"></a>Start VSD
+
+To start VSD, you can either execute the scripts directly or start it through the `gfsh` interface. To start VSD using the provided scripts, change directories to <code>_product-dir_/tools/vsd/bin</code> and the enter the following command at the prompt:
+
+-   **Windows:**
+
+    ``` pre
+    prompt>vsd.bat
+    ```
+
+    **Note:**
+    To run VSD on Windows 7 or later, go to the <code>_product-dir_/tools/vsd/bin</code> directory. Right-click on `vsd.bat` and select Properties. Click Compatibility and set it to **Windows XP**. Repeat this step for all other executables in the `bin` directory.
+
+-   **Linux/Unix, MacOS or Other OS:**
+
+    ``` pre
+    $ vsd
+    ```
+
+To start VSD using `gfsh`, start a `gfsh` prompt and enter the following command:
+
+``` pre
+gfsh>start vsd
+```
+
+## <a id="running_vsd__section_29D779D675654DC4934A3A4417957D83"></a>Load a Statistics File into VSD
+
+You have several options for loading a statistics file into VSD:
+
+-   Include the name of one or more statistics files on the VSD command line. Example:
+
+    ``` pre
+    vsd <filename.gfs> ...
+    ```
+
+-   Browse for an existing statistics file through Main &gt; Load Data File.
+-   Type the full path in the File entry box, then press Enter.
+-   Switch to a statistics file that you’ve already loaded by clicking the down-arrow next to the File entry.
+
+After you load the data file, the VSD main window displays a list of entities for which statistics are available. VSD uses color to distinguish between entities that are still running (shown in green) and those that have stopped (shown in black).
+
+## <a id="running_vsd__section_5CC53D9F2948460DACB9E94DD96C8CD4"></a>Maintain a Current View of the Data File
+
+If you select the menu item File &gt; Auto Update, VSD automatically updates your display, and any associated charts, whenever the data file changes. Alternatively, you can choose File &gt; Update periodically to update the display manually.
+
+## <a id="running_vsd__section_D6F4B37018374BFDAFBBC3594B878A4D"></a>About Statistics
+
+Some statistics are cumulative from when the GemFire system was started. Other statistics are instantaneous values that may change in any way between sample collection.
+
+Cumulative statistics are best charted per second or per sample, so that the VSD chart is readable. Absolute values are best charted as No Filter.
+
+## <a id="fgs-time-zone-information-matching-statistics-log-files"></a>.gfs Time Zone Information for Matching Statistics to Log Files
+
+When opening a .gfs file, statistics are shown in the time zone used on the *local computer* where VSD is launched. This can made it harder to relate log files to statistics if the logs are from another time zone.
+
+To open a VSD file with the time zone used when generating it, first you need to know in which time zone the .gfs file is created. To obtain this information, use the following command:
+
+``` pre
+strings file.gfs | head
+```
+
+For example:
+
+``` pre
+$ strings ObjLoader?-31-03.gfs | head
+Hongkong
+hklp162p.oocl.com
+:GemFire? x.x.x
+14:46:33 PST
+Linux x.x.x
+```
+
+After you obtain the time zone, modify your local computer to use the time zone used when obtaining statistics in the .gfs file. For example, on a Mac computer, you can first list available time zones:
+
+``` pre
+sudo systemsetup -listtimezones
+```
+
+And then export the specific timezone to your environment:
+
+``` pre
+export TZ=<timezone>
+```
+
+For example, for Hong Kong:
+
+``` pre
+export TZ=Asia/Hong_Kong
+```
+
+Then use VSD to open the .gfs file that will now display timestamps from the original time zone.
