@@ -1,6 +1,61 @@
 ---
-title: HTTP Session State Caching
+title: Tomcat Session State Caching
 ---
+
+## <a id="custom-ssc-buildpack"></a> Creating a Custom Buildpack for Session State Caching Apps
+
+This procedure creates and uses a custom Java buildpack for different versions of <%=vars.product_full%>.
+Once created, the `cf push` specifies the custom Java buildpack.
+
+1. Clone the git buildpack repository:
+
+    ```
+    git clone git@github.com:cloudfoundry/java-buildpack.git
+    ```
+
+2. Change directories to the newly created repository:
+
+    ```
+    cd java-buildpack
+    ```
+
+3. Edit the Tomcat configuration file to specify the version of <%=vars.product_full%> you are using.
+   The file to edit is `/config/tomcat.yml`.
+   The single change is the version of `geode_store`.
+   Here is the portion of the file to be changed,
+   with the string to change in bold:
+
+    <pre>
+    geode_store:
+      <b>version: 1.13.+</b>
+      repository_root: https://sessionstate-buildpack-test.s3-us-west-2.amazonaws.com
+    </pre>
+
+4. Create your custom Java buildpack on the platform with a command
+   of the form:
+
+    ```
+    cf create-buildpack BUILDPACK PATH POSITION
+    ```
+   where `BUILDPACK` is the name you choose for your buildpack, `PATH` is the location of your local
+   Java buildpack directory, and `POSITION` is the order in which your buildpack will be selected.
+
+5. After building your application, push it such that it uses your
+   buildpack:
+
+    ```
+    cf push -f ./manifest.yml -b BUILDPACK
+    ```
+
+6. Bind your app as described in
+   [Bind an App to a Service Instance](using-pcc.html#bind-service).
+
+7. Restage the app to ensure proper configuration:
+
+    ```
+    cf restage APP-NAME
+    ```
+
 
 ## <a id="disable-nearcaching"></a> Disable Near Caching Within the App
 

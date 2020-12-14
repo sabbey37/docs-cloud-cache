@@ -85,8 +85,11 @@ To enable session state caching, do _one_ of the following items:
     <pre class='terminal'>
     $ cf update-service new-service-instance -t session-replication</pre>
 
-- Option 3: When creating the service, name the service instance name by appending it with the string `-session-replication`,
+- Option 3: When creating the service, append the service instance name with the string `-session-replication`,
 for example `my-service-instance-session-replication`.
+
+- If you need to use a different version of <%=vars.product_full%> than is provided by the Java buildpack,
+  see [Creating a Custom Buildpack for Session State Caching Apps](session-caching.html#custom-ssc-buildpack) for more information.
 
 ### <a id="ssc-spring-session"></a> Enable Session State Caching Using Spring Session
 
