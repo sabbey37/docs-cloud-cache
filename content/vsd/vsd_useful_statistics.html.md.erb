@@ -4,11 +4,11 @@ title:  Quick Guide to Useful Statistics
 
 A large number of statistics are intended only for product support and engineering. This topic describes the most important categories and the useful statistics they contain.
 
-For a reference on GemFire statistics, see [GemFire Statistics List](https://geode.apache.org/docs/guide/113/reference/statistics_list.html).
+For a reference on Geode statistics, see [Geode Statistics List](https://geode.apache.org/docs/guide/113/reference/statistics_list.html).
 
 ## <a id="runtime-configuration"></a>Runtime Configuration
 
-As the name implies, these statistics can help with verifying the runtime configuration of a GemFire system:
+As the name implies, these statistics can help with verifying the runtime configuration of a service instance:
 
 -   The **number of peer nodes** (i.e. servers or peer accessors) in the system: *DistributionStats:nodes*. This value should be the same for every node in the system.
 -   The **number of clients and client connections for each server**: *CacheServerStats: currentClients*, and *currentClientConnections*
@@ -30,7 +30,7 @@ The resources that are vital for normal operation and performance are memory, fi
 -   **CPU**: The CPU usage is captured in OS statistic category, e.g. *LinuxSystemStats*. The statistic *cpuActive* shows the percentage of the total available CPU time that has been used in a non-idle state.
 -   **System load**: OS statistic category (e.g. *LinuxSystemStats*) includes the *loadAverage1*, *loadAverage5*, *loadAverage15* statistics, which show the average system load for 1, 5, and 15 minutes.
 -   **Network**: OS stats also include network related stats for received (*recv*) and transmitted traffic (*recvBytes*, *xmitBytes*, *recvErrors*, *xmitErrors*).
--   **Disk: DiskDirStatistics:diskSpace** shows the amount of disk space used for GemFire disk storage on a given disk. Above mentioned *entriesOnlyOnDisk*, and *entriesInVM* from *DiskRegionStatistics* are useful for determining the distribution of data between memory and disk, for regions that use disk overflow/persistence.
+-   **Disk: DiskDirStatistics:diskSpace** shows the amount of disk space used for disk storage on a given disk. Above mentioned *entriesOnlyOnDisk*, and *entriesInVM* from *DiskRegionStatistics* are useful for determining the distribution of data between memory and disk, for regions that use disk overflow/persistence.
 
 The following chart is an example of examining the *vmHeapMemoryStats* in relation to the *entriesInVM* statistic.
 
