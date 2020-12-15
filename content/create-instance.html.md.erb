@@ -70,8 +70,14 @@ $ cf create-service p-cloudcache small my-cloudcache -c '{"shared_write_access":
 </pre>
 
 ### <a id="ssc"></a> Enable Session State Caching with the Java Buildpack
+By default, the Tomcat instance is configured to store all Sessions and their data in memory. Under
+certain circumstances it may be appropriate to persist the Sessions and their data to a repository.
+When this is the case (small amounts of data that should survive the failure of any individual instance),
+the buildpack can automatically configure Tomcat to do so by binding an appropriate service.
 
-When the `session-replication` tag is specified, the Java buildpack downloads all the required resources for session state caching. This feature is available in Java buildpack version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
+When the `session-replication` tag is specified, the Java buildpack downloads all the required resources
+for session state caching. This feature is available in Java buildpack version 3.19 and higher, up
+to but not including version 4. It is then available again in version 4.3.
 
 To enable session state caching, do _one_ of the following items:
 
