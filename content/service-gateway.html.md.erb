@@ -23,3 +23,26 @@ when creating the <%=vars.product_short%> service instance.
 - The app must be given and use properties that authenticate
 and authorize [Communicating with a Service Instance](running-app.html#app-location) through the service gateway.
 
+## <a id='service-gateway-scaling'></a> Scaling
+
+If traffic through the service gateway becomes a performance bottleneck,
+the service gateway may be scaled.
+
+Discover if the service gateway is a bottleneck by running the command:
+
+```
+bosh -d DEPLOYMENT-NAME vms --vitals
+```
+where the `DEPLOYMENT-NAME` may be found with the procedure provided
+in [Acquire the Deployment Name](troubleshooting.html#get-deployment-name).
+
+If the CPU usage in the sni-tcp-router VM is high,
+you can scale the service gateway by altering the <%=vars.product_short%>
+tile.
+
+1. From the Ops Manager Installation Dashboard,
+click on the <%=vars.product_short%> tile.
+2. Within the tile **Settings**, click on **Resource Config**.
+3. Increase the quantity of **TCP Router INSTANCES**.
+4. Click **SAVE**.
+5. Review and apply the changes.
