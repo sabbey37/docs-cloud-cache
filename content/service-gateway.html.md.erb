@@ -1,0 +1,25 @@
+---
+title: Using a Service Gateway
+---
+
+The service gateway allows apps that run in a different location than
+the Services Foundation where the <%=vars.product_short%> service instance runs
+to communicate with the service instance.
+At its core, the service gateway is a TCP router.
+
+There are three locations where an app may run.
+The locations are defined in
+[The App's Location](architecture.html#AppLocation).
+
+Apps that run within an App Foundation and apps that run completely outside of
+any foundation must have a service gateway enabled and running
+to communicate with the <%=vars.product_short%> service instance.
+To enable and run the service instance:
+
+- The operator must
+[Configure a Service Gateway](configure-service-gateway.html).
+- The developer must [Provide Optional Parameters](create-instance.html#params)
+when creating the <%=vars.product_short%> service instance.
+- The app must be given and use properties that authenticate
+and authorize [Communicating with a Service Instance](running-app.html#app-location) through the service gateway.
+
