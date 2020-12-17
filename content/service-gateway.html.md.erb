@@ -28,13 +28,22 @@ and authorize [Communicating with a Service Instance](running-app.html#app-locat
 If traffic through the service gateway becomes a performance bottleneck,
 the service gateway may be scaled.
 
-Discover if the service gateway is a bottleneck by running the command:
+1. Discover if the service gateway is a bottleneck by 
+first using the BOSH CLI to log in and target your services foundation.
 
-```
-bosh -d DEPLOYMENT-NAME vms --vitals
-```
-where the `DEPLOYMENT-NAME` may be found with the procedure provided
-in [Acquire the Deployment Name](troubleshooting.html#get-deployment-name).
+2. Find your `BROKER-DEPLOYMENT-NAME` by running the command:
+
+    ```
+    bosh deployments | grep "^p-cloudcache"
+    ```
+
+    The first column of the output is the `BROKER-DEPLOYMENT-NAME`.
+
+3. Use the `BROKER-DEPLOYMENT-NAME` in the command:
+
+    ```
+    bosh -d BROKER-DEPLOYMENT-NAME vms --vitals
+    ```
 
 If the CPU usage in the sni-tcp-router VM is high,
 you can scale the service gateway by altering the <%=vars.product_short%>
