@@ -1,0 +1,57 @@
+---
+title: Using a Service Gateway
+---
+
+The service gateway allows apps that run in a different location than
+the Services Foundation where the <%=vars.product_short%> service instance runs
+to communicate with the service instance.
+At its core, the service gateway is a TCP router.
+
+There are three locations where an app may run.
+The locations are defined in
+[The App's Location](architecture.html#AppLocation).
+
+Apps that run within an App Foundation and apps that run completely outside of
+any foundation must have a service gateway enabled and running
+to communicate with the <%=vars.product_short%> service instance.
+To enable and run the service instance:
+
+- The operator must
+[Configure a Service Gateway](configure-service-gateway.html).
+- The developer must [Provide Optional Parameters](create-instance.html#params)
+when creating the <%=vars.product_short%> service instance.
+- The app must be given and use properties that authenticate
+and authorize [Communicating with a Service Instance](running-app.html#app-location) through the service gateway.
+
+## <a id='service-gateway-scaling'></a> Scaling
+
+If traffic through the service gateway becomes a performance bottleneck,
+the service gateway may be scaled.
+
+1. Discover if the service gateway is a bottleneck by 
+first using the BOSH CLI to log in and target your services foundation.
+
+2. Find your `BROKER-DEPLOYMENT-NAME` by running the command:
+
+    ```
+    bosh deployments | grep "^p-cloudcache"
+    ```
+
+    The first column of the output is the `BROKER-DEPLOYMENT-NAME`.
+
+3. Use the `BROKER-DEPLOYMENT-NAME` in the command:
+
+    ```
+    bosh -d BROKER-DEPLOYMENT-NAME vms --vitals
+    ```
+
+If the CPU usage in the sni-tcp-router VM is high,
+you can scale the service gateway by altering the <%=vars.product_short%>
+tile.
+
+1. From the Ops Manager Installation Dashboard,
+click on the <%=vars.product_short%> tile.
+2. Within the tile **Settings**, click on **Resource Config**.
+3. Increase the quantity of **TCP Router INSTANCES**.
+4. Click **SAVE**.
+5. Review and apply the changes.
