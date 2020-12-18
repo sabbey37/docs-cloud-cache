@@ -73,13 +73,15 @@ $ cf create-service p-cloudcache small my-cloudcache -c '{"shared_write_access":
 By default, the Tomcat instance is configured to store all Sessions and their data in memory. Under
 certain circumstances it may be appropriate to persist the Sessions and their data to a repository.
 When this is the case (small amounts of data that should survive the failure of any individual instance),
-the buildpack can automatically configure Tomcat to do so by binding an appropriate service.
+the buildpack can automatically configure Tomcat to do so by binding an appropriate service, in this
+case <%=vars.product_short%>.
 
 When the `session-replication` tag is specified, the Java buildpack downloads all the required resources
 for session state caching. An application bound to this service will start running in a Tomcat
-instance connected to the service. A region for storing sessions will be created.  Expiration for
-sessions is automatically configured to 30 minutes. This feature is available in Java buildpack
-version 3.19 and higher, up to but not including version 4. It is then available again in version 4.3.
+instance connected to the service. A region for storing sessions will be created and called
+`gemfire_modules_sessions`, and the expiration for sessions is automatically configured to 30 minutes.
+This feature is available in Java buildpack version 3.19 and higher, up to but not including version 4.
+It is then available again in version 4.3.
 
 To enable session state caching, do _one_ of the following items:
 
