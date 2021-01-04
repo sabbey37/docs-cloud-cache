@@ -35,11 +35,11 @@ service instance can be reached from other service instances. The service key sp
 one URL used to connect the gfsh client to the service instance, and another URL used to view the
 Pulse dashboard in a web browser, which allows monitoring of the service instance status.
 
-If an authentication and enterprise single sign-on (SSO) system such as LDAP
+If external authentication such as LDAP via User Account and Authentication (UAA)
 has *not* been configured, the service key shows role-based login credentials as username/password pairs. 
-If an SSO system is in place, it handles user credentials, so they will not appear in the service key.
+If an external authentication system is in place, it handles user credentials, so they will not appear in the service key.
 
-If an authentication and enterprise SSO system has been configured,
+If an external authentication system has been configured,
 then the `cf service-key` returns output in the following format, without role-based login credentials:
 
 <pre class='terminal'>
@@ -105,7 +105,7 @@ then the `cf service-key` returns output in the following format, without role-b
 }
 </pre>
 
-If an authentication and enterprise single sign-on (SSO) system such as LDAP
+If an external authentication such as LDAP via UAA
 has *not* been configured, then the `cf service-key` returns output in a format
 that includes role-based login credentials:
 
@@ -188,7 +188,7 @@ that includes role-based login credentials:
 }
 </pre>
 This service key for a <%=vars.product_full%> installation in which
-an authentication and enterprise single sign-on (SSO) system such as LDAP
+an external authentication such as LDAP via UAA
 has *not* been configured
 specifies these user roles that are predefined,
 for interacting with and within the cluster:
@@ -303,15 +303,15 @@ and then issue a `connect` command of the form:
     you will be prompted to enter the password.
 
     For an installation configured *without* an
-    authentication and enterprise single sign-on (SSO) system such as LDAP,
+    external authentication such as LDAP via UAA,
     the `USER-NAME` and `USER-PASSWORD` are taken from the service key,
     and they will either be for the developer role or for the cluster operator
     role, depending on the gfsh operations to be performed.
 
     For an installation configured *with* an
-    authentication and enterprise single sign-on (SSO) system such as LDAP,
+    external authentication such as LDAP via UAA,
     the `USER-NAME` and `USER-PASSWORD` are your credentials as 
-    issued and set up by your organization within your SSO system.
+    issued and set up by your organization within your system.
 
 ### <a id="dev-establish-https"></a> Establish the Connection with HTTPS in a Development Environment 
 
@@ -333,8 +333,8 @@ as specified in the release notes.
 Use `gfsh` with Unix or `gfsh.bat` with Windows.
 
 1. Acquire the `connect` command (the `gfsh_login_string`) from the service key. This command will connect as the cluster_operator role.
-This `connect` command assumes that the installation is configured *without* an authentication and enterprise 
-single sign-on (SSO) system such as LDAP.
+This `connect` command assumes that the installation is configured *without* an
+external authentication system such as LDAP via UAA.
 1. Run `gfsh`, and then issue the acquired `connect` command:
 
 <pre class='terminal'>

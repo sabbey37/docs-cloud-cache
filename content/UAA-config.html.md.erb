@@ -3,8 +3,8 @@ title: Configuring User Account and Authentication (UAA) Roles
 ---
 
 Extra configuration is required when defining users that have specific
-security roles with an
-authentication and enterprise single sign-on (SSO) such as LDAP.
+security roles from an
+external authentication such as LDAP via User Account and Authentication (UAA).
 
 Before <%=vars.product_full%> installation, create a UAA client
 as described in [Create a UAA Client](create-UAA-client.html).
@@ -51,7 +51,7 @@ to see region data.
 
 ##<a id='UAA-Config-Roles'></a> Configuring the Roles
 
-Configure the UAA server and your Enterprise SSO system
+Configure the UAA server and your external authentication system
 (such as LDAP) with the space-specific roles.
 
 1. Acquire the Globally Unique Identifier (GUID) for the CF space
