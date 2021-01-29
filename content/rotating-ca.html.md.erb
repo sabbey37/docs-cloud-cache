@@ -11,8 +11,26 @@ use one of the following procedures:
 
 - If running Ops Manager 2.10, follow the procedure in
 [Rotate the Services TLS CA and Its Leaf Certificates](https://docs.pivotal.io/ops-manager/2-10/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
+<p class="note warning"><strong>Warning</strong>: For apps that
+connect to the <%=vars.component_product%> cluster using TLS,
+at each step in the procedure that rebinds and restages apps,
+recreate the truststore following the directions at
+[Create a Truststore](accessing-instance.html#truststore) prior to rebinding.
+Spring Boot Data Geode (SBDG) apps that set GemFire properties
+`ssl-use-default-context=true` and `ssl-endpoint-identification-enabled=false`
+do <i>not</i> need to recreate a truststore.
+</p>
 - If running Ops Manager 2.9, follow the procedure in
 [Rotate the Services TLS CA and Its Leaf Certificates](https://docs.pivotal.io/ops-manager/2-9/security/pcf-infrastructure/advanced-certificate-rotation.html#services-rotation).
+<p class="note warning"><strong>Warning</strong>: For apps that
+connect to the <%=vars.component_product%> cluster using TLS,
+at each step in the procedure that rebinds and restages apps,
+recreate the truststore following the directions at
+[Create a Truststore](accessing-instance.html#truststore) prior to rebinding.
+Spring Boot Data Geode (SBDG) apps that set GemFire properties
+`ssl-use-default-context=true` and `ssl-endpoint-identification-enabled=false`
+do <i>not</i> need to recreate a truststore.
+</p>
 
 ## <a id="cert-rot-WAN"></a> WAN-Connected Service Instances
 
