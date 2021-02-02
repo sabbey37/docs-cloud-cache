@@ -33,14 +33,8 @@ to customize the geode_store dependencies retrieved.
       repository_root: https://java-buildpack-tomcat-gemfire-store.s3-us-west-2.amazonaws.com
     </pre>
 
-   For versions of <%=vars.product_full%> under 1.11 you may need to use an older version of
-   geode_store dependencies, which can be done by changing the above section to the following:
-
-   <pre>
-    geode_store:
-      version: 0.0.2
-      repository_root: https://repo.spring.io/ext-release-local/geode-store
-    </pre>
+   For versions of <%=vars.product_full%> under 1.11 you may need to use an older version of geode_store
+   dependencies, which can be done by changing the version to 0.0.2 in the same section shown above.
 
    Warning: For versions of geode_store that are 1.11 or greater you must be using a version of the Java
    Buildpack that is v4.36 or greater. Using versions that are older will result in issues with geode_store
