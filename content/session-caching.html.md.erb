@@ -33,22 +33,22 @@ to customize the geode_store dependencies retrieved.
       repository_root: https://java-buildpack-tomcat-gemfire-store.s3-us-west-2.amazonaws.com
     </pre>
 
-   For versions of <%=vars.product_full%> under 1.11 you may need to use an older version of geode_store
-   dependencies, which can be done by changing the version to 0.0.2 in the same section shown above.
-
-   Warning: For versions of geode_store that are 1.11 or greater you must be using a version of the Java
-   Buildpack that is v4.36 or greater. Using versions that are older will result in issues with geode_store
-   dependencies when applications are bound to a session-replication service instance. For Java Buildpack versions
-   older than v.4.36 geode_store version 0.0.2 should be used.
+      For versions of <%=vars.product_full%> under 1.11 you may need to use an older version of geode_store
+      dependencies, which can be done by changing the version to 0.0.2 in the same section shown above.
+      <br /><br />
+      <b>Warning:</b> For versions of geode_store that are 1.11 or greater you must be using a version of the Java
+      Buildpack that is v4.36 or greater. Using versions that are older will result in issues with geode_store
+      dependencies when applications are bound to a session-replication service instance. For Java Buildpack versions
+      older than v.4.36 geode_store version 0.0.2 should be used.
 
 4. If you change the version of <%=vars.product_full%> in the step above, you may also need to change
    the version of the Geode Session State Module used by the buildpack. To do this edit the following line
    in the file `tomcat_geode_store.rb` to the appropriate version of Tomcat for your current geode_store version:
    <pre>
-    SESSION_MANAGER_CLASS_NAME = 'org.apache.geode.modules.session.catalina.Tomcat8DeltaSessionManager'
-    </pre>
-   For versions of geode_store that are 1.11 or greater Tomcat9DeltaSessionManager should be used. For versions
-   older than 1.11 (including version 0.0.2) Tomcat8DeltaSessionManager should be used.
+   SESSION_MANAGER_CLASS_NAME = 'org.apache.geode.modules.session.catalina.Tomcat8DeltaSessionManager'
+   </pre>
+   For versions of geode_store that are 1.11 or greater `Tomcat9DeltaSessionManager` should be used. For versions
+   older than 1.11 (including version 0.0.2) `Tomcat8DeltaSessionManager` should be used.
 
 5. Create your custom Java buildpack on the platform with a command
    of the form:
