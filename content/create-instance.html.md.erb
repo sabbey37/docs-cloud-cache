@@ -76,8 +76,8 @@ When this is the case (small amounts of data that should survive the failure of 
 the buildpack can automatically configure Tomcat to do so by binding an appropriate service, in this
 case <%=vars.product_short%>.
 
-When the `session-replication` tag is specified, the Java buildpack downloads all the required resources
-for session state caching. An application bound to this service will start running in a Tomcat
+When the `session-replication` tag is specified the sessions are configured to be stored in a service instance,
+thus moving the data out of Tomcat. An application bound to this service will start running in a Tomcat
 instance connected to the service. A region for storing sessions will be created and called
 `gemfire_modules_sessions`, and the expiration for sessions is automatically configured to 30 minutes.
 This feature is available in Java buildpack version 3.19 and higher, up to but not including version 4.
