@@ -1,0 +1,31 @@
+---
+title: Spring Session Caching
+---
+
+To use
+[Spring Session for Apache Geode](https://spring.io/projects/spring-session-data-geode)
+for session state caching for apps with <%=vars.product_short%>,
+follow these steps:
+
+1. Make the following changes to the app:
+  * Replace the existing Spring Session `@EnableXXXHttpSession` annotation with `@EnableGemFireHttpSession(maxInactiveIntervalInSeconds = N)` where `N` is in units of seconds.
+  * Add the `spring-session-data-geode` and `spring-data-geode` dependencies to the build.
+  * Add beans to the Spring app configuration.
+
+2. Use gfsh to create a region on the cluster servers
+named `ClusteredSpringSessions`,
+when connected with a security role that can manage cluster data:
+
+  ```
+  gfsh>create region --name=ClusteredSpringSessions --type=PARTITION_HEAP_LRU
+  ```
+
+Do not enable Tomcat session state caching as described in
+[Enable Session State Caching](session-caching.html#ssc).
+Mixing Tomcat session state caching with Spring Session caching
+is problematic.
+
+The [Session State Code Example](https://github.com/gemfire/spring-for-apache-geode-examples/tree/main/session-state)
+demonstrates session state caching.
+
+Find reference documentation at [Spring Session](https://docs.spring.io/autorepo/docs/spring-session-data-geode-build/current/reference/html5/). 
