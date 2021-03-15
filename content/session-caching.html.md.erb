@@ -44,11 +44,12 @@ If you need to use a different version of <%=vars.product_full%>
 than is provided by the Java buildpack,
 follow the instructions in [Create a Custom Buildpack](#custom-ssc-buildpack).
 
-<p class="note"><strong>Note</strong>: 
-A custom buildpack will be needed if your version of the buildpack
+<p class="note"><strong>Note</strong>:
+A custom buildpack will be needed if your version of the
+<a href="https://github.com/cloudfoundry/java-buildpack">Cloud Foundry Java buildpack</a>
 specifies a <code>geode_store</code> version that is
 more recent than your tile's version of <%=vars.product_short%>.
-Find the buildpack's <code>geode_store</code> value in file <code>/config/tomcat.yml</code>.  </p>
+Find the buildpack's <code>geode_store</code> version in file <code>/config/tomcat.yml</code>.  </p>
 
 Do not mix Tomcat session state caching (as described here)
 with Spring Session caching as described in
