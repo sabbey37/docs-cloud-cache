@@ -40,16 +40,36 @@ include the substring `session-replication` anywhere within the
 service instance name.
 An example with the substring is `my-service-instance-session-replication`.
 
-If you need to use a different version of <%=vars.product_full%>
-than is provided by the Java buildpack,
-follow the instructions in [Create a Custom Buildpack](#custom-ssc-buildpack).
-
-<p class="note"><strong>Note</strong>:
-A custom buildpack will be needed if your version of the
+If your version of the
 <a href="https://github.com/cloudfoundry/java-buildpack">Cloud Foundry Java buildpack</a>
-specifies a <code>geode_store</code> version that is
-more recent than your tile's version of <%=vars.product_short%>.
-Find the buildpack's <code>geode_store</code> version in file <code>/config/tomcat.yml</code>.  </p>
+specifies a `geode_store` version that is
+more recent than your tile's version of <%=vars.product_short%> you may
+need to use a different version of <%=vars.product_full%>
+than is provided by the Java buildpack.
+The complete list of `geode_store` versions is given in [https://java-buildpack-tomcat-gemfire-store.s3-us-west-2.amazonaws.com/index.yml](https://java-buildpack-tomcat-gemfire-store.s3-us-west-2.amazonaws.com/index.yml).
+You can specify the `geode_store` version environment variable
+in your application's `manifest.yml` file or set it with the
+[cf set-env](https://cli.cloudfoundry.org/en-US/v6/set-env.html) command. For details on how to specify
+configuration values through environment variable in the
+Java Buildpack, see [Cloud Foundry Java Buildpack](https://github.com/cloudfoundry/java-buildpack/blob/main/README.md#configuration-and-extension).
+You can find the buildpack's <code>geode_store</code> version in file <code>/config/tomcat.yml</code>.
+
+When using session state caching you may see a warning during app deployment that looks like:
+
+<code>WARNING: Tomcat version X does not match Geode Tomcat Y module. If you
+encounter compatibility issues, please make sure these versions match.</code>
+
+If you have issues with
+Tomcat version compatibility when deploying applications using session state caching you can fix this
+error by changing the version of Tomcat being used by the Java Buildpack. You can do this with an
+environment variable as described in
+[Cloud Foundry Java Buildpack](https://github.com/cloudfoundry/java-buildpack/blob/main/README.md#configuration-and-extension)
+or you can modify it using the instructions to [Create a Custom Buildpack](#custom-ssc-buildpack).
+
+For a full list of environment variables related to configuring
+Tomcat in the Java Buildpack, see [Tomcat Container](https://github.com/cloudfoundry/java-buildpack/blob/main/docs/container-tomcat.md#configuration).
+If setting an environment variable is undesirable you can also configure
+these values using the process described in [Create a Custom Buildpack](#custom-ssc-buildpack)
 
 Do not mix Tomcat session state caching (as described here)
 with Spring Session caching as described in
