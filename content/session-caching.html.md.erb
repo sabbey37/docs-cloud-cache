@@ -53,6 +53,10 @@ in your application's `manifest.yml` file or set it with the
 configuration values through environment variable in the
 Java Buildpack, see [Cloud Foundry Java Buildpack](https://github.com/cloudfoundry/java-buildpack/blob/main/README.md#configuration-and-extension).
 You can find the buildpack's <code>geode_store</code> version in file <code>/config/tomcat.yml</code>.
+Keep in mind that if you are using the java_offline_buildpack you cannot change the geode_store value via
+environment variables. You will either have to use an online version of the Java Buildpack alongside the
+environment variable or create a custom buildpack which specifies the version as described
+in [Create a Custom Buildpack](#custom-ssc-buildpack).
 
 When using session state caching you may see a warning during app deployment that looks like:
 
