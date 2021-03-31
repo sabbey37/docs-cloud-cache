@@ -40,10 +40,12 @@ include the substring `session-replication` anywhere within the
 service instance name.
 An example with the substring is `my-service-instance-session-replication`.
 
+## <a id="java-ssc-buildpack"></a> Java Buildpack Version Compatibility with Tomcat Session State Caching
+
 If your version of the
 <a href="https://github.com/cloudfoundry/java-buildpack">Cloud Foundry Java buildpack</a>
 specifies a `geode_store` version that is
-more recent than your tile's version of <%=vars.product_short%> you may
+more recent than your tile's version of <%=vars.product_short%> you will
 need to use a different version of <%=vars.product_full%>
 than is provided by the Java buildpack.
 The complete list of `geode_store` versions is given in [https://java-buildpack-tomcat-gemfire-store.s3-us-west-2.amazonaws.com/index.yml](https://java-buildpack-tomcat-gemfire-store.s3-us-west-2.amazonaws.com/index.yml).
